@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<baramFlowProject version="5">
+  <general solverType="PressureBased" flowType="Incompressible" timeMode="Steady">
+    <gravity x="0" y="0" z="0" />
+    <operatingConditions pressure="101325" />
+  </general>
+  <models energyEnabled="false" turbulenceModel="KEpsilon">
+    <kEpsilon model="Standard" nearWallTreatment="StandardWallFunctions" threshold="60" blendingWidth="10" />
+    <transport energyPrandtl="0.85" wallPrandtl="0.85" turbulentSchmidt="0.7" />
+    <des ransModel="SpalartAllmaras" lowReDamping="true" delayed="false" shielding="Ddes" lengthScale="CubeRootVolume" coefficient="0.65" kOmegaCoefficient="0.82" kEpsilonCoefficient="0.6" />
+    <les subgridScale="Smagorinsky" lengthScale="CubeRootVolume" ck="0.094" ce="1.048" cw="0.325" />
+  </models>
+  <material name="air" phase="Gas" densityModel="Constant" density="1.225" dynamicViscosity="1.79E-05" specificHeat="1006" thermalConductivity="0.0245" molecularWeight="28.966" />
+  <boundaryConditions initialGaugePressure="0" initialVelocityX="0" initialVelocityY="0" initialVelocityZ="0" initialTemperature="300" initialTurbulenceIntensity="0.05" initialTurbulentViscosityRatio="10">
+    <boundary name="inlet" meshType="patch" faceCount="4" startFace="0" type="VelocityInlet" velocityX="1" velocityY="0" velocityZ="0" gaugePressure="0" temperature="300" turbulenceIntensity="0.05" turbulentViscosityRatio="10" />
+  </boundaryConditions>
+  <numericalConditions pressureVelocityCoupling="Simple" useMomentumPredictor="true">
+    <densityBased flux="RoeFds" entropyFix="0.5" cutOffMach="0.729" />
+    <discretization time="FirstOrderImplicit" pressure="Linear" momentum="SecondOrderUpwind" energy="SecondOrderUpwind" turbulence="FirstOrderUpwind" highOrderRelaxation="false" highOrderFactor="0.5" />
+    <algorithms maxIterationsPerTimeStep="20" correctors="4" nonOrthogonalCorrectors="0" />
+    <relaxation pressure="0.3" pressureFinal="1" density="0.9" densityFinal="1" momentum="0.7" momentumFinal="1" energy="1" energyFinal="1" turbulence="0.7" turbulenceFinal="1" />
+    <convergence>
+      <pressure absolute="0.001" relative="0.05" />
+      <density absolute="0.001" relative="0.05" />
+      <momentum absolute="0.001" relative="0.05" />
+      <energy absolute="0.001" relative="0.05" />
+      <turbulence absolute="0.001" relative="0.05" />
+    </convergence>
+  </numericalConditions>
+</baramFlowProject>

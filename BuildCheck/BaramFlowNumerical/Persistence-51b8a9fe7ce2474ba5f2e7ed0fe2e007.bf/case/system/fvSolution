@@ -1,0 +1,126 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    location "system";
+    object fvSolution;
+}
+
+solvers
+{
+    "(p|pcorr)"
+    {
+        solver PCG;
+        preconditioner
+        {
+            preconditioner GAMG;
+            smoother DIC;
+            tolerance 1e-5;
+            relTol 0.10000000000000001;
+        }
+        tolerance 1e-16;
+        relTol 0.10000000000000001;
+        minIter 1;
+        maxIter 5;
+    }
+    "(p|pcorr)Final"
+    {
+        solver PCG;
+        preconditioner
+        {
+            preconditioner GAMG;
+            smoother DIC;
+            tolerance 1e-5;
+            relTol 0.10000000000000001;
+        }
+        tolerance 1e-16;
+        relTol 0.10000000000000001;
+        minIter 1;
+        maxIter 5;
+    }
+    "(U|k|epsilon|omega|nuTilda|gammaInt|ReThetat)"
+    {
+        solver PBiCGStab;
+        preconditioner DILU;
+        tolerance 1e-16;
+        relTol 0.10000000000000001;
+        minIter 1;
+        maxIter 5;
+    }
+    "(U|k|epsilon|omega|nuTilda|gammaInt|ReThetat)Final"
+    {
+        solver PBiCGStab;
+        preconditioner DILU;
+        tolerance 1e-16;
+        relTol 0.10000000000000001;
+        minIter 1;
+        maxIter 5;
+    }
+}
+SIMPLE
+{
+    consistent no;
+    nNonOrthogonalCorrectors 0;
+    pRefCell 0;
+    pRefValue 0;
+    solveFlow yes;
+    solveEnergy no;
+    solveSpecies no;
+    residualControl
+    {
+        p 0.001;
+        U 0.001;
+        "(k|epsilon|omega|nuTilda|gammaInt|ReThetat)" 0.001;
+    }
+}
+PIMPLE
+{
+    consistent no;
+    momentumPredictor on;
+    turbOnFinalIterOnly false;
+    nNonOrthogonalCorrectors 0;
+    nCorrectors 7;
+    nOuterCorrectors 20;
+    moveMeshOuterCorrectors yes;
+    pRefCell 0;
+    pRefValue 0;
+    solveFlow yes;
+    solveEnergy no;
+    solveSpecies no;
+    residualControl
+    {
+        p
+        {
+            tolerance 0.001;
+            relTol 0.050000000000000003;
+        }
+        U
+        {
+            tolerance 0.001;
+            relTol 0.050000000000000003;
+        }
+        "(k|epsilon|omega|nuTilda|gammaInt|ReThetat)"
+        {
+            tolerance 0.001;
+            relTol 0.050000000000000003;
+        }
+    }
+}
+relaxationFactors
+{
+    fields
+    {
+        p 0.29999999999999999;
+        pFinal 1;
+        rho 0.90000000000000002;
+        rhoFinal 1;
+    }
+    equations
+    {
+        U 0.69999999999999996;
+        UFinal 1;
+        "(k|epsilon|omega|nuTilda|gammaInt|ReThetat)" 0.69999999999999996;
+        "(k|epsilon|omega|nuTilda|gammaInt|ReThetat)Final" 1;
+    }
+}

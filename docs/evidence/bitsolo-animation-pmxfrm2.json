@@ -1,0 +1,226 @@
+{
+  "capturedUtc": "2026-08-10T16:55:00Z",
+  "fixture": "examples/bitsolo-nodal.frd",
+  "animationMode": "TimeIncrements",
+  "topology": {
+    "actors": 4,
+    "renderPoints": 422797,
+    "triangles": 836744,
+    "locatorPoints": 1127607,
+    "locatorCells": 657394,
+    "frames": 6,
+    "postBaselineFramesVerified": 5
+  },
+  "baselinePmxfrm1": {
+    "hostBytesPerFrame": 38900992,
+    "browserBytesPerFrame": 6764752,
+    "medianBrowserActivationMs": 161.1,
+    "medianTriggerToStableBrowserMs": 3345.2421
+  },
+  "optimizedPmxfrm2": {
+    "hostBytesPerFrame": 20296168,
+    "hostByteReductionPercent": 47.83,
+    "browserBytesPerFrame": 6764752,
+    "medianBrowserDownloadMs": 32.8,
+    "medianBrowserApplyMs": 62.3,
+    "medianBrowserStablePaintMs": 1.8,
+    "medianBrowserActivationMs": 96.9,
+    "medianTriggerToStableBrowserMs": 2087.1239,
+    "frames": [
+      { "frame": 1, "downloadMs": 32.8, "applyMs": 69.5, "stablePaintMs": 1.8, "totalMs": 104.1 },
+      { "frame": 2, "downloadMs": 35.5, "applyMs": 65.1, "stablePaintMs": 1.6, "totalMs": 102.2 },
+      { "frame": 3, "downloadMs": 32.3, "applyMs": 61.2, "stablePaintMs": 1.8, "totalMs": 95.3 },
+      { "frame": 4, "downloadMs": 32.8, "applyMs": 62.3, "stablePaintMs": 1.8, "totalMs": 96.9 },
+      { "frame": 5, "downloadMs": 28.2, "applyMs": 57.6, "stablePaintMs": 3.2, "totalMs": 89.0 }
+    ]
+  },
+  "phaseProfileAndBvhRefit": {
+    "beforeRefit": {
+      "medianServerReadMs": 81.437,
+      "medianServerUpdateMs": 1277.864,
+      "medianHostTransportMs": 1357.8091,
+      "medianBrowserActivationMs": 91.9,
+      "medianTriggerToStableBrowserMs": 1874.8925
+    },
+    "afterRefit": {
+      "medianServerReadMs": 85.048,
+      "medianServerUpdateMs": 295.677,
+      "medianHostTransportMs": 382.1136,
+      "medianBrowserActivationMs": 86.2,
+      "medianTriggerToStableBrowserMs": 936.7371
+    },
+    "reductionPercent": {
+      "serverUpdate": 76.86,
+      "hostTransport": 71.86,
+      "triggerToStableBrowser": 50.04
+    },
+    "correctness": {
+      "bvhCellPartitionsRetained": true,
+      "leafAndParentBoundsRefitted": true,
+      "deformedFrustumRegressionPassed": true
+    }
+  },
+  "compactCoordinateMaterialization": {
+    "renderAndLocatorCoordinateCount": 4651212,
+    "previousTemporaryFloat64Bytes": 37209696,
+    "compactFloat32Bytes": 18604848,
+    "parserAllocationBytesRemoved": 18604848,
+    "sharedLocatorCopyBytesRemoved": 27062568,
+    "totalAllocationBytesRemovedPerFrame": 45667416,
+    "observedMedianServerUpdateMs": 263.203,
+    "aggregateCadenceAssessment": "not compared as a gain because host-write outliers dominated this run"
+  },
+  "inPlaceRefitAndCaptureReuse": {
+    "baseline": {
+      "medianServerReadAllocatedBytes": 40592528,
+      "medianServerUpdateAllocatedBytes": 78153584,
+      "medianVtkJsCaptureMs": 196.2863,
+      "medianLegacyActivationMs": 31.8689,
+      "medianMirrorMs": 196.6874,
+      "medianCombinedActivationMs": 228.1708,
+      "medianTriggerToStableBrowserMs": 786.347
+    },
+    "optimized": {
+      "medianServerReadAllocatedBytes": 40625064,
+      "medianServerUpdateAllocatedBytes": 61715864,
+      "medianVtkJsCaptureMs": 22.3475,
+      "medianLegacyActivationMs": 49.7816,
+      "medianMirrorMs": 23.1203,
+      "medianCombinedActivationMs": 74.545,
+      "medianTriggerToStableBrowserMs": 764.7302
+    },
+    "reduction": {
+      "serverUpdateAllocatedBytes": 16437720,
+      "serverUpdateAllocationPercent": 21.03,
+      "vtkJsCapturePercent": 88.62,
+      "mirrorPercent": 88.25,
+      "combinedActivationPercent": 67.33
+    },
+    "aggregateCadenceAssessment": "phase-local gains are authoritative; server/browser variance limited the end-to-end change in this run"
+  },
+  "pooledStreamingFrameReader": {
+    "capturedDate": "2026-08-11",
+    "scratchBufferBytes": 65536,
+    "baselineMedianServerReadAllocatedBytes": 40625064,
+    "optimizedMedianServerReadAllocatedBytes": 20370912,
+    "allocatedBytesRemovedPerFrame": 20254152,
+    "allocationReductionPercent": 49.86,
+    "optimizedMedianServerReadMs": 58.179,
+    "optimizedMedianServerUpdateAllocatedBytes": 61712664,
+    "optimizedMedianVtkJsCaptureMs": 12.2828,
+    "optimizedMedianCombinedActivationMs": 46.9638,
+    "optimizedMedianBrowserActivationMs": 78.9,
+    "optimizedMedianTriggerToStableBrowserMs": 575.7938,
+    "serverReadSamples": [
+      { "frame": 1, "milliseconds": 58.372, "allocatedBytes": 20508136 },
+      { "frame": 2, "milliseconds": 58.179, "allocatedBytes": 20382312 },
+      { "frame": 3, "milliseconds": 51.715, "allocatedBytes": 20370912 },
+      { "frame": 4, "milliseconds": 55.644, "allocatedBytes": 20346488 },
+      { "frame": 5, "milliseconds": 60.506, "allocatedBytes": 20304536 }
+    ],
+    "correctness": {
+      "fragmentedThreeByteReadsPassed": true,
+      "truncatedBodyProtocolRejectionPassed": true,
+      "postBaselineFramesVerified": 5,
+      "twoIndependentProcessRunsPassed": true
+    }
+  },
+  "compactLocatorRetention": {
+    "capturedDate": "2026-08-11",
+    "baselineMedianServerUpdateAllocatedBytes": 61712664,
+    "optimizedMedianServerUpdateAllocatedBytes": 34651248,
+    "allocatedBytesRemovedPerFrame": 27061416,
+    "allocationReductionPercent": 43.85,
+    "reductionFromOriginalMeasuredUpdateAllocationPercent": 55.66,
+    "baselineMedianServerUpdateMs": 207.608,
+    "optimizedMedianServerUpdateMs": 174.603,
+    "observedUpdateTimeReductionPercent": 15.9,
+    "optimizedMedianServerReadAllocatedBytes": 20381424,
+    "optimizedMedianVtkJsCaptureMs": 11.5144,
+    "optimizedMedianCombinedActivationMs": 42.0376,
+    "optimizedMedianBrowserActivationMs": 71.0,
+    "optimizedMedianTriggerToStableBrowserMs": 533.7946,
+    "serverUpdateSamples": [
+      { "frame": 1, "milliseconds": 278.836, "allocatedBytes": 34651248 },
+      { "frame": 2, "milliseconds": 174.205, "allocatedBytes": 34656984 },
+      { "frame": 3, "milliseconds": 185.968, "allocatedBytes": 34647104 },
+      { "frame": 4, "milliseconds": 174.267, "allocatedBytes": 34652272 },
+      { "frame": 5, "milliseconds": 174.603, "allocatedBytes": 34647288 }
+    ],
+    "correctness": {
+      "originRelativeFloat32RetainedInSceneState": true,
+      "specializedBvhBoundsLoop": true,
+      "compactFrustumNodeAndElementRegressionPassed": true,
+      "postBaselineFramesVerified": 5,
+      "topologyResourceMappingsStable": true
+    }
+  },
+  "directGeneratedFrameResources": {
+    "capturedDate": "2026-08-11",
+    "baselineMedianServerUpdateAllocatedBytes": 34651248,
+    "optimizedMedianServerUpdateAllocatedBytes": 21124304,
+    "allocatedBytesRemovedPerFrame": 13526944,
+    "allocationReductionPercent": 39.04,
+    "reductionFromOriginalMeasuredUpdateAllocationPercent": 72.97,
+    "optimizedMedianServerUpdateMs": 192.89,
+    "optimizedMedianServerReadAllocatedBytes": 20372696,
+    "optimizedMedianVtkJsCaptureMs": 11.2249,
+    "optimizedMedianCombinedActivationMs": 44.7061,
+    "optimizedMedianBrowserActivationMs": 91.7,
+    "optimizedMedianTriggerToStableBrowserMs": 559.5356,
+    "serverUpdateSamples": [
+      { "frame": 1, "milliseconds": 282.526, "allocatedBytes": 21524072 },
+      { "frame": 2, "milliseconds": 190.265, "allocatedBytes": 21123232 },
+      { "frame": 3, "milliseconds": 185.022, "allocatedBytes": 21127624 },
+      { "frame": 4, "milliseconds": 195.507, "allocatedBytes": 21123896 },
+      { "frame": 5, "milliseconds": 192.89, "allocatedBytes": 21124304 }
+    ],
+    "correctness": {
+      "generatedPositionResource": true,
+      "generatedScalarResource": true,
+      "sha256MatchesStagedRepresentation": true,
+      "unalignedRangeBytesMatch": true,
+      "postBaselineFramesVerified": 5,
+      "topologyResourceMappingsStable": true
+    },
+    "timingAssessment": "allocation reduction is authoritative; server and browser timing varies across process runs"
+  },
+  "updateSubphaseTelemetryAndIndexedRefit": {
+    "capturedDate": "2026-08-11",
+    "baselineMedianServerUpdateAllocatedBytes": 21124304,
+    "optimizedMedianServerUpdateAllocatedBytes": 221176,
+    "allocatedBytesRemovedPerFrame": 20903128,
+    "allocationReductionPercent": 98.95,
+    "reductionFromOriginalMeasuredUpdateAllocationPercent": 99.72,
+    "optimizedMedianServerUpdateMs": 219.769,
+    "optimizedMedianServerReadAllocatedBytes": 20376072,
+    "medianSubphases": {
+      "validation": { "milliseconds": 4.331, "allocatedBytes": 0 },
+      "resources": { "milliseconds": 10.316, "allocatedBytes": 139296 },
+      "manifest": { "milliseconds": 1.052, "allocatedBytes": 73760 },
+      "refit": { "milliseconds": 204.7, "allocatedBytes": 0 }
+    },
+    "serverUpdateSamples": [
+      { "frame": 1, "allocatedBytes": 483208, "validationAllocatedBytes": 0, "resourcesAllocatedBytes": 409616, "manifestAllocatedBytes": 73592, "refitAllocatedBytes": 0 },
+      { "frame": 2, "allocatedBytes": 221240, "validationAllocatedBytes": 8184, "resourcesAllocatedBytes": 139296, "manifestAllocatedBytes": 73760, "refitAllocatedBytes": 0 },
+      { "frame": 3, "allocatedBytes": 221176, "validationAllocatedBytes": 0, "resourcesAllocatedBytes": 147416, "manifestAllocatedBytes": 73760, "refitAllocatedBytes": 0 },
+      { "frame": 4, "allocatedBytes": 90160, "validationAllocatedBytes": 0, "resourcesAllocatedBytes": 16400, "manifestAllocatedBytes": 73760, "refitAllocatedBytes": 0 },
+      { "frame": 5, "allocatedBytes": 90160, "validationAllocatedBytes": 0, "resourcesAllocatedBytes": 16400, "manifestAllocatedBytes": 73760, "refitAllocatedBytes": 0 }
+    ],
+    "diagnosis": "foreach over IReadOnlyList<int> boxed one enumerator per locator cell",
+    "correctness": {
+      "indexedCellPointTraversal": true,
+      "refitAllocationMedianZero": true,
+      "postBaselineFramesVerified": 5,
+      "topologyResourceMappingsStable": true
+    },
+    "timingAssessment": "allocation reduction is authoritative; server and browser timing varies across process runs"
+  },
+  "invariants": {
+    "sameScene": true,
+    "revisionAdvancedEachFrame": true,
+    "positionsChangedEachFrame": true,
+    "topologyResourceMappingsStable": true,
+    "browserStablePaintRequiredBeforeNextFrame": true
+  }
+}

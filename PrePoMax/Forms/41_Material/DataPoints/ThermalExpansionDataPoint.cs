@@ -1,0 +1,59 @@
+// PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
+//
+// Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
+//
+// Source code: https://gitlab.com/MatejB/PrePoMax
+//
+// Author: Matej Borovinšek
+// Contributors:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel;
+using DynamicTypeDescriptor;
+using CaeGlobals;
+
+namespace PrePoMax
+{
+    [Serializable]
+    public class ThermalExpansionDataPoint : TempDataPoint
+    {
+        // Variables                                                                                                                
+        private EquationContainer _thermalExpansion;
+
+
+        // Properties                                                                                                               
+        [DisplayName("Thermal expansion\n[?]")]
+        [TypeConverter(typeof(EquationThermalExpansionFromConverter))]
+        public EquationString ThermalExpansionEq
+        {
+            get { return _thermalExpansion.Equation; }
+            set { _thermalExpansion.Equation = value; }
+        }
+        //
+        [Browsable(false)]
+        public EquationContainer ThermalExpansion { get { return _thermalExpansion; } set { _thermalExpansion = value; } }
+
+
+        // Constructors                                                                                                             
+        public ThermalExpansionDataPoint()
+            :base(0)
+        {
+            _thermalExpansion = new EquationContainer(typeof(StringThermalExpansionConverter), 0); // must not use FROM converter
+        }
+        public ThermalExpansionDataPoint(EquationContainer thermalExpansion, EquationContainer temperature)
+            :base(temperature)
+        {
+            _thermalExpansion = thermalExpansion;
+        }
+
+
+        // Methods                                                                                                                  
+       
+    }
+}
+
+

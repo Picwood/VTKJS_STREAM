@@ -1,0 +1,895 @@
+﻿Requirements
+
+Selection - UNDO after empty click
+By Students
+Add the possibility to output the Query command as General text formating
+
+RENDERING
+https://vtk.org/pipermail/vtkusers/2016-November/097309.html
+
+
+By Jakub
+31. 8. 2021
+1) kinematic/distributed coupling constraints
+2) symetry boundary conditions
+
+25. 5. 2021
+2) a replace step feature: Buckling for Static
+
+21. 5. 2021
+1) possibility to edit existing keywords in the keywords editor
+2) possibility to define local mesh refinements based on the number of elements, not just their size; biased distribution
+3) user-defined field output based on the available variables - equations
+4) hyperelastic materials
+
+30. 8. 2021
+1) displaying shell thickness in 3D
+2) hiding of single elements while postprocessing
+3) enabling continuous result colors
+
+
+
+By Naldo
+17. 5. 2021
+1) To zoom in - mouse right button: click, hold and drag top left to bottom right; to zoom out - mouse right button: click,
+   hold and drag bottom righ to top left
+2) model orientation - click on any of the triad axes to change the view to that orientation; create a isometric 'ball' on the
+   triad to click on for the Isometric view
+3) connectivity - show free edges and connected edges in different colours - in geometry and mesh
+4) result plots - have an option to show the midsurfaces result plots too (i.e. withoutt the shell thickness)
+5) option to plot underformed body as a wire plot
+6) option to show reference points and rigid body elements in the results plots
+
+
+By Silvio
+15. 12. 2020
+add support for automatic mesh convergance on a single face, edga or vertex
+
+By Massimiliano
+10. 9. 2020
+1) add support for cylindrical coordinate system for modeling
+2) add support for cylindrical coordinate system for ploting of the results
+3) change the legend limits on the 3D view
+5) remote load moment using nodal forces
+6) add support for spring elements
+7) add support for the restart of the analysis 
+
+
+By Devis
+1.5.2020
+Dynamic analysis (Harmonic response, Random vibration, Response spectrum, Time history)
+Fatigue analysis
+Plastic (copy / paste) parameters from data/file
+Export in VTK (Paraview)
+Personalising spectrum colours (post-Processing)
+Personalising description format (post-Processing)
+Iso line (post-Processing)
+Logo (Right-Top)
+
+
+By others:
+Josh W: 
+Support for viewing and editing materila data in material library
+
+
+By Martin:
+22.1.2020
+2) let the eye icon in the model tree (or the place where it would be) toggle hide/show state (activated/deactivated)
+
+
+By Martin:
+7. 7. 2019
+3) support for smart naming - ANSYS "rename based on definition".
+5) support for moment loads on surfaces
+6) support for hydrostatic load
+7) support for de-featuring based on mesh???
+10) FORUM!
+11) highlight the parts for which the meshing parameters are changed while Regenerate for remeshing
+16) step manager is missing (move up and down, duplicate ...)
+17) shape optimization, adaptive mesh refinement
+19) support for oppening older file versions
+22) add support for changing the active step while the animation is on
+
+
+By Vittorio:
+20. 6. 2019
+1) load symbols scaled according their magnitude • I am more inclind to the possibility to display the magnitudes like in a postprocessor using colors and a scale/legend.
+2) vector plots of displacements • This could be a nice feature. I will add it to the list.
+3) the capability of doing linear combinations of the results obtained in load steps (this is a must for civil engineers) •	This could be done like an equation combining different field values from different fields. At the moment this could be done using simple math operations: +,-,*,/,sin, cos, abs.
+Another very useful capability could be the export of results in vtk format • This feature is also requested by other users.
+
+
+By Emanuele:
+5. 11. 2018
+- add support for a bearing load - load distributed inside a hole
+
+
+By Ihor:
+25. 5. 2021
+1) user defind tooltips as for Min and Max values
+2) add the possibility for command line parameters to use PPM as .step viewer
+
+10.5.2021
+1) feature to export nodal results together with their nodal coordinates
+
+30.5.2019
+1) export for VTK
+
+Old
+- add support for importing inp files
+
+
+By Sergio:
+20. 4. 2020
+- add support for printing material datasheet option
+- add support to export material to .csv
+- add engineering constants as yield, ultimate stress and strain, fatigue limit and then scale the resuls using them
+- add support for amplitudes
+
+
+8. 6. 2020
+- can be added an option to sort alphabetically the material library
+- can be added more buttons to the main toolbar for the queries (node, element, measure...)
+- on posprocessing, a new option to select a node and plot the displayed result along the time for no lineal cases
+- for displacement history output, the label of the column and plot, should be Ux Node XXXX and not only the node number
+
+
+24.8.2018
+- tabular amplitude definitions
+- 2D plot utility 
+
+30.7.2018
+- sorting of part names, set names :- this is not possible using current user keywords positioning system with indices
+- analysis should be run in a separate folder with the analysis name; 
+
+24.6.2018
+- renaming of parts on the treeview with the F2 shortcut
+19.2.2018
+- show material and other properties in results view
+- user defined result fields using equations, so the user could add a new field and its equation
+- opening multiple results files
+- create .pmx file with each analysis run
+12.5.2020
+- main window size
+- Add advanced materials (hyperelastic and hyperfoam at least)?
+- Show bc widgets in results?  
+- Move the Open Recent items directly to the main menu branch as usual Windows programs
+- Operations on orhpan meshes??? (move, scale, rotate, simmetry, extrude, revolute...)?
+- In the CalculiX cards editor, move the Add Keyword to the vertical toolbar.
+- Add Activate/Deactivate to user keyword cards?
+- For preload, add the option to use a user selected reference point. By the moment the reference point is created in the center
+  of the faces, but if the bolt is in a simmetry plane then this is not correct.
+- In the Create Step window, with a Direct nlgeom step: Initial increment = Time period/Max increments!
+- X/Y plot utility for results?
+22.5.2020
+- add an option in the job creation window to automatically load the results in the model file and save the model file
+- an option to export the results in Paraview compatible format
+- a warning before launching the solver when plastic materias were defined, but PEEQ  was not present in the element result request
+- the same for contacts maybe
+
+
+By Martin:
+
+17.1.2018
+- distributed loads, in particular, hydrostatic ones. It is a shame that calculix doesn't offer these by default.
+- Get Prepomax running under Linux (with mono framework).
+- support of more analysis types, handling of selected data output (dat)
+- path plots based on geometric objects or sets of nodes
+- correction of overclosure or positioning for initial touch
+
+
+
+By Matej
+- Custom Type Editor for units and BC https://www.cyotek.com/blog/creating-a-custom-typeconverter-part-1   
+									  https://msdn.microsoft.com/en-us/library/ayybcxe5.aspx#Type
+
+- if mesh fails, the history is corrupt - the meshing parameters remain in history
+- min/max widgest are drawn correctly only by using the front view with animation turned on - fix it differently
+- naming BCs, constraints ... one name for symbol and surface or node set... -> dictionary<name, list<maxActors>>
+- Correctly draw transparent highlighted faces -> unstructured grid -> polyData -> DepthSortPolydata - SLOW
+- Reduce the number of commands - as by Activate/Deactivate - NOT ACTIVE ANYMORE
+- Add zero increment in each step with no displacements - done for first step
+- Faster picking - first a vtkRenderedAreaSelector and if hit do a hardwareAreaPick; Found at tests of vtkProp3DCollection: (http://www.vtk.org/gitweb?p=VTK.git;a=blob;f=Rendering/Core/Testing/Cxx/TestCompositePolyDataMapper2Picking.cxx)
+
+
+Errors:
+- if first step is Nlgeo then all the rest of them are Nlgeo - this is not so in PrePoMax.
+- on the wireframe view the query element command does not work 
+- running with no Admin rights the number of cpus cannot be changed...
+- the mouseMove event gets fired every second?!
+- there is something wrong when using small dimension: 0.001 - negative Jacobian
+
+
+Dependency nglib - added following files for c++ redistriburable compatibility:
+
+ 2015
+- concrt140.dll
+- msvcp140.dll
+- vccorlib140.dll
+- vcruntime140.dll
+
+2013
+- msvcp120.dll
+- msvcr120.dll
+
+ToDo
+
+Collapsable group box in front of the Name?
+Binary with comments?
+Axysymetric line?
+2D Fixed not working for rotations?
+Select similar in size?
+Save as: Krilo 	... if a file Krilo with no extension exist it will ask for overwrite !!! Windows problem
+
+
+Version 2.5.1
+Added Ln() function
+Added Jet and Turbo color maps
+Added Equivalent strain instead of Mises and Tresca
+Pretension bug fix
+Local mesh size bug fix
+Fixed property grid rendering in Linux
+
+Version 2.5.0
+Fixed thicken shell mesh bug
+Fixed box zoom bug
+
+Version 2.4.6
+Step symbol selection bug fix
+Pyramid element visualization bug fix
+Camera bug fix
+
+Version 2.4.5
+Added box zoom operation
+Added support for local mesh size definition based on the number of elements
+Fixed mirror part bug
+
+Version 2.4.4
+Added support for translate pattern of the mesh with preview
+Added support for rotate pattern of the mesh with preview
+Added support for mirror pattern  of the mesh with preview
+Added support for renaming items in all trees using the second mouse click or F2 key
+Added angular deflection option for triangulation of geometry
+Updated .step geometry importer to better support PTC/NX files
+Improved selection cache for faster selection
+Fixed pre-tension load symbols
+
+Version 2.4.3
+Added support for 3MF output of geometry, model and results
+Added support to open .odb files (requires Abaqus installation)
+Addes support to convert .odb files to .frd files
+
+Version 2.4.2
+Added support for deactivating parts
+Added support for deactivating materials
+Added support for deactivating user keywords
+Changed the bahviour of modified items - modified items are now not marked as invalid (red)
+Bug fixes
+
+Version 2.4.1
+Added support for hiding min/max legend values
+Added support for section output in history outputs
+Bug fixes
+
+Version 2.4.0
+Added history output from element size, equation support to wear analysis settings
+Added support for dist, distX, distY, and distZ functions in equations
+Added follower view
+Adeded support for user views
+Added support for smoother zooming: using ctrl + mouse wheel or ctrl + middle mouse button
+
+Version 2.3.9
+Inp reader performance issue solved for a large number of user keywords
+Thicken shell mesh normals merging bug fix
+
+Vesrion 2.3.8
+Fixed export of shell surfaces and pressure loads to Abaqus .inp files
+Fixed 3D view animation
+Bug fixes
+
+Vesrion 2.3.7
+Added support for local coordinate systems for distributions
+Bug fixes
+
+Vesrion 2.3.6
+History result writer supports larger amounts of data
+Fixed thicken shell mesh and frd reader
+Added support for Abaqus settings
+Added support for full Abaqus .inp exporter
+Added support for using Abaqus as a FEM solver
+Added support for .dat file preview in the Monitor form
+
+Vesrion 2.3.5
+Added support for distribution from equation
+Added support for distribution from file
+Added support for distributed initial temperature
+Added support for distributed temperature boundary condition
+Added support to preview temperature boundary condition
+Added support for distributed pressure
+Added support for distributed surface traction
+Added support for distributed defined temperature field
+
+Vesrion 2.3.4
+Added support for complex frequency step
+Added support for reading complex frequency step .dat file
+Improved support for reading .igs and .brep files containing separate faces
+Bug fixes
+
+Version 2.3.3
+Added support to convert closed shell CAD parts to solids
+Added support to convert solid CAD parts to shells
+Added support to import mixed (shell/solid) .step models (previously, all parts imported from a mixed model were recognized as shells)
+Bug fixes
+
+Version 2.3.2
+Added evaluation of part volume. In the geometry module, the volume of CAD parts is obtained from the geometry kernel; in the FE model module, the volume is obtained by finite element integration
+Added support for computation of area by finite element integration
+Added Export/Import functionality for parameters
+Added a command line switch --parametersExport
+Added support for autocomplete in all equation fields - history output and field output equations do not require rectangular brackets anymore. The autocomplete menu shows up after at least one character is entered, or by using the Ctrl+space key combination
+Part volumes added to the autocomplete menu
+Bug fixes
+
+Version 2.3.1
+Added support for command line parameter -u in combination with .frd files
+Hydrostatic pressure now uses *Dload
+Cylindrical coordinate system enabled in 2D
+Export functions added to command history
+Bug fixes
+
+Version 2.3.0
+Added support for zooming while doing rubber band selection
+Added support for entering multiple IDs during mesh bsed selection
+Added support to specify gap in compression only constraint
+Bug fixes
+
+Version 2.2.11 dev
+Improved the reading speed of the .frd files.
+Added CalculiX output to the output during command line regeneration.
+Bug fixes
+
+Version 2.2.10 dev
+Added support to run postprocessing commands
+Added support to reorganize history commands
+Updated the mortar contact models
+Added colors to history commands view with two coloring options
+
+Version 2.2.9 dev
+Added support for Run history file
+Added support for Open/Save command history 
+Added support for Drag/Drop history commands
+Selection of hexa elements bug fix
+
+Version 2.2.8 dev
+Selection buffer key bug fix
+
+Version 2.2.7 dev
+Added selection buffer for faster highlighting of model tree items
+Added symbols for defined fields
+Changed the behavior of the analysis status icon
+Added regenerate history form
+Significant speed up of some selection methods
+
+Version 2.2.6 dev
+Added the number of edges and faces to the query surface tool
+
+Version 2.2.5 dev
+Mouse over bug fixes
+
+Version 2.2.4 dev
+Added support for amplitudes by radiation emissivity and film coefficient
+Added support for execution times of history commands
+Added support for splitting periodic CAD surfaces during CAD file import
+Added regions field in all mesh setup items
+Added support for parameters to all initial conditions
+Added support for displaying symbols for initial conditions
+Added support for imported ST load
+Added support for initial angular velocity
+Added support for highlighting items in trees and list-views on mouse move
+
+Version 2.2.3 dev
+Added support for sweep meshing
+
+Version 2.2.2 dev
+The bug preventing the use of the concentrated force on a reference point was fixed
+
+Version 2.2.1 dev
+Added support for defeaturing CAD parts: Geometry → CAD Part → Defeature
+A much faster exporter for hydrostatic pressure loads into .inp file
+
+Version 2.2.0
+Added support a tool to check the element quality was added: Model → Element → Element Quality
+Added support for merging coincident nodes
+Coordinate systems are now highlighted when selected during the creation of BCs and loads
+History (for regeneration) was updated to include commands for analysis and commands for postprocessing; regeneration can now be done for the model commands only (the commands for analysis and commands for postprocessing are not regenerated) or for all commands
+Support for command line parameters was improved
+Additional .exe file called PrePoMaxCmd.exe was added, which starts PrePoMax as a command line application
+Added support for buckling reader of the .dat files
+Added support for exporting history outputs (Result → History Output → Export)
+Added support for selection by geometry IDs
+Added support for reference point creation based on geometry selection
+Added support for coordinate system creation based on geometry selection
+Added support for the creation of the field output defined by the equation (Result → Field Output → Create)
+Added support for the creation of the history output defined by the equation (Result → History Output → Create)
+Added support for filters for the user-created history outputs; possible filters are min, max, sum, and average
+Added support for the creation of coordinate systems in the FE model view (rectangular, cylindrical)
+Added support for the creation of coordinate systems in the results view (rectangular, cylindrical)
+Added support for the creation of reference points in the results view
+Added support for using coordinate systems at the creation of boundary conditions
+Added support for using coordinate systems at the creation of concentrated loads
+Added support for using coordinate systems at the creation of surface traction loads
+Added support for transforming the field output to another coordinate system (Result → Field Output → Create)
+bug fixes
+
+
+Version 2.1.0
+Added support for mass section: point and distributed mass
+Added thicken shell mesh feature
+Added a feature to split solid mesh by a selected surface
+Added a feature to delete faces of .stl geometry models
+Added support for mesh optimization when using Gmsh mesher
+Added support for pyramid elements
+Added a new color legend
+Changed the structure of the .pmx files to enable creation of much larger files
+Added supports for step controls
+Compression-only support can now activate a non-linear solution
+Gmsh updated to version 4.13
+Added simple history viewer and editor
+Keyword editor was redone to improve its performance
+
+DONE
+Version 2.0.0
+Added GmshCommon project
+Added support for Gmsh shell meshing
+Added support for Gmsh extruded solid meshing (multilayered)
+Added support for Gmsh revolved solid meshing (multilayered)
+Added support for Gmsh transfinite solid meshing
+Added compression-only constraint
+Added support for reading and displaying gap elements in the Results module
+
+Version 1.4.1
+Added support for hydrostatic pressure cutoff
+Added support for duplicate command on all editable tree items
+Added support for parameters: Tools -> Parameters
+Added support for equations with parameters to reference points
+Added support for equations with parameters to materials
+Added support for equations with parameters to sections
+Added support for equations with parameters to constraints
+Added support for equations with parameters to loads
+Added support for equations with parameters to boundary conditions
+Added support for mixed axisymmetric models
+Added additional geometry analyze option: vertices by angle
+Added exploded view by center point method
+
+Version 1.4.0
+Added support for smoothing of the wear field
+Added support for creating additional field outputs: limit, envelope
+Added advanced/basic meshing options
+Added support for defining damping in dynamic steps
+Added additional filters for finding contact pairs
+Added a tool for finding item by ids
+Added support for initial velocity definition
+Added support for modal dynamic analysis
+Added support for steady state dynamic analysis
+Added support for dynamic analysis (implicit/explicit)
+
+Version 1.3.5.1
+All property field support equations
+Added support for double-clicking the part to edit it
+Temperature loads removed from the buckle step
+Added support for mortar contact
+Added support to collapse the material libraries
+Changed the behaviour of the area selection
+Added support for imaginary results
+Added support for reading binary OpenFOAM files
+Bug fixes
+
+Version 1.3.5
+Added partial support for opening OpenFOAM results
+Added support to import a pressure load from OpenFOAM
+Added support to define a stiffness of a surface spring constraint as stiffness per area
+Added icons for different result visualizations
+Added support for opening multiple results at the same time
+Bug fixes
+
+Version 1.3.4
+A bug fix in hydrostatic load when using shell elements
+
+Version 1.3.3
+Added toolbar buttons for Query and remove annotations
+Added support for a hydrostatic pressure load
+Added a new toolbar for selection the deformation of results
+Added Boudary displacement step for wear analysis
+Added support for mouse selecion of the centrifugal load rotation point
+Bug fixes
+
+Version 1.3.2
+Added support for annotation editing
+Added support for multiple annotations at the same time
+Added support for node, element, edge, surface and part annotation
+Added annotations for measurements: distance, angle, circle
+Other bug fixes
+
+Version 1.3.1
+Fixed a bug where a compound result part could not be opened
+Fixed a bug where element field output PEEQ could not be displayed
+Drasticaly improved the load times of large models using binary writter for the model visualization
+Increased the upper value of the animation counter
+Other bug fixes
+
+Version 1.3.0 Master branch
+Added support for amplitude creation and usage in boundary conditions and loads
+Added support for managing multiple material libraries
+Added material properties preview while using material library
+Added support for material import/export to .inp files
+Added support for mesh deformation during slip wear step using the boudary displacement method
+Added slip wear analysis based on the Archard model
+Added slip wear material properties
+Added slip wear result field outputs
+Settings are first saved in a tmp file and then the file is renamed
+Added support to update nodal mesh coordinates from inp files
+Added support to export deformed result mesh as inp files
+Added support for selecting the deformed variable
+Added support for file import using command line arguments
+Added support for adding a history output from a field output
+Added support for removing field outpurts
+Added support for removing history outpurts
+Added Tresca stress
+Added pricipal strains
+
+
+Version 1.2.0 Master branch
+Added crash recovery functionality
+Added support to export mesh and deformed result parts as stl files.
+Added support to represent the undeformed result using a wireframe representation.
+Added a feature to smooth stl part
+Added a feature to flip stl part normal
+Added a feature to regenerate a compound part
+Added new symbol for the spring constraints
+Added new constraint type Surface spring.
+Added new constraint type Point spring.
+Added support for opening and visualizing the contact element nodes from jobname.cel files
+Added support for Contact elements parameter at nodal, elemental and contact field outputs
+Added support for opening and visualizing the ResultsForLastIterations.frd files
+Added support for Last iterations parameter at nodal, elemental and contact field outputs
+Added support for element renumbering
+Added support for membrane section and membrane finite element types M3D3, M3D6, M3D4, M3D4R, M3D8, M3D8R
+Added support for performing 2D plane stress analysis using finite element types CPS3, CPS6, CPS4, CPS4R, CPS8, CPS8R
+Added support for performing 2D plane strain analysis using finite element types CPE3, CPE6, CPE4, CPE4R, CPE8, CPE8R
+Added support for performing 2D axisymmetric analysis using finite element types CAX3, CAX6, CAX4, CAX4R, CAX8, CAX8R
+Added support for outputting shell and planar element results in 2D or 3D
+Bug fixes
+
+Version 1.1.1 Master branch
+Added support for geometry part scaling (unit conversion)
+Added an automatic contact pair search tool for creating tied constraints and contacts
+Added support for swapping master and slave item of tied constraints and contacts
+Added support for merging of tied constraints and contacts
+Improved the speed of multiple tied constraints and contacts manipulation
+Added a search tool for filtering the geometry, model and results tree
+Added support for merging result parts
+Improved the speed of working with large (>100) number of result parts
+Improved the speed of selection in large (>100) assemblies
+Bug fixes
+
+Version 1.1.0 Master branch
+Added support for reading thermal field and history outputs
+Added support for enabling the output of thermal field and history outputs
+Added support to read unsupported CalculiX keywords from an .inp file as user defined keywords
+Added support for defining physical constraints
+Added support for gap conductance surface interaction property
+Added support for concentrated flux load
+Added support for surface flux load
+Added support for body flux load
+Added support for convective film load
+Added support for radiation load
+Added support for temperature boundary conditions
+Added support for coupled temperature-displacement step
+Added support for uncoupled temperature-displacement step
+Added support for heat transfer step
+Added suppoprt for selection of the matrix solver type
+Added suppoprt for seting default meshing settings
+Added additional color-maps for post-processing
+Added support for a defined fileld of type temperature
+Added support for temperature initial condition
+Added support for temperature dependent material data for all supported material properties
+Added new material properties: thermal expansion, thermal conductivity and specific heat
+Added description property to all materials
+
+
+Version 1.0.0 Master branch
+Added support to swap geometry between parts
+Added support for exploded view
+Added Shell edge load
+Added support for .inp files using *Include keyword
+Added support for Unit-less unit system
+Added support for remeshing of shell finite element meshes
+Added a feature to create a reference point between two points and in the circle center
+Added support for generating model edges based on the face angle
+Added support for color annotations of parts, materials, sections and FE symbols
+Fixed the incrementation for the static step.
+Bug fixes
+
+
+Version 0.9.0 Master branch
+Added support for import of shell CAD geometry
+Added support for merging of shell faces into a compound
+Added support for visualizing shell face orientations
+Added support for flipping the shell face orientations
+Added support for splitting shell faces using two poits
+Added support for meshing of shell geometries using triangle and quadrilateral elements
+Added support for meshing the .stl shell geometries
+Added support for creating shell sections
+Added support for visualizing the results on shell faces (option 2D)
+Added support for auto-scroll in the monitor window
+Bug fixes
+
+Version 0.8.0 Master branch
+For Frequency analysis added the mode number in the status block
+Added the Adviser
+Added simple material editor for Adviser
+Added support for units/unit system
+Added support for Duplicate of Materials, Surface Interactions and Steps
+Added support for legend background and border
+Added support for status block background and border
+Bug fixes
+
+Version 0.7.0 Master branch
+Added support for individual colors for RPs, Constraints, Contact pairs, BCs and Loads
+Added support for simple plotting of data grid values (material data, history outputs...)
+Added option for using .pmx file folder for work analysis directory
+Added support for Open Recent Files
+Added support for contact history and field output
+Added support for Contact Pairs creation
+Added support for Friction
+Added support for Surface Interaction creation
+Added support for set creation on the fly
+Simplified the creation of new sets
+Fixed the visibility of symbols if geometry hidden
+Added support for multi-part selection
+
+Version 0.6.0 Master branch
+Added support for Fixed parameter for BSc
+Added support for creating prismatic boundy layer
+Added support for Pre-tension load
+At save a temporary file is first used which is then renamed to the selected file name.
+Added support for splitting of compound meshes
+Added support for regenerate to skipp over errors - needs further testing!!!
+Double-clicking the status block widget opens settings
+Add Edit CalculiX keywords menu to the context menu of the model tree
+Added support for compound part creation and meshing
+Optimized selection speed by keeping intermediate node results
+Fixed selections based on geometry
+Increased speed of meshing and analysis
+Added support for edges on symbols for icreased visibility
+Added support for Submodel boundary conditions
+Added support for edge preview
+Added support for mesh refinement - one part at a time
+Fixed visualization error with to few colors for color contours
+
+Version 0.5.2 Master branch
+Added support for importing and meshing 'hollow' CAD files
+Added support for importing .brep files
+Added support for section view
+Added support to query edges and surfaces
+Added support for geometry selection of surfaces by angle
+Added support for geometry selection of edges by angle
+Changed the wireframe mode to show model edges
+Fixed a bug with the strage selection in some cases - check for cellId != -1
+Added manager for English language of message box buttons
+Highlight hidden parts if they are selected in the model tree
+Added support of RPs in history output
+Added support for swap master/slave surfaces in tie constraints - context menu
+Added support to activate/deactivate steps
+Added descriptions provided by Martin to the video tutorials and
+Added support to activate/deactivate constraints
+Added support for CAD based selection entities in the FE Model tab
+Added support for translating mesh parts
+Added support for scaling mesh parts
+Added support for rotating mesh parts
+Added proces ZZS stresses as normal stress tensors
+Added frequency option for the field output (every n increments)
+Bug fixes - A bug in color conturs lookup table and other bugs reported by Martin
+Bug fixes - Medium nodes on geometry - Midside nodes
+
+Version 0.5.1 Master branch
+Added support for additional mesh parameters
+Added support for reading and displaying *El print data
+Added support for reading and displaying *Node print data
+Added support for preparation of outputs using *El print
+Added support for preparation of outputs using *Node print
+Added double click shortcuts on Model (for keywords) and on Scalar bar (for settings)
+Added scale widget
+Added support for finding short edges and small faces
+Added support for hardware accelerated animation
+Added support for hardening parameter in *Plastic material
+Added support for *Buckling step
+Added support for *Frequency step
+Added support for reading Frequency results
+Bug fixes
+
+Version 0.5.0 Sync branch
+Added support for selection by edges
+Added Querry -> Assembly data
+Added support for Show only (parts, constraints ...)
+Added support for smooth shading via polymesh
+Added support for point and line smoothing
+Added support for .step file import
+Added support for edges and surfaces import from .vol files
+Added support for selection by surfaces
+Added support for model rotation using arrow keys - laptops
+Added support for importing .inp materials
+Added support for importing .inp reference points and rigid bodies
+Fixed stl import in case of collapsed triangles
+Addeed support for internal surfaces
+
+Version 0.4.7 Sync branch
+Added support for gravity and centrifugal loads
+Added support for hide/show and edit in the treeview with the space and enter keys
+Added support for importing .inp surfaces
+Added support for importing .inp element sets
+Added support for importing .inp node sets
+Added feature to merge mesh parts
+Added feature to create a part from element set
+Addes support for running .cmd files
+Save As in now in AsyncMode.
+Added setting for enabling/disabling the saving of the results into pmx files.
+Redraw the dependent objects (loads, BCs, ...) if the child object changes
+Added support for material library
+Fixed bug: #1: %STR results cannot be displayed
+Fixed bug: #2: setting for open last file not working
+Added support for environmental variables: Settings/Calculix/Parallelization
+Bug fixes
+
+Version 0.4.6
+Added OK / Add new button to all forms
+Fixed save button highlight is now refreshed after saving.
+Fixed selection on assemblies when some parts are not visible.
+Added support for exe parameters - fileName to open; removed LastState file. Save before closing warning added.
+Support for saving animations as PNG images / added an increment step setting for time increment animation
+Added convergence file display to the Monitor form
+Support for openning the results file while the analysis is stil running
+The features defined on surfaces display the surfaces in the 3D view
+Added specular propertie to color, added translucency to model and actor edges
+Added support for displaying the results in udeformed, deformed and color contours way.
+Added help menu
+
+Version 0.4.5
+Added support for picking parts in 3D view
+Part, node set, element set, surface and RP names must be unique.
+Added support for multi-selection in the treeview control
+Added support for importing geometry parts into results view
+Added support for translucent colors
+Added signed maximal absolute principal stress
+Added support for parts in results view
+Simplified the BC definition form
+Added support for section assignments on element sets 
+Bounding box min and max data added
+Minor bug fixes
+
+Version 0.4.4
+Added principal stresses
+Set state working/ready now only resets when called with the same text
+Added separate commands for meshing parametres and create mesh
+Added validity checking for all items connected with names - invalid items are colored red
+Fixed the Element set form had bold font due to ViewElementSet not using DynamicCustomTypeDescriptor
+Fixed in keyword editor the GUI created keywords can be moved and deleted - they should be readonly
+Added suport for making movies from animations
+Added support for Constraints on surfaces
+Added support for BC on surfaces
+Minor bug fixes
+
+Version 0.4.3
+Added animations with scale factor and time increments
+Fixed queries on deformed geometry
+Minor bug fixes
+
+Version 0.4.2
+Stl files draw both triangle sides
+Changed the highloght functions of loads and boundary conditions
+Added support for spatially equally distributed symbols
+Support for hide/show loads
+Added graphical representation of the concentrated load, distributed load, pressure and surface traction loads
+Added graphical representation of the disp/rot boundary condition based on reference point
+Added settings for pre-processing colors: highlight, mouse highlight, contraint symbol and boundary condition color
+Support for hide/show boundary conditions
+Added graphical representation of the disp/rot boundary condition based on node set
+Added graphical representation of the disp/rot boundary condition based on reference point
+
+Version 0.4.1
+Support for hide/show constraints
+A tool for measuring distance, angle and circle was added
+A reference point can be created by nodeSets CG, by nodeSets BB CG and Coordinates
+A bounding box center is computed and displayed for NodeSet.
+Surface no longer contains the whole element set but only the element set name.
+Added outer cell face enumeration for easier surface selection.
+Added support for plastic material.
+Changed the way the surfaces are created - direct selection on geometry - based on node selection so not working properly
+
+Version 0.4.0
+Added suport for node selection by edge.
+Added support for netgen native *.vol solid mesh format.
+Added support for import of *.stl geometry.
+Added support for creating FE meshes using nglib library.
+
+Version 0.3.1
+Added output of the Analysis time in the status box.
+Added support for inp mesh file import. Only C3D4 and C3D8 elements. For mesh import from Netgen.
+Changed selection of result Step and Increment.
+Added tree based Calculix keyword editor.
+Added settings for background and lighting
+Added property part color
+Added show icons for Hidded parts
+Fixed hide all parts, select one view (top, ...), show one part - the clipping range is not correct
+Added support for Hide/show
+Updated the way the scalar values are changed in results view - faster.
+
+Version 0.3.0
+Added edit only part properties not the whole part
+Added faster selection of parts - add existing part to selection layer
+Added job status should be changed to "None" if the model changes -> add idication for job that is not OK
+Added disable/enable menus, when the model view changes from model to reslts and back;
+Fixed cell picking (select by surface) has a problem if the ray hits the cell edge and goes through;
+Fixed parabolic elements are not drawn correctly;
+Fixed picking is not working for parabolic elements;
+Fixed regenerate not working for node sets - node set has to be editeted to work.
+Added icon.
+Renamed to PrePoMax.
+Fixed after the results are read, the name of the open file remains *.frd when you view the model.
+Fixed when all results equals to 0 the model is not displayed correctly.
+Improved speed of reading and saving fiels.
+Fixed pick Node by Element - if picking on edge, mouse selection might give different result than actual pick.
+Added selection by geometry.
+Added element set creation by selection of nodes - pick and frustum
+Added element set creation by selection of elements - pick and frustum.
+Added element set creation by selection of surface angle.
+Added element set creation by selection of parts.
+Added element set creation by element ID.
+Added node set creation by selection of nodes - pick and frustum.
+Added node set creation by selection of elements - pick and frustum.
+Added node set creation by selection of surface angle.
+Added node set creation by selection of parts.
+Added node set creation by node ID.
+
+Version 0.2.2
+Added min and max ballons for the results.
+Fixed mouse selection on geometry with beam FE.
+Fixed red edges at the results,
+All 2D cells are drawn on both sides; the backface culling is enabled at all times,
+Added Wireframe view,
+Changed the representation of all edges from lines to wireframe triangles (extracted lines were extracted and then drawn for all 3D cells),
+Added query of the resutls,
+Added mouse selection of points and cells,
+Added all custom widgets,
+Added widget for status block (border widget).
+
+Version 0.2.1
+Added rainbow color spectrum.
+Added min and max setttings for the results.
+Fixed - if the number of discreete colors is reduced from 9 -> 2, after first apply is not OK, after second apply is OK.
+All item forms are now not modal any more.
+Added highlighting of the node sets, element sets, parts, surfaces and reference points in all forms.
+Determine edges from mesh based on the angle 30°.
+Draw only outter surface of the solid geometry.
+Fixed - the status block gets hidden if undeformed shape is drawn -> status block moved to selectionLayer.
+Fixed - after deactivation the icon "deactivated" is not shown. -> the last icon in the icon list is not shown!!!
+Added support for reference points in boundary conditions.
+Added feature RIGID BODY.
+Added feature reference points.
+Added multi-layerd rendering with 3 layers
+
+Version 0.2.0
+Added command patern.
+Add support for element type selection for each part.
+Replace all propertyGrids with tab enabled one.
+Added support for keyboard Delete on the model tree.
+Edit load - show which type of load it is.
+Settings for the postprocessor: draw deformed shape
+Added support for parabolic hexahedral elements
+Settings for the postprocessor: def. scale factor, number of colors, number of sig. digits, number format
+Added status block with name, date, time and def. scale factor
+Added Normal view
+Added support for linear quadrilateral and linear wedge elements
+Added support for parabolic quadrilateral and parabolic wedge elements
+Added support for linear hexahedral elements
+

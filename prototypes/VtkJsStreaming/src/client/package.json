@@ -1,0 +1,22 @@
+{
+  "name": "prepomax-vtkjs-streaming-client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test --config ../../tests/e2e/playwright.config.mts"
+  },
+  "dependencies": {
+    "@kitware/vtk.js": "36.6.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "typescript": "7.0.2",
+    "vite": "8.2.0",
+    "vitest": "4.1.10"
+  }
+}

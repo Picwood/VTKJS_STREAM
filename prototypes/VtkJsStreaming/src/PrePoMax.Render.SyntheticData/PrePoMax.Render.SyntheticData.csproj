@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\PrePoMax.Render.Contracts\PrePoMax.Render.Contracts.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,97 @@
+[
+  {
+    "name": "line-crosses-without-inside-endpoints",
+    "vtkCellType": 3,
+    "points": [[-2, 0, 0], [2, 0, 0]],
+    "legacyPointIndices": [],
+    "legacyCellIntersects": true
+  },
+  {
+    "name": "triangle-bounds-overlap-but-cell-is-disjoint",
+    "vtkCellType": 5,
+    "points": [[2.1, 0, 0], [0, 2.1, 0], [2.1, 2.1, 0]],
+    "legacyPointIndices": [],
+    "legacyCellIntersects": false
+  },
+  {
+    "name": "triangle-grazes-frustum-corner",
+    "vtkCellType": 5,
+    "points": [[2, 0, 0], [0, 2, 0], [2, 2, 0]],
+    "legacyPointIndices": [],
+    "legacyCellIntersects": true
+  },
+  {
+    "name": "hexahedron-completely-encloses-frustum",
+    "vtkCellType": 12,
+    "points": [[-2, -2, -2], [2, -2, -2], [2, 2, -2], [-2, 2, -2], [-2, -2, 2], [2, -2, 2], [2, 2, 2], [-2, 2, 2]],
+    "legacyPointIndices": [],
+    "legacyCellIntersects": false
+  },
+  {
+    "name": "quadratic-edge-midpoint-inside",
+    "vtkCellType": 21,
+    "points": [[-2, 2, 0], [2, 2, 0], [0, 0, 0]],
+    "legacyPointIndices": [2],
+    "legacyCellIntersects": true
+  },
+  {
+    "name": "quadratic-triangle-midpoint-inside-but-corner-hull-disjoint",
+    "vtkCellType": 22,
+    "points": [[2.1, 0, 0], [0, 2.1, 0], [2.1, 2.1, 0], [0, 0, 0], [1.05, 2.1, 0], [2.1, 1.05, 0]],
+    "legacyPointIndices": [3],
+    "legacyCellIntersects": false
+  },
+  {
+    "name": "vertex-on-selection-plane",
+    "vtkCellType": 1,
+    "points": [[1, 0, 0]],
+    "legacyPointIndices": [],
+    "legacyCellIntersects": true
+  },
+  {
+    "name": "zero-length-line-inside",
+    "vtkCellType": 3,
+    "points": [[0, 0, 0], [0, 0, 0]],
+    "legacyPointIndices": [0, 1],
+    "legacyCellIntersects": true
+  },
+  {
+    "name": "quadratic-tetra-inside-node-legacy-face-rejects",
+    "vtkCellType": 24,
+    "points": [
+      [0.9581926020298356, 1.0075186215817911, 0.6552260599523047],
+      [0.8446535222924453, 1.6926303978545185, 1.7424795469354526],
+      [0.4129291227975627, 2.2435713371256023, -0.2008806844422838],
+      [-0.4521856780609643, 0.4762032584533062, 0.8084342126694669],
+      [0.9224358307867622, 1.3567958514866203, 1.1657635372353923],
+      [0.5982365224743933, 1.9735763813748255, 0.7579355746572463],
+      [0.6864664431494741, 1.5834183117551732, 0.2123295920868131],
+      [0.2211177475916749, 0.7533057580472029, 0.7441220808467836],
+      [0.2170973448651021, 1.0684615858312307, 1.3239009740050862],
+      [-0.0095887790281610, 1.4126555370786456, 0.3324387144290887]
+    ],
+    "legacyPointIndices": [3, 7],
+    "legacyCellIntersects": false
+  },
+  {
+    "name": "quadratic-pyramid-inside-nodes-legacy-face-rejects",
+    "vtkCellType": 27,
+    "points": [
+      [-1.9863527265302727, -1.3496010202972997, -0.7544529341567154],
+      [-2.0302314121040546, 0.6851893089515397, -1.4884275475289162],
+      [-1.5106037604637574, 1.3223732422704653, 0.2490362207855519],
+      [-1.4564683938337524, -0.6970268886809578, 0.9762371730881092],
+      [0.1988854424447388, -0.1662127967140037, -0.7540403228662826],
+      [-1.9713400689977683, -0.3020201251373347, -1.1262117101006450],
+      [-1.7818176464112696, 1.0048555177361616, -0.6061708642751116],
+      [-1.4617876324345032, 0.2711877593997183, 0.6155352270021308],
+      [-1.7131464091487527, -0.9905375195483193, 0.1454629907375526],
+      [-0.8646785427613468, -0.7295200738254826, -0.8216178896554043],
+      [-0.8745582597054138, 0.2279153722755214, -1.0962087583217659],
+      [-0.6810306441306284, 0.5979704938182779, -0.2712990576466043],
+      [-0.6179848117383409, -0.3885771798987958, 0.1118946907493048]
+    ],
+    "legacyPointIndices": [4, 9, 11, 12],
+    "legacyCellIntersects": false
+  }
+]

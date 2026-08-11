@@ -1,0 +1,49 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrePoMax.Render.Contracts", "src\PrePoMax.Render.Contracts\PrePoMax.Render.Contracts.csproj", "{9389753D-60C9-40B0-A1CA-3FDC629F5B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrePoMax.Render.SyntheticData", "src\PrePoMax.Render.SyntheticData\PrePoMax.Render.SyntheticData.csproj", "{CDDA2628-FFCB-4147-A724-471363239E32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrePoMax.Render.Server", "src\PrePoMax.Render.Server\PrePoMax.Render.Server.csproj", "{87F1DB45-7AE2-48CD-A5A4-1CDB148A2EB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrePoMax.Render.Contracts.Tests", "tests\PrePoMax.Render.Contracts.Tests\PrePoMax.Render.Contracts.Tests.csproj", "{4A907EBC-B1C9-4523-A3DA-30A3B5406E07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrePoMax.Render.Server.Tests", "tests\PrePoMax.Render.Server.Tests\PrePoMax.Render.Server.Tests.csproj", "{726D681A-80C0-4599-AC8C-0D548B57C818}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrePoMax.Render.SectionOracle", "tools\PrePoMax.Render.SectionOracle\PrePoMax.Render.SectionOracle.csproj", "{D07AA142-C859-4BC6-9769-2AA2F98730D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9389753D-60C9-40B0-A1CA-3FDC629F5B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9389753D-60C9-40B0-A1CA-3FDC629F5B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9389753D-60C9-40B0-A1CA-3FDC629F5B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9389753D-60C9-40B0-A1CA-3FDC629F5B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDDA2628-FFCB-4147-A724-471363239E32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDDA2628-FFCB-4147-A724-471363239E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDDA2628-FFCB-4147-A724-471363239E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDDA2628-FFCB-4147-A724-471363239E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F1DB45-7AE2-48CD-A5A4-1CDB148A2EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F1DB45-7AE2-48CD-A5A4-1CDB148A2EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F1DB45-7AE2-48CD-A5A4-1CDB148A2EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F1DB45-7AE2-48CD-A5A4-1CDB148A2EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A907EBC-B1C9-4523-A3DA-30A3B5406E07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A907EBC-B1C9-4523-A3DA-30A3B5406E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A907EBC-B1C9-4523-A3DA-30A3B5406E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A907EBC-B1C9-4523-A3DA-30A3B5406E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{726D681A-80C0-4599-AC8C-0D548B57C818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{726D681A-80C0-4599-AC8C-0D548B57C818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{726D681A-80C0-4599-AC8C-0D548B57C818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{726D681A-80C0-4599-AC8C-0D548B57C818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D07AA142-C859-4BC6-9769-2AA2F98730D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D07AA142-C859-4BC6-9769-2AA2F98730D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D07AA142-C859-4BC6-9769-2AA2F98730D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D07AA142-C859-4BC6-9769-2AA2F98730D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

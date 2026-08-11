@@ -1,0 +1,177 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly GmshCommon, Version=1.0.*, Culture=Lingua inglese (non associata ad alcun paese): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class GmshCommon.Gmsh: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Initialize(): PrivateScope, Public, Static, HideBySig
+    IsInitialized(): PrivateScope, Public, Static, HideBySig
+    FinalizeAll(): PrivateScope, Public, Static, HideBySig
+    Open(String): PrivateScope, Public, Static, HideBySig
+    Merge(String): PrivateScope, Public, Static, HideBySig
+    Write(String): PrivateScope, Public, Static, HideBySig
+    Clear(): PrivateScope, Public, Static, HideBySig
+Class GmshCommon.Gmsh+Option: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    SetNumber(String, Double): PrivateScope, Public, Static, HideBySig
+    GetNumber(String): PrivateScope, Public, Static, HideBySig
+    SetString(String, String): PrivateScope, Public, Static, HideBySig
+    GetString(String): PrivateScope, Public, Static, HideBySig
+Class GmshCommon.Gmsh+Model: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Add(String): PrivateScope, Public, Static, HideBySig
+    GetCurrent(): PrivateScope, Public, Static, HideBySig
+    SetCurrent(String): PrivateScope, Public, Static, HideBySig
+    GetEntities(Tuple`2[]&(Out), Int32): PrivateScope, Public, Static, HideBySig
+    GetEntities(Tuple`2[]&(Out)): PrivateScope, Public, Static, HideBySig
+    SetEntityName(Int32, Int32, String): PrivateScope, Public, Static, HideBySig
+    GetEntityName(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    GetPhysicalGroups(Int32): PrivateScope, Public, Static, HideBySig
+    GetEntitiesForPhysicalGroup(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    AddPhysicalGroup(Int32, Int32[], Int32, String): PrivateScope, Public, Static, HideBySig
+    AddPhysicalGroup(Int32, Int32[], String): PrivateScope, Public, Static, HideBySig
+    RemovePhysicalGroups(Tuple`2[]): PrivateScope, Public, Static, HideBySig
+    SetPhysicalName(Int32, Int32, String): PrivateScope, Public, Static, HideBySig
+    GetPhysicalName(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    GetBoundary(Tuple`2[], Tuple`2[]&(Out), Boolean(HasFieldMarshal), Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    GetAdjacencies(Int32, Int32, Int32[]&(Out), Int32[]&(Out)): PrivateScope, Public, Static, HideBySig
+    GetBoundingBox(Int32, Int32, Double&(Out), Double&(Out), Double&(Out), Double&(Out), Double&(Out), Double&(Out)): PrivateScope, Public, Static, HideBySig
+    AddDiscreteEntity(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    RemoveEntities(Tuple`2[], Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    RemoveEntities(Tuple`2[]): PrivateScope, Public, Static, HideBySig
+    GetType(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    GetValue(Int32, Int32, Double[], Double[]&(Out)): PrivateScope, Public, Static, HideBySig
+    GetNormal(Int32, Double[], Double[]&(Out)): PrivateScope, Public, Static, HideBySig
+    GetParametrization(Int32, Int32, Double[], Double[]&(Out)): PrivateScope, Public, Static, HideBySig
+    GetParametrizationBounds(Int32, Int32, Double[]&(Out), Double[]&(Out)): PrivateScope, Public, Static, HideBySig
+Class GmshCommon.Gmsh+Model+Geo: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Synchronize(): PrivateScope, Public, Static, HideBySig
+    AddVolume(Int32[], Int32): PrivateScope, Public, Static, HideBySig
+    AddVolume(Int32[]): PrivateScope, Public, Static, HideBySig
+    AddSurfaceLoop(Int32[], Int32): PrivateScope, Public, Static, HideBySig
+    AddSurfaceLoop(Int32[]): PrivateScope, Public, Static, HideBySig
+Class GmshCommon.Gmsh+Model+Geo+Mesh: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Class GmshCommon.Gmsh+Model+Mesh: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Generate(Int32): PrivateScope, Public, Static, HideBySig
+    Optimize(String, Boolean(HasFieldMarshal), Int32, Tuple`2[]): PrivateScope, Public, Static, HideBySig
+    AffineTransform(Double[], Int32[][]): PrivateScope, Public, Static, HideBySig
+    Clear(Tuple`2[]): PrivateScope, Public, Static, HideBySig
+    Clear(): PrivateScope, Public, Static, HideBySig
+    AddNodes(Int32, Int32, IntPtr[], Double[]): PrivateScope, Public, Static, HideBySig
+    AddFaces(Int32, IntPtr[], IntPtr[]): PrivateScope, Public, Static, HideBySig
+    AddElements(Int32, Int32, Int32[], IntPtr[][], IntPtr[][]): PrivateScope, Public, Static, HideBySig
+    ClassifySurfaces(Double, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal), Double, Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    CreateGeometry(): PrivateScope, Public, Static, HideBySig
+    CreateTopology(Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    CreateTopology(): PrivateScope, Public, Static, HideBySig
+    GetIntegrationPoints(Int32, String, Double[]&(Out), Double[]&(Out)): PrivateScope, Public, Static, HideBySig
+    GetElementTypes(Int32[]&(Out), Int32, Int32): PrivateScope, Public, Static, HideBySig
+    GetElementTypes(Int32[]&(Out)): PrivateScope, Public, Static, HideBySig
+    GetElementTypes(Int32[]&(Out), Int32): PrivateScope, Public, Static, HideBySig
+    GetNodes(IntPtr[]&(Out), Double[]&(Out), Int32, Int32, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    GetElement(IntPtr, Int32, IntPtr[]&(Out), Int32&(Out), Int32&(Out)): PrivateScope, Public, Static, HideBySig
+    GetElementProperties(Int32, Int32&(Out), Int32&(Out), Int32&(Out), Double[]&(Out), Int32&(Out)): PrivateScope, Public, Static, HideBySig
+    GetMaxElementTag(IntPtr&(Out)): PrivateScope, Public, Static, HideBySig
+    GetElementQualities(IntPtr[], Double[]&(Out), String): PrivateScope, Public, Static, HideBySig
+    GetElements(Int32[]&(Out), IntPtr[][]&(Out), IntPtr[][]&(Out), Int32, Int32): PrivateScope, Public, Static, HideBySig
+    RemoveDuplicateNodes(): PrivateScope, Public, Static, HideBySig
+    RemoveDuplicateNodes(Tuple`2[]): PrivateScope, Public, Static, HideBySig
+    RemoveDuplicateElements(): PrivateScope, Public, Static, HideBySig
+    CreateFaces(): PrivateScope, Public, Static, HideBySig
+    GetAllFaces(Int32, IntPtr[]&(Out), IntPtr[]&(Out)): PrivateScope, Public, Static, HideBySig
+    GetJacobians(Int32, Int32, Double[], Double[]&(Out), Double[]&(Out), Double[]&(Out)): PrivateScope, Public, Static, HideBySig
+    Recombine(): PrivateScope, Public, Static, HideBySig
+    Refine(): PrivateScope, Public, Static, HideBySig
+    SetRecombine(Int32, Int32, Double): PrivateScope, Public, Static, HideBySig
+    SetRecombine(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    SetAlgorithm(Int32, Int32, Int32): PrivateScope, Public, Static, HideBySig
+    SetSizeFromBoundary(Int32, Int32, Int32): PrivateScope, Public, Static, HideBySig
+    SetCompound(Int32, Int32[]): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteCurve(Int32, Int32, String, Double): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteCurve(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteSurface(Int32, String, Int32[]): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteSurface(Int32, String): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteSurface(Int32): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteVolume(Int32, Int32[]): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteVolume(Int32): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteAutomatic(Tuple`2[], Double, Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteAutomatic(Double, Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteAutomatic(Double): PrivateScope, Public, Static, HideBySig
+    SetTransfiniteAutomatic(): PrivateScope, Public, Static, HideBySig
+    SetSmoothing(Int32, Int32, Int32): PrivateScope, Public, Static, HideBySig
+    SetOutwardOrientation(Int32): PrivateScope, Public, Static, HideBySig
+    SetOrder(Int32): PrivateScope, Public, Static, HideBySig
+    GetSizes(Tuple`2[], Double[]&(Out)): PrivateScope, Public, Static, HideBySig
+Class GmshCommon.Gmsh+Model+Mesh+Field: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Class GmshCommon.Gmsh+Model+OCC: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Extrude(Tuple`2[], Double, Double, Double, Tuple`2[]&(Out), Int32[], Double[], Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    Revolve(Tuple`2[], Double, Double, Double, Double, Double, Double, Double, Tuple`2[]&(Out), Int32[], Double[], Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    Synchronize(): PrivateScope, Public, Static, HideBySig
+    ImportShapes(String, Tuple`2[]&(Out), Boolean(HasFieldMarshal), String): PrivateScope, Public, Static, HideBySig
+    GetEntities(Int32): PrivateScope, Public, Static, HideBySig
+    Remove(Tuple`2[], Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    Remove(Tuple`2[]): PrivateScope, Public, Static, HideBySig
+    RemoveAllDuplicates(): PrivateScope, Public, Static, HideBySig
+    Defeature(Int32[], Int32[], Tuple`2[]&(Out), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    GetDistance(Int32, Int32, Int32, Int32, Double&(Out), Double&(Out), Double&(Out), Double&(Out), Double&(Out), Double&(Out), Double&(Out)): PrivateScope, Public, Static, HideBySig
+    GetDistance(Int32, Int32, Int32, Int32, Double&(Out)): PrivateScope, Public, Static, HideBySig
+    Fragment(Tuple`2[], Tuple`2[], Tuple`2[]&(Out), Tuple`2[][]&(Out), Int32, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    Fragment(Tuple`2[], Tuple`2[], Tuple`2[]&(Out), Tuple`2[][]&(Out), Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    HealShapes(Tuple`2[]&(Out), Tuple`2[], Double, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal), Boolean(HasFieldMarshal), Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    Intersect(Tuple`2[], Tuple`2[], Tuple`2[]&(Out), Tuple`2[][]&(Out), Int32, Boolean(HasFieldMarshal), Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    GetMass(Int32, Int32, Double&(Out)): PrivateScope, Public, Static, HideBySig
+    GetCenterOfMass(Int32, Int32, Double&(Out), Double&(Out), Double&(Out)): PrivateScope, Public, Static, HideBySig
+    GetEntitiesInBoundingBox(Double, Double, Double, Double, Double, Double, Tuple`2[]&(Out), Int32): PrivateScope, Public, Static, HideBySig
+    AddPoint(Double, Double, Double, Double, Int32): PrivateScope, Public, Static, HideBySig
+    AddPoint(Double, Double, Double): PrivateScope, Public, Static, HideBySig
+    AddPoint(Double, Double, Double, Double): PrivateScope, Public, Static, HideBySig
+    AddPoint(Double, Double, Double, Int32): PrivateScope, Public, Static, HideBySig
+    AddLine(Int32, Int32, Int32): PrivateScope, Public, Static, HideBySig
+    AddLine(Int32, Int32): PrivateScope, Public, Static, HideBySig
+    AddBSpline(Int32[], Int32, Int32, Double[]): PrivateScope, Public, Static, HideBySig
+    AddBSpline(Int32[], Int32, Int32, Double[], Double[], Int32[]): PrivateScope, Public, Static, HideBySig
+    AddCurveLoop(Int32[], Int32): PrivateScope, Public, Static, HideBySig
+    AddCurveLoop(Int32[]): PrivateScope, Public, Static, HideBySig
+    AddPlaneSurface(Int32[], Int32): PrivateScope, Public, Static, HideBySig
+    AddPlaneSurface(Int32[]): PrivateScope, Public, Static, HideBySig
+    AddBSplineSurface(Int32[], Int32, Int32, Int32, Int32, Double[]): PrivateScope, Public, Static, HideBySig
+    AddBSplineSurface(Int32[], Int32, Int32, Int32, Int32, Double[], Int32[], Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    AddBSplineSurface(Int32[], Int32, Int32, Int32, Int32, Double[], Double[], Double[], Int32[], Int32[], Int32[], Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    AddWire(Int32[], Int32, Boolean(HasFieldMarshal)): PrivateScope, Public, Static, HideBySig
+    AddSurfaceLoop(Int32[], Int32): PrivateScope, Public, Static, HideBySig
+    AddSurfaceLoop(Int32[]): PrivateScope, Public, Static, HideBySig
+    AddVolume(Int32[], Int32): PrivateScope, Public, Static, HideBySig
+    AddVolume(Int32[]): PrivateScope, Public, Static, HideBySig
+    SetSize(Tuple`2[], Double): PrivateScope, Public, Static, HideBySig
+Class GmshCommon.Gmsh+Model+OCC+Mesh: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Class GmshCommon.Gmsh+Logger: AutoLayout, AnsiClass, Class, NestedPublic, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Write(String, String): PrivateScope, Public, Static, HideBySig
+    Start(): PrivateScope, Public, Static, HideBySig
+    Get(): PrivateScope, Public, Static, HideBySig
+    Stop(): PrivateScope, Public, Static, HideBySig
+    GetLastError(): PrivateScope, Public, Static, HideBySig
+Class GmshCommon.Utility: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    GetCentroid(IntPtr, Int32): PrivateScope, Public, Static, HideBySig

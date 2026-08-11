@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{74EA83FB-2743-49EE-85A8-5B42CBCE19B3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UserControls</RootNamespace>
+    <AssemblyName>UserControls</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutocompleteMenu\AutocompleteItem.cs" />
+    <Compile Include="AutocompleteMenu\AutocompleteItems.cs" />
+    <Compile Include="AutocompleteMenu\AutocompleteListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AutocompleteMenu\AutocompleteMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AutocompleteMenu\AutocompleteMenuHost.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AutocompleteMenu\Colors.cs" />
+    <Compile Include="AutocompleteMenu\EventArgs.cs" />
+    <Compile Include="AutocompleteMenu\IAutocompleteListView.cs" />
+    <Compile Include="AutocompleteMenu\ITextBoxWrapper.cs" />
+    <Compile Include="AutocompleteMenu\Range.cs" />
+    <Compile Include="AutocompleteMenu\TextBoxWrapper.cs" />
+    <Compile Include="Forms\FrmPropertyDataListView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GroupBoxes\CollapsableGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GroupBoxes\CollapsableGroupBox.Designer.cs" />
+    <Compile Include="MenuStrip\NoHighlightRenderer.cs" />
+    <Compile Include="MessageBoxes\AutoClosingMessageBox.cs" />
+    <Compile Include="DataGridView\DataGridViewCopyPaste.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DiagramView\DiagramView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiagramView\DiagramView.Designer.cs">
+      <DependentUpon>DiagramView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ChildMouseWheelManagedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmProperties.Designer.cs">
+      <DependentUpon>FrmProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmPropertyListView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmPropertyListView.Designer.cs">
+      <DependentUpon>FrmPropertyListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainMouseWheelManagedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PrePoMaxChildForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListView\ListViewWithSelection.cs" />
+    <Compile Include="ListView\ListViewWithSelection.Designer.cs">
+      <DependentUpon>ListViewWithSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListView\MyListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Panels\BorderColoredPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProperyGrid\MySite.cs" />
+    <Compile Include="TextBoxes\AutoScrollTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\AutoScrollTextBox.Designer.cs">
+      <DependentUpon>AutoScrollTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextBoxes\AnnotationEditorRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\Class1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\MultiIntegerTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\MultiIntegerTextBox.Designer.cs">
+      <DependentUpon>MultiIntegerTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextBoxes\UnitAwareToolStripTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\UnitAwareToolStripTextBox.Designer.cs">
+      <DependentUpon>UnitAwareToolStripTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextBoxes\NumericToolStripTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\NumericToolStripTextBox.Designer.cs">
+      <DependentUpon>NumericToolStripTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextBoxes\ResizableTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\SearchTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\SearchTextBox.Designer.cs">
+      <DependentUpon>SearchTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextBoxes\UnitAwareTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\UnitAwareTextBox.Designer.cs">
+      <DependentUpon>UnitAwareTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MenuStrip\MenuStripFocus.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="MenuStrip\MenuStripFocus.Designer.cs">
+      <DependentUpon>MenuStripFocus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ModelTree.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ModelTree.Designer.cs">
+      <DependentUpon>ModelTree.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextBoxes\NumericTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TextBoxes\NumericTextBox.Designer.cs">
+      <DependentUpon>NumericTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ProperyGrid\ColorEditorEx.cs" />
+    <Compile Include="ProperyGrid\TabEnabledPropertyGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Trees\CodersLabTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ToolStripFocus.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ToolStripFocus.Designer.cs">
+      <DependentUpon>ToolStripFocus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Trees\Extensions.cs" />
+    <Compile Include="Trees\OrderedDictionary.cs" />
+    <Compile Include="Views\Sections\ViewSection.cs" />
+    <Compile Include="Views\Sections\ViewSolidSection.cs" />
+    <Compile Include="Views\Step\ViewStaticStep.cs" />
+    <Compile Include="Views\Step\ViewStep.cs" />
+    <Compile Include="AdvisorControl\DoubleBufferedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AdvisorControl\AdvisorItemLinkLabel.cs" />
+    <Compile Include="AdvisorControl\AdvisorItemLabel.cs" />
+    <Compile Include="AdvisorControl\AdvisorItem.cs" />
+    <Compile Include="AdvisorControl\AdvisorPage.cs" />
+    <Compile Include="AdvisorControl\AdvisorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AdvisorControl\AdvisorControl.Designer.cs">
+      <DependentUpon>AdvisorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnnotationEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AnnotationEditor.Designer.cs">
+      <DependentUpon>AnnotationEditor.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AutocompleteMenu\AutocompleteMenu.resx">
+      <DependentUpon>AutocompleteMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataGridView\DataGridViewCopyPaste.resx">
+      <DependentUpon>DataGridViewCopyPaste.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiagramView\DiagramView.resx">
+      <DependentUpon>DiagramView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmProperties.resx">
+      <DependentUpon>FrmProperties.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmPropertyDataListView.resx">
+      <DependentUpon>FrmPropertyDataListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmPropertyListView.resx">
+      <DependentUpon>FrmPropertyListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PrePoMaxChildForm.resx">
+      <DependentUpon>PrePoMaxChildForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListView\ListViewWithSelection.resx">
+      <DependentUpon>ListViewWithSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListView\MyListView.resx">
+      <DependentUpon>MyListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuStrip\MenuStripFocus.resx">
+      <DependentUpon>MenuStripFocus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ModelTree.resx">
+      <DependentUpon>ModelTree.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextBoxes\AutoScrollTextBox.resx">
+      <DependentUpon>AutoScrollTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextBoxes\MultiIntegerTextBox.resx">
+      <DependentUpon>MultiIntegerTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextBoxes\UnitAwareToolStripTextBox.resx">
+      <DependentUpon>UnitAwareToolStripTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextBoxes\NumericToolStripTextBox.resx">
+      <DependentUpon>NumericToolStripTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextBoxes\SearchTextBox.resx">
+      <DependentUpon>SearchTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextBoxes\UnitAwareTextBox.resx">
+      <DependentUpon>UnitAwareTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextBoxes\NumericTextBox.resx">
+      <DependentUpon>NumericTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProperyGrid\TabEnabledPropertyGrid.resx">
+      <DependentUpon>TabEnabledPropertyGrid.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Trees\CodersLabTreeView.resx">
+      <DependentUpon>CodersLabTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdvisorControl\AdvisorControl.resx">
+      <DependentUpon>AdvisorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AnnotationEditor.resx">
+      <DependentUpon>AnnotationEditor.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CaeGlobals\CaeGlobals.csproj">
+      <Project>{104caebc-0761-4850-a97d-3fc59116c5b6}</Project>
+      <Name>CaeGlobals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeJob\CaeJob.csproj">
+      <Project>{a449b1d6-da0d-4a08-9b64-2cd929830399}</Project>
+      <Name>CaeJob</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeMesh\CaeMesh.csproj">
+      <Project>{69d01fc1-1bc1-4470-b371-84d22282be98}</Project>
+      <Name>CaeMesh</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeModel\CaeModel.csproj">
+      <Project>{65e5ee18-b889-42ad-a775-ba5674abe1dd}</Project>
+      <Name>CaeModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeResults\CaeResults.csproj">
+      <Project>{bca7c65b-cc0b-48ca-b852-49255bd3851d}</Project>
+      <Name>CaeResults</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Resources\Warning.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Running.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OK.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mesh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Part.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Node_set.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Element_set.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Surface.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Reference_point.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Material.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Section.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Constraints.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Step.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Field_output.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Load.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Analysis.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Empty.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Bc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Unactive1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hide1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Show1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hide.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Show.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Deformed.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Color_contours.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Library.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Show2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Unactive7.ico" />
+    <None Include="Resources\Unactive6.ico" />
+    <None Include="Resources\Unactive.ico" />
+    <None Include="Resources\Unactive5.ico" />
+    <None Include="Resources\Unactive4.ico" />
+    <None Include="Resources\Unactive3.ico" />
+    <None Include="Resources\Compound.ico" />
+    <None Include="Resources\Meshing_parameters.ico" />
+    <None Include="Images\Collapse.png" />
+    <None Include="Images\Expand.png" />
+    <Content Include="License-LGPL.txt" />
+    <None Include="Resources\Unactive2.ico" />
+    <None Include="Resources\Preview_load.ico" />
+    <None Include="Resources\Step.png" />
+    <None Include="Resources\Query.ico" />
+    <None Include="Resources\NoResult.ico" />
+    <None Include="Resources\OK1.ico" />
+    <None Include="Resources\Part.png" />
+    <None Include="Resources\Remove.ico" />
+    <None Include="Resources\Search1.png" />
+    <None Include="Resources\Search.png" />
+    <None Include="Resources\Hide2.ico" />
+    <None Include="Resources\Close_White.ico" />
+    <None Include="Resources\Close_Red1.ico" />
+    <None Include="Resources\Close_Red.ico" />
+    <None Include="Resources\Close.ico" />
+    <None Include="Resources\History_output.ico" />
+    <None Include="Resources\Paste.png" />
+    <None Include="Resources\Copy.png" />
+    <None Include="Resources\Cut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Materials\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

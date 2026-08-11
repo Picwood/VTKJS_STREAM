@@ -1,0 +1,124 @@
+// PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
+//
+// Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
+//
+// Source code: https://gitlab.com/MatejB/PrePoMax
+//
+// Author: Matej Borovinšek
+// Contributors:
+
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PrePoMax
+{
+    [Serializable]
+    public class SectionViewsCollection
+    {
+        // Variables                                                                                                                
+        [NonSerialized] private Controller _controller;
+        private Octree.Plane _geometrySectionViewPlane;
+        private Octree.Plane _modelSectionViewPlane;
+        private Dictionary<string, Octree.Plane> _resultNameSectionViewPlane;
+        private bool _lightenColors;
+        private Color _sectionColor;
+
+
+        // Properties                                                                                                               
+        public string CurrentResultName { get { return _controller.AllResults.GetCurrentResultName(); } }
+        public bool LightenColors { get { return _lightenColors; } set { _lightenColors = value; } }
+        public Color SectionColor { get { return _sectionColor; } set { _sectionColor = value; } }
+
+
+        // Constructors                                                                                                             
+        public SectionViewsCollection(Controller controller)
+        {
+            _controller = controller;
+            ClearModelSectionViews();
+            _resultNameSectionViewPlane = new Dictionary<string, Octree.Plane>();
+            _lightenColors = true;
+            _sectionColor = Color.Empty;
+        }
+
+
+        // Methods                                                                                                                  
+        public bool IsSectionViewActive()
+        {
+            return GetCurrentSectionViewPlane() != null;
+        }
+        public Octree.Plane GetCurrentSectionViewPlane()
+        {
+            if (_controller.CurrentView == ViewGeometryModelResults.Geometry) return _geometrySectionViewPlane;
+            else if (_controller.CurrentView == ViewGeometryModelResults.Model) return _modelSectionViewPlane;
+            else if (_controller.CurrentView == ViewGeometryModelResults.Results)
+            {
+                string name = CurrentResultName;
+                if (name != null && _resultNameSectionViewPlane.TryGetValue(name, out Octree.Plane plane)) return plane;
+                else return null;
+            }
+            else if (_controller.CurrentView == ViewGeometryModelResults.Fatigue) return null;
+            else if (_controller.CurrentView == ViewGeometryModelResults.BaramMesh) return null;
+            else if (_controller.CurrentView == ViewGeometryModelResults.BaramFlow) return null;
+            else throw new NotSupportedException();
+        }
+        public void SetCurrentSectionViewPlane(double[] point, double[] normal)
+        {
+            Octree.Plane plane = new Octree.Plane(point, normal);
+            SetCurrentSectionViewPlane(plane);
+        }
+        public void SetCurrentSectionViewPlane(Octree.Plane plane)
+        {
+            if (_controller.CurrentView == ViewGeometryModelResults.Geometry) _geometrySectionViewPlane = plane;
+            else if (_controller.CurrentView == ViewGeometryModelResults.Model) _modelSectionViewPlane = plane;
+            else if (_controller.CurrentView == ViewGeometryModelResults.Results)
+            {
+                string name = CurrentResultName;
+                if (name != null)
+                {
+                    if (!_resultNameSectionViewPlane.ContainsKey(name))
+                        _resultNameSectionViewPlane.Add(name, plane);
+                    else _resultNameSectionViewPlane[name] = plane;
+                }
+            }
+            else if (_controller.CurrentView == ViewGeometryModelResults.Fatigue) { }
+            else if (_controller.CurrentView == ViewGeometryModelResults.BaramMesh) { }
+            else if (_controller.CurrentView == ViewGeometryModelResults.BaramFlow) { }
+            else throw new NotSupportedException();
+        }
+        public void SetCurrentPointAndNormal(double[] point, double[] normal)
+        {
+            Octree.Plane plane = GetCurrentSectionViewPlane();
+            if (plane != null) plane.SetPointAndNormal(point, normal);
+        }
+        // Clear
+        public void ClearModelSectionViews()
+        {
+            _geometrySectionViewPlane = null;
+            _modelSectionViewPlane = null;
+        }
+        public void ClearResultsSectionViews()
+        {
+            _resultNameSectionViewPlane.Clear();
+        }
+        // Remove
+        public void RemoveCurrentSectionView()
+        {
+            if (_controller.CurrentView == ViewGeometryModelResults.Geometry) _geometrySectionViewPlane = null;
+            else if (_controller.CurrentView == ViewGeometryModelResults.Model) _modelSectionViewPlane = null;
+            else if (_controller.CurrentView == ViewGeometryModelResults.Results)
+            {
+                string name = CurrentResultName;
+                if (name != null) _resultNameSectionViewPlane.Remove(CurrentResultName);
+            }
+            else if (_controller.CurrentView == ViewGeometryModelResults.Fatigue) { }
+            else if (_controller.CurrentView == ViewGeometryModelResults.BaramMesh) { }
+            else if (_controller.CurrentView == ViewGeometryModelResults.BaramFlow) { }
+            else throw new NotSupportedException();
+        }
+        
+    }
+}

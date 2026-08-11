@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http://127.0.0.1:* ws://127.0.0.1:*; style-src 'self'; img-src 'self' blob: data:; worker-src 'self' blob:" />
+    <title>PrePoMax streaming renderer prototype</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="toolbar">
+        <div class="brand">
+          <strong>PrePoMax</strong>
+          <span>Streaming renderer prototype</span>
+        </div>
+        <label class="server-field">
+          Server
+          <input id="server-url" type="url" value="http://127.0.0.1:5174" spellcheck="false" />
+        </label>
+        <button id="connect" type="button">Load fixture</button>
+        <button id="cancel" type="button" disabled>Cancel</button>
+        <button id="unload" type="button" disabled>Unload</button>
+        <button id="reset-camera" type="button" disabled>Reset camera</button>
+        <select id="camera-view" aria-label="Camera view" disabled>
+          <option value="isometric">Isometric</option>
+          <option value="front">Front</option>
+          <option value="back">Back</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
+        </select>
+        <label class="toolbar-check"><input id="orthographic" type="checkbox" checked /> Orthographic</label>
+      </header>
+
+      <section class="workspace">
+        <aside class="panel scene-panel">
+          <h2>Scene</h2>
+          <div id="actors" class="actor-list"><span class="muted">No scene loaded</span></div>
+          <h2>Field</h2>
+          <label class="palette-field">
+            Palette
+            <select id="palette">
+              <option value="Cool to Warm">Cool to Warm</option>
+              <option value="Blue to Red Rainbow">Rainbow</option>
+            </select>
+          </label>
+          <label class="actor-row"><input id="contours" type="checkbox" checked /> Show contours</label>
+          <button id="switch-field" type="button" disabled>Switch scalar field</button>
+          <div id="legend" class="legend muted">Scalars not loaded</div>
+        </aside>
+
+        <section class="viewport-shell">
+          <div id="viewport" aria-label="3D render viewport"></div>
+          <div id="selection-rectangle" aria-hidden="true" hidden></div>
+          <div id="pick-marker" aria-hidden="true" hidden></div>
+          <div id="error" class="error-banner" role="alert" hidden></div>
+          <div class="progress-card">
+            <progress id="progress" max="1" value="0"></progress>
+            <output id="status">Ready</output>
+          </div>
+        </section>
+
+        <aside class="panel diagnostics-panel">
+          <h2>Selection</h2>
+          <pre id="pick-inspector" class="pick-inspector">No selection</pre>
+          <h2>Diagnostics</h2>
+          <div class="diagnostic-actions">
+            <button id="copy-diagnostics" type="button">Copy summary</button>
+            <button id="download-diagnostics" type="button">Download JSON</button>
+          </div>
+          <pre id="diagnostics">Protocol 1.0\nWaiting for scene.</pre>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

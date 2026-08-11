@@ -1,0 +1,105 @@
+// PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
+//
+// Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
+//
+// Source code: https://gitlab.com/MatejB/PrePoMax
+//
+// Author: Matej Borovinšek
+// Contributors:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CaeMesh
+{
+    [Serializable]
+    public class LinearBeamElement : FeElement1D
+    {
+        // Variables                                                                                                                
+        private static int vtkCellTypeInt = (int)vtkCellType.VTK_LINE;
+
+
+        // Properties                                                                                                               
+
+
+        // Constructors                                                                                                             
+        public LinearBeamElement(int id, int[] nodeIds)
+            : base(id, nodeIds)
+        {
+        }
+        public LinearBeamElement(int id, int partId, int[] nodeIds)
+            : base(id, partId, nodeIds)
+        {
+        }
+
+
+        // Methods                                                                                                                  
+        public override int[] GetVtkNodeIds()
+        {
+            // return a copy -> ToArray
+            return NodeIds.ToArray();
+        }
+        public override int[] GetGmshNodeIds()
+        {
+            // return a copy -> ToArray
+            return NodeIds.ToArray();
+        }
+        public override int GetVtkCellType()
+        {
+            return vtkCellTypeInt;
+        }
+        public override FeFaceName GetFaceNameFromSortedNodeIds(int[] nodeIds)
+        {
+            throw new NotImplementedException();
+        }
+        public override int[] GetNodeIdsFromFaceName(FeFaceName faceName)
+        {
+            throw new NotImplementedException();
+        }
+        public override int[] GetVtkCellFromFaceName(FeFaceName faceName)
+        {
+            throw new NotImplementedException();
+        }
+        public override int[][] GetAllVtkCells()
+        {
+            return new int[][] { NodeIds.ToArray() };
+        }
+        public override Dictionary<FeFaceName, double> GetFaceNamesAndAreasFromNodeSet(HashSet<int> nodeSet,
+                                                                                       Dictionary<int, FeNode> nodes,
+                                                                                       bool edgeFaces)
+        {
+            throw new NotImplementedException();
+        }
+        public override double[] GetEquivalentForcesFromFaceName(FeFaceName faceName)
+        {
+            throw new NotImplementedException();
+        }
+        public override double[] GetEquivalentForcesFromFaceName(FeFaceName faceName, double[] nodalValues)
+        {
+            throw new NotImplementedException();
+        }
+        public override double GetArea(FeFaceName faceName, Dictionary<int, FeNode> nodes)
+        {
+            throw new NotImplementedException();
+        }
+        public override double[] GetFaceCG(FeFaceName faceName, Dictionary<int, FeNode> nodes, out double area)
+        {
+            throw new NotImplementedException();
+        }
+        public override double[] GetCG(Dictionary<int, FeNode> nodes, out double length)
+        {
+            return GeometryTools.BeamCG(nodes[NodeIds[0]], nodes[NodeIds[1]], out length);
+        }
+        //
+        public override void Mirror()
+        { }
+        //
+        public override FeElement DeepCopy()
+        {
+            return new LinearBeamElement(Id, PartId, NodeIds.ToArray());
+        }
+    }
+}

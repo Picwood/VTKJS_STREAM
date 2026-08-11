@@ -1,0 +1,89 @@
+{
+  "schema": "prepomax-wp5-run-summary-v1",
+  "capturedUtc": "2026-08-05T21:05:30Z",
+  "environment": {
+    "os": "Windows 10 x64",
+    "browser": "Chrome 150.0.0.0",
+    "webglVendor": "Google Inc. (Intel)",
+    "webglRenderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "viewport": [1920, 1080],
+    "devicePixelRatio": 1,
+    "devtoolsOpen": false
+  },
+  "configuration": {
+    "chunkCellRows": 50,
+    "resourceConcurrency": 3,
+    "resourceCapBytes": 8388608,
+    "chunks": 30
+  },
+  "canonical": {
+    "uniqueNodes": 3000000,
+    "logicalQuads": 2996501,
+    "triangles": 5993002,
+    "chunkPointTuplesIncludingBoundaryDuplication": 3058000
+  },
+  "network": {
+    "manifestBytes": 82317,
+    "initialResourceRequests": 150,
+    "initialBytes": 157048032,
+    "scalarRequests": 30,
+    "scalarBytes": 12232000
+  },
+  "runs": [
+    {
+      "capturedUtc": "2026-08-05T21:04:11.720Z",
+      "serverReadyToManifestMs": 771.4,
+      "manifestToFirstChunkMs": 62.9,
+      "completeLoadMs": 1585.0,
+      "longestLoadTaskMs": 0.0,
+      "orbitMedianFps": 49.01960761397676,
+      "pickP95Ms": 92.3,
+      "scalarUpdateMs": 462.7,
+      "browserTrackedPeakAboveBaselineBytes": 275577200,
+      "gpuMemoryMB": 120.844024,
+      "backendManagedPeakAboveBaselineBytes": 9539648,
+      "retainedAfterFiveUnloadsRatio": 0.011930254026820797
+    },
+    {
+      "capturedUtc": "2026-08-05T21:04:45.538Z",
+      "serverReadyToManifestMs": 665.6,
+      "manifestToFirstChunkMs": 62.7,
+      "completeLoadMs": 1610.9,
+      "longestLoadTaskMs": 0.0,
+      "orbitMedianFps": 51.020408101202996,
+      "pickP95Ms": 92.8,
+      "scalarUpdateMs": 448.6,
+      "browserTrackedPeakAboveBaselineBytes": 275621980,
+      "gpuMemoryMB": 120.844024,
+      "backendManagedPeakAboveBaselineBytes": 9844264,
+      "retainedAfterFiveUnloadsRatio": 0.011925979198030578
+    },
+    {
+      "capturedUtc": "2026-08-05T21:05:08.000Z",
+      "serverReadyToManifestMs": 649.5,
+      "manifestToFirstChunkMs": 71.7,
+      "completeLoadMs": 1639.2,
+      "longestLoadTaskMs": 0.0,
+      "orbitMedianFps": 50.25125604058627,
+      "pickP95Ms": 98.7,
+      "scalarUpdateMs": 464.1,
+      "browserTrackedPeakAboveBaselineBytes": 275576244,
+      "gpuMemoryMB": 120.844024,
+      "backendManagedPeakAboveBaselineBytes": 9848840,
+      "retainedAfterFiveUnloadsRatio": 0.011941878415325234
+    }
+  ],
+  "medians": {
+    "serverReadyToManifestMs": 665.6,
+    "manifestToFirstChunkMs": 62.9,
+    "completeLoadMs": 1610.9,
+    "longestLoadTaskMs": 0.0,
+    "orbitMedianFps": 50.25125604058627,
+    "pickP95Ms": 92.8,
+    "scalarUpdateMs": 462.7,
+    "browserTrackedPeakAboveBaselineBytes": 275577200,
+    "gpuMemoryMB": 120.844024,
+    "backendManagedPeakAboveBaselineBytes": 9844264,
+    "retainedAfterFiveUnloadsRatio": 0.011930254026820797
+  }
+}

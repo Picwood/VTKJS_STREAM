@@ -1,0 +1,60 @@
+// PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
+//
+// Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
+//
+// Source code: https://gitlab.com/MatejB/PrePoMax
+//
+// Author: Matej Borovinšek
+// Contributors:
+
+using Kitware.VTK;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace vtkControl
+{
+    public class vtkMaxCaptionActor : vtkMaxActor
+    {
+        // Actors
+        private vtkActor2D _captionActor;
+        private double[] _position;
+        private double[] _offsetVector;
+
+
+        // Properties                                                                                                               
+        public vtkActor2D CaptionActor { get { return _captionActor; } set { _captionActor = value; } }
+        public double[] Position { get { return _position; } set { _position = value; } }
+        public double[] OffsetVector { get { return _offsetVector; } set { _offsetVector = value; } }
+        public override bool VtkMaxActorVisible
+        {
+            get { return _visible; }
+            set
+            {
+                _visible = value;
+                if (_captionActor != null) _captionActor.SetVisibility(_visible ? 1 : 0);
+            }
+        }
+
+
+        // Constructors                                                                                                             
+        public vtkMaxCaptionActor(string name, Color color, vtkActor2D captionActor)
+            : base()
+        {
+            _name = name;
+            _captionActor = captionActor;
+            //
+            _actorRepresentation = vtkMaxActorRepresentation.Unknown;
+            _backfaceCulling = true;
+            _color = color;
+            _backfaceColor = Color.Black;
+            _colorTable = null;
+            _colorContours = false;
+            _sectionViewPossible = false;
+            _drawOnGeometry = false;
+        }
+    }
+}

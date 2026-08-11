@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\PrePoMax.Render.Contracts\PrePoMax.Render.Contracts.csproj" />
+    <ProjectReference Include="..\PrePoMax.Render.SyntheticData\PrePoMax.Render.SyntheticData.csproj" />
+  </ItemGroup>
+</Project>

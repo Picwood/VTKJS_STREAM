@@ -1,0 +1,61 @@
+// PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
+//
+// Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
+//
+// Source code: https://gitlab.com/MatejB/PrePoMax
+//
+// Author: Matej Borovinšek
+// Contributors:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using CaeGlobals;
+using DynamicTypeDescriptor;
+
+namespace CaeMesh
+{
+    [Serializable]
+    public class GeometrySelection : NamedClass
+    {
+        // Variables                                                                                                                
+        private int[] _geometryIds;
+        private Selection _creationData;
+        
+
+        // Properties                                                                                                               
+        public int[] GeometryIds { get { return _geometryIds; } set { _geometryIds = value; } }
+        public Selection CreationData { get { return _creationData; } set { _creationData = value; } }
+
+
+        // Constructors                                                                                                             
+        public GeometrySelection(string name)
+            :base(name)
+        {
+            Clear();
+        }
+        public GeometrySelection(string name, int[] geometryIds, Selection creationDataClone)
+           : this(name)
+        {
+            _geometryIds = geometryIds;
+            _creationData = creationDataClone;
+        }
+        public GeometrySelection(GeometrySelection geometrySelection)
+           : this(geometrySelection.Name)
+        {
+            _geometryIds = geometrySelection.GeometryIds?.ToArray();
+            _creationData = geometrySelection.CreationData?.DeepClone();
+            _creationData = geometrySelection.CreationData?.DeepClone();
+        }
+
+
+        // Methods                                                                                                                  
+        public void Clear()
+        {
+            _geometryIds = null;
+            _creationData = null;
+        }
+    }
+}

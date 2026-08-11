@@ -1,0 +1,10 @@
+FoamFile { object boundary; }
+1
+(
+inlet
+{
+ type patch;
+ nFaces 4;
+ startFace 0;
+}
+)

@@ -1,0 +1,50 @@
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    location "system";
+    object fvSchemes;
+}
+
+ddtSchemes
+{
+    default backward;
+}
+gradSchemes
+{
+    default Gauss linear;
+    momentumReconGrad VKLimited Gauss linear 1.0;
+    energyReconGrad VKLimited Gauss linear 1.0;
+    turbulenceReconGrad VKLimited Gauss linear 1.0;
+}
+divSchemes
+{
+    default Gauss linear;
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+    div(phi,U) Gauss linearUpwind momentumReconGrad;
+    div(rhoPhi,U) Gauss linearUpwind momentumReconGrad;
+    div(phi,k) Gauss upwind;
+    div(phi,epsilon) Gauss upwind;
+}
+laplacianSchemes
+{
+    default Gauss linear corrected;
+}
+interpolationSchemes
+{
+    default linear;
+    interpolate(p) linear;
+    reconstruct(psi) Minmod;
+    reconstruct(p) Minmod;
+    reconstruct(U) MinmodV;
+    reconstruct(Dp) Minmod;
+}
+snGradSchemes
+{
+    default corrected;
+}
+wallDist
+{
+    method meshWave;
+}

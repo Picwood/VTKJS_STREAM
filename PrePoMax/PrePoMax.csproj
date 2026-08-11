@@ -1,0 +1,1377 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1BA289A1-1DEE-4EE3-80C6-0150A1BEAFD4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PrePoMax</RootNamespace>
+    <AssemblyName>PrePoMax</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Console-Debug|x64'">
+    <!-- Edited by Maxx -->
+    <OutputType>Exe</OutputType>
+    <AssemblyName>PrePoMax</AssemblyName>
+    <!-- Edited by Maxx -->
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Console-Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Console-Release|x64'">
+    <!-- Edited by Maxx -->
+    <OutputType>Exe</OutputType>
+    <AssemblyName>PrePoMax</AssemblyName>
+    <!-- Edited by Maxx -->
+    <OutputPath>bin\x64\Console-Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>main.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4129.50" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CommandLine, Version=2.9.1.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.9.1\lib\net461\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="FastColoredTextBox, Version=2.16.24.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b, processorArchitecture=MSIL">
+      <HintPath>..\packages\FCTB.2.16.24\lib\FastColoredTextBox.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\ExplodedViewsCollection.cs" />
+    <Compile Include="Rendering\VtkJsRendererControl.cs" />
+    <Compile Include="Rendering\VtkJsRendererHost.cs" />
+    <Compile Include="Rendering\VtkJsSceneCapture.cs" />
+    <Compile Include="Collections\EdgesVisibilitiesCollection.cs" />
+    <Compile Include="Collections\FollowerViewsCollection.cs" />
+    <Compile Include="Collections\TransformationsCollection.cs" />
+    <Compile Include="CommandLine\CommandLineOptions.cs" />
+    <Compile Include="Fatigue\FatigueSetup.cs" />
+    <Compile Include="Commands\0000_File\CExportResultHistoryOutputToCsv.cs" />
+    <Compile Include="Commands\0000_File\CExportTo3mf.cs" />
+    <Compile Include="Commands\0000_File\CExportToStl.cs" />
+    <Compile Include="Commands\0000_File\CExportCADGeometryPartsAsBrep.cs" />
+    <Compile Include="Commands\0000_File\CExportPartsAsMmgMesh.cs" />
+    <Compile Include="Commands\0000_File\CExportCADGeometryPartsAsStep.cs" />
+    <Compile Include="Commands\0000_File\CExportDeformedPartsToCalculix.cs" />
+    <Compile Include="Commands\0000_File\CExportPartsAsGmshMesh.cs" />
+    <Compile Include="Commands\0000_File\CExportToAbaqus.cs" />
+    <Compile Include="Commands\0000_File\CExportToCalculix.cs" />
+    <Compile Include="Commands\0000_File\COpenFile.cs" />
+    <Compile Include="Commands\0000_File\CSaveToPmx.cs" />
+    <Compile Include="Commands\0000_File\CImportFile.cs" />
+    <Compile Include="Commands\000_General\CRenamePost.cs" />
+    <Compile Include="Commands\000_General\CRenamePre.cs" />
+    <Compile Include="Commands\0010_Edit\CSetCalculixUserKeywords.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CResetColorForGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CSetColorForGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\CConvertSolidToShell.cs" />
+    <Compile Include="Commands\0030_Geometry\CDeleteStlPartFaces.cs" />
+    <Compile Include="Commands\0030_Geometry\CDefeature.cs" />
+    <Compile Include="Commands\0030_Geometry\CRegenerateCompoundParts.cs" />
+    <Compile Include="Commands\0030_Geometry\CFlipStlPartSurfacesNormal.cs" />
+    <Compile Include="Commands\0030_Geometry\CConvertShellToSolid.cs" />
+    <Compile Include="Commands\0030_Geometry\CSwapPartGeometries.cs" />
+    <Compile Include="Commands\0030_Geometry\CCreateAndImportCompoundPart.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CScaleGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CSetTransparencyForGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CHideGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CRemoveGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CReplaceGeometryPartProperties.cs" />
+    <Compile Include="Commands\0030_Geometry\01_Part\CShowGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\CFindEdgesByAngleForGeometryParts.cs" />
+    <Compile Include="Commands\0030_Geometry\CSplitAFaceUsingTwoPoints.cs" />
+    <Compile Include="Commands\0030_Geometry\CFlipFaceOrientations.cs" />
+    <Compile Include="Commands\0040_Meshing\CAddMeshSetupItem.cs" />
+    <Compile Include="Commands\0040_Meshing\CCreateBaramMeshCase.cs" />
+    <Compile Include="Commands\0040_Meshing\COpenBaramFlowProject.cs" />
+    <Compile Include="Commands\0040_Meshing\CSetBaramFlowSection.cs" />
+    <Compile Include="Commands\0040_Meshing\CUpdateBaramFlowGeneralSettings.cs" />
+    <Compile Include="Commands\0040_Meshing\CUpdateBaramFlowBoundarySettings.cs" />
+    <Compile Include="Commands\0040_Meshing\CUpdateBaramFlowMaterialSettings.cs" />
+    <Compile Include="Commands\0040_Meshing\CUpdateBaramFlowModelsSettings.cs" />
+    <Compile Include="Commands\0040_Meshing\CUpdateBaramFlowNumericalSettings.cs" />
+    <Compile Include="Commands\0040_Meshing\CUpdateBaramFlowRunSettings.cs" />
+    <Compile Include="Commands\0040_Meshing\CDuplicateMeshSetupItems.cs" />
+    <Compile Include="Commands\0040_Meshing\CExportBaramMeshCase.cs" />
+    <Compile Include="Commands\0040_Meshing\CExportBaramMeshGeometry.cs" />
+    <Compile Include="Commands\0040_Meshing\CRemoveMeshSetupItems.cs" />
+    <Compile Include="Commands\0040_Meshing\CReplaceMeshSetupItem.cs" />
+    <Compile Include="Commands\0040_Meshing\CUpdateBaramMeshConfiguration.cs" />
+    <Compile Include="Commands\0040_Meshing\CWriteBaramMeshBaseGrid.cs" />
+    <Compile Include="Commands\0040_Meshing\CWriteBaramMeshCastellation.cs" />
+    <Compile Include="Commands\0040_Meshing\CWriteBaramMeshSnap.cs" />
+    <Compile Include="Commands\0050_Model\02_Tools\CCreateBoundaryLayer.cs" />
+    <Compile Include="Commands\0050_Model\02_Tools\CFindEdgesByAngleForModelPartsCommand.cs" />
+    <Compile Include="Commands\0050_Model\02_Tools\CRemeshElements.cs" />
+    <Compile Include="Commands\0050_Model\02_Tools\CSplitPartMeshUsingSurface.cs" />
+    <Compile Include="Commands\0050_Model\02_Tools\CThickenShellMesh.cs" />
+    <Compile Include="Commands\0050_Model\02_Tools\CUpdateNodalCoordinatesFromFile.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\01_Node\CMergeCoincidentNodes.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\01_Node\CRenumberNodes.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\02_Element\CCreateElementSetFromElementQuality.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\02_Element\CRenumberElements.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CHideModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CMergeModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CRemoveModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CReplaceModelPartProperties.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CResetColorForModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CMirrorModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CRotateModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CScaleModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CSetColorForModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CSetTransparencyForModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CShowModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\03_Part\CTranslateModelParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\04_NodeSet\CAddNodeSet.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\04_NodeSet\CDuplicateNodeSets.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\04_NodeSet\CRemoveNodeSets.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\04_NodeSet\CReplaceNodeSet.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\05_ElementSet\CAddElementSet.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\05_ElementSet\CConvertElementSetsToMeshParts.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\05_ElementSet\CDeleteElementsInElementSets.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\05_ElementSet\CDuplicateElementSets.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\05_ElementSet\CRemoveElementSets.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\05_ElementSet\CReplaceElementSet.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\06_Surface\CAddSurface.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\06_Surface\CDuplicateSurfaces.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\06_Surface\CRemoveSurfaces.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\06_Surface\CReplaceSurface.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\07_ReferencePoint\CAddModelReferencePoint.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\07_ReferencePoint\CDuplicateModelReferencePoints.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\07_ReferencePoint\CHideModelReferencePoints.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\07_ReferencePoint\CRemoveModelReferencePoints.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\07_ReferencePoint\CReplaceModelReferencePoint.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\07_ReferencePoint\CShowModelReferencePoints.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\08_CoordinateSystem\CAddModelCoordinateSystem.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\08_CoordinateSystem\CDuplicateModelCoordinateSystems.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\08_CoordinateSystem\CHideModelCoordinateSystems.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\08_CoordinateSystem\CRemoveModelCoordinateSystems.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\08_CoordinateSystem\CReplaceModelCoordinateSystem.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\08_CoordinateSystem\CShowModelCoordinateSystems.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\09_Cylinder\CAddModelCylinder.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\09_Cylinder\CDuplicateModelCylinders.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\09_Cylinder\CRemoveModelCylinders.cs" />
+    <Compile Include="Commands\0050_Model\03_Mesh\09_Cylinder\CReplaceModelCylinder.cs" />
+    <Compile Include="Commands\0074_Distribution\CAddDistribution.cs" />
+    <Compile Include="Commands\0074_Distribution\CDuplicateDistributions.cs" />
+    <Compile Include="Commands\0074_Distribution\CRemoveDistributions.cs" />
+    <Compile Include="Commands\0074_Distribution\CReplaceDistribution.cs" />
+    <Compile Include="Commands\0076_InitialCondition\CHideInitialConditions.cs" />
+    <Compile Include="Commands\0076_InitialCondition\CShowInitialConditions.cs" />
+    <Compile Include="Commands\0086_DefinedField\CHideDefinedFields.cs" />
+    <Compile Include="Commands\0086_DefinedField\CShowDefinedFields.cs" />
+    <Compile Include="Commands\0090_Tools\CImportParameters.cs" />
+    <Compile Include="Commands\0090_Tools\CExportParameters.cs" />
+    <Compile Include="Commands\00_Base\ICommandAsynchronous.cs" />
+    <Compile Include="Commands\00_Base\IExportFileCommand.cs" />
+    <Compile Include="Commands\00_Base\IFileCommand.cs" />
+    <Compile Include="Commands\00_Base\IImportFileCommand.cs" />
+    <Compile Include="Commands\00_Base\SaveCommand.cs" />
+    <Compile Include="Commands\0100_Analysis\CAddDeafaultJob.cs" />
+    <Compile Include="Commands\0100_Analysis\CPrepareAndRunJob.cs" />
+    <Compile Include="Commands\0110_Results\00_Base\CSetCurrentResults.cs" />
+    <Compile Include="Commands\0110_Results\00_Base\COpenResults.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CResetColorForResultParts.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CSetColorContoursForResultPartsCommand.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CSetColorForResultParts.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\07_ReferencePoint\CAddResultReferencePoint.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\07_ReferencePoint\CDuplicateResultReferencePoints.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\07_ReferencePoint\CHideResultReferencePoints.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\07_ReferencePoint\CRemoveResultReferencePoints.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\07_ReferencePoint\CReplaceResultReferencePoint.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\07_ReferencePoint\CShowResultReferencePoints.cs" />
+    <Compile Include="Commands\00_Base\AnalysisCommand.cs" />
+    <Compile Include="Commands\00_Base\PostprocessCommand.cs" />
+    <Compile Include="Commands\00_Base\PreprocessCommand.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\08_CoordinateSystem\CAddResultCoordinateSystem.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\08_CoordinateSystem\CDuplicateResultCoordinateSystems.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\08_CoordinateSystem\CHideResultCoordinateSystems.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\08_CoordinateSystem\CRemoveResultCoordinateSystems.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\08_CoordinateSystem\CReplaceResultCoordinateSystem.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\08_CoordinateSystem\CShowResultCoordinateSystems.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CHideResultParts.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CMergeResultParts.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CRemoveResultParts.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CReplaceResultPartProperties.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CSetTransparencyForResultParts.cs" />
+    <Compile Include="Commands\0110_Results\01_Mesh\01_Part\CShowResultParts.cs" />
+    <Compile Include="Commands\0110_Results\02_FieldOutput\CAddResultFieldOutput.cs" />
+    <Compile Include="Commands\0110_Results\02_FieldOutput\CRemoveResultFieldOutputComponents.cs" />
+    <Compile Include="Commands\0110_Results\02_FieldOutput\CRemoveResultFieldOutputs.cs" />
+    <Compile Include="Commands\0110_Results\02_FieldOutput\CReplaceResultFieldOutput.cs" />
+    <Compile Include="Commands\_Compatibility\v2.2.3\CExportResultHistoryOutput.cs" />
+    <Compile Include="Commands\0110_Results\03_HistoryOutput\CAddResultHistoryOutput.cs" />
+    <Compile Include="Commands\0110_Results\03_HistoryOutput\CRemoveResultHistoryFields.cs" />
+    <Compile Include="Commands\0110_Results\03_HistoryOutput\CRemoveResultHistoryComponents.cs" />
+    <Compile Include="Commands\0110_Results\03_HistoryOutput\CRemoveResultHistoryOutputs.cs" />
+    <Compile Include="Commands\0110_Results\03_HistoryOutput\CReplaceResultHisotryOutput.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CAddMeshingParameters.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CAddMeshRefinement.cs" />
+    <Compile Include="Commands\0040_Meshing\CCreateMesh.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CDuplicateMeshRefinements.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CDuplicateMeshingParameters.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CRemoveMeshingParameters.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CRemoveMeshRefinements.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CReplaceMeshingParameters.cs" />
+    <Compile Include="Commands\_Compatibility\v1.4.1\CReplaceMeshRefinement.cs" />
+    <Compile Include="Commands\_Compatibility\v1.3.5\CSetMeshingParameters.cs" />
+    <Compile Include="Commands\0050_Model\01_Properties\CReplaceModelProperties.cs" />
+    <Compile Include="Commands\0050_Model\CSetModelUnitSystem.cs" />
+    <Compile Include="Commands\0050_Model\CSetNewModelProperties.cs" />
+    <Compile Include="Commands\0061_Material\CDuplicateMaterials.cs" />
+    <Compile Include="Commands\0061_Material\CDuplicateMaterial.cs" />
+    <Compile Include="Commands\0062_Section\CDuplicateSections.cs" />
+    <Compile Include="Commands\0071_Constraint\CDuplicateConstraints.cs" />
+    <Compile Include="Commands\0071_Constraint\CMergeByMasterSlaveConstraints.cs" />
+    <Compile Include="Commands\0071_Constraint\CSwapMasterSlaveConstraints.cs" />
+    <Compile Include="Commands\0072_SurfaceInteraction\CAddSurfaceInteraction.cs" />
+    <Compile Include="Commands\0072_SurfaceInteraction\CDuplicateSurfaceInteractions.cs" />
+    <Compile Include="Commands\0072_SurfaceInteraction\CRemoveSurfaceInteractions.cs" />
+    <Compile Include="Commands\0072_SurfaceInteraction\CReplaceSurfaceInteraction.cs" />
+    <Compile Include="Commands\0061_Material\CAddMaterial.cs" />
+    <Compile Include="Commands\0061_Material\CRemoveMaterials.cs" />
+    <Compile Include="Commands\0061_Material\CReplaceMaterial.cs" />
+    <Compile Include="Commands\0062_Section\CAddSection.cs" />
+    <Compile Include="Commands\0062_Section\CRemoveSections.cs" />
+    <Compile Include="Commands\0073_ContactPair\CDuplicateContactPairs.cs" />
+    <Compile Include="Commands\0075_Amplitude\CDuplicateAmplitudes.cs" />
+    <Compile Include="Commands\0076_InitialCondition\CDuplicateInitialConditions.cs" />
+    <Compile Include="Commands\0076_InitialCondition\CReplaceInitialCondition.cs" />
+    <Compile Include="Commands\0071_Constraint\CAddConstraint.cs" />
+    <Compile Include="Commands\0071_Constraint\CHideConstraints.cs" />
+    <Compile Include="Commands\0071_Constraint\CRemoveConstraints.cs" />
+    <Compile Include="Commands\0071_Constraint\CReplaceConstraint.cs" />
+    <Compile Include="Commands\0071_Constraint\CShowConstraints.cs" />
+    <Compile Include="Commands\0073_ContactPair\CAddContactPair.cs" />
+    <Compile Include="Commands\0073_ContactPair\CHideContactPairs.cs" />
+    <Compile Include="Commands\0073_ContactPair\CMergeByMasterSlaveContactPairs.cs" />
+    <Compile Include="Commands\0073_ContactPair\CSwapMasterSlaveContactPairs.cs" />
+    <Compile Include="Commands\0073_ContactPair\CRemoveContactPairs.cs" />
+    <Compile Include="Commands\0073_ContactPair\CReplaceContactPair.cs" />
+    <Compile Include="Commands\0073_ContactPair\CShowContactPairs.cs" />
+    <Compile Include="Commands\0076_InitialCondition\CAddInitialCondition.cs" />
+    <Compile Include="Commands\0076_InitialCondition\CRemoveInitialConditions.cs" />
+    <Compile Include="Commands\0062_Section\CReplaceSection.cs" />
+    <Compile Include="Commands\0075_Amplitude\CAddAmplitude.cs" />
+    <Compile Include="Commands\0075_Amplitude\CRemoveAmplitudes.cs" />
+    <Compile Include="Commands\0075_Amplitude\CReplaceAmplitude.cs" />
+    <Compile Include="Commands\0081_Step\CAddStep.cs" />
+    <Compile Include="Commands\0081_Step\CDuplicateSteps.cs" />
+    <Compile Include="Commands\0081_Step\CRemoveSteps.cs" />
+    <Compile Include="Commands\0081_Step\CReplaceStepControls.cs" />
+    <Compile Include="Commands\0081_Step\CReplaceStep.cs" />
+    <Compile Include="Commands\0082_HistoryOutput\CAddHistoryOutput.cs" />
+    <Compile Include="Commands\0082_HistoryOutput\CDuplicateHistoryOutputs.cs" />
+    <Compile Include="Commands\0082_HistoryOutput\CRemoveHistoryOutputs.cs" />
+    <Compile Include="Commands\0082_HistoryOutput\CPropagateHistoryOutput.cs" />
+    <Compile Include="Commands\0082_HistoryOutput\CReplaceHistoryOutput.cs" />
+    <Compile Include="Commands\0083_FieldOutput\CAddFieldOutput.cs" />
+    <Compile Include="Commands\0083_FieldOutput\CDuplicateFieldOutputs.cs" />
+    <Compile Include="Commands\0083_FieldOutput\CRemoveFieldOutputs.cs" />
+    <Compile Include="Commands\0083_FieldOutput\CPropagateFieldOutput.cs" />
+    <Compile Include="Commands\0083_FieldOutput\CReplaceFieldOutput.cs" />
+    <Compile Include="Commands\0084_BoundaryConditions\CDuplicateBCs.cs" />
+    <Compile Include="Commands\0084_BoundaryConditions\CPropagateBC.cs" />
+    <Compile Include="Commands\0084_BoundaryConditions\CAddBC.cs" />
+    <Compile Include="Commands\0084_BoundaryConditions\CHideBCs.cs" />
+    <Compile Include="Commands\0084_BoundaryConditions\CRemoveBCs.cs" />
+    <Compile Include="Commands\0084_BoundaryConditions\CReplaceBC.cs" />
+    <Compile Include="Commands\0084_BoundaryConditions\CShowBCs.cs" />
+    <Compile Include="Commands\0085_Load\CAddLoad.cs" />
+    <Compile Include="Commands\0085_Load\CDuplicateLoads.cs" />
+    <Compile Include="Commands\0085_Load\CHideLoads.cs" />
+    <Compile Include="Commands\0085_Load\CRemoveLoads.cs" />
+    <Compile Include="Commands\0085_Load\CPropagateLoad.cs" />
+    <Compile Include="Commands\0085_Load\CReplaceLoad.cs" />
+    <Compile Include="Commands\0085_Load\CShowLoads.cs" />
+    <Compile Include="Commands\0086_DefinedField\CAddDefinedField.cs" />
+    <Compile Include="Commands\0086_DefinedField\CDuplicateDefinedFields.cs" />
+    <Compile Include="Commands\0086_DefinedField\CPropagateDefinedField.cs" />
+    <Compile Include="Commands\0086_DefinedField\CRemoveDefinedFields.cs" />
+    <Compile Include="Commands\0086_DefinedField\CReplaceDefinedField.cs" />
+    <Compile Include="Commands\0090_Tools\CAddParameter.cs" />
+    <Compile Include="Commands\0090_Tools\CRemoveParameters.cs" />
+    <Compile Include="Commands\0090_Tools\CReplaceParameter.cs" />
+    <Compile Include="Commands\0100_Analysis\CAddJob.cs" />
+    <Compile Include="Commands\0100_Analysis\CDuplicateJobs.cs" />
+    <Compile Include="Commands\0100_Analysis\CRemoveJobs.cs" />
+    <Compile Include="Commands\0100_Analysis\CReplaceJob.cs" />
+    <Compile Include="Commands\000_General\CActivateDeactivateMultiple.cs" />
+    <Compile Include="Commands\00_Base\ICommandWithDialog.cs" />
+    <Compile Include="Commands\000_General\CClear.cs" />
+    <Compile Include="Commands\_Compatibility\v2.2.3\CActivateDeactivate.cs" />
+    <Compile Include="Commands\CommandsCollection.cs" />
+    <Compile Include="Commands\00_Base\Command.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CActivateDeactivateMultilpe.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CAddReferencePoint.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CDuplicateReferencePoints.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CHideReferencePoints.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CPropagateHisotryOutput.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CRemoveReferencePoints.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CReplaceHisotryOutput.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CReplaceReferencePoint.cs" />
+    <Compile Include="Commands\_Compatibility\v2.1.0\CShowReferencePoints.cs" />
+    <Compile Include="Commands\_Compatibility\v2.2.0\CDeleteStlPartFacesCommand.cs" />
+    <Compile Include="ContactValidationResult.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="Enums\ViewGeometryModelResults.cs" />
+    <Compile Include="Enums\ShowWithColor.cs" />
+    <Compile Include="Enums\ViewResultsType.cs" />
+    <Compile Include="Forms\00_Common\FileExporter\ExportHistoryResultSetFileProperties.cs" />
+    <Compile Include="Forms\00_Common\FileExporter\ViewExport3mfFileProperties.cs" />
+    <Compile Include="Forms\00_Common\FileExporter\ViewExportFileProperties.cs" />
+    <Compile Include="Forms\00_Common\FileExporter\FrmExportFileWithProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FileExporter\ExportFileProperties.cs" />
+    <Compile Include="Forms\00_Common\FrmRegenerate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmRegenerate.Designer.cs">
+      <DependentUpon>FrmRegenerate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmGetColor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmGetColor.Designer.cs">
+      <DependentUpon>FrmGetColor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmSelectGeometry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmSelectGeometry.Designer.cs">
+      <DependentUpon>FrmSelectGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmNewModel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FileExporter\Export3mfFileProperties.cs" />
+    <Compile Include="Forms\00_Common\ViewColor.cs" />
+    <Compile Include="Forms\00_Common\ViewStringValue.cs" />
+    <Compile Include="Forms\00_Common\ViewUnitSystem.cs" />
+    <Compile Include="Forms\00_Advisor\AdvisorCreator.cs" />
+    <Compile Include="Forms\00_Parameters\FrmEquationParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Parameters\FrmEquationParameters.Designer.cs">
+      <DependentUpon>FrmEquationParameters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\01_Edit\DataGridViewExtension.cs" />
+    <Compile Include="Forms\01_Edit\FrmEditCommands.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\01_Edit\FrmEditCommands.Designer.cs">
+      <DependentUpon>FrmEditCommands.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\01_Edit\ViewCommand.cs" />
+    <Compile Include="Forms\02_View\FrmUserVew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\02_View\FrmUserVew.Designer.cs">
+      <DependentUpon>FrmUserVew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\02_View\FollowerViewParameters.cs" />
+    <Compile Include="Forms\02_View\FrmFollowerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\02_View\FrmFollowerView.Designer.cs">
+      <DependentUpon>FrmFollowerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\02_View\ViewUserViewParameters.cs" />
+    <Compile Include="Forms\02_View\ViewFollowerViewParameters.cs" />
+    <Compile Include="Forms\04_BaramMesh\BaramStlFeatureSplitter.cs" />
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshBaseGrid.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshCastellation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshRefinement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshRefinementVolume.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshSnap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshGeometry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\04_BaramMesh\FrmBaramMeshStlSplit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\05_BaramFlow\FrmBaramFlowGeneral.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\05_BaramFlow\FrmBaramFlowBoundaryConditions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\05_BaramFlow\FrmBaramFlowMaterial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\05_BaramFlow\FrmBaramFlowModels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\05_BaramFlow\FrmBaramFlowNumericalConditions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\05_BaramFlow\FrmBaramFlowRunConditions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\11_MeshSetup\FrmMeshSetupItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\11_MeshSetup\ViewSweepMesh.cs" />
+    <Compile Include="Forms\11_MeshSetup\ViewShellGmsh.cs" />
+    <Compile Include="Forms\11_MeshSetup\ViewTransfiniteMesh.cs" />
+    <Compile Include="Forms\11_MeshSetup\ViewTetrahedralGmsh.cs" />
+    <Compile Include="Forms\11_MeshSetup\ViewRevolveMesh.cs" />
+    <Compile Include="Forms\11_MeshSetup\ViewGmshSetupItem.cs" />
+    <Compile Include="Forms\11_MeshSetup\ViewExtrudeMesh.cs" />
+    <Compile Include="Forms\11_MeshSetup\ViewMeshSetupItem.cs" />
+    <Compile Include="Forms\21_FEModel\KeywordAtNode.cs" />
+    <Compile Include="Forms\21_FEModel\FrmSplitPartMeshUsingSurface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\21_FEModel\FrmThickenShellMesh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\11_MeshSetup\ViewThickenShellMesh.cs" />
+    <Compile Include="Forms\21_FEModel\ViewSplitPartMeshData.cs" />
+    <Compile Include="Forms\22_Node\FrmMergeCoincidentNodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\22_Node\ViewMergeCoincidentNodes.cs" />
+    <Compile Include="Forms\23_Element\FrmElementQuality.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\23_Element\ViewElementQuality.cs" />
+    <Compile Include="Forms\24_Part\FrmPartProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\24_Part\FrmMirror.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\24_Part\FrmRotate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\24_Part\FrmScale.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\24_Part\FrmTranslate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\24_Part\MirrorParameters.cs" />
+    <Compile Include="Forms\24_Part\RotateParameters.cs" />
+    <Compile Include="Forms\24_Part\ScaleParameters.cs" />
+    <Compile Include="Forms\24_Part\TranslateParameters.cs" />
+    <Compile Include="Forms\24_Part\ViewPartProperties.cs" />
+    <Compile Include="Forms\25_NodeSet\FrmNodeSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\25_NodeSet\ViewNodeSet.cs" />
+    <Compile Include="Forms\26_ElementSet\FrmElementSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\26_ElementSet\ViewElementSet.cs" />
+    <Compile Include="Forms\32_CoordinateSystems\FrmCoordinateSystem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\32_CoordinateSystems\ViewCoordinateSystem.cs" />
+    <Compile Include="Forms\33_Cylinders\FrmCylinder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\33_Cylinders\ViewFeCylinder.cs" />
+    <Compile Include="Forms\41_Material\ViewSlipWear.cs" />
+    <Compile Include="Forms\42_Section\ViewPointMassSection.cs" />
+    <Compile Include="Forms\42_Section\ViewMembraneSection.cs" />
+    <Compile Include="Forms\42_Section\ViewDistributedMassSection.cs" />
+    <Compile Include="Forms\43_Constraint\ViewCompressionOnly.cs" />
+    <Compile Include="Forms\43_Constraint\ViewSpring.cs" />
+    <Compile Include="Forms\43_Constraint\ViewSurfaceSpring.cs" />
+    <Compile Include="Forms\45_SearchContactPairs\FrmSearchContactPairs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\45_SearchContactPairs\FrmSearchContactPairs.Designer.cs">
+      <DependentUpon>FrmSearchContactPairs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\45_SearchContactPairs\SearchContactPair.cs" />
+    <Compile Include="Forms\02_View\ExplodedViewParameters.cs" />
+    <Compile Include="Forms\02_View\FrmExplodedView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\02_View\FrmExplodedView.Designer.cs">
+      <DependentUpon>FrmExplodedView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\02_View\FrmSectionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\02_View\FrmSectionView.Designer.cs">
+      <DependentUpon>FrmSectionView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\02_View\ViewExplodedViewParameters.cs" />
+    <Compile Include="Forms\02_View\SectionViewParameters.cs" />
+    <Compile Include="Forms\03_AnalyzeGeometry\FrmAnalyzeGeometry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\03_AnalyzeGeometry\FrmAnalyzeGeometry.Designer.cs">
+      <DependentUpon>FrmAnalyzeGeometry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\11_MeshSetup\ViewLocalMeshSize.cs" />
+    <Compile Include="Forms\21_FEModel\FrmBoundaryLayer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\21_FEModel\FrmModelProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\21_FEModel\FrmRemeshingParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\21_FEModel\ViewBoundaryLayer.cs" />
+    <Compile Include="Forms\21_FEModel\ViewRemeshingParameters.cs" />
+    <Compile Include="Forms\21_FEModel\ViewModelProperties.cs" />
+    <Compile Include="Forms\41_Material\DataPoints\SpecificHeatDataPoint.cs" />
+    <Compile Include="Forms\41_Material\DataPoints\ThermalConductivityDataPoint.cs" />
+    <Compile Include="Forms\41_Material\DataPoints\ThermalExpansionDataPoint.cs" />
+    <Compile Include="Forms\41_Material\DataPoints\DensityDataPoint.cs" />
+    <Compile Include="Forms\41_Material\DataPoints\ElasticDataPoint.cs" />
+    <Compile Include="Forms\41_Material\DataPoints\TempDataPoint.cs" />
+    <Compile Include="Forms\41_Material\MaterialLibraryItem.cs" />
+    <Compile Include="Forms\41_Material\FrmMaterialLibrary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\41_Material\FrmMaterialLibrary.Designer.cs">
+      <DependentUpon>FrmMaterialLibrary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\41_Material\DataPoints\PlasticDataPoint.cs" />
+    <Compile Include="Forms\41_Material\ViewSpecificHeat.cs" />
+    <Compile Include="Forms\41_Material\ViewThermalConductivity.cs" />
+    <Compile Include="Forms\41_Material\ViewThermalExpansion.cs" />
+    <Compile Include="Forms\41_Material\ViewElasticWithDensity.cs" />
+    <Compile Include="Forms\42_Section\ViewShellSection.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\DataPoints\GapConductanceDataPoint.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\DataPoints\PressureOverclosureDataPoint.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\ListViewItemComparer.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\FrmSurfaceInteraction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\44_SurfaceInteraction\FrmSurfaceInteraction.Designer.cs">
+      <DependentUpon>FrmSurfaceInteraction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\44_SurfaceInteraction\ViewGapConductance.cs" />
+    <Compile Include="Forms\45_ContactPair\FrmContactPair.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\45_ContactPair\ViewContactPair.cs" />
+    <Compile Include="Forms\46_Distribution\FrmDistribution.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\46_Distribution\ViewMappedDistribution.cs" />
+    <Compile Include="Forms\46_Distribution\ViewDistributionFromFile.cs" />
+    <Compile Include="Forms\46_Distribution\ViewDistributionFromEquation.cs" />
+    <Compile Include="Forms\46_Distribution\ViewDistribution.cs" />
+    <Compile Include="Forms\48_InitialConditions\FrmInitialCondition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\48_InitialConditions\ViewInitialCondition.cs" />
+    <Compile Include="Forms\48_InitialConditions\ViewInitialAngularVelocity.cs" />
+    <Compile Include="Forms\48_InitialConditions\ViewInitialTranslationalVelocity.cs" />
+    <Compile Include="Forms\48_InitialConditions\ViewInitialTemperature.cs" />
+    <Compile Include="Forms\47_Amplitude\AmplitudeDataPoint.cs" />
+    <Compile Include="Forms\47_Amplitude\FrmAmplitude.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\47_Amplitude\ViewAmplitude.cs" />
+    <Compile Include="Forms\47_Amplitude\ViewAmplitudeTabular.cs" />
+    <Compile Include="Forms\51_Step\Controls\FrmStepControls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\51_Step\Controls\FrmStepControls.Designer.cs">
+      <DependentUpon>FrmStepControls.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\51_Step\Controls\ViewContactStepControlParameter.cs" />
+    <Compile Include="Forms\51_Step\Controls\ViewResetStepControlParameter.cs" />
+    <Compile Include="Forms\51_Step\Controls\ViewFieldStepControlParameter.cs" />
+    <Compile Include="Forms\51_Step\Controls\ViewTimeIncrementationStepControlParameter.cs" />
+    <Compile Include="Forms\51_Step\Controls\ViewStepControlParameter.cs" />
+    <Compile Include="Forms\51_Step\DampingRatiosAndValuesUIEditor.cs" />
+    <Compile Include="Forms\51_Step\FrmGetDampingRatios.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\51_Step\FrmGetDampingRatios.Designer.cs">
+      <DependentUpon>FrmGetDampingRatios.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\51_Step\ViewComplexFrequencyStep.cs" />
+    <Compile Include="Forms\51_Step\ViewModalDynamics.cs" />
+    <Compile Include="Forms\51_Step\ViewSteadyStateDynamics.cs" />
+    <Compile Include="Forms\51_Step\ViewCoupledTempDispStep.cs" />
+    <Compile Include="Forms\51_Step\ViewDynamicStep.cs" />
+    <Compile Include="Forms\51_Step\ViewSlipWearStep.cs" />
+    <Compile Include="Forms\51_Step\ViewBoundaryDisplacementStep.cs" />
+    <Compile Include="Forms\51_Step\ViewUncoupledTempDispStep.cs" />
+    <Compile Include="Forms\51_Step\ViewHeatTransferStep.cs" />
+    <Compile Include="Forms\52_HistoryOutput\ViewContactHistoryOutput.cs" />
+    <Compile Include="Forms\52_HistoryOutput\ViewSectionHistoryOutput.cs" />
+    <Compile Include="Forms\53_FieldOutput\ViewContactFieldOutput.cs" />
+    <Compile Include="Forms\43_Constraint\ViewPointSpring.cs" />
+    <Compile Include="Forms\54_BoundaryConditions\ViewTemperatureBC.cs" />
+    <Compile Include="Forms\54_BoundaryConditions\ViewFixedBC.cs" />
+    <Compile Include="Forms\55_Load\Imported\ViewImportedSTLoad.cs" />
+    <Compile Include="Forms\55_Load\Imported\ViewImportedPressureLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewHydrostaticPressureLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewCFlux.cs" />
+    <Compile Include="Forms\55_Load\ViewFilmHeatTransfer.cs" />
+    <Compile Include="Forms\55_Load\ViewDFlux.cs" />
+    <Compile Include="Forms\55_Load\ViewBodyFlux.cs" />
+    <Compile Include="Forms\55_Load\ViewRadiationHeatTransfer.cs" />
+    <Compile Include="Forms\55_Load\ViewShellEdgeLoad.cs" />
+    <Compile Include="Forms\56_DefinedField\FrmDefinedField.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\56_DefinedField\ViewDefinedField.cs" />
+    <Compile Include="Forms\56_DefinedField\ViewDefinedTemperature.cs" />
+    <Compile Include="Forms\61_Settings\ViewAbaqusSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewCalculixSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewColorSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewAnnotationSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewMeshingSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewUnitSystemlSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewStatusBlockSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewLegendSettings.cs" />
+    <Compile Include="Annotations\MaxValueAnnotation.cs" />
+    <Compile Include="Annotations\MinValueAnnotation.cs" />
+    <Compile Include="Annotations\TextAnnotation.cs" />
+    <Compile Include="Annotations\PartAnnotation.cs" />
+    <Compile Include="Annotations\SurfaceAnnotation.cs" />
+    <Compile Include="Annotations\EdgeAnnotation.cs" />
+    <Compile Include="Annotations\ElementAnnotation.cs" />
+    <Compile Include="Annotations\NodeAnnotation.cs" />
+    <Compile Include="Annotations\AnnotationBase.cs" />
+    <Compile Include="Forms\63_Find\FrmFind.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\63_Find\FrmFind.Designer.cs">
+      <DependentUpon>FrmFind.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\82_ResultFieldOutput\LimitPartDataPoint.cs" />
+    <Compile Include="Forms\82_ResultFieldOutput\LimitElementSetDataPoint.cs" />
+    <Compile Include="Forms\82_ResultFieldOutput\FrmResultFieldOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\82_ResultFieldOutput\ViewResultFieldOutput.cs" />
+    <Compile Include="Forms\82_ResultFieldOutput\ViewResultFieldOutputCoordinateSystemTransform.cs" />
+    <Compile Include="Forms\82_ResultFieldOutput\ViewResultFieldOutputEnvelope.cs" />
+    <Compile Include="Forms\82_ResultFieldOutput\ViewResultFieldOutputLimit.cs" />
+    <Compile Include="Forms\82_ResultFieldOutput\ViewResultFieldOutputEquation.cs" />
+    <Compile Include="Forms\83_ResultHistoryOutput\FrmResultHistoryOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\83_ResultHistoryOutput\FrmExportDisplayedFrd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FileExporter\ViewExportHistoryResultSetFileProperties.cs" />
+    <Compile Include="Forms\83_ResultHistoryOutput\ViewResultHistoryOutputFromEquation.cs" />
+    <Compile Include="Forms\83_ResultHistoryOutput\ViewResultHistoryOutputFromElementSize.cs" />
+    <Compile Include="Forms\83_ResultHistoryOutput\ViewResultHistoryOutputFromField.cs" />
+    <Compile Include="Forms\83_ResultHistoryOutput\ViewResultHistoryOutput.cs" />
+    <Compile Include="Forms\84_Transformation\FrmTransformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\84_Transformation\FrmTransformation.Designer.cs">
+      <DependentUpon>FrmTransformation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\84_Transformation\ViewCircularPattern.cs" />
+    <Compile Include="Forms\84_Transformation\ViewLinearPattern.cs" />
+    <Compile Include="Forms\84_Transformation\ViewTransformation.cs" />
+    <Compile Include="Forms\84_Transformation\ViewSymetry.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\ViewFriction.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\ViewSurfaceInteractionProperty.cs" />
+    <Compile Include="Forms\44_SurfaceInteraction\ViewSurfaceBehavior.cs" />
+    <Compile Include="Forms\51_Step\ViewBuckleStep.cs" />
+    <Compile Include="Forms\51_Step\ViewFrequencyStep.cs" />
+    <Compile Include="Forms\52_HistoryOutput\FrmHistoryOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\52_HistoryOutput\ViewHistoryOutput.cs" />
+    <Compile Include="Forms\52_HistoryOutput\ViewElementHistoryOutput.cs" />
+    <Compile Include="Forms\52_HistoryOutput\ViewNodalHistoryOutput.cs" />
+    <Compile Include="Forms\54_BoundaryConditions\ViewSubmodelBC.cs" />
+    <Compile Include="Forms\55_Load\ViewCentrifLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewGravityLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewPreTensionLoad.cs" />
+    <Compile Include="Forms\61_Settings\FrmGetEnvVars.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\61_Settings\FrmGetEnvVars.Designer.cs">
+      <DependentUpon>FrmGetEnvVars.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmGetValue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmGetValue.Designer.cs">
+      <DependentUpon>FrmGetValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmLocalExtremaSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmPmxProtectionKey.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\27_Surface\FrmSurface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\31_ReferencePoint\FrmReferencePoint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\42_Section\FrmSection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\43_Constraint\FrmConstraint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\51_Step\FrmStep.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\53_FieldOutput\FrmFieldOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\54_BoundaryConditions\FrmBC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\55_Load\FrmLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\61_Settings\EnvVarsUIEditor.cs" />
+    <Compile Include="Forms\83_ResultHistoryOutput\FrmViewResultHistoryOutput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\83_ResultHistoryOutput\FrmViewResultHistoryOutput.Designer.cs">
+      <DependentUpon>FrmViewResultHistoryOutput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\IFormHighlightSymbol.cs" />
+    <Compile Include="Forms\IFormHighlight.cs" />
+    <Compile Include="Forms\IFormItemSetDataParent.cs" />
+    <Compile Include="Forms\IFormBase.cs" />
+    <Compile Include="Forms\00_Common\ViewDoubleValue.cs" />
+    <Compile Include="Forms\21_FEModel\FrmCalculixKeywordEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\21_FEModel\FrmCalculixKeywordEditor.Designer.cs">
+      <DependentUpon>FrmCalculixKeywordEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\11_MeshSetup\ViewMeshingParameters.cs" />
+    <Compile Include="Forms\27_Surface\ViewFeSurface.cs" />
+    <Compile Include="Forms\31_ReferencePoint\ViewFeReferencePoint.cs" />
+    <Compile Include="Forms\41_Material\ViewPlastic.cs" />
+    <Compile Include="Forms\43_Constraint\ViewTie.cs" />
+    <Compile Include="Forms\43_Constraint\ViewRigidBody.cs" />
+    <Compile Include="Forms\43_Constraint\ViewConstraint.cs" />
+    <Compile Include="Forms\54_BoundaryConditions\ViewBoundaryCondition.cs" />
+    <Compile Include="Forms\54_BoundaryConditions\ViewDisplacementRotation.cs" />
+    <Compile Include="Forms\53_FieldOutput\ViewFieldOutput.cs" />
+    <Compile Include="Forms\53_FieldOutput\ViewElementFieldOutput.cs" />
+    <Compile Include="Forms\53_FieldOutput\ViewNodalFieldOutput.cs" />
+    <Compile Include="Forms\41_Material\FrmMaterial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\41_Material\FrmMaterial.Designer.cs">
+      <DependentUpon>FrmMaterial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\41_Material\ViewElastic.cs" />
+    <Compile Include="Forms\41_Material\ViewMaterialProperty.cs" />
+    <Compile Include="Forms\41_Material\ViewDensity.cs" />
+    <Compile Include="Forms\42_Section\ViewSection.cs" />
+    <Compile Include="Forms\42_Section\ViewSolidSection.cs" />
+    <Compile Include="Forms\00_Common\FrmSelectEntity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmSelectEntity.Designer.cs">
+      <DependentUpon>FrmSelectEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\55_Load\ViewMomentLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewSTLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewCLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewDLoad.cs" />
+    <Compile Include="Forms\55_Load\ViewLoad.cs" />
+    <Compile Include="Forms\61_Settings\FrmSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\61_Settings\FrmSettings.Designer.cs">
+      <DependentUpon>FrmSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\61_Settings\ViewGeneralSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewPreSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewGraphicsSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewPostSettings.cs" />
+    <Compile Include="Forms\61_Settings\ViewSettings.cs" />
+    <Compile Include="Forms\62_Query\FrmQuery.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\62_Query\FrmQuery.Designer.cs">
+      <DependentUpon>FrmQuery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\71_Analysis\FrmAnalysis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\71_Analysis\FrmAnalysis.Designer.cs">
+      <DependentUpon>FrmAnalysis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\71_Analysis\FrmMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\71_Analysis\FrmMonitor.Designer.cs">
+      <DependentUpon>FrmMonitor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\71_Analysis\ViewAnalysisJob.cs" />
+    <Compile Include="Forms\90_Fatigue\FrmFatigueSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\81_Animation\FrmAnimation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\81_Animation\FrmAnimation.Designer.cs">
+      <DependentUpon>FrmAnimation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\51_Step\ViewStaticStep.cs" />
+    <Compile Include="Forms\51_Step\ViewStep.cs" />
+    <Compile Include="Forms\FrmSplash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmSplash.Designer.cs">
+      <DependentUpon>FrmSplash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ViewMasterSlaveMultiRegion.cs" />
+    <Compile Include="Forms\ViewMultiRegion.cs" />
+    <Compile Include="Forms\ViewError.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="LocalExtremaSearch.cs" />
+    <Compile Include="PmxFileProtection.cs" />
+    <Compile Include="Tools\BaramOpenFoamRunner.cs" />
+    <Compile Include="Tools\GmshBase.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Collections\SectionViewsCollection.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\SelectionCache.cs" />
+    <Compile Include="Selection\ItemSet\ItemSetData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Selection\ItemSet\PointSelectionMethodEnum.cs" />
+    <Compile Include="Selection\ItemSet\SinglePointDataEditor.cs" />
+    <Compile Include="Forms\00_Common\FrmSelectItemSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\00_Common\FrmSelectItemSet.Designer.cs">
+      <DependentUpon>FrmSelectItemSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Selection\ItemSet\ItemSetDataEditor.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Settings\AbaqusSettings.cs" />
+    <Compile Include="Settings\ColorSettings.cs" />
+    <Compile Include="Settings\AnnotationSettings.cs" />
+    <Compile Include="Settings\MeshingSettings.cs" />
+    <Compile Include="Settings\UnitSystemSettings.cs" />
+    <Compile Include="Settings\GeneralSettings.cs" />
+    <Compile Include="Settings\GraphicsSettings.cs" />
+    <Compile Include="Forms\61_Settings\IReset.cs" />
+    <Compile Include="Settings\StatusBlockSettings.cs" />
+    <Compile Include="Settings\LegendSettings.cs" />
+    <Compile Include="Settings\SettingsContainer.cs" />
+    <Compile Include="Settings\PreSettings.cs" />
+    <Compile Include="Settings\PostSettings.cs" />
+    <Compile Include="Settings\ISettings.cs" />
+    <Compile Include="Settings\CalculixSettings.cs" />
+    <Compile Include="Enums\UpdateModelType.cs" />
+    <Compile Include="Annotations\AnnotationContainer.cs" />
+    <EmbeddedResource Include="Forms\00_Common\FileExporter\FrmExportFileWithProperties.resx">
+      <DependentUpon>FrmExportFileWithProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Common\FrmRegenerate.resx">
+      <DependentUpon>FrmRegenerate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Common\FrmGetColor.resx">
+      <DependentUpon>FrmGetColor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Common\FrmSelectGeometry.resx">
+      <DependentUpon>FrmSelectGeometry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Common\FrmNewModel.resx">
+      <DependentUpon>FrmNewModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Parameters\FrmEquationParameters.resx">
+      <DependentUpon>FrmEquationParameters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\01_Edit\FrmEditCommands.resx">
+      <DependentUpon>FrmEditCommands.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\02_View\FrmUserVew.resx">
+      <DependentUpon>FrmUserVew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\02_View\FrmFollowerView.resx">
+      <DependentUpon>FrmFollowerView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\11_MeshSetup\FrmMeshSetupItem.resx">
+      <DependentUpon>FrmMeshSetupItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\21_FEModel\FrmSplitPartMeshUsingSurface.resx">
+      <DependentUpon>FrmSplitPartMeshUsingSurface.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\21_FEModel\FrmThickenShellMesh.resx">
+      <DependentUpon>FrmThickenShellMesh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\22_Node\FrmMergeCoincidentNodes.resx">
+      <DependentUpon>FrmMergeCoincidentNodes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\23_Element\FrmElementQuality.resx">
+      <DependentUpon>FrmElementQuality.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\24_Part\FrmPartProperties.resx">
+      <DependentUpon>FrmPartProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\24_Part\FrmMirror.resx">
+      <DependentUpon>FrmMirror.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\24_Part\FrmRotate.resx">
+      <DependentUpon>FrmRotate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\24_Part\FrmScale.resx">
+      <DependentUpon>FrmScale.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\24_Part\FrmTranslate.resx">
+      <DependentUpon>FrmTranslate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\25_NodeSet\FrmNodeSet.resx">
+      <DependentUpon>FrmNodeSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\26_ElementSet\FrmElementSet.resx">
+      <DependentUpon>FrmElementSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\32_CoordinateSystems\FrmCoordinateSystem.resx">
+      <DependentUpon>FrmCoordinateSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\45_SearchContactPairs\FrmSearchContactPairs.resx">
+      <DependentUpon>FrmSearchContactPairs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\02_View\FrmExplodedView.resx">
+      <DependentUpon>FrmExplodedView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\02_View\FrmSectionView.resx">
+      <DependentUpon>FrmSectionView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\03_AnalyzeGeometry\FrmAnalyzeGeometry.resx">
+      <DependentUpon>FrmAnalyzeGeometry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\21_FEModel\FrmBoundaryLayer.resx">
+      <DependentUpon>FrmBoundaryLayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\21_FEModel\FrmModelProperties.resx">
+      <DependentUpon>FrmModelProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\21_FEModel\FrmRemeshingParameters.resx">
+      <DependentUpon>FrmRemeshingParameters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\41_Material\FrmMaterialLibrary.resx">
+      <DependentUpon>FrmMaterialLibrary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\44_SurfaceInteraction\FrmSurfaceInteraction.resx">
+      <DependentUpon>FrmSurfaceInteraction.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\45_ContactPair\FrmContactPair.resx">
+      <DependentUpon>FrmContactPair.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\46_Distribution\FrmDistribution.resx">
+      <DependentUpon>FrmDistribution.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\48_InitialConditions\FrmInitialCondition.resx">
+      <DependentUpon>FrmInitialCondition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\47_Amplitude\FrmAmplitude.resx">
+      <DependentUpon>FrmAmplitude.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\51_Step\Controls\FrmStepControls.resx">
+      <DependentUpon>FrmStepControls.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\51_Step\FrmGetDampingRatios.resx">
+      <DependentUpon>FrmGetDampingRatios.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\52_HistoryOutput\FrmHistoryOutput.resx">
+      <DependentUpon>FrmHistoryOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\56_DefinedField\FrmDefinedField.resx">
+      <DependentUpon>FrmDefinedField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\61_Settings\FrmGetEnvVars.resx">
+      <DependentUpon>FrmGetEnvVars.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Common\FrmGetValue.resx">
+      <DependentUpon>FrmGetValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\27_Surface\FrmSurface.resx">
+      <DependentUpon>FrmSurface.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\21_FEModel\FrmCalculixKeywordEditor.resx">
+      <DependentUpon>FrmCalculixKeywordEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\31_ReferencePoint\FrmReferencePoint.resx">
+      <DependentUpon>FrmReferencePoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\42_Section\FrmSection.resx">
+      <DependentUpon>FrmSection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\43_Constraint\FrmConstraint.resx">
+      <DependentUpon>FrmConstraint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\51_Step\FrmStep.resx">
+      <DependentUpon>FrmStep.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\53_FieldOutput\FrmFieldOutput.resx">
+      <DependentUpon>FrmFieldOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\41_Material\FrmMaterial.resx">
+      <DependentUpon>FrmMaterial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Common\FrmSelectEntity.resx">
+      <DependentUpon>FrmSelectEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\54_BoundaryConditions\FrmBC.resx">
+      <DependentUpon>FrmBC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\55_Load\FrmLoad.resx">
+      <DependentUpon>FrmLoad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\61_Settings\FrmSettings.resx">
+      <DependentUpon>FrmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\62_Query\FrmQuery.resx">
+      <DependentUpon>FrmQuery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\63_Find\FrmFind.resx">
+      <DependentUpon>FrmFind.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\71_Analysis\FrmAnalysis.resx">
+      <DependentUpon>FrmAnalysis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\71_Analysis\FrmMonitor.resx">
+      <DependentUpon>FrmMonitor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\81_Animation\FrmAnimation.resx">
+      <DependentUpon>FrmAnimation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\82_ResultFieldOutput\FrmResultFieldOutput.resx">
+      <DependentUpon>FrmResultFieldOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\83_ResultHistoryOutput\FrmResultHistoryOutput.resx">
+      <DependentUpon>FrmResultHistoryOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\83_ResultHistoryOutput\FrmViewResultHistoryOutput.resx">
+      <DependentUpon>FrmViewResultHistoryOutput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\84_Transformation\FrmTransformation.resx">
+      <DependentUpon>FrmTransformation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmSplash.resx">
+      <DependentUpon>FrmSplash.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\00_Common\FrmSelectItemSet.resx">
+      <DependentUpon>FrmSelectItemSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CaeGlobals\CaeGlobals.csproj">
+      <Project>{104caebc-0761-4850-a97d-3fc59116c5b6}</Project>
+      <Name>CaeGlobals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeJob\CaeJob.csproj">
+      <Project>{a449b1d6-da0d-4a08-9b64-2cd929830399}</Project>
+      <Name>CaeJob</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeMesh\CaeMesh.csproj">
+      <Project>{69d01fc1-1bc1-4470-b371-84d22282be98}</Project>
+      <Name>CaeMesh</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeModel\CaeModel.csproj">
+      <Project>{65e5ee18-b889-42ad-a775-ba5674abe1dd}</Project>
+      <Name>CaeModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaeResults\CaeResults.csproj">
+      <Project>{bca7c65b-cc0b-48ca-b852-49255bd3851d}</Project>
+      <Name>CaeResults</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\STL\STL.csproj">
+      <Project>{f32f3151-1595-4211-a01e-2f7beb34f88d}</Project>
+      <Name>STL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UserControls\UserControls.csproj">
+      <Project>{74ea83fb-2743-49ee-85a8-5b42cbce19b3}</Project>
+      <Name>UserControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\vtkControl\vtkControl.csproj">
+      <Project>{125eefac-7731-4640-b731-1a32372fa76d}</Project>
+      <Name>vtkControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Splash_02.png" />
+    <None Include="Resources\Splash_01.png" />
+    <None Include="Icons\Common\Hide.ico" />
+    <None Include="Icons\Common\Show.ico" />
+    <None Include="Icons\Common\Up_arrow.ico" />
+    <None Include="Icons\Common\Down_arrow.ico" />
+    <None Include="Icons\Results\Previous.ico" />
+    <None Include="Icons\Results\Next.ico" />
+    <None Include="Icons\Results\First.ico" />
+    <None Include="Icons\Results\Last.ico" />
+    <None Include="Icons\Results\Stop.ico" />
+    <None Include="Icons\Results\Animate.ico" />
+    <None Include="Icons\Results\Animate_backwards.ico" />
+    <None Include="Icons\Common\InvertHideShow.ico" />
+    <None Include="Icons\Results\Color_contours.ico" />
+    <None Include="Icons\Results\Deformed.ico" />
+    <None Include="Icons\Results\Undeformed.ico" />
+    <None Include="Icons\Common\Right_arrow.ico" />
+    <None Include="Icons\Common\Left_arrow.ico" />
+    <None Include="Icons\Material\Library.ico" />
+    <None Include="Icons\View\SymbolsOff.ico" />
+    <None Include="Icons\View\SymbolsOn.ico" />
+    <None Include="Icons\View\SectionCut.ico" />
+    <None Include="Icons\View\SectionView.ico" />
+    <None Include="Icons\Geometry\Mesh_refinement.ico" />
+    <None Include="Icons\Constraints\Constraints.ico" />
+    <None Include="Icons\Contact\ContactInteraction.ico" />
+    <None Include="Icons\Contact\SurfaceInteraction.ico" />
+    <None Include="Icons\Material\Remove.ico" />
+    <None Include="Icons\Contact\ContactPair.ico" />
+    <None Include="Icons\File\Open.png" />
+    <None Include="Icons\Common\Cut.png" />
+    <None Include="Icons\Common\Copy.png" />
+    <None Include="Icons\Common\Paste.png" />
+    <None Include="Icons\Contact\Contact.ico" />
+    <None Include="Icons\Analysis\NoResult.ico" />
+    <None Include="Icons\Analysis\OK.ico" />
+    <None Include="Icons\Analysis\Running.ico" />
+    <None Include="Icons\Analysis\Warning.ico" />
+    <None Include="Icons\Results\Transformations.ico" />
+    <None Include="Icons\View\Explode.ico" />
+    <None Include="Icons\Step\Bc.png" />
+    <None Include="Icons\Step\Load.png" />
+    <None Include="Icons\Step\Defined_field.ico" />
+    <None Include="Icons\Material\Remove.ico" />
+    <None Include="Icons\Mesh\Part.png" />
+    <None Include="Icons\Tools\Query.ico" />
+    <None Include="Icons\Tools\Clear_query.ico" />
+    <None Include="Icons\Tools\Remove_annotations.ico" />
+    <None Include="Icons\Results\Undeformed_Wireframe.ico" />
+    <None Include="Icons\Results\Undeformed_Solid.ico" />
+    <None Include="Icons\Step\Field_output.ico" />
+    <None Include="Icons\Step\History_output.ico" />
+    <None Include="Icons\Step\Step.png" />
+    <None Include="Icons\Step\Preview_load.ico" />
+    <None Include="Icons\File\New.ico" />
+    <None Include="Icons\File\Open.ico" />
+    <None Include="Icons\File\Import.ico" />
+    <None Include="Icons\File\Save.ico" />
+    <None Include="Icons\File\Export.ico" />
+    <None Include="Icons\View\ZoomToFit.ico" />
+    <None Include="Icons\View\Front.ico" />
+    <None Include="Icons\View\Back.ico" />
+    <None Include="Icons\View\Top.ico" />
+    <None Include="Icons\View\Bottom.ico" />
+    <None Include="Icons\View\Left.ico" />
+    <None Include="Icons\View\Right.ico" />
+    <None Include="Icons\View\Normal.ico" />
+    <None Include="Icons\View\Vertical.ico" />
+    <None Include="Icons\View\Isometric.ico" />
+    <None Include="Icons\View\Wireframe.ico" />
+    <None Include="Icons\View\ElementEdges.ico" />
+    <None Include="Icons\View\ModelEdges.ico" />
+    <None Include="Icons\View\NoEdges.ico" />
+    <None Include="Icons\Mesh\Node_set.ico" />
+    <None Include="Icons\Mesh\Element_set.ico" />
+    <None Include="Icons\Mesh\Surface.ico" />
+    <None Include="Icons\Mesh\Reference_point.ico" />
+    <None Include="Icons\Material\Material.ico" />
+    <None Include="Icons\Section\Section.ico" />
+    <None Include="Icons\Initial conditions\Preview_initial_condition.ico" />
+    <None Include="Icons\Step\Preview_defined_field.ico" />
+    <None Include="Icons\Common\Search.ico" />
+    <None Include="Icons\Geometry\Meshing_parameters.ico" />
+    <None Include="Icons\Common\Compound.ico" />
+    <None Include="Icons\Mesh\Feature.ico" />
+    <None Include="Icons\Mesh\CoordinateSystem.ico" />
+    <None Include="Icons\Step\Propagate.ico" />
+    <None Include="Icons\Step\Preview_boundary_condition.ico" />
+    <None Include="Icons\View\FollowerView.ico" />
+    <None Include="Icons\View\BoxZoom.ico" />
+    <Content Include="main.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\0020_View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="c:\Program Files\ActiViz.NET 5.8.0 OpenSource Edition\bin\Kitware.mummy.Runtime.dll" />
+    <Analyzer Include="c:\Program Files\ActiViz.NET 5.8.0 OpenSource Edition\bin\Kitware.VTK.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <MoveToLibFolder Include="$(OutputPath)*.dll ; $(OutputPath)*.pdb ; $(OutputPath)*.xml" />
+    </ItemGroup>
+    <Move SourceFiles="@(MoveToLibFolder)" DestinationFolder="$(OutputPath)lib" OverwriteReadOnlyFiles="true" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>del *.dll.config
+del *.manifest
+
+rd /s /q "de" "en" "es" "fr" "hu" "it" "ja" "pt" "ru" "sk" "sv" "tr" "zh-cn" "zh-tw"
+
+IF NOT EXIST "$(TargetDir)lib\" mkdir "$(TargetDir)lib\"
+
+IF EXIST "$(SolutionDir)GmshCaller\bin\x64\$(ConfigurationName)\GmshCaller.exe" copy "$(SolutionDir)GmshCaller\bin\x64\$(ConfigurationName)\GmshCaller.exe" "$(TargetDir)lib"
+
+IF EXIST "$(SolutionDir)PrePoMax\bin\x64\Console-Debug\PrePoMax.exe" copy "$(SolutionDir)PrePoMax\bin\x64\Console-Debug\PrePoMax.exe" "$(SolutionDir)PrePoMax\bin\x64\Debug\PrePoMax.com"
+IF EXIST "$(SolutionDir)PrePoMax\bin\x64\Console-Debug\PrePoMax.exe.config" copy "$(SolutionDir)PrePoMax\bin\x64\Console-Debug\PrePoMax.exe.config" "$(SolutionDir)PrePoMax\bin\x64\Debug\PrePoMax.com.config"
+
+IF EXIST "$(SolutionDir)PrePoMax\bin\x64\Console-Release\PrePoMax.exe" copy "$(SolutionDir)PrePoMax\bin\x64\Console-Release\PrePoMax.exe" "$(SolutionDir)PrePoMax\bin\x64\Release\PrePoMax.com"
+IF EXIST "$(SolutionDir)PrePoMax\bin\x64\Console-Release\PrePoMax.exe.config" copy "$(SolutionDir)PrePoMax\bin\x64\Console-Release\PrePoMax.exe.config" "$(SolutionDir)PrePoMax\bin\x64\Release\PrePoMax.com.config"</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del *Cmd.exe
+del *Cmd.exe.config</PreBuildEvent>
+  </PropertyGroup>
+</Project>

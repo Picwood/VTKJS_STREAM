@@ -1,0 +1,85 @@
+// PrePoMax - Copyright (C) 2016-2026 Matej Borovinšek
+//
+// Licensed under the terms defined in the LICENSE file located in the root directory of this source code.
+//
+// Source code: https://gitlab.com/MatejB/PrePoMax
+//
+// Author: Matej Borovinšek
+// Contributors:
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel;
+using DynamicTypeDescriptor;
+using CaeGlobals;
+using System.Drawing.Design;
+
+namespace PrePoMax
+{
+    [Serializable]
+    public abstract class ViewDefinedField : ViewMultiRegion
+    {
+        // Variables                                                                                                                
+        private string _selectionHidden;
+
+
+        // Properties                                                                                                               
+        [CategoryAttribute("Data")]
+        [OrderedDisplayName(0, 10, "Name")]
+        [DescriptionAttribute("Name of the defined field.")]
+        [Id(1, 1)]
+        public abstract string Name { get; set; }
+        //
+        [CategoryAttribute("Region")]
+        [OrderedDisplayName(0, 10, "Region type")]
+        [DescriptionAttribute("Select the region type for the creation of the defined field.")]
+        [Id(1, 2)]
+        public override string RegionType { get { return base.RegionType; } set { base.RegionType = value; } }
+        //
+        [CategoryAttribute("Region")]
+        [OrderedDisplayName(1, 10, "Hidden")]
+        [DescriptionAttribute("Hidden.")]
+        [Id(2, 2)]
+        public string SelectionHidden { get { return _selectionHidden; } set { _selectionHidden = value; } }
+        //
+        [CategoryAttribute("Time/Frequency")]
+        [OrderedDisplayName(0, 10, "Amplitude")]
+        [DescriptionAttribute("Select the amplitude for the load.")]
+        [Id(1, 18)]
+        public abstract string AmplitudeName { get; set; }
+        //
+        [Category("Appearance")]
+        [DisplayName("Color")]
+        [Description("Select boundary condition color.")]
+        [Editor(typeof(UserControls.ColorEditorEx), typeof(UITypeEditor))]
+        [Id(1, 20)]
+        public abstract System.Drawing.Color Color { get; set; }
+
+
+        // Constructors                                                                                                             
+
+
+        // Methods
+        public abstract CaeModel.DefinedField GetBase();
+        public override void UpdateRegionVisibility()
+        {
+            base.UpdateRegionVisibility();
+            // Hide SelectionHidden
+            DynamicTypeDescriptor.CustomPropertyDescriptor cpd;
+            if (base.RegionType == RegionTypeEnum.Selection.ToFriendlyString())
+            {
+                cpd = base.DynamicCustomTypeDescriptor.GetProperty(nameof(SelectionHidden));
+                cpd.SetIsBrowsable(false);
+            }
+        }
+        public void PopulateAmplitudeNames(string[] amplitudeNames)
+        {
+            List<string> names = new List<string>() { CaeModel.Amplitude.DefaultAmplitudeName };
+            names.AddRange(amplitudeNames);
+            DynamicCustomTypeDescriptor.PopulateProperty(nameof(AmplitudeName), names.ToArray(), false, 2);
+        }
+    }
+}
