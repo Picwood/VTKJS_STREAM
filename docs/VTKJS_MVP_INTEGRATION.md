@@ -214,7 +214,7 @@ The script produces a self-contained `linux-x64` server, verifies the authentica
 
 ## Next migration slice
 
-1. Continue PEND-004 with smoothing/highlight settings, then user-pick mode. Coordinate orientation, scale, scalar legend, categorical color bar, status block, and shared widget layout are browser-owned. Exact overlay depth ordering, volumetric OpenFOAM, transformed/generated-edge 3MF parity, and remaining tools follow.
+1. Continue PEND-004 with user-pick activation/deactivation and hover isolation. Coordinate orientation, result widgets/shared layout, and graphics-interaction settings are browser-owned. Exact overlay depth ordering, volumetric OpenFOAM, transformed/generated-edge 3MF parity, and remaining tools follow.
 2. Run the native Linux 3M physical-GPU benchmark when suitable hardware is available (PEND-001).
 3. Conduct representative-model manual visual acceptance with a named reviewer (PEND-005).
 

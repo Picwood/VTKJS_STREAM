@@ -16,7 +16,10 @@ export default defineConfig({
   outputDir: 'test-results',
   use: {
     baseURL: 'http://127.0.0.1:5173',
-    channel: 'chrome',
+    // Use Playwright's pinned Chromium by default so the suite does not depend
+    // on a separately installed Chrome distribution. Set this when a branded
+    // browser is required for a compatibility run (for example, "chrome").
+    channel: process.env.PREPOMAX_PLAYWRIGHT_CHANNEL,
     headless: true,
     viewport: { width: 1400, height: 900 },
     deviceScaleFactor: 1,

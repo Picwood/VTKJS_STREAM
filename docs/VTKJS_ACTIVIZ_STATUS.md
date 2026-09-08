@@ -45,7 +45,6 @@ Consequently, renaming/deleting the ActiViz DLLs or uninstalling ActiViz is not 
 
 The authoritative detailed inventory is [the compatibility call-site inventory](../prototypes/VtkJsStreaming/docs/activiz-compatibility-inventory.md). The remaining groups are:
 
-- smoothing and highlight-color settings;
 - user-pick activation/deactivation;
 - crop/smooth mesh-editing helper classification;
 - unsupported generic/volume rendering and volumetric OpenFOAM parity;
@@ -54,7 +53,7 @@ The authoritative detailed inventory is [the compatibility call-site inventory](
 - renderer-neutral replacement of `vtkControl` enums/data types in application/domain signatures;
 - conditional symbol silhouettes and exact visual differences tracked by PEND-005/PEND-011.
 
-The coordinate orientation marker, scale widget, scalar legend, categorical color bar, status block, and shared result-widget layout are browser-owned as of this audit.
+The coordinate orientation marker, result widgets/shared layout, and smoothing/highlight-color settings are browser-owned as of this audit. WebGL context antialiasing replaces the unavailable VTK 5.8 point/line smoothing toggles; user-pick hover remains a separate open capability.
 
 ## Exit gate for a truly ActiViz-free launch
 

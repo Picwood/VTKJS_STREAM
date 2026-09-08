@@ -454,7 +454,7 @@ Status: complete on 2026-09-02 (PEND-003).
 - Packaged fixture acceptance reported hidden/visible states, positive `0.68 mm`, six labels, 402.021-pixel width, `ScaleWidgetBrowserOnly=True`, and clean shutdown.
 - Audited physical ActiViz removal. VTK.js is the visible renderer when selected, but `vtkControl` is still constructed unconditionally and its project/assembly types remain startup dependencies. Added `scripts/start-prepomax-vtkjs.ps1` and `docs/VTKJS_ACTIVIZ_STATUS.md` so the launch mode and remaining removal gate are explicit.
 - Verification: client 73/73, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, packaged scale smoke, and launcher/PowerShell syntax passed.
-- Evidence: [scale widget retirement](evidence/scale-widget-retirement.md). The scalar-legend, categorical color-bar, status-block, and shared-layout slices subsequently completed; PEND-004 now targets smoothing/highlight settings and user-pick mode.
+- Evidence: [scale widget retirement](evidence/scale-widget-retirement.md). The remaining result widgets/shared layout and graphics-interaction settings subsequently completed; PEND-004 now targets user-pick mode.
 
 ## Browser-owned scalar legend - 2026-09-08
 
@@ -463,7 +463,7 @@ Status: complete on 2026-09-02 (PEND-003).
 - Added a safe top-left DOM legend and applied its range/palette to current and future vtk.js mappers. State survives reconstruction and refreshes after scene/scalar/frame, contour, and visibility changes.
 - Packaged fixture acceptance reported `ScalarLegendBrowserOnly=True`, hidden/visible lifecycle, `Displacements`/`Magnitude`/`mm`, `Complex: Real`, `Automatic`, `E3`, range `0..1`, nine colors, ten labels, background/border, and clean shutdown.
 - Verification: client 75/75, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, and packaged scalar-legend smoke passed.
-- Evidence: [scalar legend retirement](evidence/scalar-legend-retirement.md). The categorical color-bar, status-block, and shared-layout slices subsequently completed; PEND-004 now targets smoothing/highlight settings and user-pick mode, while exact visual typography remains PEND-005.
+- Evidence: [scalar legend retirement](evidence/scalar-legend-retirement.md). The categorical color-bar, status-block/shared-layout, and graphics-interaction settings subsequently completed; PEND-004 now targets user-pick mode, while exact visual typography remains PEND-005.
 
 ## Browser-owned categorical color bar - 2026-09-08
 
@@ -472,7 +472,7 @@ Status: complete on 2026-09-02 (PEND-003).
 - Added a safe top-left DOM list, legacy underscore/hyphen label normalization, navigation/view-reconstruction replay, and full-scene clear integration.
 - Packaged fixture acceptance reported `ColorBarBrowserOnly=True`, exact red/blue/green order, three normalized labels, visible-to-empty hidden lifecycle, appearance flags, and clean shutdown.
 - Verification: client 77/77, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, and packaged color-bar smoke passed.
-- Evidence: [categorical color-bar retirement](evidence/categorical-color-bar-retirement.md). The status-block/shared-layout slice subsequently completed; PEND-004 now targets smoothing/highlight settings and user-pick mode, while exact typography and unusually large-list presentation remain PEND-005.
+- Evidence: [categorical color-bar retirement](evidence/categorical-color-bar-retirement.md). The status-block/shared-layout and graphics-interaction slices subsequently completed; PEND-004 now targets user-pick mode, while exact typography and unusually large-list presentation remain PEND-005.
 
 ## Browser-owned status block and shared widget layout - 2026-09-08
 
@@ -481,4 +481,15 @@ Status: complete on 2026-09-02 (PEND-003).
 - Preserved current-culture legacy text generation across all six result field types and added animation-frame step/increment/time plus scale-factor/harmonic-angle updates.
 - Packaged acceptance reported `StatusBlockBrowserOnly=True`, exact 20-pixel placement for all three result overlays, frequency and harmonic content, hidden lifecycle, and clean shutdown.
 - Verification: client 81/81, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, packaged status/layout smoke, PowerShell syntax, and diff checks passed.
-- Evidence: [status block and widget layout retirement](evidence/status-block-and-widget-layout-retirement.md). PEND-004 next targets smoothing/highlight settings and user-pick mode; exact typography and settings gestures remain review items.
+- Evidence: [status block and widget layout retirement](evidence/status-block-and-widget-layout-retirement.md). Graphics-interaction settings subsequently completed; PEND-004 next targets user-pick mode, while exact typography and settings gestures remain review items.
+
+## Browser-owned smoothing and highlight settings - 2026-09-08
+
+- Added retained `prepomax.graphics-interaction.updated-v1` state with strict normalized RGB/Boolean validation and navigation/view-reconstruction replay.
+- Routed point/line smoothing and primary/secondary/mouse highlight color seams away from hidden ActiViz in VTK.js mode; default ActiViz behavior is unchanged.
+- Applied primary color to browser selection/actor overlays with legacy surface darkening, secondary color to marked retained selection construction, and mouse color to the validated-pick marker. Existing retained selection primitives/surfaces recolor when settings change.
+- Documented that browser/WebGL multisample rasterization has no exact equivalent to VTK 5.8 point/line smoothing switches; flags retain preference without recreating any render window.
+- Packaged acceptance reported exact configured colors, primary and secondary rendered uses, `GraphicsInteractionBrowserOnly=True`, and clean shutdown.
+- Hardened browser E2E startup to use Playwright's pinned Chromium by default, with `PREPOMAX_PLAYWRIGHT_CHANNEL` available for an explicit branded-browser compatibility run. The packaged acceptance timer now waits for ordinary model refreshes before creating its temporary highlight overlays.
+- Verification: client 83/83, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, packaged graphics-interaction smoke, PowerShell syntax, and diff checks passed.
+- Evidence: [graphics interaction settings retirement](evidence/graphics-interaction-settings-retirement.md). PEND-004 next targets user-pick activation/deactivation; hover use of mouse highlight color follows there.

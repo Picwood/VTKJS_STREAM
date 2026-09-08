@@ -170,6 +170,12 @@ PrePoMax publishes the complete result status through `prepomax.status-block.upd
 
 The shared `prepomax.result-widget-layout.updated-v1` message contains integer pixel offsets from 0 through 4,096. Scalar legend and categorical color bar use top/left offsets; status block uses top/right offsets. The two public reset seams restore 20-pixel offsets and publish the complete layout. Both states are retained across navigation and scene-view reconstruction.
 
+## Graphics interaction settings
+
+`prepomax.graphics-interaction.updated-v1` is a complete retained state containing Boolean point/line smoothing preferences and normalized three-channel primary, secondary, and mouse-highlight RGB values. The browser rejects the whole update unless every property is present, finite, and bounded to `[0,1]`. Primary colors apply to authoritative selection overlays and actor wireframes; whole-surface actor highlighting retains the legacy 0.7 multiplier. C# resolves `UseSecondaryHighlightColor` for retained point/line and surface selection construction, including recoloring existing retained selections after a settings change. Mouse color applies to the validated-pick marker.
+
+The smoothing flags describe user preference. Browser rendering uses WebGL context anti-aliasing because WebGL has no equivalent of VTK 5.8's render-window point/line smoothing toggles; receiving a preference never reconstructs a render window.
+
 ## Control envelopes
 
 WebSockets carry UTF-8 JSON only. Every envelope contains protocol, message ID, optional correlation ID, scene ID/revision, type, UTC timestamp, and payload. Unknown payload properties are ignored. Bulk data never appears in an envelope.

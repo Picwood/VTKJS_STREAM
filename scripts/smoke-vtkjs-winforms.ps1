@@ -30,6 +30,7 @@ param(
     [switch]$ExerciseScalarLegend,
     [switch]$ExerciseColorBar,
     [switch]$ExerciseStatusBlock,
+    [switch]$ExerciseGraphicsInteraction,
     [switch]$ExerciseActorPresentation,
     [switch]$ExerciseActorHighlight,
     [switch]$ExerciseSceneClear,
@@ -115,6 +116,7 @@ if ($ExerciseScaleWidget) { $env:PREPOMAX_VTKJS_SMOKE_SCALE_WIDGET = '1' }
 if ($ExerciseScalarLegend) { $env:PREPOMAX_VTKJS_SMOKE_SCALAR_LEGEND = '1' }
 if ($ExerciseColorBar) { $env:PREPOMAX_VTKJS_SMOKE_COLOR_BAR = '1' }
 if ($ExerciseStatusBlock) { $env:PREPOMAX_VTKJS_SMOKE_STATUS_BLOCK = '1' }
+if ($ExerciseGraphicsInteraction) { $env:PREPOMAX_VTKJS_SMOKE_GRAPHICS_INTERACTION = '1' }
 if ($ExerciseActorPresentation) { $env:PREPOMAX_VTKJS_SMOKE_ACTOR_PRESENTATION = '1' }
 if ($ExerciseActorHighlight) { $env:PREPOMAX_VTKJS_SMOKE_ACTOR_HIGHLIGHT = '1' }
 if ($ExerciseSceneClear) {
@@ -177,6 +179,7 @@ $scaleWidgetBrowserOnly = $false
 $scalarLegendBrowserOnly = $false
 $colorBarBrowserOnly = $false
 $statusBlockBrowserOnly = $false
+$graphicsInteractionBrowserOnly = $false
 $actorPresentationApplied = $false
 $actorHighlightApplied = $false
 $sceneClearApplied = $false
@@ -1540,6 +1543,25 @@ try {
         }
     }
 
+    if ($ExerciseGraphicsInteraction) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $graphicsInteractionBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $graphicsInteractionBrowserOnly =
+                ($trace -match 'compatibility bypass capability=graphics-interaction operation=smoothing-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=graphics-interaction operation=highlight-colors-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=graphics-interaction operation=mouse-highlight-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=selection-construction operation=points-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=actor-highlight operation=add').Count -gt 0 -and
+                ($trace -match 'acceptance: graphics interaction configured false\|true\|0\.125,0\.251,0\.376\|0\.502,0\.627,0\.753\|0\.878,0\.502,0\.125\|browser-webgl-antialias\|\|0\.088,0\.176,0\.264\|0\.502,0\.627,0\.753').Count -gt 0
+        }
+        if (-not $graphicsInteractionBrowserOnly) {
+            $graphicsDiagnostic = ($trace | Where-Object { $_ -match 'graphics interaction|graphics-interaction|highlight' } |
+                Select-Object -Last 100) -join ' | '
+            throw "Browser-owned smoothing/highlight settings were not completed. Trace: $graphicsDiagnostic"
+        }
+    }
+
     if ($ExerciseCellClassification) {
         for ($attempt = 0; $attempt -lt 240 -and -not $cellClassificationBrowserOnly; $attempt++) {
             Start-Sleep -Milliseconds 250
@@ -1651,6 +1673,7 @@ try {
         ScalarLegendBrowserOnly = $scalarLegendBrowserOnly
         ColorBarBrowserOnly = $colorBarBrowserOnly
         StatusBlockBrowserOnly = $statusBlockBrowserOnly
+        GraphicsInteractionBrowserOnly = $graphicsInteractionBrowserOnly
         ActorPresentationApplied = $actorPresentationApplied
         ActorHighlightApplied = $actorHighlightApplied
         BrowserSceneClearApplied = $sceneClearApplied
@@ -1731,6 +1754,7 @@ finally {
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SCALAR_LEGEND -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_COLOR_BAR -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_STATUS_BLOCK -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_GRAPHICS_INTERACTION -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ACTOR_PRESENTATION -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR_TRIGGER -ErrorAction SilentlyContinue

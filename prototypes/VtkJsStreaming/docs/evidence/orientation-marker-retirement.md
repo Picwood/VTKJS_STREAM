@@ -37,4 +37,4 @@ The Release/x64 process reported `OrientationMarkerBrowserOnly=True`. Hidden dia
 
 ## Next boundary
 
-The scale-widget visibility/unit slice subsequently completed. PEND-004 next targets scalar-legend state and the remaining result widgets. Exact orientation captions/shaft styling belongs to PEND-005. User-pick mode, smoothing/highlight settings, editing-helper classification, volume-cell display/OpenFOAM parity, transformed export projection, native 3MF packaging, and final hidden-registry cleanup remain explicit.
+The scale widget, remaining result widgets/shared layout, and graphics-interaction settings subsequently completed. Exact orientation captions/shaft styling belongs to PEND-005. User-pick mode, editing-helper classification, volume-cell display/OpenFOAM parity, transformed export projection, native 3MF packaging, and final hidden-registry cleanup remain explicit.

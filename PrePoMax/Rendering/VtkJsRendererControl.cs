@@ -917,10 +917,9 @@ namespace PrePoMax.Rendering
             if (!IsBrowserReady || _webView.CoreWebView2 == null) return;
             await TraceAcceptanceScript("graphics interaction " + label, @"(() => {
                 try {
-                    const value = JSON.parse(document.querySelector('#diagnostics')?.textContent || '{}')
-                        ?.renderer?.graphicsInteraction;
-                    const rgb = color => color.map(channel => channel.toFixed(3)).join(',');
                     const renderer = JSON.parse(document.querySelector('#diagnostics')?.textContent || '{}')?.renderer;
+                    const value = renderer?.graphicsInteraction;
+                    const rgb = color => color.map(channel => channel.toFixed(3)).join(',');
                     const highlightColors = renderer?.actorHighlights?.colors?.map(rgb).join('~') || '';
                     const transientColors = renderer?.transientPrimitives?.colors?.map(rgb).join('~') || '';
                     return value ? `${value.pointSmoothing}|${value.lineSmoothing}|${rgb(value.primaryHighlightRgb)}|${rgb(value.secondaryHighlightRgb)}|${rgb(value.mouseHighlightRgb)}|${value.rasterization}|${value.selectionColors.map(rgb).join('~')}|${highlightColors}|${transientColors}` : 'missing';

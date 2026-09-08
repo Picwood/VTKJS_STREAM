@@ -81,6 +81,7 @@ namespace PrePoMax
         private System.Windows.Forms.Timer _vtkJsSmokeScalarLegendTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeColorBarTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeStatusBlockTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeGraphicsInteractionTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeActorPresentationTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeActorHighlightTimer;
         private int _vtkJsSmokeActorHighlightStage;
@@ -983,6 +984,7 @@ namespace PrePoMax
             StartVtkJsSmokeScalarLegend();
             StartVtkJsSmokeColorBar();
             StartVtkJsSmokeStatusBlock();
+            StartVtkJsSmokeGraphicsInteraction();
             StartVtkJsSmokeActorPresentation();
             StartVtkJsSmokeActorHighlight();
             StartVtkJsSmokeSceneClear();
@@ -1281,6 +1283,65 @@ namespace PrePoMax
                 }
             };
             _vtkJsSmokeStatusBlockTimer.Start();
+        }
+
+        private void StartVtkJsSmokeGraphicsInteraction()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_GRAPHICS_INTERACTION"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJs.WriteAcceptanceTrace("graphics interaction timer started");
+            _vtkJsSmokeGraphicsInteractionTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeGraphicsInteractionTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                ticks++;
+                if (stage == 0)
+                {
+                    // Opening a model can publish several normal scene refreshes after the
+                    // first topology chunk. Let those finish before adding the temporary
+                    // acceptance overlays, which are intentionally cleared by a refresh.
+                    if (ticks < 40) return;
+                    string actorName = _vtkJs.GetCapturedActorNames().FirstOrDefault();
+                    if (string.IsNullOrWhiteSpace(actorName)) return;
+                    var secondaryPoint = new vtkMaxActorData
+                    {
+                        Name = "__VtkJsSmokeSecondaryHighlight", Layer = vtkRendererLayer.Selection,
+                        NodeSize = 9, Color = Color.Red, UseSecondaryHighlightColor = true
+                    };
+                    secondaryPoint.Geometry.Nodes.Coor = new[] { new[] { 0.25, 0.25, 0.25 } };
+                    Add3DNodes(secondaryPoint);
+                    HighlightActor(actorName);
+                    SetSmoothing(false, true, false);
+                    SetHighlightColor(Color.FromArgb(32, 64, 96), Color.FromArgb(128, 160, 192));
+                    SetMouseHighlightColor(Color.FromArgb(224, 128, 32));
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && ticks >= 18)
+                {
+                    _vtkJs.TraceAcceptanceGraphicsInteraction("configured");
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ticks >= 12)
+                {
+                    Clear3DSelection();
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ticks >= 10)
+                {
+                    _vtkJsSmokeGraphicsInteractionTimer.Stop();
+                    _vtkJsSmokeGraphicsInteractionTimer.Dispose();
+                    _vtkJsSmokeGraphicsInteractionTimer = null;
+                }
+            };
+            _vtkJsSmokeGraphicsInteractionTimer.Start();
         }
 
         private void StartVtkJsSmokeCellClassification()
@@ -3107,6 +3168,12 @@ namespace PrePoMax
         }
         private async void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (_vtkJsSmokeGraphicsInteractionTimer != null)
+            {
+                _vtkJsSmokeGraphicsInteractionTimer.Stop();
+                _vtkJsSmokeGraphicsInteractionTimer.Dispose();
+                _vtkJsSmokeGraphicsInteractionTimer = null;
+            }
             if (_vtkJsSmokeStatusBlockTimer != null)
             {
                 _vtkJsSmokeStatusBlockTimer.Stop();

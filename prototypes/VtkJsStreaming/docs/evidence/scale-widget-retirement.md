@@ -38,4 +38,4 @@ The visible viewport can be launched in VTK.js mode with `scripts/start-prepomax
 
 ## Next boundary
 
-The scalar-legend, categorical color-bar, status-block, and shared-layout slices subsequently completed. PEND-004 next targets smoothing/highlight settings and user-pick mode. Physical ActiViz removal remains blocked by the groups and build/runtime dependencies in `docs/VTKJS_ACTIVIZ_STATUS.md`.
+The scalar-legend, categorical color-bar, status-block/shared-layout, and graphics-interaction slices subsequently completed. PEND-004 next targets user-pick mode. Physical ActiViz removal remains blocked by the groups and build/runtime dependencies in `docs/VTKJS_ACTIVIZ_STATUS.md`.
