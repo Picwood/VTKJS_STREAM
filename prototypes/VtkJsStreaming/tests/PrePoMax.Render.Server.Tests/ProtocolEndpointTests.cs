@@ -3,6 +3,8 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.WebSockets;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -13,6 +15,61 @@ namespace PrePoMax.Render.Server.Tests;
 public sealed class ProtocolEndpointTests(RenderServerFactory factory) : IClassFixture<RenderServerFactory>
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+
+    [Fact]
+    public async Task ProductionSessionBootstrap_RequiresHostAuthorityReusesSessionAndAdoptsCookie()
+    {
+        const string hostToken = "production-test-host-token";
+        using var production = factory.WithWebHostBuilder(builder =>
+        {
+            builder.UseEnvironment("Production");
+            builder.UseSetting("PREPOMAX_RENDER_HOST_TOKEN", hostToken);
+        });
+        using var client = production.CreateClient(new WebApplicationFactoryClientOptions { HandleCookies = false });
+
+        Assert.Equal(HttpStatusCode.Unauthorized,
+            (await client.PostAsync("/api/v1/sessions", null)).StatusCode);
+        using (var invalid = new HttpRequestMessage(HttpMethod.Post, "/api/v1/sessions"))
+        {
+            invalid.Headers.Add("X-PrePoMax-Host-Token", "invalid");
+            Assert.Equal(HttpStatusCode.Unauthorized, (await client.SendAsync(invalid)).StatusCode);
+        }
+
+        SessionCreated first;
+        using (var create = new HttpRequestMessage(HttpMethod.Post, "/api/v1/sessions"))
+        {
+            create.Headers.Add("X-PrePoMax-Host-Token", hostToken);
+            var response = await client.SendAsync(create);
+            response.EnsureSuccessStatusCode();
+            first = Assert.IsType<SessionCreated>(
+                await response.Content.ReadFromJsonAsync<SessionCreated>(JsonOptions));
+        }
+
+        using (var reuse = new HttpRequestMessage(HttpMethod.Post, "/api/v1/sessions"))
+        {
+            reuse.Headers.Add("X-PrePoMax-Host-Token", hostToken);
+            reuse.Headers.Add("X-PrePoMax-Session", first.AccessToken);
+            var response = await client.SendAsync(reuse);
+            response.EnsureSuccessStatusCode();
+            var second = Assert.IsType<SessionCreated>(
+                await response.Content.ReadFromJsonAsync<SessionCreated>(JsonOptions));
+            Assert.Equal(first, second);
+        }
+
+        Assert.Equal(HttpStatusCode.Unauthorized,
+            (await client.PostAsync("/api/v1/sessions/adopt", null)).StatusCode);
+        using (var adopt = new HttpRequestMessage(HttpMethod.Post, "/api/v1/sessions/adopt"))
+        {
+            adopt.Headers.Add("X-PrePoMax-Session", first.AccessToken);
+            adopt.Headers.Add("Cookie", "prepomax-render-session=stale-cookie-from-another-loopback-port");
+            var response = await client.SendAsync(adopt);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+            var cookie = Assert.Single(response.Headers.GetValues("Set-Cookie"));
+            Assert.Contains("prepomax-render-session=", cookie);
+            Assert.Contains("httponly", cookie, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("samesite=strict", cookie, StringComparison.OrdinalIgnoreCase);
+        }
+    }
 
     [Fact]
     public async Task Manifest_RequiresSessionAndContainsOnlyResourceDescriptors()

@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 using System.Text;
 using System.Threading.Channels;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 using PrePoMax.Render.Contracts;
 using PrePoMax.Render.Server;
 using PrePoMax.Render.SyntheticData;
@@ -19,8 +21,18 @@ var builder = WebApplication.CreateBuilder(args);
 var configuredPort = GetConfiguredPort();
 var allowedOrigins = GetAllowedOrigins(builder.Environment.IsDevelopment());
 var clientRoot = GetClientRoot();
-var hostShutdownToken = Environment.GetEnvironmentVariable("PREPOMAX_RENDER_HOST_TOKEN");
+var hostShutdownToken = builder.Configuration["PREPOMAX_RENDER_HOST_TOKEN"];
 var hostUploadMaximumBytes = GetHostUploadMaximumBytes();
+if (!builder.Environment.IsDevelopment())
+{
+    // Default lifetime/static-file information logs include physical content roots.
+    // Keep production diagnostics path-neutral; request headers (including credentials)
+    // are never logged by application code.
+    builder.Logging.AddFilter("Microsoft.Hosting.Lifetime", LogLevel.Warning);
+    builder.Logging.AddFilter("Microsoft.AspNetCore.Hosting.Diagnostics", LogLevel.Warning);
+    builder.Logging.AddFilter("Microsoft.AspNetCore.Routing.EndpointMiddleware", LogLevel.Warning);
+    builder.Logging.AddFilter("Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware", LogLevel.Warning);
+}
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.Limits.MaxRequestBodySize = hostUploadMaximumBytes;
@@ -34,7 +46,8 @@ builder.WebHost.ConfigureKestrel(options =>
     }
 });
 builder.Services.AddCors(options => options.AddPolicy("LocalClient", policy =>
-    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+    policy.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+        .WithExposedHeaders(ProtocolConstants.HeaderName, "X-PrePoMax-Server-Version")));
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -47,10 +60,28 @@ builder.Services.AddSingleton(CommandRateLimitOptions.FromEnvironment());
 builder.Services.AddSingleton<CommandRateLimiter>();
 builder.Services.AddSingleton<SceneState>();
 builder.Services.AddSingleton<SceneEventHub>();
+builder.Services.AddSingleton<RenderDiagnosticsState>();
 builder.Services.AddHostedService<RenderServerLifecycle>();
 builder.Services.AddSingleton(ResourceDelayOptions.FromEnvironment(builder.Environment.IsDevelopment()));
 
 var app = builder.Build();
+var requestLogger = app.Services.GetRequiredService<ILoggerFactory>()
+    .CreateLogger("PrePoMax.Render.Server.Request");
+var sessionLogger = app.Services.GetRequiredService<ILoggerFactory>()
+    .CreateLogger("PrePoMax.Render.Server.Session");
+var diagnosticsState = app.Services.GetRequiredService<RenderDiagnosticsState>();
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    var addresses = app.Services.GetRequiredService<IServer>()
+        .Features.Get<IServerAddressesFeature>()?.Addresses;
+    var address = addresses?
+        .Select(value => Uri.TryCreate(value, UriKind.Absolute, out var uri) ? uri : null)
+        .FirstOrDefault(uri => uri is not null && uri.Port > 0);
+    if (address is not null)
+    {
+        Console.Out.WriteLine($"PREPOMAX_RENDER_READY=http://127.0.0.1:{address.Port}");
+    }
+});
 app.UseCors("LocalClient");
 app.Use(async (context, next) =>
 {
@@ -64,7 +95,21 @@ if (clientRoot is not null)
 {
     var clientFiles = new PhysicalFileProvider(clientRoot);
     app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = clientFiles });
-    app.UseStaticFiles(new StaticFileOptions { FileProvider = clientFiles });
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = clientFiles,
+        OnPrepareResponse = context =>
+        {
+            // The embedded WebView uses a persistent profile. Revalidate the entry
+            // document so a newly staged hashed bundle cannot be shadowed by an old
+            // cached index.html after an in-place application upgrade.
+            if (string.Equals(context.Context.Request.Path.Value, "/index.html", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(context.Context.Request.Path.Value, "/", StringComparison.OrdinalIgnoreCase))
+            {
+                context.Context.Response.Headers.CacheControl = "no-store, max-age=0";
+            }
+        },
+    });
 }
 var webSocketOptions = new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(20) };
 foreach (var origin in allowedOrigins)
@@ -78,6 +123,7 @@ app.Use(async (context, next) =>
     if (context.Request.Path.StartsWithSegments("/api"))
     {
         context.Response.Headers[ProtocolConstants.HeaderName] = ProtocolConstants.Version;
+        context.Response.Headers["X-PrePoMax-Server-Version"] = RenderTelemetry.ServerVersion;
         if (context.Request.Headers.TryGetValue(ProtocolConstants.HeaderName, out var requestedVersion)
             && !requestedVersion.ToString().StartsWith("1.", StringComparison.Ordinal))
         {
@@ -88,6 +134,55 @@ app.Use(async (context, next) =>
     }
 
     await next(context);
+});
+
+app.Use(async (context, next) =>
+{
+    var operation = RenderTelemetry.ClassifyOperation(context.Request.Path);
+    if (operation is null)
+    {
+        await next(context);
+        return;
+    }
+
+    var started = Stopwatch.GetTimestamp();
+    var canceled = false;
+    try
+    {
+        await next(context);
+    }
+    catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+    {
+        canceled = true;
+        throw;
+    }
+    finally
+    {
+        var statusCode = canceled ? 499 : context.Response.StatusCode;
+        var responseBytes = context.Response.ContentLength ?? 0;
+        var sessionId = context.Items[typeof(RenderSession)] is RenderSession session
+            ? session.SessionId
+            : "none";
+        var sceneId = RenderTelemetry.SafeIdentifier(context.Request.RouteValues["sceneId"]);
+        var requestId = RenderTelemetry.SafeCorrelation(context.TraceIdentifier);
+        var elapsedMs = RenderTelemetry.ElapsedMilliseconds(started);
+        if (operation == "resource.read")
+        {
+            RenderTelemetry.ResourceCompleted(
+                requestLogger, requestId, sessionId, sceneId,
+                RenderTelemetry.SafeIdentifier(context.Request.RouteValues["resourceId"]),
+                statusCode, elapsedMs, responseBytes, canceled);
+        }
+        else
+        {
+            RenderTelemetry.RequestCompleted(
+                requestLogger, operation, requestId, sessionId, sceneId,
+                RenderTelemetry.SafeIdentifier(context.Items[RenderTelemetry.CommandMessageIdItemKey]),
+                RenderTelemetry.SafeIdentifier(context.Items[RenderTelemetry.CommandCorrelationIdItemKey]),
+                statusCode, elapsedMs, responseBytes, canceled);
+        }
+        diagnosticsState.Record(operation, statusCode, responseBytes, canceled);
+    }
 });
 
 app.Use(async (context, next) =>
@@ -524,7 +619,22 @@ app.MapPost("/api/v1/host/frame", async (
 
 app.MapPost("/api/v1/sessions", (HttpContext context, SessionStore sessions, SceneState sceneState) =>
 {
-    if (!sessions.TryCreate(out var session) || session is null)
+    var hostAuthorized = TokensEqual(
+        hostShutdownToken,
+        context.Request.Headers["X-PrePoMax-Host-Token"].ToString());
+    if (!builder.Environment.IsDevelopment() && !hostAuthorized)
+    {
+        RenderTelemetry.SessionRejected(sessionLogger, "host-credential-invalid");
+        return Results.Unauthorized();
+    }
+
+    RenderSession? session = null;
+    var reused = false;
+    if (hostAuthorized)
+    {
+        reused = sessions.TryAuthorize(context, out session);
+    }
+    if (session is null && (!sessions.TryCreate(out session) || session is null))
     {
         return Results.Json(
             new ApiError("session-capacity-reached", "The local render session limit has been reached. Retry after an existing session expires.", true),
@@ -532,14 +642,25 @@ app.MapPost("/api/v1/sessions", (HttpContext context, SessionStore sessions, Sce
     }
 
     var manifest = sceneState.Manifest;
-    context.Response.Cookies.Append("prepomax-render-session", session.Token, new CookieOptions
-    {
-        HttpOnly = true,
-        SameSite = SameSiteMode.Strict,
-        IsEssential = true,
-        MaxAge = sessions.Lifetime,
-    });
+    context.Items[typeof(RenderSession)] = session;
+    AppendSessionCookie(context, sessions, session);
+    if (reused)
+        RenderTelemetry.SessionReused(sessionLogger, session.SessionId, manifest.SceneId);
+    else
+        RenderTelemetry.SessionCreated(sessionLogger, session.SessionId, manifest.SceneId);
     return Results.Ok(new SessionCreated(session.SessionId, session.Token, manifest.SceneId));
+});
+
+app.MapPost("/api/v1/sessions/adopt", (HttpContext context, SessionStore sessions, SceneState sceneState) =>
+{
+    var session = context.Items[typeof(RenderSession)] as RenderSession;
+    if (session is null)
+    {
+        return Results.Unauthorized();
+    }
+    AppendSessionCookie(context, sessions, session);
+    RenderTelemetry.SessionAdopted(sessionLogger, session.SessionId, sceneState.Manifest.SceneId);
+    return Results.NoContent();
 });
 
 app.MapGet("/api/v1/scenes", (SceneState sceneState) =>
@@ -548,14 +669,17 @@ app.MapGet("/api/v1/scenes", (SceneState sceneState) =>
     return Results.Ok(new[] { new SceneSummary(manifest.SceneId, manifest.Name, manifest.SceneRevision) });
 });
 
-app.MapGet("/api/v1/diagnostics", (SceneState sceneState) =>
+app.MapGet("/api/v1/diagnostics", (SceneState sceneState, RenderDiagnosticsState diagnosticsState) =>
 {
     using var process = Process.GetCurrentProcess();
     process.Refresh();
     var gc = GC.GetGCMemoryInfo();
     var manifest = sceneState.Manifest;
+    var telemetry = diagnosticsState.Snapshot();
     return Results.Ok(new
     {
+        protocolVersion = ProtocolConstants.Version,
+        serverVersion = telemetry.ServerVersion,
         processId = process.Id,
         workingSetBytes = process.WorkingSet64,
         peakWorkingSetBytes = process.PeakWorkingSet64,
@@ -579,6 +703,11 @@ app.MapGet("/api/v1/diagnostics", (SceneState sceneState) =>
         chunkPointTuples = manifest.Actors.Sum(actor => actor.Chunks.Sum(chunk => (long)chunk.PointCount)),
         triangles = manifest.Actors.Sum(actor => actor.Chunks.Sum(chunk => (long)chunk.TriangleCount)),
         descriptorBytes = manifest.Resources.Sum(resource => resource.ByteLength),
+        requestCount = telemetry.RequestCount,
+        resourceRequestCount = telemetry.ResourceRequestCount,
+        resourceResponseBytes = telemetry.ResourceResponseBytes,
+        canceledRequestCount = telemetry.CanceledRequestCount,
+        lastSafeErrorCode = telemetry.LastSafeErrorCode,
     });
 });
 
@@ -679,6 +808,8 @@ app.MapPost("/api/v1/scenes/{sceneId}/commands", (
     CommandRateLimiter rateLimiter) =>
 {
     var manifest = sceneState.Manifest;
+    context.Items[RenderTelemetry.CommandMessageIdItemKey] = command.MessageId;
+    context.Items[RenderTelemetry.CommandCorrelationIdItemKey] = command.CorrelationId;
     if (sceneId != manifest.SceneId)
     {
         return Results.NotFound(new ApiError("scene-not-found", "The requested scene does not exist."));
@@ -867,6 +998,19 @@ static bool TokensEqual(string? expected, string supplied)
     var suppliedBytes = Encoding.UTF8.GetBytes(supplied);
     return expectedBytes.Length == suppliedBytes.Length
         && System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(expectedBytes, suppliedBytes);
+}
+
+static void AppendSessionCookie(HttpContext context, SessionStore sessions, RenderSession session)
+{
+    context.Response.Cookies.Append("prepomax-render-session", session.Token, new CookieOptions
+    {
+        HttpOnly = true,
+        SameSite = SameSiteMode.Strict,
+        IsEssential = true,
+        Secure = false,
+        Path = "/",
+        MaxAge = sessions.Lifetime,
+    });
 }
 
 static void WriteFramePhaseHeaders(

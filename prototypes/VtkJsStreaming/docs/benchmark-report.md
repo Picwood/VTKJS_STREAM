@@ -1,6 +1,6 @@
 # WP5 benchmark report
 
-Status: completed on Windows x64 on 2026-08-05. The Linux x64 acceptance item was not executable on this host and is explicitly failed/pending; no Linux result is inferred from Windows.
+Status: physical-GPU benchmark completed on Windows x64 on 2026-08-05. Linux x64 functional qualification passed on 2026-09-01; a Linux physical-GPU benchmark remains pending and no Linux performance result is inferred from Windows or software WebGL.
 
 ## Reference system and method
 
@@ -37,6 +37,23 @@ No threshold was changed. All gates passed on the documented integrated-GPU syst
 
 The browser figure is `Runtime.getHeapUsage.usedSize + backingStorageSize` after forced collection, so it includes live array-buffer backing stores. VTK.js supplies the approximate GPU allocation. Backend memory is sampled from `GC.GetTotalMemory(false)`; process peak working set is retained in the raw run. These are different memory domains and are not added together.
 
+## Multi-million selection addendum (2026-08-31)
+
+The same canonical scene now includes a physical selection acceptance. Three fresh headed Chrome 151 runs on the Intel UHD/ANGLE D3D11 reference system selected 3,000,000 authoritative node IDs matching 3,058,000 resident chunk tuples. Stable deterministic sampling produced 436,858 visible overlay points in 30 actors on every run.
+
+| Metric | Target | Three-run median | Status |
+|---|---:|---:|---|
+| retained authoritative IDs | = 3,000,000 | 3,000,000 | Pass |
+| sampled overlay points | 1–500,000 | 436,858 | Pass |
+| selection activation | ≤ 2,000 ms | 474.6 ms | Pass |
+| selected-scene orbit | ≥ 20 FPS | 27.78 FPS | Pass |
+
+The exact visual-overlay policy remains unchanged through 1,000,000 matches. Above that boundary, the sampled representation is capped at 500,000 points while all authoritative IDs remain retained. Raw evidence is committed in `../../../docs/evidence/wp5-multimillion-selection-2026-08-31.json` and its `-run2`/`-run3` companions. The pre-existing point-pick and scalar-update target gates varied around their target boundaries during these addendum runs; none crossed its hard-failure threshold, and the dedicated selection assertions passed in all three runs.
+
+## Structured-diagnostics overhead addendum (2026-09-02)
+
+A paired Windows headless Chrome 152 run measured the bounded structured diagnostics path without replacing or reinterpreting the physical-GPU baseline. Information-level application events versus the same category suppressed measured 3,306.7 versus 3,189.3 ms complete initial load (+117.4 ms, +3.68%) and 11,875,528 versus 11,174,400 bytes backend managed peak above baseline (+701,128 bytes). Initial cardinality was exactly 152 correlated requests, including 150 resource events for the exact 157,048,032 descriptor bytes; there is no per-node, per-triangle, or per-animation-frame event. See [structured diagnostics evidence](evidence/structured-production-diagnostics.md) and its two raw JSON files. Headless timing variance is explicitly non-qualifying for GPU performance.
+
 ## Functional and network evidence
 
 - The generator and browser assert exactly 3,000,000 unique source nodes and 5,993,002 triangles. Chunk point tuples are higher only because neighboring independent PolyData chunks share one boundary row.
@@ -63,3 +80,7 @@ From the prototype root:
 ```
 
 The default is a headed, hardware-qualified attempt. Use `-Headless` only for functional smoke evidence; the harness marks software/headless GPU gates failed. Bash uses `PREPOMAX_BENCHMARK_HEADLESS=0 ./scripts/benchmark.sh`. Chunk rows and the response cap are configurable in both scripts.
+
+## Linux x64 functional qualification
+
+On 2026-09-01, Ubuntu 22.04 under WSL2 passed the self-contained `linux-x64` server lifecycle and production same-origin client gate. Linux Chromium 151 reported WebGL2 and rendered the deterministic small fixture with two actors, two chunks, six points, two polygons, and exactly 152 transferred resource bytes. This closes cross-platform functional correctness only; the 3M physical-GPU performance and memory benchmark remains pending on Linux. See [the captured environment and results](evidence/linux-x64-functional.md).

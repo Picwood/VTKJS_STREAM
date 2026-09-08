@@ -25,6 +25,7 @@ namespace PrePoMax
         private sealed class Entry
         {
             public vtkMaxActor[] Actors;
+            public vtkMaxActorData[] ActorData;
             public uint MemoryKB;
             public DateTime LastUsed;
         }
@@ -57,7 +58,7 @@ namespace PrePoMax
         }
         public bool TryGet(string key, out vtkMaxActor[] actors)
         {
-            if (_entries.TryGetValue(key, out var entry))
+            if (_entries.TryGetValue(key, out var entry) && entry.Actors != null)
             {
                 entry.LastUsed = DateTime.UtcNow;
                 actors = entry.Actors;
@@ -73,13 +74,37 @@ namespace PrePoMax
             //
             uint entryMemoryKB = CalculateMemoryKB(actors);
             // Item too large to ever fit → reject
-            if (entryMemoryKB > _maxMemoryKB) return;
-            // Evict until it fits
-            EvictUntilFits(entryMemoryKB);
+            AddEntry(key, new Entry { Actors = actors, MemoryKB = entryMemoryKB, LastUsed = DateTime.UtcNow });
+        }
+        public bool TryGetActorData(string key, out vtkMaxActorData[] actorData)
+        {
+            if (_entries.TryGetValue(key, out var entry) && entry.ActorData != null)
+            {
+                entry.LastUsed = DateTime.UtcNow;
+                actorData = entry.ActorData;
+                return true;
+            }
             //
-            _entries[key] = new Entry { Actors = actors, MemoryKB = entryMemoryKB, LastUsed = DateTime.UtcNow };
-            //
-            _currentMemoryKB += entryMemoryKB;
+            actorData = null;
+            return false;
+        }
+        public void AddActorData(string key, vtkMaxActorData[] actorData)
+        {
+            if (actorData == null || actorData.Length == 0) return;
+            uint entryMemoryKB = CalculateMemoryKB(actorData);
+            AddEntry(key, new Entry { ActorData = actorData, MemoryKB = entryMemoryKB, LastUsed = DateTime.UtcNow });
+        }
+        private void AddEntry(string key, Entry entry)
+        {
+            if (entry.MemoryKB > _maxMemoryKB) return;
+            if (_entries.TryGetValue(key, out Entry previous))
+            {
+                _currentMemoryKB -= previous.MemoryKB;
+                _entries.Remove(key);
+            }
+            EvictUntilFits(entry.MemoryKB);
+            _entries[key] = entry;
+            _currentMemoryKB += entry.MemoryKB;
         }
         private uint CalculateMemoryKB(vtkMaxActor[] actors)
         {
@@ -87,6 +112,45 @@ namespace PrePoMax
             foreach (var actor in actors) sum += actor.MemorySize; // assumed KB
             //
             return sum;
+        }
+        private uint CalculateMemoryKB(vtkMaxActorData[] actors)
+        {
+            ulong bytes = 0;
+            foreach (vtkMaxActorData actor in actors)
+            {
+                if (actor == null) continue;
+                bytes += EstimateMemoryBytes(actor.Geometry);
+                bytes += EstimateMemoryBytes(actor.ModelEdges);
+                bytes += EstimateMemoryBytes(actor.ElementEdges);
+                bytes += EstimateMemoryBytes(actor.CellLocator);
+            }
+            return (uint)Math.Min(uint.MaxValue, Math.Max(1UL, (bytes + 1023UL) / 1024UL));
+        }
+        private ulong EstimateMemoryBytes(CaeGlobals.PartExchangeData part)
+        {
+            if (part == null) return 0;
+            ulong bytes = 0;
+            if (part.Nodes != null)
+            {
+                bytes += (ulong)(part.Nodes.Ids == null ? 0 : part.Nodes.Ids.Length) * sizeof(int);
+                bytes += (ulong)(part.Nodes.Values == null ? 0 : part.Nodes.Values.Length) * sizeof(float);
+                if (part.Nodes.Coor != null)
+                    foreach (double[] values in part.Nodes.Coor)
+                        bytes += (ulong)(values == null ? 0 : values.Length) * sizeof(double);
+                if (part.Nodes.Normals != null)
+                    foreach (double[] values in part.Nodes.Normals)
+                        bytes += (ulong)(values == null ? 0 : values.Length) * sizeof(double);
+            }
+            if (part.Cells != null)
+            {
+                bytes += (ulong)(part.Cells.Ids == null ? 0 : part.Cells.Ids.Length) * sizeof(int);
+                bytes += (ulong)(part.Cells.Types == null ? 0 : part.Cells.Types.Length) * sizeof(int);
+                bytes += (ulong)(part.Cells.Values == null ? 0 : part.Cells.Values.Length) * sizeof(float);
+                if (part.Cells.CellNodeIds != null)
+                    foreach (int[] values in part.Cells.CellNodeIds)
+                        bytes += (ulong)(values == null ? 0 : values.Length) * sizeof(int);
+            }
+            return bytes;
         }
         private void EvictUntilFits(uint incomingKB)
         {

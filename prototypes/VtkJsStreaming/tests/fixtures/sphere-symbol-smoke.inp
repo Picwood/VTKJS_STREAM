@@ -1,0 +1,16 @@
+*HEADING
+VTK.js sphere symbol process smoke
+*NODE
+1, 0., 0., 0.
+2, 1., 0., 0.
+3, 0., 1., 0.
+4, 0., 0., 1.
+*ELEMENT, TYPE=C3D4, ELSET=Solid
+1, 1, 2, 3, 4
+*ELSET, ELSET=Solid
+1
+*MATERIAL, NAME=SmokeMaterial
+*ELASTIC
+210000., 0.3
+*SOLID SECTION, ELSET=Solid, MATERIAL=SmokeMaterial
+1.

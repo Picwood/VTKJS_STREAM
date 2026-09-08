@@ -2,12 +2,28 @@ import './style.css';
 import { ChunkLoader, type LoadProgress } from './chunkLoader';
 import type {
   ActorPresentationUpdatedPayload, ActorRemovedPayload, ActorVisibilityUpdatedPayload, AreaCompletedPayload, CameraUpdatedPayload, FieldUpdatedPayload, FrameUpdatedPayload, FrustumCompletedPayload,
-  HostAnnotation, HostAnnotationAction, HostAnnotationActionMessage, HostSelectionOperation, HostSelectionStateMessage, HostValidatedAreaMessage, HostValidatedPickMessage, PickCompletedPayload, ProtocolMessage,
-  RenderActor, ResolvedPick, SceneManifest, SceneReplacedPayload,
+  HostActorContour, HostAnnotation, HostAnnotationAction, HostAnnotationActionMessage, HostCaption, HostColorBarMessage, HostCoordinateAxis, HostDirectionalGlyph, HostGraphicsInteractionMessage, HostOrientationMarkerMessage, HostResultWidgetLayoutMessage, HostScalarLegendMessage, HostScaleWidgetMessage, HostSelectionOperation, HostSelectionStateMessage, HostSphereSymbol, HostStatusBlockMessage, HostTransformationStateMessage, HostTransientPrimitive, HostValidatedAreaMessage, HostValidatedPickMessage, HostViewportAppearanceMessage, PickCompletedPayload, ProtocolMessage,
+  RenderActor, ResolvedPick, SceneManifest, SceneReplacedPayload, SessionCreated,
 } from './protocol';
 import { RenderApi } from './renderApi';
 import { normalizeHostAnnotations } from './hostAnnotations';
+import { normalizeHostSphereSymbols } from './hostSphereSymbols';
+import { normalizeHostTransientPrimitives } from './hostTransientPrimitives';
+import { normalizeHostCoordinateOverlays } from './hostCoordinateOverlays';
+import { normalizeHostDirectionalGlyphs } from './hostDirectionalGlyphs';
+import { normalizeHostViewportAppearance } from './hostViewportAppearance';
+import { normalizeHostOrientationMarker } from './hostOrientationMarker';
+import { normalizeHostScaleWidget } from './hostScaleWidget';
+import { normalizeHostScalarLegend } from './hostScalarLegend';
+import { normalizeHostColorBar } from './hostColorBar';
+import { normalizeHostStatusBlock } from './hostStatusBlock';
+import { normalizeHostResultWidgetLayout } from './hostResultWidgetLayout';
+import { normalizeHostGraphicsInteraction } from './hostGraphicsInteraction';
+import { normalizeHostActorContours } from './hostActorContours';
+import { normalizeHostActorHighlights } from './hostActorHighlights';
+import { normalizeHostTransformations } from './hostTransformations';
 import { decodeHostSelection } from './hostSelectionBinary';
+import { normalizeHostSessionBootstrap } from './sessionBootstrap';
 import { VtkSceneView, type CameraParameters, type CameraView } from './vtkSceneView';
 
 const elements = {
@@ -40,7 +56,12 @@ const annotationInteractions = {
   moved: notifyAnnotationMoved,
   action: notifyAnnotationAction,
 };
-let view = new VtkSceneView(elements.viewport, showError, annotationInteractions, notifyCameraChanged);
+const clientVersion = '0.1.0';
+let contextLossCount = 0;
+let lastSafeErrorCode: string | null = null;
+let currentSessionId: string | null = null;
+let transportDiagnostics = { serverVersion: null as string | null, resourceRetries: 0, resourceCancellations: 0 };
+let view = createSceneView();
 view.setParallelProjection(elements.orthographic.checked);
 let hostSelection: HostSelectionStateMessage = {
   type: 'prepomax.selection.updated-v1',
@@ -51,6 +72,51 @@ let hostSelection: HostSelectionStateMessage = {
   edgeNodeIds: [],
 };
 let hostAnnotations: readonly HostAnnotation[] = [];
+let hostSphereSymbols: readonly HostSphereSymbol[] = [];
+let hostTransientPrimitives: readonly HostTransientPrimitive[] = [];
+let hostCoordinateAxes: readonly HostCoordinateAxis[] = [];
+let hostCaptions: readonly HostCaption[] = [];
+let hostDirectionalGlyphs: readonly HostDirectionalGlyph[] = [];
+let hostActorContours: readonly HostActorContour[] = [];
+let hostActorHighlights: readonly string[] = [];
+let hostViewportAppearance: HostViewportAppearanceMessage = {
+  type: 'prepomax.viewport-appearance.updated-v1', gradient: false,
+  topRgb: [0.87, 0.91, 0.95], bottomRgb: [0.87, 0.91, 0.95],
+  ambient: 0, diffuse: 1, redraw: false,
+};
+let hostOrientationMarker: HostOrientationMarkerMessage = {
+  type: 'prepomax.orientation-marker.updated-v1', visible: true,
+};
+let hostScaleWidget: HostScaleWidgetMessage = {
+  type: 'prepomax.scale-widget.updated-v1', visible: true, unit: '',
+};
+let hostScalarLegend: HostScalarLegendMessage = {
+  type: 'prepomax.scalar-legend.updated-v1', visible: false,
+  fieldName: 'PrePoMax values', componentName: 'value', unit: '', complexComponent: '',
+  minMaxType: 'Automatic', numberFormat: 'G4', drawBackground: false, drawBorder: false,
+  minimum: 0, maximum: 1, colors: [[0.23, 0.30, 0.75], [0.71, 0.02, 0.15]],
+};
+let hostColorBar: HostColorBarMessage = {
+  type: 'prepomax.color-bar.updated-v1', visible: false,
+  drawBackground: false, drawBorder: true, colors: [], labels: [],
+};
+let hostStatusBlock: HostStatusBlockMessage = {
+  type: 'prepomax.status-block.updated-v1', visible: false,
+  drawBackground: false, drawBorder: false, lines: [],
+};
+let hostResultWidgetLayout: HostResultWidgetLayoutMessage = {
+  type: 'prepomax.result-widget-layout.updated-v1',
+  scalarLegend: { top: 20, left: 20 }, colorBar: { top: 20, left: 20 },
+  statusBlock: { top: 20, right: 20 },
+};
+let hostGraphicsInteraction: HostGraphicsInteractionMessage = {
+  type: 'prepomax.graphics-interaction.updated-v1', pointSmoothing: true, lineSmoothing: true,
+  primaryHighlightRgb: [1, 0, 0], secondaryHighlightRgb: [0.93, 0.51, 0.93],
+  mouseHighlightRgb: [1, 0.65, 0],
+};
+let hostTransformations: HostTransformationStateMessage = {
+  type: 'prepomax.transformations.updated-v1', visible: true, matrices: [],
+};
 let hostFollowerView: { actorNames: readonly string[]; nodeIds: readonly number[] } = { actorNames: [], nodeIds: [] };
 let hostExplodedPreview = new Map<string, readonly [number, number, number]>();
 let hostSectionView: { enabled: boolean; point: readonly [number, number, number];
@@ -160,6 +226,9 @@ embeddedWebView?.addEventListener?.('sharedbufferreceived', (event) => {
     embeddedWebView.releaseBuffer?.(buffer);
   }
 });
+if (launchParameters.get('embedded') === '1') {
+  notifyHost({ type: 'prepomax.client.ready-v1' });
+}
 window.addEventListener('beforeunload', () => {
   activeLoad?.abort();
   activePick?.abort();
@@ -168,11 +237,16 @@ window.addEventListener('beforeunload', () => {
   view.delete();
 });
 
-if (launchParameters.get('autoload') === '1') {
+if (launchParameters.get('autoload') === '1'
+  && (launchParameters.get('embedded') !== '1' || launchParameters.get('testHooks') === '1')) {
   void loadScene();
 }
 
-async function loadScene(): Promise<void> {
+async function loadScene(
+  bootstrap?: SessionCreated,
+  deferSceneApplied = false,
+  replacement?: Readonly<{ api: RenderApi; sceneId: string }>,
+): Promise<void> {
   const followerBaseline = view.getFollowerPoints();
   activeLoad?.abort();
   activePick?.abort();
@@ -189,8 +263,19 @@ async function loadScene(): Promise<void> {
   clearError();
   view.delete();
   elements.viewport.replaceChildren();
-  view = new VtkSceneView(elements.viewport, showError, annotationInteractions, notifyCameraChanged);
+  view = createSceneView();
   view.setParallelProjection(elements.orthographic.checked);
+  view.setViewportAppearance(hostViewportAppearance);
+  view.setOrientationMarkerVisible(hostOrientationMarker.visible);
+  view.setScaleWidget(hostScaleWidget.visible, hostScaleWidget.unit);
+  view.setScalarLegend(hostScalarLegend);
+  view.setColorBar(hostColorBar);
+  view.setStatusBlock(hostStatusBlock);
+  view.setResultWidgetLayout(hostResultWidgetLayout);
+  view.setGraphicsInteraction(hostGraphicsInteraction);
+  view.setTransformations(hostTransformations.matrices, hostTransformations.visible);
+  view.setActorContours(hostActorContours);
+  view.setActorHighlights(hostActorHighlights);
   view.setSelection(hostSelection.item, hostSelection.ids, hostSelection.actorNames,
     hostSelection.faceNodeIds, hostSelection.edgeNodeIds);
   view.setAnnotations(hostAnnotations);
@@ -216,17 +301,29 @@ async function loadScene(): Promise<void> {
   setStatus('Creating authenticated local session…');
 
   try {
-    const api = new RenderApi(elements.serverUrl.value);
+    const api = replacement?.api ?? new RenderApi(elements.serverUrl.value);
     currentApi = api;
-    const session = await api.createSession(signal);
+    let sceneId: string;
+    if (replacement) {
+      sceneId = replacement.sceneId;
+    } else {
+      const session = bootstrap ?? await api.createSession(signal);
+      if (bootstrap) await api.adoptSession(session, signal);
+      currentSessionId = session.sessionId;
+      sceneId = session.sceneId;
+    }
     setStatus('Fetching scene manifest…');
-    manifest = await api.getManifest(session.sceneId, signal);
+    manifest = await api.getManifest(sceneId, signal);
     manifestReceivedAt = performance.now();
     view.setWorldOrigin(manifest.worldOrigin);
+    view.setSphereSymbols(hostSphereSymbols);
+    view.setTransientPrimitives(hostTransientPrimitives);
+    view.setCoordinateOverlays(hostCoordinateAxes, hostCaptions);
+    view.setDirectionalGlyphs(hostDirectionalGlyphs);
     if (hostSectionView.enabled) view.setSectionView(hostSectionView.point, hostSectionView.normal);
     let socket: WebSocket;
     socket = api.connectEvents(
-      session.sceneId,
+      sceneId,
       (message) => void handleSceneEvent(message),
       () => { elements.switchField.disabled = false; },
       showError,
@@ -234,7 +331,7 @@ async function loadScene(): Promise<void> {
         if (eventSocket === socket && manifest) {
           eventSocket = null;
           setStatus('Event stream disconnected; reloading scene snapshot…');
-          void loadScene();
+          void loadScene(undefined, false, { api, sceneId: manifest.sceneId });
         }
       },
     );
@@ -266,6 +363,7 @@ async function loadScene(): Promise<void> {
     await nextStableFrame();
     firstStableFrameAt = performance.now();
     notifyCameraChanged(view.getCameraParameters());
+    if (!deferSceneApplied) notifySceneApplied();
     updateDiagnostics();
     setStatus(`Loaded ${manifest.actors.length} actors.`);
     elements.unload.disabled = false;
@@ -273,8 +371,9 @@ async function loadScene(): Promise<void> {
     if (signal.aborted) {
       setStatus('Load cancelled.');
     } else {
-      showError(error instanceof Error ? error.message : String(error));
+      showError(error instanceof Error ? error.message : String(error), safeErrorCode(error));
       setStatus('Load failed.');
+      updateDiagnostics();
     }
   } finally {
     if (activeLoad?.signal === signal) {
@@ -339,14 +438,35 @@ function renderLegend(scene: SceneManifest): void {
 
 function updateDiagnostics(progress: LoadProgress | null = latestProgress): void {
   const now = performance.now();
+  if (currentApi) transportDiagnostics = currentApi.getDiagnostics();
+  const renderPointTuples = manifest?.actors.reduce((sum, actor) =>
+    sum + actor.chunks.reduce((actorSum, chunk) => actorSum + chunk.pointCount, 0), 0) ?? 0;
+  const renderTriangles = manifest?.actors.reduce((sum, actor) =>
+    sum + actor.chunks.reduce((actorSum, chunk) => actorSum + chunk.triangleCount, 0), 0) ?? 0;
+  const sourcePointIdTuples = manifest?.resources.filter((resource) => resource.semantic === 'sourcePointIds')
+    .reduce((sum, resource) => sum + resource.elementCount, 0) ?? 0;
+  const sourceElementIdTuples = manifest?.resources.filter((resource) => resource.semantic === 'sourceElementIds')
+    .reduce((sum, resource) => sum + resource.elementCount, 0) ?? 0;
+  const plannedBytes = progress?.totalBytes ?? manifest?.resources.reduce((sum, resource) => sum + resource.byteLength, 0) ?? 0;
+  const transferredBytes = progress?.transferredBytes ?? 0;
   const diagnostics = {
     protocol: '1.0',
+    protocolVersion: '1.0',
+    clientVersion,
+    serverVersion: transportDiagnostics.serverVersion,
+    sessionId: currentSessionId,
     sceneId: manifest?.sceneId ?? null,
     sceneRevision: manifest?.sceneRevision ?? null,
     actors: manifest?.actors.length ?? 0,
     chunks: manifest?.actors.reduce((sum, actor) => sum + actor.chunks.length, 0) ?? 0,
     resources: manifest?.resources.length ?? 0,
     resourceConcurrency,
+    counts: { renderPointTuples, renderTriangles, sourcePointIdTuples, sourceElementIdTuples },
+    bytes: {
+      planned: plannedBytes,
+      transferred: transferredBytes,
+      decoded: transferredBytes,
+    },
     transferredBytes: progress?.transferredBytes ?? null,
     firstGeometryMs: firstGeometryAt !== null && loadStartedAt !== null ? Math.round(firstGeometryAt - loadStartedAt) : null,
     elapsedMs: loadStartedAt !== null ? Math.round(now - loadStartedAt) : null,
@@ -372,6 +492,12 @@ function updateDiagnostics(progress: LoadProgress | null = latestProgress): void
       lastMs: pickLatencies.length > 0 ? roundMetric(pickLatencies.at(-1)!) : null,
       p50Ms: percentile(pickLatencies, 0.5),
       p95Ms: percentile(pickLatencies, 0.95),
+    },
+    recovery: {
+      resourceRetries: transportDiagnostics.resourceRetries,
+      resourceCancellations: transportDiagnostics.resourceCancellations,
+      contextLossCount,
+      lastSafeErrorCode,
     },
     renderer: view.getDiagnostics(),
   };
@@ -585,12 +711,146 @@ async function resolveArea(startX: number, startY: number, endX: number, endY: n
 
 function applyHostMessage(value: unknown): void {
   const type = (value as { type?: unknown } | null)?.type;
-  if (type === 'prepomax.selection.updated-v1') applyHostSelection(value);
+  if (type === 'prepomax.session.bootstrap-v1') void applySessionBootstrap(value);
+  else if (type === 'prepomax.selection.updated-v1') applyHostSelection(value);
   else if (type === 'prepomax.annotations.updated-v1') applyHostAnnotations(value);
+  else if (type === 'prepomax.sphere-symbols.updated-v1') applyHostSphereSymbols(value);
+  else if (type === 'prepomax.transient-primitives.updated-v1') applyHostTransientPrimitives(value);
+  else if (type === 'prepomax.coordinate-overlays.updated-v1') applyHostCoordinateOverlays(value);
+  else if (type === 'prepomax.directional-glyphs.updated-v1') applyHostDirectionalGlyphs(value);
+  else if (type === 'prepomax.actor-contours.updated-v1') applyHostActorContours(value);
+  else if (type === 'prepomax.actor-highlights.updated-v1') applyHostActorHighlights(value);
+  else if (type === 'prepomax.viewport-appearance.updated-v1') applyHostViewportAppearance(value);
+  else if (type === 'prepomax.orientation-marker.updated-v1') applyHostOrientationMarker(value);
+  else if (type === 'prepomax.scale-widget.updated-v1') applyHostScaleWidget(value);
+  else if (type === 'prepomax.scalar-legend.updated-v1') applyHostScalarLegend(value);
+  else if (type === 'prepomax.color-bar.updated-v1') applyHostColorBar(value);
+  else if (type === 'prepomax.status-block.updated-v1') applyHostStatusBlock(value);
+  else if (type === 'prepomax.result-widget-layout.updated-v1') applyHostResultWidgetLayout(value);
+  else if (type === 'prepomax.graphics-interaction.updated-v1') applyHostGraphicsInteraction(value);
+  else if (type === 'prepomax.transformations.updated-v1') void applyHostTransformations(value);
   else if (type === 'prepomax.box-zoom.mode-v1') applyBoxZoomMode(value);
   else if (type === 'prepomax.follower-view.updated-v1') applyFollowerView(value);
   else if (type === 'prepomax.exploded-view.preview-v1') void applyExplodedViewPreview(value);
   else if (type === 'prepomax.section-view.updated-v1') void applySectionView(value);
+}
+
+function applyHostViewportAppearance(value: unknown): void {
+  try {
+    hostViewportAppearance = normalizeHostViewportAppearance(value);
+    view.setViewportAppearance(hostViewportAppearance);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostOrientationMarker(value: unknown): void {
+  try {
+    hostOrientationMarker = normalizeHostOrientationMarker(value);
+    view.setOrientationMarkerVisible(hostOrientationMarker.visible);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostScaleWidget(value: unknown): void {
+  try {
+    hostScaleWidget = normalizeHostScaleWidget(value);
+    view.setScaleWidget(hostScaleWidget.visible, hostScaleWidget.unit);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostScalarLegend(value: unknown): void {
+  try {
+    hostScalarLegend = normalizeHostScalarLegend(value);
+    view.setScalarLegend(hostScalarLegend);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostColorBar(value: unknown): void {
+  try {
+    hostColorBar = normalizeHostColorBar(value);
+    view.setColorBar(hostColorBar);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostStatusBlock(value: unknown): void {
+  try {
+    hostStatusBlock = normalizeHostStatusBlock(value);
+    view.setStatusBlock(hostStatusBlock);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostResultWidgetLayout(value: unknown): void {
+  try {
+    hostResultWidgetLayout = normalizeHostResultWidgetLayout(value);
+    view.setResultWidgetLayout(hostResultWidgetLayout);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostGraphicsInteraction(value: unknown): void {
+  try {
+    hostGraphicsInteraction = normalizeHostGraphicsInteraction(value);
+    view.setGraphicsInteraction(hostGraphicsInteraction);
+    elements.pickMarker.style.backgroundColor = rgbCss(hostGraphicsInteraction.mouseHighlightRgb);
+    updateDiagnostics();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+async function applyHostTransformations(value: unknown): Promise<void> {
+  try {
+    hostTransformations = normalizeHostTransformations(value);
+    view.setTransformations(hostTransformations.matrices, hostTransformations.visible);
+    updateDiagnostics();
+    await nextStableFrame();
+    notifyTransformationsApplied();
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
+}
+
+function applyHostActorContours(value: unknown): void {
+  try { hostActorContours = normalizeHostActorContours(value); }
+  catch (error) { showError(error instanceof Error ? error.message : String(error)); return; }
+  view.setActorContours(hostActorContours);
+  updateDiagnostics();
+}
+
+function applyHostActorHighlights(value: unknown): void {
+  try { hostActorHighlights = normalizeHostActorHighlights(value); }
+  catch (error) { showError(error instanceof Error ? error.message : String(error)); return; }
+  view.setActorHighlights(hostActorHighlights);
+  updateDiagnostics();
+}
+
+async function applySessionBootstrap(value: unknown): Promise<void> {
+  try {
+    if (launchParameters.get('embedded') !== '1') {
+      throw new Error('Session bootstrap is only accepted by the embedded renderer.');
+    }
+    await loadScene(normalizeHostSessionBootstrap(value));
+  } catch (error) {
+    showError(error instanceof Error ? error.message : String(error));
+  }
 }
 
 async function applySectionView(value: unknown): Promise<void> {
@@ -775,6 +1035,37 @@ function applyHostAnnotations(value: unknown): void {
   updateDiagnostics();
 }
 
+function applyHostSphereSymbols(value: unknown): void {
+  try { hostSphereSymbols = normalizeHostSphereSymbols(value); }
+  catch (error) { showError(error instanceof Error ? error.message : String(error)); return; }
+  view.setSphereSymbols(hostSphereSymbols);
+  updateDiagnostics();
+}
+
+function applyHostTransientPrimitives(value: unknown): void {
+  try { hostTransientPrimitives = normalizeHostTransientPrimitives(value); }
+  catch (error) { showError(error instanceof Error ? error.message : String(error)); return; }
+  view.setTransientPrimitives(hostTransientPrimitives);
+  updateDiagnostics();
+}
+
+function applyHostCoordinateOverlays(value: unknown): void {
+  let state: ReturnType<typeof normalizeHostCoordinateOverlays>;
+  try { state = normalizeHostCoordinateOverlays(value); }
+  catch (error) { showError(error instanceof Error ? error.message : String(error)); return; }
+  hostCoordinateAxes = state.axes;
+  hostCaptions = state.captions;
+  view.setCoordinateOverlays(hostCoordinateAxes, hostCaptions);
+  updateDiagnostics();
+}
+
+function applyHostDirectionalGlyphs(value: unknown): void {
+  try { hostDirectionalGlyphs = normalizeHostDirectionalGlyphs(value); }
+  catch (error) { showError(error instanceof Error ? error.message : String(error)); return; }
+  view.setDirectionalGlyphs(hostDirectionalGlyphs);
+  updateDiagnostics();
+}
+
 function notifyAnnotationEdited(name: string, text: string): void {
   notifyHost({ type: 'prepomax.annotation.edited-v1', name, text });
 }
@@ -857,12 +1148,29 @@ async function switchField(): Promise<void> {
 async function handleSceneEvent(message: ProtocolMessage): Promise<void> {
   if (message.type === 'scene.replaced') {
     const payload = message.payload as SceneReplacedPayload;
+    const authenticatedApi = currentApi;
+    if (!authenticatedApi) return;
     hostExplodedPreview.clear();
     view.cancelExplodedViewPreview();
     setStatus('PrePoMax published a replacement scene; loading its snapshot…');
-    await loadScene();
-    if (!manifest || manifest.sceneId !== payload.sceneId) {
-      showError('The replacement scene snapshot did not match the announced scene.');
+    await loadScene(undefined, true, { api: authenticatedApi, sceneId: payload.sceneId });
+    // A newer clear can supersede the event that initiated this reload. The fetched
+    // manifest is authoritative; an empty snapshot needs no event camera replay.
+    if (manifest?.actors.length === 0) {
+      notifyHost({ type: 'prepomax.follower-view.applied-v1', sceneRevision: manifest.sceneRevision,
+        followerAdjusted: false, cameraAdjusted: false });
+      notifySceneApplied();
+      setStatus('Loaded empty scene.');
+      return;
+    }
+    if (!manifest) return;
+    if (manifest.sceneId !== payload.sceneId) {
+      // Another replacement completed while this asynchronous handler was loading.
+      // The fetched snapshot is newer than this event, so acknowledge that snapshot
+      // and let its own handler perform any camera replay.
+      clearError();
+      notifySceneApplied();
+      setStatus(`Loaded ${manifest.actors.length} actors.`);
       return;
     }
     applyCamera(payload.camera);
@@ -871,7 +1179,7 @@ async function handleSceneEvent(message: ProtocolMessage): Promise<void> {
     await nextStableFrame();
     notifyHost({ type: 'prepomax.follower-view.applied-v1', sceneRevision: manifest?.sceneRevision ?? 0,
       followerAdjusted, cameraAdjusted });
-    notifyHost({ type: 'prepomax.scene.applied-v1', sceneRevision: manifest.sceneRevision });
+    notifySceneApplied();
     return;
   }
   if (message.type === 'camera.updated') {
@@ -911,7 +1219,7 @@ async function handleSceneEvent(message: ProtocolMessage): Promise<void> {
     }
     const payload = message.payload as ActorPresentationUpdatedPayload;
     const presentations = new Map(payload.actors.map((actor) => [actor.actorId, actor]));
-    for (const actor of payload.actors) view.setActorColor(actor.actorId, actor.frontRgba);
+    for (const actor of payload.actors) view.setActorPresentation(actor.actorId, actor.name, actor.frontRgba);
     manifest = {
       ...manifest,
       sceneRevision: message.sceneRevision,
@@ -1094,6 +1402,23 @@ async function handleSceneEvent(message: ProtocolMessage): Promise<void> {
   }
 }
 
+function notifySceneApplied(): void {
+  if (!manifest) return;
+  notifyHost({
+    type: 'prepomax.scene.applied-v1',
+    sceneId: manifest.sceneId,
+    sceneRevision: manifest.sceneRevision,
+    actorCount: manifest.actors.length,
+    pipelineChunks: manifest.actors.reduce((count, actor) => count + actor.chunks.length, 0),
+  });
+  notifyTransformationsApplied();
+}
+
+function notifyTransformationsApplied(): void {
+  const diagnostics = view.getTransformationDiagnostics();
+  notifyHost({ type: 'prepomax.transformations.applied-v1', ...diagnostics });
+}
+
 interface FrameActivationSample {
   readonly sceneRevision: number;
   readonly chunks: number;
@@ -1135,8 +1460,19 @@ function unloadScene(): void {
   sceneGeneration += 1;
   view.delete();
   elements.viewport.replaceChildren();
-  view = new VtkSceneView(elements.viewport, showError, annotationInteractions, notifyCameraChanged);
+  view = createSceneView();
   view.setParallelProjection(elements.orthographic.checked);
+  view.setViewportAppearance(hostViewportAppearance);
+  view.setOrientationMarkerVisible(hostOrientationMarker.visible);
+  view.setScaleWidget(hostScaleWidget.visible, hostScaleWidget.unit);
+  view.setScalarLegend(hostScalarLegend);
+  view.setColorBar(hostColorBar);
+  view.setStatusBlock(hostStatusBlock);
+  view.setResultWidgetLayout(hostResultWidgetLayout);
+  view.setGraphicsInteraction(hostGraphicsInteraction);
+  view.setTransformations(hostTransformations.matrices, hostTransformations.visible);
+  view.setActorContours(hostActorContours);
+  view.setActorHighlights(hostActorHighlights);
   elements.actors.replaceChildren(Object.assign(document.createElement('span'), { className: 'muted', textContent: 'No scene loaded' }));
   elements.legend.className = 'legend muted';
   elements.legend.textContent = 'Scalars not loaded';
@@ -1179,9 +1515,29 @@ function setStatus(message: string): void {
   elements.status.value = message;
 }
 
-function showError(message: string): void {
+function rgbCss(rgb: readonly [number, number, number]): string {
+  return `rgb(${rgb.map((channel) => Math.round(channel * 255)).join(' ')})`;
+}
+
+function showError(message: string, code = 'client-error'): void {
+  lastSafeErrorCode = /^[a-z0-9-]{1,64}$/.test(code) ? code : 'client-error';
   elements.error.textContent = message;
   elements.error.hidden = false;
+}
+
+function safeErrorCode(error: unknown): string {
+  const candidate = (error as { code?: unknown } | null)?.code;
+  if (typeof candidate === 'string' && /^[a-z0-9-]{1,64}$/.test(candidate)) return candidate;
+  if (error instanceof DOMException && error.name === 'AbortError') return 'request-cancelled';
+  return 'client-error';
+}
+
+function createSceneView(): VtkSceneView {
+  return new VtkSceneView(elements.viewport, (message) => {
+    contextLossCount += 1;
+    showError(message, 'webgl-context-lost');
+    updateDiagnostics();
+  }, annotationInteractions, notifyCameraChanged);
 }
 
 function clearError(): void {
@@ -1210,6 +1566,9 @@ declare global {
   interface Window {
     __prepomaxBenchmark?: {
       measureOrbit(frameCount?: number): Promise<number[]>;
+      setParallelScale(scale: number): void;
+      selectCanonicalNodes(count: number): Promise<number>;
+      clearSelection(): void;
       unload(): void;
       disconnectEvents(): void;
     };
@@ -1220,6 +1579,35 @@ if (['1'].includes(new URLSearchParams(window.location.search).get('benchmark') 
   || ['1'].includes(new URLSearchParams(window.location.search).get('testHooks') ?? '')) {
   window.__prepomaxBenchmark = {
     measureOrbit: (frameCount) => view.measureOrbit(frameCount),
+    setParallelScale: (parallelScale) => {
+      if (!Number.isFinite(parallelScale) || parallelScale <= 0) throw new Error('The benchmark scale is invalid.');
+      const camera = view.getCameraParameters();
+      view.setCameraParameters(camera.position, camera.focalPoint, camera.viewUp, parallelScale, 'set');
+      updateDiagnostics();
+    },
+    selectCanonicalNodes: async (count) => {
+      if (!Number.isSafeInteger(count) || count < 1 || count > 8_000_000)
+        throw new Error('The benchmark selection count is invalid.');
+      const ids = new Array<number>(count);
+      for (let index = 0; index < count; index += 1) ids[index] = index + 1;
+      hostSelection = {
+        type: 'prepomax.selection.updated-v1', item: 'node', ids,
+        actorNames: [], faceNodeIds: [], edgeNodeIds: [],
+      };
+      const started = performance.now();
+      view.setSelection('node', ids, [], [], []);
+      updateDiagnostics();
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      return performance.now() - started;
+    },
+    clearSelection: () => {
+      hostSelection = {
+        type: 'prepomax.selection.updated-v1', item: 'none', ids: [],
+        actorNames: [], faceNodeIds: [], edgeNodeIds: [],
+      };
+      view.setSelection('none', [], [], [], []);
+      updateDiagnostics();
+    },
     unload: unloadScene,
     disconnectEvents: () => eventSocket?.close(),
   };

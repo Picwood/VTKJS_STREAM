@@ -16394,6 +16394,10 @@ namespace PrePoMax
         {
             _selectionCache.Add(key, actors);
         }
+        private void AddActorDataToSelectionBuffer(string key, vtkMaxActorData[] actorData)
+        {
+            _selectionCache.AddActorData(key, actorData);
+        }
         private string GetSelectionBufferKey(string prefixName, int hash, vtkRendererLayer layer, bool backfaceCulling)
         {
             string key = _currentView + Globals.NameSeparator +
@@ -16408,6 +16412,20 @@ namespace PrePoMax
         {
             if (_selectionCache.TryGet(key, out actors)) return true;
             else return false;
+        }
+        private bool GetActorDataFromSelectionBuffer(string key, out vtkMaxActorData[] actorData)
+        {
+            return _selectionCache.TryGetActorData(key, out actorData);
+        }
+        private void AddSelectionCellData(vtkMaxActorData data, List<vtkMaxActor> actors,
+                                          List<vtkMaxActorData> actorData)
+        {
+            if (_form.IsVtkJsRendererActive && data.Layer == vtkRendererLayer.Selection)
+            {
+                _form.Add3DSelectionCells(data);
+                actorData.Add(data);
+            }
+            else actors.Add(_form.Add3DCells(data));
         }
 
         #endregion #################################################################################################################
@@ -18218,7 +18236,7 @@ namespace PrePoMax
             if (data != null)
             {
                 ApplyLighting(data);
-                _form.Add3DCells(data);
+                _form.Add3DPart(data);
             }
         }
         private vtkMaxActorData GetGeometryPartActorData(FeMesh mesh, BasePart part,
@@ -18343,7 +18361,7 @@ namespace PrePoMax
             }
             );
             //
-            if (allData.Count > 0) _form.Add3DCells(allData.ToArray());
+            if (allData.Count > 0) _form.Add3DParts(allData.ToArray());
             //
             if (hiddenActors.Count > 0) _form.HideActors(hiddenActors.ToArray(), false);
         }
@@ -18355,7 +18373,7 @@ namespace PrePoMax
             if (data != null)
             {
                 ApplyLighting(data);
-                _form.Add3DCells(data);
+                _form.Add3DPart(data);
             }
         }
         public vtkMaxActorData GetModelPartActorData(FeMesh mesh, BasePart part, vtkRendererLayer layer,
@@ -22030,7 +22048,16 @@ namespace PrePoMax
             // Create a key and check if the data already exists
             string key = GetSelectionBufferKey(prefixName, Tools.GetHashCode(elementIds), layer, false);
             //
-            if (!countOnly && GetActorsFromSelectionBuffer(key, out vtkMaxActor[] actors))
+            if (!countOnly && _form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection &&
+                GetActorDataFromSelectionBuffer(key, out vtkMaxActorData[] cachedActorData))
+            {
+                foreach (vtkMaxActorData cachedData in cachedActorData)
+                {
+                    _form.Add3DSelectionCells(cachedData);
+                    numDrawnCells += cachedData.Geometry.Cells.CellNodeIds.Length;
+                }
+            }
+            else if (!countOnly && GetActorsFromSelectionBuffer(key, out vtkMaxActor[] actors))
             {
                 for (int i = 0; i < actors.Length; i++)
                 {
@@ -22044,6 +22071,7 @@ namespace PrePoMax
                 BasePart[] parts = mesh.CreateBasePartsByTypeFromElementIds(elementIds, onlyVisible);
                 vtkMaxActorData data;
                 List<vtkMaxActor> actorsList = new List<vtkMaxActor>();
+                List<vtkMaxActorData> actorDataList = new List<vtkMaxActorData>();
                 //
                 bool shell;
                 List<int[]> edgeCells = new List<int[]>();
@@ -22070,7 +22098,7 @@ namespace PrePoMax
                         data.Geometry.Cells.Types = cellTypes;
                         //
                         ApplyLighting(data);
-                        actorsList.Add(_form.Add3DCells(data));
+                        AddSelectionCellData(data, actorsList, actorDataList);
                         //if (shell)
                         {
                             // Data
@@ -22097,14 +22125,15 @@ namespace PrePoMax
                             data.UseSecondaryHighlightColor = false;
                             //
                             ApplyLighting(data);
-                            actorsList.Add(_form.Add3DCells(data));
+                            AddSelectionCellData(data, actorsList, actorDataList);
                         }
                     }
                     //
                     numDrawnCells += cells.Length;
                 }
                 //
-                if (actorsList.Count > 0) AddActorsToSelectionBuffer(key, actorsList.ToArray());
+                if (actorDataList.Count > 0) AddActorDataToSelectionBuffer(key, actorDataList.ToArray());
+                else if (actorsList.Count > 0) AddActorsToSelectionBuffer(key, actorsList.ToArray());
             }
             //
             return numDrawnCells;
@@ -22140,7 +22169,16 @@ namespace PrePoMax
                         vtkMaxActor[] actors;
                         FeNodeSet nodeSet = _model.Mesh.NodeSets[s.NodeSetName];
                         string key = GetSelectionBufferKey(name, Tools.GetHashCode(nodeSet.Labels), layer, backfaceCulling);
-                        if (!countOnly && GetActorsFromSelectionBuffer(key, out actors) && actors.Length == 1)
+                        if (!countOnly && _form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection &&
+                            GetActorDataFromSelectionBuffer(key, out vtkMaxActorData[] cachedActorData) &&
+                            cachedActorData.Length == 1)
+                        {
+                            cachedActorData[0].Color = color;
+                            cachedActorData[0].UseSecondaryHighlightColor = useSecondaryHighlightColor;
+                            _form.Add3DSelectionCells(cachedActorData[0]);
+                            return cachedActorData[0].Geometry.Cells.CellNodeIds.Length;
+                        }
+                        else if (!countOnly && GetActorsFromSelectionBuffer(key, out actors) && actors.Length == 1)
                         {
                             actors[0].Color = color;
                             actors[0].UseSecondaryHighlightColor = useSecondaryHighlightColor;
@@ -22165,9 +22203,16 @@ namespace PrePoMax
                                 data.UseSecondaryHighlightColor = useSecondaryHighlightColor;
                                 //
                                 ApplyLighting(data);
-                                actors = new vtkMaxActor[] { _form.Add3DCells(data) };
-                                //
-                                AddActorsToSelectionBuffer(key, actors);
+                                if (_form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection)
+                                {
+                                    _form.Add3DSelectionCells(data);
+                                    AddActorDataToSelectionBuffer(key, new vtkMaxActorData[] { data });
+                                }
+                                else
+                                {
+                                    actors = new vtkMaxActor[] { _form.Add3DCells(data) };
+                                    AddActorsToSelectionBuffer(key, actors);
+                                }
                             }
                             return data.Geometry.Cells.CellNodeIds.Length;
                         }
@@ -22188,7 +22233,18 @@ namespace PrePoMax
         {
             vtkMaxActor[] actors;
             string key = GetSelectionBufferKey(prefixName, Tools.GetHashCode(cells), layer, backfaceCulling);
-            if (GetActorsFromSelectionBuffer(key, out actors) && actors.Length == 2)
+            if (_form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection &&
+                GetActorDataFromSelectionBuffer(key, out vtkMaxActorData[] cachedActorData) &&
+                cachedActorData.Length == 2)
+            {
+                foreach (vtkMaxActorData data in cachedActorData)
+                {
+                    data.Color = color;
+                    data.UseSecondaryHighlightColor = useSecondaryHighlightColor;
+                    _form.Add3DSelectionCells(data);
+                }
+            }
+            else if (GetActorsFromSelectionBuffer(key, out actors) && actors.Length == 2)
             {
                 actors[0].Color = color;
                 actors[0].UseSecondaryHighlightColor = useSecondaryHighlightColor;
@@ -22218,7 +22274,9 @@ namespace PrePoMax
                 mesh.GetSurfaceGeometry(cells, out data.Geometry.Nodes.Ids, out data.Geometry.Nodes.Coor, out data.Geometry.Cells.Types);
                 //
                 ApplyLighting(data);
-                actors[0] = _form.Add3DCells(data);
+                if (_form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection) _form.Add3DSelectionCells(data);
+                else actors[0] = _form.Add3DCells(data);
+                vtkMaxActorData faceData = data;
                 //
                 if (!drawEdges) return;
                 // Edges
@@ -22236,9 +22294,16 @@ namespace PrePoMax
                                              out data.Geometry.Cells.Types);
                 //
                 ApplyLighting(data);
-                actors[1] = _form.Add3DCells(data);
-                //
-                AddActorsToSelectionBuffer(key, actors);
+                if (_form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection)
+                {
+                    _form.Add3DSelectionCells(data);
+                    AddActorDataToSelectionBuffer(key, new vtkMaxActorData[] { faceData, data });
+                }
+                else
+                {
+                    actors[1] = _form.Add3DCells(data);
+                    AddActorsToSelectionBuffer(key, actors);
+                }
             }
         }
         public int DrawSurfaceEdge(string prefixName, string surfaceName, Color color, vtkRendererLayer layer,
@@ -22256,7 +22321,16 @@ namespace PrePoMax
                     vtkMaxActor[] actors;
                     FeNodeSet nodeSet = _model.Mesh.NodeSets[s.NodeSetName];
                     string key = GetSelectionBufferKey(name, Tools.GetHashCode(nodeSet.Labels), layer, backfaceCulling);
-                    if (!countOnly && GetActorsFromSelectionBuffer(key, out actors) && actors.Length == 1)
+                    if (!countOnly && _form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection &&
+                        GetActorDataFromSelectionBuffer(key, out vtkMaxActorData[] cachedActorData) &&
+                        cachedActorData.Length == 1)
+                    {
+                        cachedActorData[0].Color = color;
+                        cachedActorData[0].UseSecondaryHighlightColor = useSecondaryHighlightColor;
+                        _form.Add3DSelectionCells(cachedActorData[0]);
+                        return cachedActorData[0].Geometry.Cells.CellNodeIds.Length;
+                    }
+                    else if (!countOnly && GetActorsFromSelectionBuffer(key, out actors) && actors.Length == 1)
                     {
                         actors[0].Color = color;
                         actors[0].UseSecondaryHighlightColor = useSecondaryHighlightColor;
@@ -22282,9 +22356,16 @@ namespace PrePoMax
                             data.UseSecondaryHighlightColor = useSecondaryHighlightColor;
                             //
                             ApplyLighting(data);
-                            actors = new vtkMaxActor[] { _form.Add3DCells(data) };
-                            //
-                            AddActorsToSelectionBuffer(key, actors);
+                            if (_form.IsVtkJsRendererActive && layer == vtkRendererLayer.Selection)
+                            {
+                                _form.Add3DSelectionCells(data);
+                                AddActorDataToSelectionBuffer(key, new vtkMaxActorData[] { data });
+                            }
+                            else
+                            {
+                                actors = new vtkMaxActor[] { _form.Add3DCells(data) };
+                                AddActorsToSelectionBuffer(key, actors);
+                            }
                         }
                         //
                         return data.Geometry.Cells.CellNodeIds.Length;

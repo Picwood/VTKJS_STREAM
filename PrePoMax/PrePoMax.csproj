@@ -116,6 +116,8 @@
     <Compile Include="Rendering\VtkJsRendererControl.cs" />
     <Compile Include="Rendering\VtkJsRendererHost.cs" />
     <Compile Include="Rendering\VtkJsSceneCapture.cs" />
+    <Compile Include="Rendering\VtkJsExportLookupTable.cs" />
+    <Compile Include="Rendering\VtkJsMjpegAviWriter.cs" />
     <Compile Include="Collections\EdgesVisibilitiesCollection.cs" />
     <Compile Include="Collections\FollowerViewsCollection.cs" />
     <Compile Include="Collections\TransformationsCollection.cs" />

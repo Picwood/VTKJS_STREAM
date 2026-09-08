@@ -10,7 +10,7 @@ $tokenBytes = New-Object byte[] 32
 $tokenGenerator = [Security.Cryptography.RandomNumberGenerator]::Create()
 $tokenGenerator.GetBytes($tokenBytes)
 $tokenGenerator.Dispose()
-$hostToken = [Convert]::ToBase64String($tokenBytes)
+$hostToken = [Convert]::ToBase64String($tokenBytes).Replace('+', '-').Replace('/', '_').TrimEnd('=')
 $stdoutPath = Join-Path ([IO.Path]::GetTempPath()) ('prepomax-vtkjs-' + [Guid]::NewGuid().ToString('N') + '.log')
 $stderrPath = $stdoutPath + '.err'
 $serverProcess = $null
@@ -33,7 +33,8 @@ try {
     if ($null -eq $health) { throw 'The renderer host did not become healthy.' }
 
     $index = Invoke-WebRequest "$baseUrl/" -UseBasicParsing
-    $session = Invoke-RestMethod -Method Post "$baseUrl/api/v1/sessions"
+    $session = Invoke-RestMethod -Method Post "$baseUrl/api/v1/sessions" `
+        -Headers @{ 'X-PrePoMax-Host-Token' = $hostToken }
     $shutdown = Invoke-WebRequest -Method Post "$baseUrl/api/v1/host/shutdown" `
         -Headers @{ 'X-PrePoMax-Host-Token' = $hostToken } -UseBasicParsing
     $serverProcess.WaitForExit(5000) | Out-Null
@@ -44,6 +45,11 @@ try {
     if ($shutdown.StatusCode -ne 202 -or -not $serverProcess.HasExited) {
         throw 'The renderer host did not shut down gracefully.'
     }
+    $capturedLog = ((Get-Content -LiteralPath $stdoutPath, $stderrPath -Raw -ErrorAction SilentlyContinue) -join "`n")
+    if ($capturedLog.Contains($hostToken) -or $capturedLog.Contains($clientRoot.Path) -or
+        $capturedLog.Contains($repositoryRoot)) {
+        throw 'Production renderer logs exposed a credential or physical filesystem path.'
+    }
 
     [pscustomobject]@{
         Health = $health.status
@@ -51,6 +57,7 @@ try {
         SceneId = $session.sceneId
         ShutdownStatus = $shutdown.StatusCode
         Exited = $serverProcess.HasExited
+        SensitiveLogDataAbsent = $true
     }
 }
 finally {

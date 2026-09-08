@@ -78,6 +78,17 @@ namespace PrePoMax.Forms
                 }
             } 
         }
+        public string SelectedSettingsName
+        {
+            get
+            {
+                if (lvSettings.SelectedItems.Count == 1) return lvSettings.SelectedItems[0].Text;
+                if (_viewSettings != null)
+                    foreach (var entry in _viewSettings)
+                        if (ReferenceEquals(entry.Value, propertyGrid.SelectedObject)) return entry.Key;
+                return null;
+            }
+        }
 
 
         // Events                                                                                                                   
@@ -201,13 +212,20 @@ namespace PrePoMax.Forms
                     if (item.Text == _previousSettings)
                     {
                         item.Selected = true;
+                        item.Focused = true;
+                        propertyGrid.SelectedObject = item.Tag;
                         break;
                     }
                 }
             }
             else
             {
-                if (lvSettings.Items.Count > 0) lvSettings.Items[0].Selected = true;
+                if (lvSettings.Items.Count > 0)
+                {
+                    lvSettings.Items[0].Selected = true;
+                    lvSettings.Items[0].Focused = true;
+                    propertyGrid.SelectedObject = lvSettings.Items[0].Tag;
+                }
             }
             //
             controller.SetSelectByToOff();

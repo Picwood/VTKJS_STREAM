@@ -4,9 +4,13 @@ This prototype implements the vertical slice described in the repository-level `
 
 ## Current status
 
-WP0–WP5 are complete and verified on Windows. The canonical renderer streams 3,000,000 unique source nodes and 5,993,002 triangles through bounded generated resources, renders progressively, performs scalar-only updates, and maps spatially culled GPU picks to server-validated source IDs. All initial quantitative gates passed on the documented Intel integrated-GPU reference run. Linux verification remains pending and is recorded as a failed acceptance item rather than inferred.
+WP0–WP5 are complete. The canonical renderer streams 3,000,000 unique source nodes and 5,993,002 triangles through bounded generated resources, renders progressively, performs scalar-only updates, and maps spatially culled GPU picks to server-validated source IDs. All initial quantitative gates passed on the documented Windows/Intel integrated-GPU reference run. Ubuntu 22.04 Linux x64 also passes the self-contained server and Chromium/WebGL2 functional gate; a physical Linux GPU performance run remains pending and is not inferred from software WebGL.
 
 The WinForms MVP additionally transfers a real 15-part PMX surface snapshot (828,619 points and 1,623,416 triangles) through the credentialed host bridge. See [docs/progress.md](docs/progress.md) for evidence and known gaps.
+
+Outstanding production, platform, hardware, and optional-parity work is prioritized with explicit prerequisites and completion evidence in the [pending-work register](../../docs/VTKJS_PENDING_WORK.md).
+
+To launch the built WinForms application with the VTK.js visible viewport from the repository root, run `.\scripts\start-prepomax-vtkjs.ps1`, optionally with `-ModelPath`. ActiViz assemblies are still required at application startup; see [the dependency status and removal gate](../../docs/VTKJS_ACTIVIZ_STATUS.md).
 
 ## Prerequisites
 
@@ -29,6 +33,7 @@ npm test
 npm run build
 npm run test:e2e
 Pop-Location
+..\..\scripts\audit-vtkjs-prototype-isolation.ps1
 ./scripts/benchmark.ps1
 # Optional Windows legacy differential check (requires ActiViz 5.8):
 ./scripts/compare-frustum-corpus-activiz.ps1

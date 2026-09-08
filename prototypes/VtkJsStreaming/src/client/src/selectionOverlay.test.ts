@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { getNodeOverlayStride, maximumExactNodeOverlayPoints } from './selectionOverlay';
+import { getNodeOverlayStride, maximumExactNodeOverlayPoints,
+  maximumSampledNodeOverlayPoints } from './selectionOverlay';
 
 describe('adaptive node selection overlays', () => {
   it('keeps overlays exact through one million rendered matches', () => {
@@ -8,10 +9,10 @@ describe('adaptive node selection overlays', () => {
   });
 
   it('uses a deterministic bounded stride for larger selections', () => {
-    expect(getNodeOverlayStride(maximumExactNodeOverlayPoints + 1)).toBe(2);
-    expect(getNodeOverlayStride(3_000_000)).toBe(3);
+    expect(getNodeOverlayStride(maximumExactNodeOverlayPoints + 1)).toBe(3);
+    expect(getNodeOverlayStride(3_000_000)).toBe(6);
     expect(Math.ceil(8_000_000 / getNodeOverlayStride(8_000_000)))
-      .toBeLessThanOrEqual(maximumExactNodeOverlayPoints);
+      .toBeLessThanOrEqual(maximumSampledNodeOverlayPoints);
   });
 
   it('rejects invalid counts', () => {

@@ -90,11 +90,6 @@ internal sealed class SessionStore(SessionStoreOptions options, TimeProvider tim
 
     private static string? GetToken(HttpContext context)
     {
-        if (context.Request.Cookies.TryGetValue("prepomax-render-session", out var cookieToken))
-        {
-            return cookieToken;
-        }
-
         if (context.Request.Headers.TryGetValue("X-PrePoMax-Session", out var headerToken))
         {
             return headerToken.ToString();
@@ -102,8 +97,13 @@ internal sealed class SessionStore(SessionStoreOptions options, TimeProvider tim
 
         const string bearerPrefix = "Bearer ";
         var authorization = context.Request.Headers.Authorization.ToString();
-        return authorization.StartsWith(bearerPrefix, StringComparison.OrdinalIgnoreCase)
-            ? authorization[bearerPrefix.Length..]
+        if (authorization.StartsWith(bearerPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            return authorization[bearerPrefix.Length..];
+        }
+
+        return context.Request.Cookies.TryGetValue("prepomax-render-session", out var cookieToken)
+            ? cookieToken
             : null;
     }
 }

@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Threading;
@@ -15,11 +17,14 @@ namespace PrePoMax.Rendering
     internal sealed class VtkJsRendererHost : IDisposable
     {
         private static readonly Regex ListeningUrlPattern = new Regex(
-            @"Now listening on:\s+(http://127\.0\.0\.1:\d+)",
+            @"(?:PREPOMAX_RENDER_READY=|Now listening on:\s+)(http://127\.0\.0\.1:\d+)",
             RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        private static readonly Regex SessionTokenPattern = new Regex(
+            @"^[A-Za-z0-9_-]{43}$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         private Process _process;
         private string _hostToken;
+        private string _browserSessionToken;
         private Uri _baseUri;
         private readonly SemaphoreSlim _mutationGate = new SemaphoreSlim(1, 1);
 
@@ -29,7 +34,7 @@ namespace PrePoMax.Rendering
 
             string serverPath = ResolveServerPath();
             string clientRoot = ResolveClientRoot();
-            _hostToken = CreateToken();
+            _hostToken = GetHostToken();
             var ready = new TaskCompletionSource<Uri>(TaskCreationOptions.RunContinuationsAsynchronously);
             var process = new Process();
             process.StartInfo = new ProcessStartInfo
@@ -122,6 +127,43 @@ namespace PrePoMax.Rendering
                 process.Dispose();
                 _baseUri = null;
                 _hostToken = null;
+                _browserSessionToken = null;
+            }
+        }
+
+        public async Task<VtkJsBrowserSession> CreateBrowserSessionAsync()
+        {
+            await _mutationGate.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                EnsureReady("browser session bootstrap");
+                var request = (HttpWebRequest)WebRequest.Create(new Uri(_baseUri, "/api/v1/sessions"));
+                request.Method = "POST";
+                request.ContentLength = 0;
+                request.Headers["X-PrePoMax-Host-Token"] = _hostToken;
+                if (!string.IsNullOrEmpty(_browserSessionToken))
+                    request.Headers["X-PrePoMax-Session"] = _browserSessionToken;
+
+                using (var response = (HttpWebResponse)await request.GetResponseAsync().ConfigureAwait(false))
+                using (Stream stream = response.GetResponseStream())
+                {
+                    if (response.StatusCode != HttpStatusCode.OK || stream == null)
+                        throw new InvalidOperationException("The renderer host refused a browser session request.");
+                    var serializer = new DataContractJsonSerializer(typeof(VtkJsBrowserSession));
+                    var session = serializer.ReadObject(stream) as VtkJsBrowserSession;
+                    Guid sessionId;
+                    Guid sceneId;
+                    if (session == null || !Guid.TryParseExact(session.SessionId, "D", out sessionId)
+                        || !Guid.TryParseExact(session.SceneId, "D", out sceneId)
+                        || !SessionTokenPattern.IsMatch(session.AccessToken ?? string.Empty))
+                        throw new InvalidOperationException("The renderer host returned an invalid browser session.");
+                    _browserSessionToken = session.AccessToken;
+                    return session;
+                }
+            }
+            finally
+            {
+                _mutationGate.Release();
             }
         }
 
@@ -521,10 +563,32 @@ namespace PrePoMax.Rendering
             return Convert.ToBase64String(bytes).Replace('+', '-').Replace('/', '_').TrimEnd('=');
         }
 
+        private static string GetHostToken()
+        {
+            string configured = Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_HOST_TOKEN_OVERRIDE");
+            if (string.IsNullOrWhiteSpace(configured)) return CreateToken();
+            if (!SessionTokenPattern.IsMatch(configured))
+                throw new InvalidOperationException("PREPOMAX_VTKJS_HOST_TOKEN_OVERRIDE must be a 43-character base64url token.");
+            return configured;
+        }
+
         private static string Quote(string value)
         {
             return "\"" + value.Replace("\"", "\\\"") + "\"";
         }
+    }
+
+    [DataContract]
+    internal sealed class VtkJsBrowserSession
+    {
+        [DataMember(Name = "sessionId")]
+        public string SessionId { get; set; }
+
+        [DataMember(Name = "accessToken")]
+        public string AccessToken { get; set; }
+
+        [DataMember(Name = "sceneId")]
+        public string SceneId { get; set; }
     }
 
     internal sealed class VtkJsFrameUploadMetrics

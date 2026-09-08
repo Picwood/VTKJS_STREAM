@@ -143,10 +143,10 @@ namespace PrePoMax.Forms
                 OnHide();
             }
         }
-        private void btnSaveMovieAs_Click(object sender, EventArgs e)
+        private async void btnSaveMovieAs_Click(object sender, EventArgs e)
         {
-            if (cbSaveAsImages.Checked) SaveAsImages();
-            else SaveAsMovie();
+            if (cbSaveAsImages.Checked) await SaveAsImages();
+            else await SaveAsMovie();
         }
         // Frames
         private void numFirstFrame_ValueChanged(object sender, EventArgs e)
@@ -316,6 +316,15 @@ namespace PrePoMax.Forms
         {
             _form = form;
             _controller = controller;
+            if (_form.IsVtkJsRendererActive)
+            {
+                cbGraphicsRam.Checked = false;
+                cbGraphicsRam.Enabled = false;
+                cbGraphicsRam.Text = "Frame storage managed by VTK.js";
+                cbEncoderOptions.Checked = false;
+                cbEncoderOptions.Enabled = false;
+                cbEncoderOptions.Text = "Motion JPEG (built-in encoder)";
+            }
             // This calls UpdateFrame
             InitializeVariables();
             //
@@ -435,7 +444,7 @@ namespace PrePoMax.Forms
         {
             timerAnimation.Stop();
         }
-        private void SaveAsMovie()
+        private async Task SaveAsMovie()
         {
             try
             {
@@ -454,13 +463,14 @@ namespace PrePoMax.Forms
                     if (extension != ".avi")
                     {
                         fileName = System.IO.Path.GetFileNameWithoutExtension(saveFileDialog1.FileName) + ".avi";
-                        System.IO.Path.Combine(System.IO.Path.GetDirectoryName(saveFileDialog1.FileName), fileName);
+                        fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(saveFileDialog1.FileName), fileName);
                     }
                     else fileName = saveFileDialog1.FileName;
 
                     bool scalarRangeFromAllFrames = _colorSpectrumLimitsType == ColorSpectrumLimitsType.AllFrames;
-                    _form.SaveAnimationAsAVI(fileName, new int[] { (int)numFirstFrame.Value - 1, (int)numLastFrame.Value - 1 }, _frameDelta,
-                                             _fps, scalarRangeFromAllFrames, _animationStyle == AnimationStyle.Swing, cbEncoderOptions.Checked);
+                    await _form.SaveAnimationAsAVI(fileName,
+                        new int[] { (int)numFirstFrame.Value - 1, (int)numLastFrame.Value - 1 }, _frameDelta,
+                        _fps, scalarRangeFromAllFrames, _animationStyle == AnimationStyle.Swing, cbEncoderOptions.Checked);
 
                     UpdateFrame();
 
@@ -472,7 +482,7 @@ namespace PrePoMax.Forms
                 CaeGlobals.ExceptionTools.Show(this, ex);
             }
         }
-        private void SaveAsImages()
+        private async Task SaveAsImages()
         {
             try
             {
@@ -491,13 +501,14 @@ namespace PrePoMax.Forms
                     if (extension != ".png")
                     {
                         fileName = System.IO.Path.GetFileNameWithoutExtension(saveFileDialog1.FileName) + ".png";
-                        System.IO.Path.Combine(System.IO.Path.GetDirectoryName(saveFileDialog1.FileName), fileName);
+                        fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(saveFileDialog1.FileName), fileName);
                     }
                     else fileName = saveFileDialog1.FileName;
 
                     bool scalarRangeFromAllFrames = _colorSpectrumLimitsType == ColorSpectrumLimitsType.AllFrames;
-                    _form.SaveAnimationAsImages(fileName, new int[] { (int)numFirstFrame.Value - 1, (int)numLastFrame.Value - 1 }, _frameDelta,
-                                                scalarRangeFromAllFrames, _animationStyle == AnimationStyle.Swing);
+                    await _form.SaveAnimationAsImages(fileName,
+                        new int[] { (int)numFirstFrame.Value - 1, (int)numLastFrame.Value - 1 }, _frameDelta,
+                        scalarRangeFromAllFrames, _animationStyle == AnimationStyle.Swing);
                     //
                     UpdateFrame();
                     //

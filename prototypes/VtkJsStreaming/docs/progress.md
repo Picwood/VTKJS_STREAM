@@ -1,10 +1,19 @@
 # Implementation progress
 
-Last updated: 2026-08-06
+Last updated: 2026-09-03
+
+## 2026-09-02 — Temporary actor-highlight retirement
+
+- Added bounded retained `prepomax.actor-highlights.updated-v1` replacement state, separate from authoritative selection state.
+- VTK.js now owns accumulated non-pickable wireframe highlight overlays and their clear, rename, removal, visibility, clipping, exploded-position, navigation, and disposal lifecycle.
+- `FrmMain.HighlightActor` and `Clear3DSelection` bypass hidden ActiViz mutations only in VTK.js mode; the default backend is unchanged.
+- Added strict client normalization tests and a packaged `-ExerciseActorHighlight` add/clear acceptance path.
+- Verification passed: client 63/63, .NET 80/80, Playwright 2/2, strict client build, full Release/x64 build/staging, and 15-actor PMX process acceptance with `ActorHighlightApplied=True`.
+- Explicitly deferred exact legacy model-edge/silhouette appearance to PEND-011 and manual visual review to PEND-005.
 
 ## WP0 — baseline and reproducibility
 
-Status: implemented; Windows verification passed, Linux verification pending.
+Status: implemented; Windows and Linux x64 functional verification passed.
 
 - Created the isolated solution, contract/server/synthetic-data projects, client, tests, docs, and scripts.
 - Enabled nullable reference types and warnings-as-errors for all prototype C# projects.
@@ -50,7 +59,7 @@ Follow-up coverage that does not block the WP2 exit criteria:
 
 - tolerant golden-image comparison across supported browser/GPU combinations;
 - automated context-loss/restoration injection where the browser backend permits it;
-- bundle code splitting (currently approximately 709 KB minified / 195 KB gzip).
+- production chunking now separates the application and bounded VTK dependency chunks, with strict execution ordering for VTK registration side effects and a build-failing 500,000-byte JavaScript chunk budget. The current entry is 92,598 bytes and the largest chunk is 215,278 bytes.
 
 ## WP3 — scalar-only update
 
@@ -81,7 +90,7 @@ Status: implemented; deterministic Windows browser and server verification passe
 
 ## WP5 — scale and benchmark
 
-Status: implemented and benchmarked on Windows x64; Linux verification pending.
+Status: implemented and benchmarked on Windows x64; Linux x64 functional verification passed, physical-GPU benchmarking pending.
 
 - Added the deterministic 2000×1500 generator with exactly 3,000,000 unique source-node IDs, 2,996,501 logical element IDs, and 5,993,002 rendered triangles.
 - Added cancellation-aware generated resources that hash and write through a 256 KiB pooled buffer. Large bodies are never retained as managed byte arrays or copied through a MemoryStream.
@@ -96,8 +105,11 @@ Status: implemented and benchmarked on Windows x64; Linux verification pending.
 
 ## Immediate next steps
 
-1. Run the clean-checkout functional and benchmark commands on a supported Linux x64 host and record pass/fail evidence.
-2. Code-split the production client bundle.
+1. Continue capability-by-capability retirement of the hidden ActiViz compatibility backend (PEND-004).
+2. Run the native Linux physical-GPU benchmark when suitable hardware is available (PEND-001).
+3. Conduct named-reviewer manual visual acceptance on representative models (PEND-005).
+
+The native Linux physical-GPU benchmark remains PEND-001 and starts as soon as suitable hardware is available. All deferred and conditional work has prerequisites and completion evidence in the [pending-work register](../../../docs/VTKJS_PENDING_WORK.md).
 
 ## Post-WP5 acceptance hardening
 
@@ -168,7 +180,9 @@ Status: opt-in Windows integration with real static surfaces implemented and pro
 - Added `PMXSEL1`, a bounded little-endian selection envelope delivered through a read-only WebView2 shared buffer whenever the retained authoritative state exceeds a JSON-path bound. Strict client decoding covers signature, counts, UTF-8, cell arity, declared references, exact length, and release-after-use.
 - The new tube corpus contains 577,325 input nodes and 370,848 C3D10 elements. Its PMX process smoke published 171,686 render points / 321,960 triangles plus 577,324 locator nodes / 370,848 cells, transferred all 577,324 displayed node IDs in roughly 2.3 MiB, and produced a visible non-overflowing node overlay.
 - Audited the complete `PMXSEL1` size equation and raised the premature ID policy limit from 2,000,000 to 8,000,000. All other maxima combined with eight million IDs yield 61,793,640 bytes (58.93 MiB), preserving the 64 MiB hard envelope without multipart state. Counts above eight million are rejected before value decoding.
-- Added deterministic adaptive node overlays: all authoritative IDs are retained, while more than one million rendered matches use a stable stride capped at one million overlay points and report `overflow=true`. Unit tests cover exact/sampled boundaries; Playwright decodes 2,000,001 IDs; a packaged `fatigue_test.frd` WebView2 smoke transmitted 2,000,001 unique IDs in 8,000,044 bytes and produced a visible exact overlay for the 6,503 matching locator nodes.
+- Added deterministic adaptive node overlays: all authoritative IDs are retained and overlays remain exact through one million rendered matches. Larger states use a stable stride capped at 500,000 overlay points and report `overflow=true`; the cap was tightened from one million after the physical 3M-match run showed the original representation below the integrated-GPU interaction target. Unit tests cover exact/sampled boundaries; Playwright decodes 2,000,001 IDs; a packaged `fatigue_test.frd` WebView2 smoke transmitted 2,000,001 unique IDs in 8,000,044 bytes and produced a visible exact overlay for the 6,503 matching locator nodes.
+- Completed the physical multi-million-match acceptance on the canonical WP5 scene. Three fresh headed Chrome/Intel UHD runs retained 3,000,000 authoritative IDs, matched 3,058,000 resident point tuples, and rendered a stable 436,858-point/30-actor sampled overlay. Median activation was 474.6 ms and median selected-orbit performance was 27.78 FPS; all four dedicated gates passed in every run. Raw JSON is under `docs/evidence/wp5-multimillion-selection-2026-08-31*.json`.
+- Retired `AddSphereActor` as the first engineering-glyph primitive. A bounded retained WebView2 replacement state carries unique names, absolute anchors, RGBA, and display size; vtk.js renders a shared 13×13 sphere source through non-pickable glyph mappers and recomputes parallel/perspective world scales on render. Client tests cover malformed states and aggregate bounds; Playwright proves two-point instancing, 2× zoom scaling, and disposal; the packaged four-node C3D4 smoke proves the real `FrmMain` path bypasses ActiViz, creates one positive-scale glyph, and shuts down cleanly.
 - Forwarded PrePoMax's derived normal and vertical camera results through the existing bounded custom-camera command, preserving the legacy orientation rules while making the VTK.js viewport authoritative.
 - Added bounded `PMXREM1` actor removal. Capture, current manifest/resources, visibility state, locator topology, client pipelines, and selection overlays now converge without a scene reload; parser/state and Playwright coverage includes duplicate rejection and resource disposal.
 - Added the first functional deformation-animation bridge. PrePoMax's retained per-frame render coordinates, scalars, extrema, and locator coordinates now replace the visible scene when `SetAnimationFrame` runs; source IDs and topology are inherited from the authoritative base actor instead of reconstructed from VTK output.
@@ -212,28 +226,259 @@ Status: opt-in Windows integration with real static surfaces implemented and pro
 - Closed exact-plane multi-cell locator parity with a 12-case live ActiViz differential spanning VTK volume types 10-14, 24-27, and 29. Shared-face contributions are deduplicated actor-wide, linear volumes use the legacy marching tables instead of an angle-ordered polygon fan, and exact coincident coordinates merge even when input point IDs differ. Shared-face, shared-node, and duplicate-interface cases match ActiViz point counts and 53 canonical triangles; focused C# regressions retain source-element provenance.
 - Added a seeded full-cell frustum differential that captures live ActiViz 5.8 point/cell results and drives the production managed selector through an overrideable xUnit corpus. Seeds 58103-58105 pass 612 valid transformed cases across all 17 supported VTK cell types. The first seed exposed the extractor's quadratic-volume parent-cell-edge face bug; a later case exposed its actor-level overall-bounds gate. Both observable legacy behaviors are now reproduced, and quadratic tetra/pyramid failures are retained in the ten-case committed regression corpus. The packaged `fatigue_test.frd` geometry-area smoke still resolved 10 IDs through `locator=True`, displayed the authoritative overlay, and shut down cleanly.
 
+- Retired coordinate-axis and caption rendering from hidden ActiViz in VTK.js mode. One bounded retained replacement preserves absolute anchors, direction, color, constant-screen sizing, display-scaled caption vectors, and font scale. VTK.js reproduces the legacy line/cone source, safe text-only captions, floating-origin conversion, camera scaling, and deterministic disposal. Client 32/32, Playwright 2/2, .NET 78/78, Release/x64, and packaged C3D4 process acceptance passed.
+- Retired the multi-anchor displacement-constraint cone family from hidden ActiViz in VTK.js mode. The extensible directional-glyph state was introduced with `displacement-cone`, requires paired anchors/nonzero directions, and reproduces the capped 31-sided source, 0.3 camera-relative scale, lighting, name mutation, floating origin, and lifecycle disposal. Client 35/35, Playwright 2/2, Release/x64, and packaged C3D4 process acceptance passed; exact camera-dependent silhouette edges remain explicitly unclaimed.
+- Retired rotational-constraint symbols through a second directional kind. The browser reproduces the misleadingly named legacy `:cylinder` as its actual flat cube/line source: 24 face-local cube points, 12 triangles, and one two-point line, with exact dimensions/offset, paired direction orientation, 0.3 camera scale, and retained lifecycle. Client 36/36, Playwright 2/2, Release/x64, and packaged C3D4 process acceptance passed.
+- Retired oriented load arrows through a third directional kind. Explicit inversion and relative-size state reproduces legacy source resolutions, inverse head/radius sizing, magnitude length scaling, anchor offsets, zero-normal removal, and naming. Headed bounds coverage exposed VTK.js's newer arrow recentering; production now cancels it to recover ActiViz 5.8 X=0..1 semantics before applying +0.05/-1.05. Client 37/37, Playwright 2/2, Release/x64, and packaged C3D4 process acceptance passed.
+- Retired moment-load double arrows through a fourth directional kind. VTK.js appends the legacy 21-sided cone centered at X=0.65 to the standard 21/15-resolution arrow, cancels current VTK.js arrow recentering, applies the common +0.05 anchor gap and unmodified camera-relative symbol size, filters zero normals, and owns the composed source lifecycle. Client 38/38, Playwright 2/2, Release/x64, and packaged C3D4 process acceptance passed.
+- Retired spring-constraint symbols through a fifth directional kind. The exact 93-point smoothed path, radius-0.03 ten-sided capped tube, fixed -1.05 translation, unmodified camera-relative size, `:spring` identity, and legacy inversion no-op are retained. Because vtk.js TriangleFilter ignores strips, production explicitly expands the tube's strips into the expected 1,856 triangles while preserving 950 shared points and normals. Client 39/39, Playwright 2/2, Release/x64, and packaged C3D4 process acceptance passed.
+- Retired the smaller general cone used by line-with-arrow selection previews through a sixth directional kind. Its capped 11-sided radius-0.35 source, X=-1..0 placement, 13 points / 22 triangles, `:cones` mutation, 0.3 camera-relative scale, supplied RGBA, orientation, and lifecycle are retained without hidden actors. Client 40/40, Playwright 2/2, Release/x64, and packaged C3D4 process acceptance passed.
+- Retired oriented thermometer symbols through a seventh directional kind. The radius-0.2 11x11 bulb, transformed radius-0.1/height-0.8 seven-sided stem, 129 shared points / 222 triangles, explicit normals, +0.05/-1.05 inversion translations, 0.5 scale, `:thermo` identity, and lifecycle match the legacy source. The real temperature seam and all browser/build gates passed.
+- Retired oriented flux symbols through the eighth directional kind. The radius-0.2 9x11 sphere retains centered versus X=0.2 placement, +0.05/-1.05 inversion translations, 79 shared points / 154 triangles, 0.5 scale, `:flux` identity, and lifecycle. The real flux seam and all browser/build gates passed. The completed audit confirms every symbol-producing public `vtkControl` method used by `Controller.Draw*Symbols` now has a VTK.js branch; only optional camera-dependent silhouette edging remains unclaimed.
+- Closed the physical follower-redraw coverage gap with a deterministic four-node FRD. The process harness applies a real three-node plane through `Controller.ApplyFollowerView`, waits for browser baseline capture, then activates scale-factor frame 1 through the normal animation path. Revision 2 retained topology and reported `followerAdjusted=True`, `cameraAdjusted=True`, all follower apply/update compatibility bypasses, 22.9 ms stable browser activation, graceful close, and renderer-child exit.
+- Closed annotation-settings dialog automation. The browser action opens the real `FrmSettings`; the process asserts `Annotations` is the live property page and invokes the physical Cancel button through UI Automation. This exposed and fixed a host issue where a pre-handle `ListViewItem.Selected` assignment did not populate the property grid; `PrepareForm` now explicitly installs the requested page. The packaged run passed exact-origin action validation, host selection, Cancel, graceful close, and child exit.
+
+## Trusted Production session bootstrap
+
+Status: complete on 2026-09-01 (PEND-002).
+
+- Production now rejects anonymous and incorrectly host-credentialed session creation; explicit Development mode preserves direct browser convenience.
+- The embedded client announces readiness without autoloading. The exact-origin WinForms host creates/reuses the session and transfers it through WebView messaging; authenticated adoption establishes the HttpOnly/SameSite=Strict cookie before manifest or WebSocket traffic.
+- Credentials remain in memory and headers/message payloads only. They are absent from URLs, command lines, traces, and persistent files. A dedicated path-neutral readiness line allows framework path-bearing lifetime logs to remain suppressed.
+- Verification passed: server 68/68, client 54/54, Playwright 2/2, strict production build, full Release/x64 staging, safe-log lifecycle smoke, basic packaged WebView2 smoke, and a model-backed packaged scene load. See [decision and evidence](evidence/production-session-bootstrap.md).
+
+## Structured Production diagnostics
+
+Status: complete on 2026-09-02 (PEND-003).
+
+- Added source-generated stable event IDs 6000-6021 for lifecycle, sessions, selected requests, and resources. Correlations are canonical UUIDs or bounded server request IDs; raw URLs, bodies, exception text, paths, and credentials are excluded.
+- Added server protocol/version, request/resource byte/count, cancellation, and last-safe-error diagnostics plus an exposed bounded server-version response header.
+- Completed the downloadable client schema with version/session identity, WebGL limits, source/render counts, planned/transferred/decoded bytes, retry/cancellation/context-loss counts, and the last safe error code.
+- Capture-based Production tests, client metrics tests, and Playwright schema/retry/secrecy checks passed. A paired canonical 3M headless run observed a 117.4 ms (+3.68%) complete-load delta and +0.67 MiB backend managed peak with structured events enabled; exact event/byte cardinality remained bounded. See [evidence and raw JSON](evidence/structured-production-diagnostics.md).
+
+## Verification evidence
+
+## Viewport-appearance compatibility retirement — 2026-09-02
+
+- Retired hidden `SetBackground` and `SetLighting` mutations in VTK.js mode while preserving the default ActiViz branches.
+- Added bounded retained gradient/top/bottom RGB and ambient/diffuse state, WebView navigation and scene-view recreation replay, and material application to current/future streamed and section actors.
+- Refreshed the remaining compatibility call-site inventory by capability and kept smoothing, widgets, transformations, actor readback/dual writes, and animation export explicitly open.
+- Verification passed: client 59/59, Playwright 2/2, strict client build, complete Release/x64 staging, and packaged C3D4 process acceptance with exact browser state plus clean parent/child shutdown. See [evidence](evidence/viewport-appearance-retirement.md).
+
 ## Verification evidence
 
 - `npm install`: passed; 109 packages audited, zero reported vulnerabilities.
-- `npm test`: passed; 8 files and 26 tests.
+- `npm test`: passed; 12 files and 47 tests.
 - `npm run build`: passed under strict TypeScript; Vite production bundle created.
 - `dotnet build -c Release`: passed with 0 warnings and 0 errors using SDK 9.0.316.
 - `dotnet test`: passed; 78 tests across 2 assemblies, 0 failures, 0 skipped.
 - Loopback runtime smoke test: passed for session creation, authenticated manifest retrieval, and an immutable binary resource. The manifest reported 2 actors and 10 descriptors; the resource returned the expected 36 bytes, protocol header, binary content type, range support, cache policy, and hash ETag.
 - Headless Chrome production correctness run: passed using software WebGL/WebGL2. Two actors, two chunks, six points, two polygons, and all 152 fixture resource bytes were resident; first geometry callback was observed before full completion. No performance claim is made from this run.
-- Production JavaScript bundle: approximately 720 KB minified / 198 KB gzip. Vite reports the >500 KB chunk warning; code splitting remains an explicit optimization item.
-- `npm run test:e2e`: passed; 2 Playwright/Chrome correctness tests cover WP2–WP4 behavior, clean event-stream snapshot recovery, retry exhaustion, visible integrity failure, and subsequent reload recovery.
+- Production JavaScript bundle: 844,367 total minified bytes across 14 chunks; the application entry is 92,598 bytes and the largest VTK chunk is 215,278 bytes. Every JavaScript chunk is enforced below 500,000 bytes at build time. See [bundle code-splitting evidence](evidence/bundle-code-splitting.md).
+- `npm run test:e2e`: passed; 2 Playwright/Chrome correctness tests cover WP2–WP4 behavior, clean event-stream snapshot recovery, retry exhaustion, visible integrity failure, subsequent reload recovery, and an all-request loopback assertion.
 - Headed WP5 benchmark: passed functionally and passed all quantitative gates over three fresh Windows runs; median complete load 1.611 s, orbit 50.25 FPS, pick 92.8 ms p95, tracked browser peak 262.8 MiB, and five-unload retention 1.193%.
 
 ## Known deviations and limitations
 
 - Configured ports bind IPv4 and IPv6 localhost; the ephemeral-port fallback remains IPv4-only because Kestrel does not support dynamic port allocation with `ListenLocalhost`.
-- Session lifetime, session capacity, and command rate are process-local prototype controls; production bootstrap/credential handoff remains controller integration work. WebSocket subscriber queues are bounded to 32 messages and removed on disconnect.
+- Session lifetime, session capacity, and command rate are process-local controls. Production session creation is now desktop-authorized and the exact-origin WebView adopts its session into an HttpOnly/Strict cookie; PEND-002 is complete. WebSocket subscriber queues are bounded to 32 messages and removed on disconnect.
 - `PMXSCN2` rectangle selection now uses the full-cell server BVH; v1/synthetic scenes retain the visible-triangle fallback. The ten-case committed corpus and 612-case seeded randomized differential cover every supported cell type against ActiViz 5.8. Invalid/inverted cells, arbitrary non-box frusta in the standalone oracle, exhaustive input space, and later VTK versions are not claimed.
 - Scale-factor, time-increment/modal, and complex harmonic real-process deltas are qualified. Host payload reduction, bounded pooled request streaming, compact V2 parsing, browser stable-paint qualification, subphase allocation telemetry, allocation-free median BVH refit, compact locator retention, invariant-topology capture reuse, and direct generated frame resources are complete. Retained displacement bases are optional unless the remaining read-side frame storage proves constraining.
 - Browser annotation context actions and adaptive selections through the safe eight-million-ID `PMXSEL1` capacity are complete.
-- Began capability-by-capability retirement of the hidden ActiViz backend. Annotation add, named removal, and remove-all now execute only in VTK.js when opted in, while default mode retains the original calls. The packaged real-FRD interaction smoke requires compatibility-bypass traces in addition to authoritative move/edit/reset/delete behavior.
+- Began capability-by-capability retirement of the hidden ActiViz backend. Annotation add, named removal, and remove-all now execute only in VTK.js when opted in, while default mode retains the original calls. Packaged interaction and settings-dialog smokes cover authoritative move/edit/reset/delete/settings behavior and compatibility-bypass traces.
 - Camera ownership now resides in retained browser snapshots for VTK.js mode. Standard/custom/reset, normal/vertical visible-bounds fitting, camera-adjusting redraws, box zoom, actor visibility/removal, animation-frame bounds adjustment, and follower apply/update/remove across frame or full-scene changes bypass ActiViz. Exploded preview, section clipping/caps, and section-aware rectangle selection also bypass hidden rendering.
 - VTK linear volume types 10-14 and quadratic types 24-27/29 now match the piecewise-linear subdivisions, legacy contour tables, exact-coordinate locator merging, and coincident-cell suppression used by `vtkCutter`. Evidence includes ambiguous generated cases, a 240-case three-seed canonical/warped differential, a 12-case shared-face/shared-node multi-cell differential, and a real 2,150-element C3D13 process smoke. Introducing fully isoparametric curved contours would intentionally differ from the legacy renderer; later VTK releases are not claimed.
 - The small deterministic fixture intentionally uses byte arrays; the large generator uses bounded pooled direct streaming.
-- Linux x64 remains unverified on the current Windows-only host, so the cross-platform functional acceptance gate is failed/pending.
+- Linux x64 functional qualification passed under Ubuntu 22.04 on WSL2: the self-contained server lifecycle, production client, Chromium/WebGL2 fixture rendering, exact counts, and credentialed shutdown all passed. This is software-WebGL correctness evidence, not a physical-GPU benchmark or Linux desktop-shell claim. See [Linux x64 functional evidence](evidence/linux-x64-functional.md).
+## 2026-09-02 — Actor registry/presentation retirement
+
+- Retired hidden ActiViz calls for `ContainsActor`, rename/color, per-actor contour visibility, and hide/show in VTK.js mode while leaving the default backend unchanged.
+- Made captured actor identity authoritative across scalar/extrema, selection, follower, exploded-view, animation, and contour retained state. Browser chunk pipelines now adopt renamed actor names as well as RGBA.
+- Added bounded retained `prepomax.actor-contours.updated-v1` state and atomic client validation; per-actor and global contour flags compose with finite-scalar availability.
+- Passed 61/61 client tests, 80/80 renderer .NET tests, strict client build, full Release/x64 staging, 2/2 Playwright, and the packaged one-actor registry/server-presentation smoke.
+- The packaged diagnostic exposed a separate initial-empty-scene event/session race. It was recorded as PEND-012 and is closed in the resynchronization slice below. The subsequent temporary actor-highlight slice is also complete; PEND-004 continues with scene lifecycle and authoritative selection clearing.
+
+## 2026-09-02 — Late first-topology resynchronization
+
+- Closed PEND-012: explicit current session credentials now override stale hostname-scoped WebView cookies, and the first non-empty topology triggers one trusted bootstrap refresh.
+- Added exact stable scene acknowledgements with scene ID, revision, actor count, and pipeline-chunk count; full replacements still acknowledge after follower/camera application.
+- Packaged actor-presentation acceptance now requires a non-empty browser pipeline and passed with exact rename/RGB/opacity/visibility/contour diagnostics. The adjacent visibility/camera smoke also passed.
+- Verification: client 61/61, renderer .NET 80/80, Playwright 2/2, strict production build, and full Release/x64 staging.
+## 2026-09-03 - authoritative selection clear and browser scene reset
+
+- Retired hidden selection clearing in VTK.js mode. `Clear3DSelection` publishes a fresh empty selection snapshot and independently clears temporary actor highlights; `ClearButKeepParts` also clears both browser-owned states.
+- Expanded full scene reset to clear captured topology, animation/extrema/contour/highlight state, selections, annotations, sphere/coordinate/caption/directional overlays, follower state, exploded offsets, section view, and box zoom.
+- Replacement reloads now reuse the already-adopted authenticated browser session. This fixed the production-only HTTP 401 caused by attempting anonymous session creation after `scene.replaced`.
+- Empty/current replacement snapshots are acknowledged after stable load, and overlapping replacement events coalesce around the authoritative fetched manifest.
+- Hardened packaging: staging removes obsolete hashed client bundles after validating the exact output directory, and the server marks `index.html` `no-store` for persistent WebView profiles.
+- Added deterministic scene-clear smoke synchronization and corrected locator evidence to select the last positive pre-clear topology sample.
+- Packaged `BENDING_NEON36.pmx` acceptance passed with 15 actors, 828,619 points, 1,623,416 triangles, 2,140,668 locator points, 931,033 locator cells, and `BrowserSceneClearApplied=True`.
+
+## Core part-construction slice - 2026-09-03
+
+- Added explicit no-handle single/batch part submission. In VTK.js mode, successful renderer-neutral capture now bypasses duplicate hidden `vtkMaxActor` construction; capture rejection or failure uses a traced legacy fallback.
+- Migrated ordinary geometry/model part drawing only. Result scalar/animation, selection cache, points/generic cells, OpenFOAM, transformations, and export/readback remain intentionally open.
+- Added packaged acceptance gating through `-ExerciseCorePartConstruction`.
+- `BENDING_NEON36.pmx` passed with 15 actors, 828,619 render points, 1,623,416 triangles, 2,140,668 locator points, 931,033 locator cells, `CorePartConstructionBrowserOnly=True`, and clean parent/child shutdown.
+- Regression baseline remains green: client 63/63, .NET 80/80, Playwright 2/2, isolation audit pass, and full Release/x64 staging/build pass.
+
+## Interactive animation-frame activation - 2026-09-03
+
+- Removed the hidden `vtkControl.SetAnimationFrame` mutation from VTK.js interactive frame changes. Browser capture/transport/application is now the only runtime activation path; default ActiViz behavior is unchanged.
+- Retained hidden animation construction and metadata specifically for the still-open AVI/PNG export path, avoiding a silent export regression.
+- Extended packaged animation acceptance to require the result-animation bypass trace and `LegacyActivationMs=0`.
+- The committed tetrahedral FRD passed with one actor, changed frame-1 positions, stable topology, `AnimationFrameActiVizBypassed=True`, and clean shutdown.
+- Regression baseline: client 63/63, .NET 80/80, Playwright 2/2, isolation audit pass, and full Release/x64 staging/build pass.
+
+## Retained 3MF actor input - 2026-09-03
+
+- Added browser-authoritative export projection for captured part coordinates, rendered triangles, scalars, color/contour state, visibility, and model edges.
+- VTK.js `GetVtkMaxActorData` now returns retained captured actors without querying the hidden VTK registry for browser-only scenes. When auxiliary legacy actors may exist, it merges only uncaptured names; default renderer behavior is unchanged.
+- Added packaged `-ExerciseThreeMfExportInput` acceptance. The C3D4 case passed with one browser-only actor, 12 points, 4 triangles, and `ThreeMfExportRetainedInput=True`.
+- A real archive-write probe exposed missing `lib3mf.dll` in the repository/staged output. Native archive production is therefore explicitly unqualified and added to packaging work.
+- Regression baseline remains green: client 63/63, .NET 80/80, Playwright 2/2, isolation audit, Release/x64 build/staging, and diff checks.
+- The remaining hidden `Clear` and `ClearButKeepParts` calls are not claimed retired: scalar-result, generic, point, selection-handle, OpenFOAM, transformed, and export-only auxiliary paths can still populate the hidden registry. This was the boundary entering the palette/range slice below.
+
+## Retained 3MF lookup table - 2026-09-03
+
+- Added managed sampling for all 14 PrePoMax color spectra, including brightness, reversal, RGB/HSV/Lab/diverging interpolation, and manual below/above colors.
+- Retained current-frame scalar ranges from captured visible contour actors and animation-wide ranges from existing frame metadata.
+- VTK.js `GetLookupTable` now emits `lookup-table-managed` and never queries `vtkControl.GetLookupTable`; the default renderer is unchanged.
+- Packaged acceptance passed all palettes, a manually extended 11-color table, one actor / 12 points / four triangles, and clean shutdown.
+- The next slice is duplicate hidden static scalar-result construction; generated edges, transforms/auxiliary export, native `lib3mf.dll`, and AVI/PNG remain documented boundaries.
+
+## Static scalar-result construction - 2026-09-03
+
+- Added a browser-only `AddScalarFieldOn3DCells` path with an explicit traced legacy fallback; the default renderer remains unchanged.
+- Removed hidden actor-scalar and scalar-formatting mutations from VTK.js update/redraw seams while retaining browser camera adjustment.
+- Completed retained actor round-trip data with node/element IDs, triangle types, and locator geometry.
+- Added `(sceneId, revision)` browser acknowledgement and `-ExerciseStaticScalarConstruction` packaged coverage.
+- Deterministic acceptance published construction range `-3..7` and scalar-only update range `-5..9`; committed-FRD `DISP/ALL` acceptance retained one actor / 12 points / four triangles / four locator points / one locator cell and then passed frame-1 activation with zero hidden work.
+- At this milestone animated AVI/PNG storage, selection-handle construction, generic/point/OpenFOAM actors, transformations, and auxiliary export remained open; the selection-handle point/line/surface paths are retired in the subsequent sections.
+
+## Cached selection-surface construction - 2026-09-03
+
+- Extended `SelectionCache` with bounded renderer-neutral `vtkMaxActorData[]` entries while preserving the native actor cache for the default renderer.
+- Element, surface, arbitrary-face, and surface-edge cache seams now re-submit renderer-neutral data in VTK.js mode instead of retaining/reinserting `vtkMaxActor` handles.
+- Added browser-owned transient triangle/quad selection actors, collision protection against retained part names, authenticated discrete removal, public selection-clear integration, and export exclusion.
+- Added `-ExerciseSelectionSurfaceConstruction`; packaged C3D4 acceptance proved cache retrieval, browser add/clear, no legacy fallback, retained base topology, and clean process shutdown.
+- Point actors and line-only edge previews were subsequently retired by the transient-primitive slice below. Animated construction/export and other generic paths remain open.
+
+## Selection point/line construction - 2026-09-03
+
+- Added bounded retained point/line primitives with absolute coordinates, indexed line segments, RGBA, display point size, and line width. Browser pipelines are origin-relative, non-pickable, section-clipped, and recreated after navigation.
+- Routed selection-layer `Add3DNodes` and the common single-cell `Add3DCells` seam browser-only after successful capture. VTK linear lines are retained directly; quadratic edges expand into start-mid and mid-end segments. Unsupported content keeps a traced visible fallback.
+- Integrated primitive replacement with public selection clear, full scene clear, shutdown, and navigation recovery while excluding the transient state from model topology, locators, picking, and export.
+- Packaged C3D4 acceptance reported 2 transient actors / 5 points / 2 lines and null native handles, then 0/0/0 after `Clear3DSelection`, with `SelectionPrimitiveConstructionBrowserOnly=True`. The separately executed cached-surface regression also remained green.
+- Verification: client 66/66, .NET 80/80, Playwright 2/2, isolation audit pass, strict production client build, Release/x64 application build, and packaged staging pass.
+- At this milestone PEND-004 next targeted animated-result construction plus the coupled AVI/PNG dependency; the following slice retires eager construction and leaves browser-owned capture/encoding open. Generic auxiliary actors, OpenFOAM, transformations, and final hidden-registry cleanup remain documented.
+
+## Animated-result construction and export isolation - 2026-09-04
+
+- Removed eager hidden `vtkMaxActor` and per-frame actor-array construction from VTK.js animation setup. Registration now succeeds only after retained frame-zero capture, and ordinary animation setup emits `construction-browser-only`.
+- Moved animation metadata, scale-factor queries, and acceleration preference behind the retained adapter. Interactive frame activation remains the sole browser/server path with zero native activation work.
+- Preserved AVI/PNG compatibility through explicit lazy materialization: the first export reconstructs retained sources and cloned metadata, applies acceleration and hidden-part visibility, and is reused only within that animation scene.
+- Extended packaged animation acceptance with construction/export gates. The committed one-tetra FRD proved no pre-export native materialization, wrote two nonempty PNG frames through the public image-export seam, and then activated browser frame 1 with stable topology and `LegacyActivationMs=0`.
+- Verification: client 66/66, .NET 80/80, Playwright 2/2, isolation audit pass, full Release/x64 build/staging, and clean process shutdown.
+- PEND-004 next replaces export-only render-window capture, starting with browser PNG frames and deterministic acknowledgement; AVI encoding/codec behavior remains an explicit decision.
+
+## Browser-owned animation PNG export - 2026-09-04
+
+- Routed `SaveAnimationAsImages` through retained frame activation and WebView2 composited PNG capture in VTK.js mode; the default renderer remains unchanged and only AVI uses lazy native animation materialization.
+- Added single-flight stable-paint acknowledgement for both incremental frame updates and first-frame full-scene replacement, with a 30-second timeout and lifecycle cancellation.
+- Added bounded PNG signature/IHDR/dimension/size validation, same-directory staging, per-file atomic replacement, failure cleanup, awaited WinForms UI handling, and preserved forward/step/swing naming semantics.
+- Packaged PNG-only acceptance wrote two valid, distinct frames and reported `AnimationPngCaptureBrowserOnly=True`, `AnimationExportAdapterMaterialized=False`, `AnimationConstructionBrowserOnly=True`, and `AnimationFrameActiVizBypassed=True`; no acceptance or staging files remained.
+- Full regression verification is recorded in [browser animation PNG evidence](evidence/browser-animation-png-export.md). PEND-004 now targets the explicit AVI encoder/codec decision; generic/OpenFOAM actors, transformations, widgets, and final hidden-registry cleanup remain open.
+
+## Browser-owned animation AVI export - 2026-09-04
+
+- Selected a self-contained AVI 1.0 Motion JPEG path for VTK.js mode: no FFmpeg/runtime codec dependency, no system dialog, and one bounded composited browser JPEG held at a time.
+- Added strict JPEG dimension/marker validation and a checked streaming RIFF writer with `avih`/`strh`/`strf`, `MJPG`, padded `00dc` keyframes, `idx1`, durable finalization, same-directory staging, and atomic destination replacement.
+- Made the movie UI asynchronous and explicit: VTK.js reports its built-in MJPEG encoder and browser-managed frame storage; legacy ActiViz retains the original codec/RAM controls.
+- Removed the now-unused native animation export adapter and its retained-source/metadata accessors. No VTK.js animation path constructs, activates, captures, or encodes through hidden ActiViz.
+- Combined packaged acceptance validated PNG plus AVI, parsed exact RIFF/index structure, checked two distinct embedded JPEGs, reported both browser-only gates true and adapter materialization false, and removed output/staging files.
+- Evidence: [browser animation AVI export](evidence/browser-animation-avi-export.md). PEND-004 next targets transformations and generic auxiliary/OpenFOAM actor construction; configurable modern video formats and cancellation are explicit future enhancements, not renderer blockers.
+
+## Browser-owned transformation copies - 2026-09-04
+
+- Routed symmetry, linear/circular pattern, apply, hide, and show through bounded retained host matrices without hidden ActiViz calls in VTK.js mode.
+- Added resource-sharing non-pickable browser actor instances, legacy-compatible sequential composition, floating-origin matrix conversion, lifecycle replay/clear, presentation/visibility propagation, and post-scene acknowledgement.
+- The first packaged run exposed and fixed an acknowledgement ordering race when retained matrices arrived before browser chunks. Real-model rerun passed with seven matrices, a positive transformed-actor count, zero pickable actors, and successful hide/show.
+- Evidence: [browser transformation retirement](evidence/browser-transformations-retirement.md). PEND-004 next targets generic auxiliary/OpenFOAM construction; transformed section-cap/export projection remains explicitly pending.
+
+## Browser-owned auxiliary and managed OpenFOAM construction - 2026-09-04
+
+- Routed non-pickable base-layer auxiliary surfaces through retained scene capture and points/lines through a bounded persistent primitive set. Persistent primitives remain separate from selection primitives, survive selection clear, and support visibility, rename, removal, navigation replay, and scene cleanup.
+- Preserved explicit fallback for unsupported, pickable, and overlay content. Array submission classifies each item independently so one rejected actor does not duplicate accepted browser actors in the hidden backend.
+- VTK.js `AddOpenFoamMesh` now bypasses the native reader before file access. Existing Baram callers fall through to the managed `polyMesh` boundary reader, whose faces and unique edges use the renderer-neutral routes above.
+- Packaged `BENDING_NEON36.pmx` acceptance reported 40 retained actors / 904,768 render points / 1,766,120 triangles with unchanged locator totals, then proved a synthetic auxiliary surface and two primitives remained after selection clear, honored hide/show, removed discretely, returned null native handles, and used no fallback.
+- Verification: client 69/69, strict client build, and targeted Release/x64 packaged smoke passed at this checkpoint; the full regression/staging run is recorded with the evidence after completion.
+- Evidence: [auxiliary/OpenFOAM construction retirement](evidence/auxiliary-openfoam-construction-retirement.md). PEND-004 next targets native-handle `AddActor` and remaining pickable/overlay generic construction. Volumetric OpenFOAM parity and primitive transformation/3MF projection remain explicit boundaries.
+
+## Generic and native-handle construction retirement - 2026-09-04
+
+- Broadened non-selection cell capture to supported pickable and non-pickable surfaces while preserving pickable flags and locator data. Non-pickable overlay points now use persistent browser primitives.
+- Enforced the selection-cache architecture: active VTK.js caches replay renderer-neutral actor data, while unexpected `vtkMaxActor` handles are diagnosed and blocked before hidden-renderer mutation.
+- Added named primitive and per-pipeline pickability diagnostics plus `-ExerciseGenericConstruction` packaged acceptance.
+- The packaged fixture reported `GenericConstructionBrowserOnly=True`, browser `True|True` for pickable surface/named overlay point, null returned handles, authoritative removal, and clean shutdown. The independent auxiliary regression remained green.
+- Verification: client 69/69, .NET 80/80, Playwright 2/2, isolation audit pass, strict client build, and Release/x64 application build/staging pass.
+- Evidence: [generic/native-handle construction retirement](evidence/generic-native-handle-construction-retirement.md). At that milestone PEND-004 next targeted pickable points and unsupported-cell classification; the following slice records that outcome. Exact overlay depth ordering remains a visual boundary.
+
+## Generic cell-type classification - 2026-09-07
+
+- Extended retained surface conversion with VTK triangle strips (type 6) and pixels (type 8), preserving source-element provenance and deterministic winding/perimeter triangulation.
+- Extended persistent primitive conversion with VTK polylines (type 4), expanded into adjacent line segments.
+- Made generic surface classification atomic: if any cell type is outside 5/6/8/9/22/23, the complete actor is rejected with the sorted type list instead of rendering a misleading subset.
+- Audited `Add3DNodes` callers and found no production pickable-point producer. Direct pickable primitive capture remains explicitly rejected because the persistent primitive pipeline is non-pickable.
+- Added `-ExerciseCellClassification` process acceptance. The packaged fixture reported exact 4-triangle and 2-line expansion, mixed type-5/type-10 and pickable-point rejection, browser `true|true`, authoritative removal, `CellClassificationBrowserOnly=True`, and clean shutdown.
+- Verification: client 69/69, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, and Release/x64 application build/staging pass.
+- Evidence: [cell-type classification retirement](evidence/cell-type-classification-retirement.md). PEND-004 now advances to the remaining widget/tool seams and hidden-registry dependency audit; volume-cell rendering, exact overlay depth ordering, transformed/export projection, and final cleanup remain explicit.
+
+## Browser-owned orientation marker - 2026-09-07
+
+- Routed `SetCoorSysVisibility` through retained `prepomax.orientation-marker.updated-v1` state in VTK.js mode; default ActiViz behavior is unchanged.
+- Added a non-interactive lower-left vtk.js orientation marker with dedicated renderer ownership, main-camera synchronization, resize handling, 50-pixel minimum / 200-pixel maximum, and legacy red/green/blue colors quantized to the actor's 8-bit contract.
+- Retained visibility across scene-view reconstruction/navigation and deterministically disabled/deleted the marker renderer and axes actor at disposal.
+- Added strict message normalization tests, diagnostic camera/palette/size/actor state, and `-ExerciseOrientationMarker` packaged acceptance.
+- Browser testing exposed a vtk.js 36.6 `AxesActor` getter defect (`model.getXConfig`); production diagnostics avoid the broken getter and retain explicit immutable palette values. Both progressive-load and recovery browser tests passed after the correction.
+- Packaged fixture acceptance reported hidden `false|0`, visible `true|1`, camera alignment, the 200-pixel bound, expected palette, `OrientationMarkerBrowserOnly=True`, and clean parent/child shutdown.
+- Verification: client 71/71, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 application build/staging, PowerShell syntax, and diff checks passed.
+- The stock vtk.js axes actor renders arrow shafts without legacy X/Y/Z captions. Functional orientation/visibility ownership is retired from hidden ActiViz, while exact shaft/caption appearance remains explicitly assigned to PEND-005.
+- Evidence: [orientation marker retirement](evidence/orientation-marker-retirement.md). The scale visibility/unit slice subsequently completed; PEND-004 next targets scalar-legend state and the remaining result widgets.
+
+## Browser-owned scale widget and ActiViz launch audit - 2026-09-07
+
+- Routed scale-widget visibility and length-unit updates through retained `prepomax.scale-widget.updated-v1` state in VTK.js mode; default ActiViz behavior is unchanged.
+- Added a non-interactive DOM scale overlay that reproduces the legacy 400-pixel target, nearest one-fifth-decade model-length rounding, adjusted width, alternating five-field bar, six `G4`-equivalent labels, and unit suffix.
+- Camera animation, explicit rendering, resize, and view reconstruction recompute or restore the scale. Unit input is limited to 64 printable characters and DOM text assignment prevents markup interpretation.
+- Packaged fixture acceptance reported hidden/visible states, positive `0.68 mm`, six labels, 402.021-pixel width, `ScaleWidgetBrowserOnly=True`, and clean shutdown.
+- Audited physical ActiViz removal. VTK.js is the visible renderer when selected, but `vtkControl` is still constructed unconditionally and its project/assembly types remain startup dependencies. Added `scripts/start-prepomax-vtkjs.ps1` and `docs/VTKJS_ACTIVIZ_STATUS.md` so the launch mode and remaining removal gate are explicit.
+- Verification: client 73/73, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, packaged scale smoke, and launcher/PowerShell syntax passed.
+- Evidence: [scale widget retirement](evidence/scale-widget-retirement.md). The scalar-legend, categorical color-bar, status-block, and shared-layout slices subsequently completed; PEND-004 now targets smoothing/highlight settings and user-pick mode.
+
+## Browser-owned scalar legend - 2026-09-08
+
+- Added retained `prepomax.scalar-legend.updated-v1` state for visibility, result and complex metadata, units, min/max policy, `G`/`E` format, background/border, effective range, and managed sampled palette.
+- Routed scalar spectrum, text, number format, background, border, and initial-position seams away from hidden ActiViz when VTK.js mode is active; full scene clear hides the retained legend.
+- Added a safe top-left DOM legend and applied its range/palette to current and future vtk.js mappers. State survives reconstruction and refreshes after scene/scalar/frame, contour, and visibility changes.
+- Packaged fixture acceptance reported `ScalarLegendBrowserOnly=True`, hidden/visible lifecycle, `Displacements`/`Magnitude`/`mm`, `Complex: Real`, `Automatic`, `E3`, range `0..1`, nine colors, ten labels, background/border, and clean shutdown.
+- Verification: client 75/75, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, and packaged scalar-legend smoke passed.
+- Evidence: [scalar legend retirement](evidence/scalar-legend-retirement.md). The categorical color-bar, status-block, and shared-layout slices subsequently completed; PEND-004 now targets smoothing/highlight settings and user-pick mode, while exact visual typography remains PEND-005.
+
+## Browser-owned categorical color bar - 2026-09-08
+
+- Added retained `prepomax.color-bar.updated-v1` state with bounded equal ordered RGB/label arrays, visibility, background, and border.
+- Routed initial position, replacement, append, appearance, and hide/clear seams away from hidden ActiViz in VTK.js mode. Default ActiViz behavior is unchanged.
+- Added a safe top-left DOM list, legacy underscore/hyphen label normalization, navigation/view-reconstruction replay, and full-scene clear integration.
+- Packaged fixture acceptance reported `ColorBarBrowserOnly=True`, exact red/blue/green order, three normalized labels, visible-to-empty hidden lifecycle, appearance flags, and clean shutdown.
+- Verification: client 77/77, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, and packaged color-bar smoke passed.
+- Evidence: [categorical color-bar retirement](evidence/categorical-color-bar-retirement.md). The status-block/shared-layout slice subsequently completed; PEND-004 now targets smoothing/highlight settings and user-pick mode, while exact typography and unusually large-list presentation remain PEND-005.
+
+## Browser-owned status block and shared widget layout - 2026-09-08
+
+- Added bounded retained `prepomax.status-block.updated-v1` and `prepomax.result-widget-layout.updated-v1` state, complete client validation, safe DOM lines, and explicit top-left/top-right pixel placement.
+- Routed visibility, content, background, border, result-position reset, and color-position reset away from hidden ActiViz in VTK.js mode; default ActiViz behavior is unchanged.
+- Preserved current-culture legacy text generation across all six result field types and added animation-frame step/increment/time plus scale-factor/harmonic-angle updates.
+- Packaged acceptance reported `StatusBlockBrowserOnly=True`, exact 20-pixel placement for all three result overlays, frequency and harmonic content, hidden lifecycle, and clean shutdown.
+- Verification: client 81/81, .NET 80/80, Playwright 2/2, isolation audit 6 projects / 34 C# files / zero forbidden references, strict client build, Release/x64 build/staging, packaged status/layout smoke, PowerShell syntax, and diff checks passed.
+- Evidence: [status block and widget layout retirement](evidence/status-block-and-widget-layout-retirement.md). PEND-004 next targets smoothing/highlight settings and user-pick mode; exact typography and settings gestures remain review items.

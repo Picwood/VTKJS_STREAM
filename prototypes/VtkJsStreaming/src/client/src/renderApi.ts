@@ -6,6 +6,9 @@ import { decodeSectionGeometry, type SectionGeometryRequest, type SectionGeometr
 export class RenderApi {
   readonly #baseUrl: string;
   #accessToken: string | null = null;
+  #serverVersion: string | null = null;
+  #resourceRetries = 0;
+  #resourceCancellations = 0;
 
   public constructor(baseUrl: string) {
     const parsed = new URL(baseUrl);
@@ -21,10 +24,25 @@ export class RenderApi {
       credentials: 'include',
       signal: signal ?? null,
     });
+    this.#captureServerVersion(response);
     await ensureSuccess(response);
     const session = await response.json() as SessionCreated;
     this.#accessToken = session.accessToken;
     return session;
+  }
+
+  public async adoptSession(session: SessionCreated, signal?: AbortSignal): Promise<void> {
+    this.#accessToken = session.accessToken;
+    try {
+      await this.#fetch('/api/v1/sessions/adopt', {
+        method: 'POST',
+        credentials: 'include',
+        signal: signal ?? null,
+      });
+    } catch (error) {
+      this.#accessToken = null;
+      throw error;
+    }
   }
 
   public async getManifest(sceneId: string, signal?: AbortSignal): Promise<SceneManifest> {
@@ -34,7 +52,15 @@ export class RenderApi {
 
   public async getResource(descriptor: ResourceDescriptor, signal?: AbortSignal) {
     for (let attempt = 0; attempt < 2; attempt += 1) {
-      const response = await this.#fetch(descriptor.uri, { signal: signal ?? null });
+      let response: Response;
+      try {
+        response = await this.#fetch(descriptor.uri, { signal: signal ?? null });
+      } catch (error) {
+        if (signal?.aborted || (error instanceof DOMException && error.name === 'AbortError')) {
+          this.#resourceCancellations += 1;
+        }
+        throw error;
+      }
       const buffer = await response.arrayBuffer();
       try {
         await verifySha256(descriptor, buffer);
@@ -43,9 +69,22 @@ export class RenderApi {
         if (!(error instanceof ResourceValidationError) || attempt === 1) {
           throw error;
         }
+        this.#resourceRetries += 1;
       }
     }
     throw new Error(`Resource ${descriptor.resourceId} failed integrity validation after retry.`);
+  }
+
+  public getDiagnostics(): Readonly<{
+    serverVersion: string | null;
+    resourceRetries: number;
+    resourceCancellations: number;
+  }> {
+    return {
+      serverVersion: this.#serverVersion,
+      resourceRetries: this.#resourceRetries,
+      resourceCancellations: this.#resourceCancellations,
+    };
   }
 
   public async sendCommand<TPayload = unknown>(
@@ -123,8 +162,14 @@ export class RenderApi {
       ...init,
       headers: { ...init.headers, 'X-PrePoMax-Session': this.#accessToken },
     });
+    this.#captureServerVersion(response);
     await ensureSuccess(response);
     return response;
+  }
+
+  #captureServerVersion(response: Response): void {
+    const value = response.headers.get('X-PrePoMax-Server-Version');
+    this.#serverVersion = value && /^[0-9A-Za-z.+-]{1,64}$/.test(value) ? value : this.#serverVersion;
   }
 }
 

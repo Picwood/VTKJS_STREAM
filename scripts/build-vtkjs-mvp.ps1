@@ -35,7 +35,15 @@ dotnet publish (Join-Path $prototypeRoot 'src\PrePoMax.Render.Server\PrePoMax.Re
     -c Release --no-restore -o $serverOutput
 if ($LASTEXITCODE -ne 0) { throw 'The renderer server publish failed.' }
 
-New-Item -ItemType Directory -Force -Path $clientOutput | Out-Null
+$resolvedPrePoMaxOutput = [System.IO.Path]::GetFullPath($prePoMaxOutput).TrimEnd('\') + '\'
+$resolvedClientOutput = [System.IO.Path]::GetFullPath($clientOutput)
+if (-not $resolvedClientOutput.StartsWith($resolvedPrePoMaxOutput, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Refusing to clean client output outside the PrePoMax build directory: $resolvedClientOutput"
+}
+if (Test-Path -LiteralPath $resolvedClientOutput) {
+    Remove-Item -LiteralPath $resolvedClientOutput -Recurse -Force
+}
+New-Item -ItemType Directory -Force -Path $resolvedClientOutput | Out-Null
 Copy-Item -Path (Join-Path $clientRoot 'dist\*') -Destination $clientOutput -Recurse -Force
 
 & $msbuild (Join-Path $repositoryRoot 'PrePoMax.sln') /t:Restore,Build `

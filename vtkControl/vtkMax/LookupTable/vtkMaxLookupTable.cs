@@ -30,6 +30,8 @@ namespace vtkControl
 
         // Properties
         public Color[] Colors { get { return _colors; } set { _colors = value; } }
+        public double MinimumValue { get { return _minValue; } }
+        public double MaximumValue { get { return _maxValue; } }
 
 
         // Constructors                                                                                                             
@@ -38,6 +40,17 @@ namespace vtkControl
             _minValue = 0.0;
             _maxValue = 0.0;
             _colors = new Color[0];
+        }
+        public vtkMaxLookupTable(double minValue, double maxValue, Color[] colors)
+        {
+            if (double.IsNaN(minValue) || double.IsInfinity(minValue))
+                throw new ArgumentOutOfRangeException("minValue");
+            if (double.IsNaN(maxValue) || double.IsInfinity(maxValue) || maxValue < minValue)
+                throw new ArgumentOutOfRangeException("maxValue");
+            if (colors == null) throw new ArgumentNullException("colors");
+            _minValue = minValue;
+            _maxValue = maxValue;
+            _colors = (Color[])colors.Clone();
         }
         public vtkMaxLookupTable(vtkLookupTable lookupTable)
         {

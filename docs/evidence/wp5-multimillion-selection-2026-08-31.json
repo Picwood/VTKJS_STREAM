@@ -1,0 +1,364 @@
+{
+  "runKind": "headed-physical-candidate",
+  "qualifyingHardwareRun": true,
+  "capturedUtc": "2026-08-31T08:15:08.376Z",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
+  "viewport": {
+    "width": 1920,
+    "height": 1080,
+    "deviceScaleFactor": 1
+  },
+  "configuration": {
+    "chunkCellRows": 50,
+    "resourceConcurrency": 3,
+    "resourceCapBytes": 8388608
+  },
+  "canonical": {
+    "uniqueNodes": 3000000,
+    "logicalQuads": 2996501,
+    "triangles": 5993002,
+    "chunkPointTuples": 3058000
+  },
+  "network": {
+    "manifestBytes": 82317,
+    "initialResourceRequests": 150,
+    "initialBytes": 157048032,
+    "scalarRequests": 30,
+    "scalarBytes": 12232000
+  },
+  "timing": {
+    "manifestMs": 715.1,
+    "firstVisibleChunkMs": 79.4,
+    "completeLoadMs": 2612.3,
+    "firstStableFrameMs": 2616.6,
+    "longestTaskMs": 0,
+    "scalarActivationMs": null
+  },
+  "picks": {
+    "count": 30,
+    "lastMs": 85.3,
+    "p50Ms": 85.7,
+    "p95Ms": 156.7,
+    "samples": [
+      156.7,
+      103.2,
+      97,
+      82.3,
+      82,
+      79.6,
+      90.2,
+      85.7,
+      122,
+      113.3,
+      82.3,
+      169.5,
+      80.1,
+      132.5,
+      151.2,
+      82.9,
+      86.5,
+      81.2,
+      82.8,
+      93.5,
+      89.6,
+      79.5,
+      77.5,
+      77.8,
+      87.2,
+      88.5,
+      81.8,
+      82,
+      89.1,
+      85.3
+    ]
+  },
+  "orbit": {
+    "samples": [
+      10.900000095367432,
+      2.8999998569488525,
+      16.800000190734863,
+      16.699999809265137,
+      24.600000143051147,
+      29.5,
+      28.299999952316284,
+      2.200000047683716,
+      27.700000047683716,
+      28.799999952316284,
+      55.39999985694885,
+      51.40000009536743,
+      35.299999952316284,
+      29.700000047683716,
+      29.799999952316284,
+      27.799999952316284,
+      27.800000190734863,
+      27.799999952316284,
+      31.200000047683716,
+      29.199999809265137,
+      28,
+      28.200000047683716,
+      28,
+      27.5,
+      27.899999856948853,
+      40.299999952316284,
+      34.5,
+      27.100000143051147,
+      27,
+      25.40000009536743,
+      26.899999856948853,
+      219.90000009536743,
+      41.09999990463257,
+      48.40000009536743,
+      66.40000009536743,
+      19.09999990463257,
+      31.09999990463257,
+      27.700000047683716,
+      24.100000143051147,
+      25.799999952316284,
+      23.59999990463257,
+      24.299999952316284,
+      23.600000143051147,
+      22.399999856948853,
+      22.700000047683716,
+      22.200000047683716,
+      21.700000047683716,
+      21.200000047683716,
+      21.799999952316284,
+      20.700000047683716,
+      21.200000047683716,
+      20.59999990463257,
+      20.200000047683716,
+      19.299999952316284,
+      18.600000143051147,
+      20,
+      18.5,
+      20.899999856948853,
+      18.600000143051147,
+      17.799999952316284
+    ],
+    "medianMs": 25.799999952316284,
+    "medianFps": 38.75968999411651
+  },
+  "multiMillionSelection": {
+    "selectedIds": 3000000,
+    "matchingPointTuples": 3058000,
+    "overlayPointTuples": 436858,
+    "overlayActors": 30,
+    "sampled": true,
+    "activationMs": 518.9000000953674,
+    "orbitSamples": [
+      3,
+      9.200000047683716,
+      16.799999952316284,
+      23.5,
+      93.60000014305115,
+      40.5,
+      40.39999985694885,
+      3.799999952316284,
+      35.80000019073486,
+      37.299999952316284,
+      37.5,
+      38.299999952316284,
+      40.09999990463257,
+      37.700000047683716,
+      37.799999952316284,
+      39.80000019073486,
+      36,
+      35.299999952316284,
+      34.299999952316284,
+      34
+    ],
+    "medianOrbitMs": 36
+  },
+  "browserMemory": {
+    "baseline": {
+      "usedJSHeapSize": 3306801,
+      "totalJSHeapSize": 4237237,
+      "jsHeapSizeLimit": 4395630592,
+      "v8UsedBytes": 2493496,
+      "backingStorageBytes": 772021,
+      "embedderHeapBytes": 1033584,
+      "trackedBytes": 3265517
+    },
+    "loaded": {
+      "usedJSHeapSize": 278973121,
+      "totalJSHeapSize": 280497637,
+      "jsHeapSizeLimit": 4395630592,
+      "v8UsedBytes": 12997876,
+      "backingStorageBytes": 265965029,
+      "embedderHeapBytes": 1680400,
+      "trackedBytes": 278962905
+    },
+    "cycles": [
+      {
+        "cycle": 1,
+        "loaded": 278963309,
+        "unloaded": 5931039,
+        "actors": 0,
+        "chunks": 0
+      },
+      {
+        "cycle": 2,
+        "loaded": 278530013,
+        "unloaded": 6134851,
+        "actors": 0,
+        "chunks": 0
+      },
+      {
+        "cycle": 3,
+        "loaded": 278625185,
+        "unloaded": 6263139,
+        "actors": 0,
+        "chunks": 0
+      },
+      {
+        "cycle": 4,
+        "loaded": 278778785,
+        "unloaded": 6511147,
+        "actors": 0,
+        "chunks": 0
+      },
+      {
+        "cycle": 5,
+        "loaded": 279017113,
+        "unloaded": 6646639,
+        "actors": 0,
+        "chunks": 0
+      }
+    ],
+    "retainedRatio": 0.01226388840506534
+  },
+  "gpu": {
+    "propCount": 30,
+    "invisiblePropCount": 0,
+    "gpuMemoryMB": 120.84402399999999,
+    "points": 3058000,
+    "verts": 0,
+    "lines": 0,
+    "triangles": 5993002,
+    "str": "propCount: 30\ninvisiblePropCount: 0\ngpuMemoryMB: 120.84402399999999\npoints: 3058000\nverts: 0\nlines: 0\ntriangles: 5993002",
+    "vendor": "Google Inc. (Intel)",
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x0000A788) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "backend": {
+    "baseline": {
+      "processId": 40320,
+      "workingSetBytes": 80093184,
+      "peakWorkingSetBytes": 80093184,
+      "managedHeapBytes": 8679088,
+      "committedManagedBytes": 0,
+      "totalAllocatedBytes": 8653704,
+      "gen0Collections": 0,
+      "gen1Collections": 0,
+      "gen2Collections": 0,
+      "sceneInitializationMs": 670.7121,
+      "sceneId": "10000000-0000-0000-0000-000000000002",
+      "sceneRevision": 1,
+      "actors": 1,
+      "chunks": 30,
+      "uniqueSourceNodes": 3000000,
+      "logicalQuads": 2996501,
+      "chunkPointTuples": 3058000,
+      "triangles": 5993002,
+      "descriptorBytes": 157048032
+    },
+    "peak": {
+      "processId": 40320,
+      "workingSetBytes": 89526272,
+      "peakWorkingSetBytes": 89526272,
+      "managedHeapBytes": 18781168,
+      "committedManagedBytes": 0,
+      "totalAllocatedBytes": 18726432,
+      "gen0Collections": 0,
+      "gen1Collections": 0,
+      "gen2Collections": 0,
+      "sceneInitializationMs": 670.7121,
+      "sceneId": "10000000-0000-0000-0000-000000000002",
+      "sceneRevision": 2,
+      "actors": 1,
+      "chunks": 30,
+      "uniqueSourceNodes": 3000000,
+      "logicalQuads": 2996501,
+      "chunkPointTuples": 3058000,
+      "triangles": 5993002,
+      "descriptorBytes": 157048032
+    },
+    "managedPeakAboveBaseline": 10102080
+  },
+  "gates": {
+    "serverReadyToManifest": {
+      "status": "pass",
+      "value": 715.1,
+      "target": "<= 2000 ms"
+    },
+    "manifestToFirstChunk": {
+      "status": "pass",
+      "value": 79.4,
+      "target": "<= 5000 ms"
+    },
+    "completeLoad": {
+      "status": "pass",
+      "value": 2612.3,
+      "target": "<= 15000 ms"
+    },
+    "longestTask": {
+      "status": "pass",
+      "value": 0,
+      "target": "<= 200 ms"
+    },
+    "orbitFps": {
+      "status": "pass",
+      "value": 38.75968999411651,
+      "target": ">= 30 FPS"
+    },
+    "pickP95": {
+      "status": "fail",
+      "value": 156.7,
+      "target": "<= 100 ms"
+    },
+    "scalarActivation": {
+      "status": "pass",
+      "value": 467.90000009536743,
+      "target": "<= 500 ms"
+    },
+    "multiMillionSelectedIds": {
+      "status": "pass",
+      "value": 3000000,
+      "target": "= 3000000"
+    },
+    "multiMillionOverlayPoints": {
+      "status": "pass",
+      "value": 436858,
+      "target": "1..500000"
+    },
+    "multiMillionSelectionActivation": {
+      "status": "pass",
+      "value": 518.9000000953674,
+      "target": "<= 2000 ms"
+    },
+    "multiMillionSelectionOrbit": {
+      "status": "pass",
+      "value": 27.77777777777778,
+      "target": ">= 20 FPS"
+    },
+    "browserPeak": {
+      "status": "pass",
+      "value": 275697388,
+      "target": "<= 700 MiB"
+    },
+    "gpuMemory": {
+      "status": "pass",
+      "value": 120.84402399999999,
+      "target": "<= 700 MB"
+    },
+    "backendManagedPeak": {
+      "status": "pass",
+      "value": 10102080,
+      "target": "<= 400 MiB"
+    },
+    "retainedAfterFiveUnloads": {
+      "status": "pass",
+      "value": 0.01226388840506534,
+      "target": "<= 10%"
+    }
+  }
+}

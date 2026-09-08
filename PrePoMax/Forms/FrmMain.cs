@@ -53,6 +53,7 @@ namespace PrePoMax
         //
         private vtkControl.vtkControl _vtk;
         private VtkJsRendererControl _vtkJs;
+        private bool _vtkJsHasLegacyExportActors;
         private System.Windows.Forms.Timer _vtkJsSmokeFieldTimer;
         private System.Windows.Forms.Timer _vtkJsSmokePickTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeAnnotationTimer;
@@ -61,8 +62,39 @@ namespace PrePoMax
         private System.Windows.Forms.Timer _vtkJsSmokeCameraTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeBoxZoomTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeVisibilityCameraTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeTransformationTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeExplodedPreviewTimer;
         private System.Windows.Forms.Timer _vtkJsSmokeSectionViewTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeSphereSymbolTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeCoordinateOverlayTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeDirectionalGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeGeneralConeGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeRotationalGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeArrowGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeDoubleArrowGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeSpringGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeThermalGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeFluxGlyphTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeViewportAppearanceTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeOrientationMarkerTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeScaleWidgetTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeScalarLegendTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeColorBarTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeStatusBlockTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeActorPresentationTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeActorHighlightTimer;
+        private int _vtkJsSmokeActorHighlightStage;
+        private int _vtkJsSmokeActorHighlightTicks;
+        private System.Windows.Forms.Timer _vtkJsSmokeSceneClearTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeThreeMfExportInputTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeStaticScalarConstructionTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeSelectionSurfaceTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeSelectionPrimitiveTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeAuxiliaryConstructionTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeGenericConstructionTimer;
+        private System.Windows.Forms.Timer _vtkJsSmokeCellClassificationTimer;
+        private int _vtkJsSmokeSceneClearStage;
+        private int _vtkJsSmokeSceneClearTicks;
         private int _vtkJsSmokeReadyTicks;
         private double[] _vtkJsCameraPosition;
         private double[] _vtkJsCameraFocalPoint;
@@ -932,8 +964,1415 @@ namespace PrePoMax
             StartVtkJsSmokeCamera();
             StartVtkJsSmokeBoxZoom();
             StartVtkJsSmokeVisibilityCamera();
+            StartVtkJsSmokeTransformations();
             StartVtkJsSmokeExplodedPreview();
             StartVtkJsSmokeSectionView();
+            StartVtkJsSmokeSphereSymbol();
+            StartVtkJsSmokeCoordinateOverlay();
+            StartVtkJsSmokeDirectionalGlyph();
+            StartVtkJsSmokeGeneralConeGlyph();
+            StartVtkJsSmokeRotationalGlyph();
+            StartVtkJsSmokeArrowGlyph();
+            StartVtkJsSmokeDoubleArrowGlyph();
+            StartVtkJsSmokeSpringGlyph();
+            StartVtkJsSmokeThermalGlyph();
+            StartVtkJsSmokeFluxGlyph();
+            StartVtkJsSmokeViewportAppearance();
+            StartVtkJsSmokeOrientationMarker();
+            StartVtkJsSmokeScaleWidget();
+            StartVtkJsSmokeScalarLegend();
+            StartVtkJsSmokeColorBar();
+            StartVtkJsSmokeStatusBlock();
+            StartVtkJsSmokeActorPresentation();
+            StartVtkJsSmokeActorHighlight();
+            StartVtkJsSmokeSceneClear();
+            StartVtkJsSmokeThreeMfExportInput();
+            StartVtkJsSmokeStaticScalarConstruction();
+            StartVtkJsSmokeSelectionSurface();
+            StartVtkJsSmokeSelectionPrimitives();
+            StartVtkJsSmokeAuxiliaryConstruction();
+            StartVtkJsSmokeGenericConstruction();
+            StartVtkJsSmokeCellClassification();
+        }
+
+        private void StartVtkJsSmokeOrientationMarker()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ORIENTATION_MARKER"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJs.WriteAcceptanceTrace("orientation marker timer started");
+            int stage = 0;
+            int ticks = 0;
+            _vtkJsSmokeOrientationMarkerTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeOrientationMarkerTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                ticks++;
+                if (stage == 0)
+                {
+                    SetCoorSysVisibility(false);
+                    _vtkJs.WriteAcceptanceTrace("orientation marker requested hidden=True");
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && ticks >= 10)
+                {
+                    _vtkJs.TraceAcceptanceOrientationMarker("hidden");
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ticks >= 10)
+                {
+                    SetCoorSysVisibility(true);
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceOrientationMarker("visible");
+                    stage = 4;
+                    ticks = 0;
+                }
+                else if (stage == 4 && ticks >= 10)
+                {
+                    _vtkJsSmokeOrientationMarkerTimer.Stop();
+                    _vtkJsSmokeOrientationMarkerTimer.Dispose();
+                    _vtkJsSmokeOrientationMarkerTimer = null;
+                }
+                if (ticks > 300 && _vtkJsSmokeOrientationMarkerTimer != null)
+                {
+                    _vtkJs.WriteAcceptanceTrace("orientation marker failed: browser acknowledgement timeout");
+                    _vtkJsSmokeOrientationMarkerTimer.Stop();
+                    _vtkJsSmokeOrientationMarkerTimer.Dispose();
+                    _vtkJsSmokeOrientationMarkerTimer = null;
+                }
+            };
+            _vtkJsSmokeOrientationMarkerTimer.Start();
+        }
+
+        private void StartVtkJsSmokeScaleWidget()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SCALE_WIDGET"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJs.WriteAcceptanceTrace("scale widget timer started");
+            _vtkJsSmokeScaleWidgetTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeScaleWidgetTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                ticks++;
+                if (stage == 0)
+                {
+                    SetScaleWidgetVisibility(false);
+                    _vtkJs.SetScaleWidget(null, "mm");
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scale-unit-browser-only");
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && ticks >= 12)
+                {
+                    _vtkJs.TraceAcceptanceScaleWidget("hidden");
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ticks >= 10)
+                {
+                    SetScaleWidgetVisibility(true);
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceScaleWidget("visible");
+                    stage = 4;
+                    ticks = 0;
+                }
+                else if (stage == 4 && ticks >= 10)
+                {
+                    _vtkJsSmokeScaleWidgetTimer.Stop();
+                    _vtkJsSmokeScaleWidgetTimer.Dispose();
+                    _vtkJsSmokeScaleWidgetTimer = null;
+                }
+            };
+            _vtkJsSmokeScaleWidgetTimer.Start();
+        }
+
+        private void StartVtkJsSmokeScalarLegend()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SCALAR_LEGEND"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJs.WriteAcceptanceTrace("scalar legend timer started");
+            _vtkJsSmokeScalarLegendTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeScalarLegendTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                ticks++;
+                if (stage == 0)
+                {
+                    InitializeResultWidgetPositions();
+                    SetScalarBarColorSpectrum(new vtkMaxColorSpectrum());
+                    SetScalarBarText("Displacements", "Magnitude", "mm", "Real", "Automatic");
+                    SetScalarBarNumberFormat("E3");
+                    DrawLegendBackground(true);
+                    DrawLegendBorder(true);
+                    _vtkJs.SetScalarLegendVisibility(false);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-visibility-browser-only");
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && ticks >= 12)
+                {
+                    _vtkJs.TraceAcceptanceScalarLegend("hidden");
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ticks >= 10)
+                {
+                    _vtkJs.SetScalarLegendVisibility(true);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-visibility-browser-only");
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceScalarLegend("visible");
+                    stage = 4;
+                    ticks = 0;
+                }
+                else if (stage == 4 && ticks >= 10)
+                {
+                    _vtkJsSmokeScalarLegendTimer.Stop();
+                    _vtkJsSmokeScalarLegendTimer.Dispose();
+                    _vtkJsSmokeScalarLegendTimer = null;
+                }
+            };
+            _vtkJsSmokeScalarLegendTimer.Start();
+        }
+
+        private void StartVtkJsSmokeColorBar()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_COLOR_BAR"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJs.WriteAcceptanceTrace("color bar timer started");
+            _vtkJsSmokeColorBarTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeColorBarTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                ticks++;
+                if (stage == 0)
+                {
+                    InitializeColorBarWidgetPosition();
+                    SetColorBarColorsAndLabels(new[] { Color.Red, Color.Blue },
+                                               new[] { "Front_face", "Back-face" });
+                    AddColorBarColorsAndLabels(new[] { Color.Lime }, new[] { "Load_A" });
+                    DrawColorBarBackground(true);
+                    DrawColorBarBorder(false);
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && ticks >= 12)
+                {
+                    _vtkJs.TraceAcceptanceColorBar("visible");
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ticks >= 10)
+                {
+                    HideColorBar();
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ticks >= 12)
+                {
+                    _vtkJs.TraceAcceptanceColorBar("hidden");
+                    stage = 4;
+                    ticks = 0;
+                }
+                else if (stage == 4 && ticks >= 10)
+                {
+                    _vtkJsSmokeColorBarTimer.Stop();
+                    _vtkJsSmokeColorBarTimer.Dispose();
+                    _vtkJsSmokeColorBarTimer = null;
+                }
+            };
+            _vtkJsSmokeColorBarTimer.Start();
+        }
+
+        private void StartVtkJsSmokeStatusBlock()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_STATUS_BLOCK"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJs.WriteAcceptanceTrace("status block timer started");
+            _vtkJsSmokeStatusBlockTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeStatusBlockTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                ticks++;
+                if (stage == 0)
+                {
+                    InitializeResultWidgetPositions();
+                    InitializeColorBarWidgetPosition();
+                    SetStatusBlockVisibility(true);
+                    DrawStatusBlockBackground(true);
+                    DrawStatusBlockBorder(false);
+                    SetStatusBlock("rotor_case.frd", new DateTime(2026, 9, 8, 14, 20, 30), 120, "Hz",
+                                   "DISP", 2.5f, vtkMaxFieldDataType.Frequency, 2, 5);
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && ticks >= 12)
+                {
+                    _vtkJs.TraceAcceptanceStatusBlock("static");
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ticks >= 10)
+                {
+                    _vtkJs.SetAnimationFrameData(new[] { 120f }, new[] { 3 }, new[] { 7 }, new[] { 45f },
+                                                 new double[0], vtkMaxAnimationType.Harmonic);
+                    SetAnimationFrame(0, false);
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ticks >= 12)
+                {
+                    _vtkJs.TraceAcceptanceStatusBlock("animated");
+                    stage = 4;
+                    ticks = 0;
+                }
+                else if (stage == 4 && ticks >= 10)
+                {
+                    SetStatusBlockVisibility(false);
+                    stage = 5;
+                    ticks = 0;
+                }
+                else if (stage == 5 && ticks >= 12)
+                {
+                    _vtkJs.TraceAcceptanceStatusBlock("hidden");
+                    stage = 6;
+                    ticks = 0;
+                }
+                else if (stage == 6 && ticks >= 10)
+                {
+                    _vtkJsSmokeStatusBlockTimer.Stop();
+                    _vtkJsSmokeStatusBlockTimer.Dispose();
+                    _vtkJsSmokeStatusBlockTimer = null;
+                }
+            };
+            _vtkJsSmokeStatusBlockTimer.Start();
+        }
+
+        private void StartVtkJsSmokeCellClassification()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_CELL_CLASSIFICATION"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            const string surfaceName = "__VtkJsSmokeStripPixelSurface";
+            const string polylineName = "__VtkJsSmokePolyline";
+            int baselineActors = 0;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJsSmokeCellClassificationTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeCellClassificationTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                if (stage == 0)
+                {
+                    baselineActors = _vtkJs.BrowserAppliedActorCount;
+                    var surface = new vtkMaxActorData
+                    {
+                        Name = surfaceName, Layer = vtkRendererLayer.Base, Pickable = false,
+                        Color = Color.SteelBlue, SectionViewPossible = false
+                    };
+                    surface.Geometry.Nodes.Coor = new[]
+                    {
+                        new[] { 0.0, 0.0, 0.4 }, new[] { 0.4, 0.0, 0.4 },
+                        new[] { 0.0, 0.4, 0.4 }, new[] { 0.4, 0.4, 0.4 },
+                        new[] { 0.6, 0.0, 0.4 }, new[] { 1.0, 0.0, 0.4 },
+                        new[] { 0.6, 0.4, 0.4 }, new[] { 1.0, 0.4, 0.4 }
+                    };
+                    surface.Geometry.Cells.Ids = new[] { 501, 502 };
+                    surface.Geometry.Cells.CellNodeIds = new[] { new[] { 0, 1, 2, 3 }, new[] { 4, 5, 6, 7 } };
+                    surface.Geometry.Cells.Types = new[] { 6, 8 };
+                    var polyline = new vtkMaxActorData
+                    {
+                        Name = polylineName, Layer = vtkRendererLayer.Base, Pickable = false,
+                        Color = Color.DarkOrange, LineWidth = 3, SectionViewPossible = false
+                    };
+                    polyline.Geometry.Nodes.Coor = new[]
+                    {
+                        new[] { 0.0, 0.0, 0.5 }, new[] { 0.3, 0.2, 0.5 }, new[] { 0.6, 0.0, 0.5 }
+                    };
+                    polyline.Geometry.Cells.CellNodeIds = new[] { new[] { 0, 1, 2 } };
+                    polyline.Geometry.Cells.Types = new[] { 4 };
+                    vtkMaxActor surfaceHandle = Add3DCells(surface);
+                    vtkMaxActor polylineHandle = Add3DCells(polyline);
+
+                    var mixedUnsupported = new vtkMaxActorData
+                    {
+                        Name = "__VtkJsSmokeMixedUnsupported", Layer = vtkRendererLayer.Base, Pickable = false
+                    };
+                    mixedUnsupported.Geometry.Nodes.Coor = new[]
+                    {
+                        new[] { 0.0, 0.0, 0.0 }, new[] { 1.0, 0.0, 0.0 },
+                        new[] { 0.0, 1.0, 0.0 }, new[] { 0.0, 0.0, 1.0 }
+                    };
+                    mixedUnsupported.Geometry.Cells.CellNodeIds = new[]
+                    {
+                        new[] { 0, 1, 2 }, new[] { 0, 1, 2, 3 }
+                    };
+                    mixedUnsupported.Geometry.Cells.Types = new[] { 5, 10 };
+                    bool mixedRejected = !_vtkJs.CaptureAuxiliaryActor(mixedUnsupported);
+                    var pickablePoint = new vtkMaxActorData
+                    {
+                        Name = "__VtkJsSmokePickablePoint", Layer = vtkRendererLayer.Base, Pickable = true
+                    };
+                    pickablePoint.Geometry.Nodes.Coor = new[] { new[] { 0.0, 0.0, 0.0 } };
+                    bool pickablePointRejected = !_vtkJs.CaptureAuxiliaryPrimitive(pickablePoint);
+                    _vtkJs.WriteAcceptanceTrace("cell classification requested surfaceHandleNull=" +
+                        (surfaceHandle == null) + " polylineHandleNull=" + (polylineHandle == null) +
+                        " mixedRejected=" + mixedRejected + " pickablePointRejected=" + pickablePointRejected);
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && _vtkJs.BrowserAppliedActorCount == baselineActors + 1 &&
+                         ContainsActor(surfaceName) && ContainsActor(polylineName) && ++ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceCellClassification(surfaceName, polylineName);
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ++ticks >= 20)
+                {
+                    _vtkJs.RemoveActors(new[] { surfaceName, polylineName });
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ++ticks >= 20)
+                {
+                    _vtkJs.WriteAcceptanceTrace("cell classification removal contains surface=" +
+                                                ContainsActor(surfaceName) + " polyline=" +
+                                                ContainsActor(polylineName));
+                    _vtkJsSmokeCellClassificationTimer.Stop();
+                    _vtkJsSmokeCellClassificationTimer.Dispose();
+                    _vtkJsSmokeCellClassificationTimer = null;
+                }
+                if (++ticks > 300 && _vtkJsSmokeCellClassificationTimer != null)
+                {
+                    _vtkJs.WriteAcceptanceTrace("cell classification failed: browser acknowledgement timeout");
+                    _vtkJsSmokeCellClassificationTimer.Stop();
+                    _vtkJsSmokeCellClassificationTimer.Dispose();
+                    _vtkJsSmokeCellClassificationTimer = null;
+                }
+            };
+            _vtkJsSmokeCellClassificationTimer.Start();
+        }
+
+        private void StartVtkJsSmokeGenericConstruction()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_GENERIC_CONSTRUCTION"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            const string surfaceName = "__VtkJsSmokePickableSurface";
+            const string pointName = "__VtkJsSmokeOverlayPoint";
+            int baselineActors = 0;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJsSmokeGenericConstructionTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeGenericConstructionTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                if (stage == 0)
+                {
+                    baselineActors = _vtkJs.BrowserAppliedActorCount;
+                    var surface = new vtkMaxActorData
+                    {
+                        Name = surfaceName, Layer = vtkRendererLayer.Base, Pickable = true,
+                        Color = Color.MediumPurple, SectionViewPossible = false
+                    };
+                    surface.Geometry.Nodes.Ids = new[] { 301, 302, 303 };
+                    surface.Geometry.Nodes.Coor = new[]
+                    {
+                        new[] { 0.0, 0.0, 0.2 }, new[] { 0.4, 0.0, 0.2 }, new[] { 0.0, 0.4, 0.2 }
+                    };
+                    surface.Geometry.Cells.Ids = new[] { 401 };
+                    surface.Geometry.Cells.CellNodeIds = new[] { new[] { 0, 1, 2 } };
+                    surface.Geometry.Cells.Types = new[] { 5 };
+                    surface.CellLocator = surface.Geometry;
+                    var point = new vtkMaxActorData
+                    {
+                        Name = pointName, Layer = vtkRendererLayer.Overlay, Pickable = false,
+                        Color = Color.Gold, NodeSize = 8, SectionViewPossible = false
+                    };
+                    point.Geometry.Nodes.Coor = new[] { new[] { 0.2, 0.2, 0.3 } };
+                    vtkMaxActor surfaceHandle = Add3DCells(surface);
+                    vtkMaxActor pointHandle = Add3DNodes(point);
+                    AddActor(null);
+                    _vtkJs.WriteAcceptanceTrace("generic construction requested surfaceHandleNull=" +
+                                                (surfaceHandle == null) + " pointHandleNull=" +
+                                                (pointHandle == null));
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && _vtkJs.BrowserAppliedActorCount == baselineActors + 1 &&
+                         ContainsActor(surfaceName) && ContainsActor(pointName) && ++ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceGenericConstruction(surfaceName, pointName);
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ++ticks >= 20)
+                {
+                    _vtkJs.RemoveActors(new[] { surfaceName, pointName });
+                    _vtkJs.WriteAcceptanceTrace("generic removal requested");
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ++ticks >= 20)
+                {
+                    _vtkJs.WriteAcceptanceTrace("generic removal contains surface=" + ContainsActor(surfaceName) +
+                                                " point=" + ContainsActor(pointName));
+                    _vtkJsSmokeGenericConstructionTimer.Stop();
+                    _vtkJsSmokeGenericConstructionTimer.Dispose();
+                    _vtkJsSmokeGenericConstructionTimer = null;
+                }
+                if (++ticks > 300 && _vtkJsSmokeGenericConstructionTimer != null)
+                {
+                    _vtkJs.WriteAcceptanceTrace("generic construction failed: browser acknowledgement timeout");
+                    _vtkJsSmokeGenericConstructionTimer.Stop();
+                    _vtkJsSmokeGenericConstructionTimer.Dispose();
+                    _vtkJsSmokeGenericConstructionTimer = null;
+                }
+            };
+            _vtkJsSmokeGenericConstructionTimer.Start();
+        }
+
+        private void StartVtkJsSmokeAuxiliaryConstruction()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_AUXILIARY_CONSTRUCTION"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            const string surfaceName = "__VtkJsSmokeAuxiliarySurface";
+            const string lineName = "__VtkJsSmokeAuxiliaryLine";
+            const string pointName = "__VtkJsSmokeAuxiliaryPoint";
+            int baselineActors = 0;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJsSmokeAuxiliaryConstructionTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeAuxiliaryConstructionTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady || !_vtkJs.HasPublishedTopology ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                if (stage == 0)
+                {
+                    baselineActors = _vtkJs.BrowserAppliedActorCount;
+                    var surface = new vtkMaxActorData
+                    {
+                        Name = surfaceName, Layer = vtkRendererLayer.Base, Pickable = false,
+                        Color = Color.CornflowerBlue, SectionViewPossible = false
+                    };
+                    surface.Geometry.Nodes.Ids = new[] { 101, 102, 103 };
+                    surface.Geometry.Nodes.Coor = new[]
+                    {
+                        new[] { 0.0, 0.0, 0.0 }, new[] { 0.5, 0.0, 0.0 }, new[] { 0.0, 0.5, 0.0 }
+                    };
+                    surface.Geometry.Cells.Ids = new[] { 201 };
+                    surface.Geometry.Cells.CellNodeIds = new[] { new[] { 0, 1, 2 } };
+                    surface.Geometry.Cells.Types = new[] { 5 };
+                    var line = new vtkMaxActorData
+                    {
+                        Name = lineName, Layer = vtkRendererLayer.Base, Pickable = false,
+                        Color = Color.DarkSlateGray, LineWidth = 2, SectionViewPossible = false
+                    };
+                    line.Geometry.Nodes.Coor = new[] { new[] { 0.0, 0.0, 0.0 }, new[] { 0.5, 0.5, 0.0 } };
+                    line.Geometry.Cells.CellNodeIds = new[] { new[] { 0, 1 } };
+                    line.Geometry.Cells.Types = new[] { 3 };
+                    Add3DCells(new[] { surface, line });
+                    var point = new vtkMaxActorData
+                    {
+                        Name = pointName, Layer = vtkRendererLayer.Base, Pickable = false,
+                        Color = Color.OrangeRed, NodeSize = 7, SectionViewPossible = false
+                    };
+                    point.Geometry.Nodes.Coor = new[] { new[] { 0.25, 0.25, 0.1 } };
+                    vtkMaxActor pointHandle = Add3DNodes(point);
+                    vtkMaxActor openFoamHandle = AddOpenFoamMesh("__browser_bypass__.foam", 0,
+                        "__VtkJsSmokeOpenFoam", Color.Gray);
+                    _vtkJs.WriteAcceptanceTrace("auxiliary construction requested pointHandleNull=" +
+                                                (pointHandle == null) + " openFoamHandleNull=" +
+                                                (openFoamHandle == null));
+                    stage = 1;
+                    ticks = 0;
+                }
+                else if (stage == 1 && _vtkJs.BrowserAppliedActorCount == baselineActors + 1 &&
+                         ContainsActor(surfaceName) && ContainsActor(lineName) && ContainsActor(pointName) &&
+                         ++ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceAuxiliaryPrimitives("added");
+                    stage = 2;
+                    ticks = 0;
+                }
+                else if (stage == 2 && ++ticks >= 15)
+                {
+                    Clear3DSelection();
+                    stage = 3;
+                    ticks = 0;
+                }
+                else if (stage == 3 && ++ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceAuxiliaryPrimitives("retained-after-selection-clear");
+                    stage = 4;
+                    ticks = 0;
+                }
+                else if (stage == 4 && ++ticks >= 15)
+                {
+                    HideActors(new[] { lineName }, false);
+                    stage = 5;
+                    ticks = 0;
+                }
+                else if (stage == 5 && ++ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceAuxiliaryPrimitives("hidden");
+                    stage = 6;
+                    ticks = 0;
+                }
+                else if (stage == 6 && ++ticks >= 15)
+                {
+                    ShowActors(new[] { lineName }, false);
+                    stage = 7;
+                    ticks = 0;
+                }
+                else if (stage == 7 && ++ticks >= 15)
+                {
+                    _vtkJs.TraceAcceptanceAuxiliaryPrimitives("shown");
+                    stage = 8;
+                    ticks = 0;
+                }
+                else if (stage == 8 && ++ticks >= 15)
+                {
+                    _vtkJs.RemoveActors(new[] { surfaceName, lineName, pointName });
+                    stage = 9;
+                    ticks = 0;
+                }
+                else if (stage == 9 && ++ticks >= 20)
+                {
+                    _vtkJs.WriteAcceptanceTrace("auxiliary removal contains surface=" + ContainsActor(surfaceName) +
+                                                " line=" + ContainsActor(lineName) +
+                                                " point=" + ContainsActor(pointName));
+                    _vtkJs.TraceAcceptanceAuxiliaryPrimitives("removed");
+                    _vtkJsSmokeAuxiliaryConstructionTimer.Stop();
+                    _vtkJsSmokeAuxiliaryConstructionTimer.Dispose();
+                    _vtkJsSmokeAuxiliaryConstructionTimer = null;
+                }
+                if (++ticks > 300 && _vtkJsSmokeAuxiliaryConstructionTimer != null)
+                {
+                    _vtkJs.WriteAcceptanceTrace("auxiliary construction failed: browser acknowledgement timeout");
+                    _vtkJsSmokeAuxiliaryConstructionTimer.Stop();
+                    _vtkJsSmokeAuxiliaryConstructionTimer.Dispose();
+                    _vtkJsSmokeAuxiliaryConstructionTimer = null;
+                }
+            };
+            _vtkJsSmokeAuxiliaryConstructionTimer.Start();
+        }
+
+        private void StartVtkJsSmokeSelectionPrimitives()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SELECTION_PRIMITIVES"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            int ticks = 0;
+            _vtkJsSmokeSelectionPrimitiveTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeSelectionPrimitiveTimer.Tick += (sender, args) =>
+            {
+                if (stage == 0)
+                {
+                    if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                        _vtkJs.BrowserAppliedActorCount == 0) return;
+                    var points = new vtkMaxActorData
+                    {
+                        Name = "__VtkJsSmokeSelectionPoints",
+                        Layer = vtkRendererLayer.Selection,
+                        Color = Color.Lime,
+                        NodeSize = 9,
+                        Pickable = false
+                    };
+                    points.Geometry.Nodes.Coor = new[]
+                    {
+                        new[] { 0.0, 0.0, 0.0 }, new[] { 0.25, 0.25, 0.25 }
+                    };
+                    vtkMaxActor pointHandle = Add3DNodes(points);
+                    var line = new vtkMaxActorData
+                    {
+                        Name = "__VtkJsSmokeSelectionQuadraticLine",
+                        Layer = vtkRendererLayer.Selection,
+                        Color = Color.Cyan,
+                        LineWidth = 4,
+                        Pickable = false
+                    };
+                    line.Geometry.Nodes.Coor = new[]
+                    {
+                        new[] { 0.0, 0.0, 0.0 }, new[] { 1.0, 0.0, 0.0 }, new[] { 0.5, 0.25, 0.0 }
+                    };
+                    line.Geometry.Cells.CellNodeIds = new[] { new[] { 0, 1, 2 } };
+                    line.Geometry.Cells.Types = new[] { 21 };
+                    vtkMaxActor lineHandle = Add3DCells(line);
+                    _vtkJs.WriteAcceptanceTrace("transient primitives requested pointHandleNull=" +
+                                                (pointHandle == null) + " lineHandleNull=" + (lineHandle == null));
+                    stage = 1;
+                    ticks = 0;
+                    return;
+                }
+                if (stage == 1 && ++ticks >= 20)
+                {
+                    _vtkJs.TraceAcceptanceTransientPrimitives("added");
+                    stage = 2;
+                    ticks = 0;
+                    return;
+                }
+                if (stage == 2 && ++ticks >= 60)
+                {
+                    Clear3DSelection();
+                    stage = 3;
+                    ticks = 0;
+                    return;
+                }
+                if (stage == 3 && ++ticks >= 40)
+                {
+                    _vtkJs.TraceAcceptanceTransientPrimitives("cleared");
+                    _vtkJsSmokeSelectionPrimitiveTimer.Stop();
+                    _vtkJsSmokeSelectionPrimitiveTimer.Dispose();
+                    _vtkJsSmokeSelectionPrimitiveTimer = null;
+                    return;
+                }
+                if (++ticks >= 300)
+                {
+                    _vtkJs.WriteAcceptanceTrace("transient primitives failed: browser acknowledgement timeout");
+                    _vtkJsSmokeSelectionPrimitiveTimer.Stop();
+                    _vtkJsSmokeSelectionPrimitiveTimer.Dispose();
+                    _vtkJsSmokeSelectionPrimitiveTimer = null;
+                }
+            };
+            _vtkJsSmokeSelectionPrimitiveTimer.Start();
+        }
+
+        private void StartVtkJsSmokeSelectionSurface()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SELECTION_SURFACE"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            const string actorName = "__VtkJsSmokeSelectionSurface";
+            int stage = 0;
+            int ticks = 0;
+            int baselineActors = 0;
+            SelectionCache smokeCache = new SelectionCache(1);
+            _vtkJsSmokeSelectionSurfaceTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeSelectionSurfaceTimer.Tick += (sender, args) =>
+            {
+                if (stage == 0)
+                {
+                    if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                        _vtkJs.BrowserAppliedActorCount == 0) return;
+                    vtkMaxActorData data = _vtkJs.GetExportActorData().FirstOrDefault();
+                    if (data == null) return;
+                    baselineActors = _vtkJs.GetCapturedActorNames().Length;
+                    data.Name = actorName;
+                    data.IsAPart = false;
+                    data.Layer = vtkRendererLayer.Selection;
+                    data.Pickable = false;
+                    data.ColorContours = false;
+                    data.Color = Color.Orange;
+                    data.CellLocator = null;
+                    smokeCache.AddActorData(actorName, new vtkMaxActorData[] { data });
+                    if (!smokeCache.TryGetActorData(actorName, out vtkMaxActorData[] cachedData) ||
+                        cachedData.Length != 1)
+                    {
+                        _vtkJs.WriteAcceptanceTrace("transient selection failed: renderer-neutral cache miss");
+                        return;
+                    }
+                    Add3DSelectionCells(cachedData[0]);
+                    _vtkJs.WriteAcceptanceTrace("transient selection cache actorData=" + cachedData.Length +
+                                                " entries=" + smokeCache.Count);
+                    _vtkJs.WriteAcceptanceTrace("transient selection requested baselineActors=" + baselineActors);
+                    stage = 1;
+                    ticks = 0;
+                    return;
+                }
+                if (stage == 1 && _vtkJs.GetCapturedActorNames().Contains(actorName) &&
+                    _vtkJs.BrowserAppliedActorCount == baselineActors + 1)
+                {
+                    bool exportExcluded = !_vtkJs.GetExportActorData().Any(actor => actor.Name == actorName);
+                    _vtkJs.WriteAcceptanceTrace("transient selection exportExcluded=" + exportExcluded);
+                    _vtkJs.TraceAcceptanceTransientSelection(actorName, "added");
+                    stage = 2;
+                    ticks = 0;
+                    return;
+                }
+                if (stage == 2 && ++ticks >= 80)
+                {
+                    Clear3DSelection();
+                    stage = 3;
+                    ticks = 0;
+                    return;
+                }
+                if (stage == 3 && ++ticks >= 40)
+                {
+                    _vtkJs.TraceAcceptanceTransientSelection(actorName, "cleared");
+                    _vtkJsSmokeSelectionSurfaceTimer.Stop();
+                    _vtkJsSmokeSelectionSurfaceTimer.Dispose();
+                    _vtkJsSmokeSelectionSurfaceTimer = null;
+                    return;
+                }
+                if (++ticks >= 300)
+                {
+                    _vtkJs.WriteAcceptanceTrace("transient selection failed: browser acknowledgement timeout");
+                    _vtkJsSmokeSelectionSurfaceTimer.Stop();
+                    _vtkJsSmokeSelectionSurfaceTimer.Dispose();
+                    _vtkJsSmokeSelectionSurfaceTimer = null;
+                }
+            };
+            _vtkJsSmokeSelectionSurfaceTimer.Start();
+        }
+
+        private void StartVtkJsSmokeStaticScalarConstruction()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_STATIC_SCALAR_CONSTRUCTION"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            int ticks = 0;
+            long previousRevision = 0;
+            Guid previousSceneId = Guid.Empty;
+            string actorName = null;
+            int scalarPointCount = 0;
+            _vtkJsSmokeStaticScalarConstructionTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeStaticScalarConstructionTimer.Tick += (sender, args) =>
+            {
+                if (stage == 0)
+                {
+                    if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                        _vtkJs.BrowserAppliedActorCount == 0 || _vtkJs.BrowserAppliedPipelineChunks == 0) return;
+                    vtkMaxActorData data = _vtkJs.GetExportActorData().FirstOrDefault();
+                    if (data == null || data.Geometry == null || data.Geometry.Nodes == null ||
+                        data.Geometry.Nodes.Coor == null || data.Geometry.Nodes.Coor.Length == 0) return;
+                    float[] existingValues = data.Geometry.Nodes.Values;
+                    float[] finiteValues = existingValues == null ? new float[0] : existingValues
+                        .Where(value => !float.IsNaN(value) && !float.IsInfinity(value)).ToArray();
+                    if (data.ColorContours && finiteValues.Length > 0)
+                    {
+                        _vtkJs.WriteAcceptanceTrace("static scalar construction observed points=" +
+                                                    data.Geometry.Nodes.Coor.Length +
+                                                    " range=" + finiteValues.Min().ToString(System.Globalization.CultureInfo.InvariantCulture) +
+                                                    ".." + finiteValues.Max().ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        _vtkJs.WriteAcceptanceTrace("static scalar construction applied revision=" +
+                                                    _vtkJs.BrowserAppliedSceneRevision);
+                        _vtkJsSmokeStaticScalarConstructionTimer.Stop();
+                        _vtkJsSmokeStaticScalarConstructionTimer.Dispose();
+                        _vtkJsSmokeStaticScalarConstructionTimer = null;
+                        return;
+                    }
+                    data.ColorContours = true;
+                    actorName = data.Name;
+                    scalarPointCount = data.Geometry.Nodes.Coor.Length;
+                    data.Geometry.Nodes.Values = Enumerable.Range(0, data.Geometry.Nodes.Coor.Length)
+                        .Select(index => index == 0 ? -3f : index == data.Geometry.Nodes.Coor.Length - 1 ? 7f : index / 10f)
+                        .ToArray();
+                    previousRevision = _vtkJs.BrowserAppliedSceneRevision;
+                    previousSceneId = _vtkJs.BrowserAppliedSceneId;
+                    AddScalarFieldOn3DCells(data, true);
+                    _vtkJs.WriteAcceptanceTrace("static scalar construction requested points=" +
+                                                data.Geometry.Nodes.Coor.Length);
+                    stage = 1;
+                    return;
+                }
+                if (_vtkJs.BrowserAppliedSceneId != Guid.Empty &&
+                    (_vtkJs.BrowserAppliedSceneId != previousSceneId ||
+                     _vtkJs.BrowserAppliedSceneRevision > previousRevision))
+                {
+                    if (stage == 1)
+                    {
+                        _vtkJs.WriteAcceptanceTrace("static scalar construction applied revision=" +
+                                                    _vtkJs.BrowserAppliedSceneRevision);
+                        float[] updatedValues = Enumerable.Range(0, scalarPointCount)
+                            .Select(index => index == 0 ? -5f : index == scalarPointCount - 1 ? 9f : index / 5f)
+                            .ToArray();
+                        _vtkJs.ArmStaticScalarUpdateAcceptance();
+                        UpdateActorSurfaceScalarField(actorName, updatedValues, null, null, true);
+                        _vtkJs.WriteAcceptanceTrace("static scalar update requested points=" + scalarPointCount);
+                        _vtkJsSmokeStaticScalarConstructionTimer.Stop();
+                        _vtkJsSmokeStaticScalarConstructionTimer.Dispose();
+                        _vtkJsSmokeStaticScalarConstructionTimer = null;
+                    }
+                }
+                else if (++ticks > 300)
+                {
+                    _vtkJs.WriteAcceptanceTrace("static scalar construction failed: browser acknowledgement timeout");
+                    _vtkJsSmokeStaticScalarConstructionTimer.Stop();
+                    _vtkJsSmokeStaticScalarConstructionTimer.Dispose();
+                    _vtkJsSmokeStaticScalarConstructionTimer = null;
+                }
+            };
+            _vtkJsSmokeStaticScalarConstructionTimer.Start();
+        }
+
+        private void StartVtkJsSmokeThreeMfExportInput()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_3MF_EXPORT_INPUT"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeThreeMfExportInputTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeThreeMfExportInputTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                    _vtkJs.BrowserAppliedActorCount == 0 || _vtkJs.BrowserAppliedPipelineChunks == 0) return;
+                _vtkJsSmokeThreeMfExportInputTimer.Stop();
+                _vtkJsSmokeThreeMfExportInputTimer.Dispose();
+                _vtkJsSmokeThreeMfExportInputTimer = null;
+                try
+                {
+                    vtkMaxActorData[] data = GetVtkMaxActorData();
+                    vtkMaxLookupTable lookupTable = GetLookupTable();
+                    int paletteCount = 0;
+                    foreach (vtkColorSpectrumType type in Enum.GetValues(typeof(vtkColorSpectrumType)))
+                    {
+                        var spectrum = new vtkMaxColorSpectrum
+                        {
+                            Type = type,
+                            NumberOfColors = 9,
+                            ReverseColors = paletteCount % 2 != 0,
+                            ColorBrightness = 0.2
+                        };
+                        _vtkJs.SetColorSpectrum(spectrum);
+                        vtkMaxLookupTable palette = GetLookupTable();
+                        if (palette.Colors.Length != 9)
+                            throw new InvalidOperationException("Managed 3MF palette has an unexpected color count for " + type + ".");
+                        paletteCount++;
+                    }
+                    var manualSpectrum = new vtkMaxColorSpectrum
+                    {
+                        Type = vtkColorSpectrumType.Viridis,
+                        MinMaxType = vtkColorSpectrumMinMaxType.Manual,
+                        MinUserValue = 0.25,
+                        MaxUserValue = 0.75,
+                        NumberOfColors = 9
+                    };
+                    _vtkJs.SetColorSpectrum(manualSpectrum);
+                    vtkMaxLookupTable manualLookup = GetLookupTable();
+                    if (manualLookup.Colors.Length != 11 || manualLookup.MinimumValue >= 0.25 ||
+                        manualLookup.MaximumValue <= 0.75)
+                        throw new InvalidOperationException("Managed 3MF manual range colors were not extended correctly.");
+                    _vtkJs.SetColorSpectrum(new vtkMaxColorSpectrum());
+                    long points = data.Where(actor => actor.Geometry != null).Sum(actor =>
+                        actor.Geometry.Nodes == null || actor.Geometry.Nodes.Coor == null
+                            ? 0L : actor.Geometry.Nodes.Coor.LongLength);
+                    long cells = data.Where(actor => actor.Geometry != null).Sum(actor =>
+                        actor.Geometry.Cells == null || actor.Geometry.Cells.CellNodeIds == null
+                            ? 0L : actor.Geometry.Cells.CellNodeIds.LongLength);
+                    _vtkJs.WriteAcceptanceTrace("3mf export input actors=" + data.Length +
+                                                " points=" + points + " cells=" + cells +
+                                                " lookupColors=" + lookupTable.Colors.Length +
+                                                " lookupRange=" + lookupTable.MinimumValue.ToString(System.Globalization.CultureInfo.InvariantCulture) +
+                                                ".." + lookupTable.MaximumValue.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    _vtkJs.WriteAcceptanceTrace("3mf lookup palettes=" + paletteCount +
+                                                " manualColors=" + manualLookup.Colors.Length);
+                }
+                catch (Exception exception)
+                {
+                    _vtkJs.WriteAcceptanceTrace("3mf export input failed: " + exception.Message);
+                }
+            };
+            _vtkJsSmokeThreeMfExportInputTimer.Start();
+        }
+
+        private void StartVtkJsSmokeSceneClear()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            string triggerPath = Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR_TRIGGER");
+            int stableActorCount = -1;
+            _vtkJsSmokeSceneClearStage = 0;
+            _vtkJsSmokeSceneClearTicks = 0;
+            _vtkJsSmokeSceneClearTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeSceneClearTimer.Tick += (sender, args) =>
+            {
+                if (_vtkJsSmokeSceneClearStage == 0)
+                {
+                    if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                        _vtkJs.BrowserAppliedActorCount == 0 || _vtkJs.BrowserAppliedPipelineChunks == 0) return;
+                    string actorName = _vtkJs.GetCapturedActorNames().FirstOrDefault();
+                    if (actorName == null) return;
+                    _vtkJs.SetSelection("part", new int[0], new string[] { actorName });
+                    HighlightActor(actorName);
+                    stableActorCount = _vtkJs.GetCapturedActorNames().Length;
+                    _vtkJsSmokeSceneClearTicks = 0;
+                    _vtkJsSmokeSceneClearStage = 1;
+                    return;
+                }
+                bool externallyTriggered = !string.IsNullOrWhiteSpace(triggerPath) && File.Exists(triggerPath);
+                int currentActorCount = _vtkJs.GetCapturedActorNames().Length;
+                if (_vtkJsSmokeSceneClearStage == 1 &&
+                    (currentActorCount != stableActorCount || _vtkJs.BrowserAppliedActorCount != currentActorCount))
+                {
+                    stableActorCount = currentActorCount;
+                    _vtkJsSmokeSceneClearTicks = 0;
+                    return;
+                }
+                bool stableLongEnough = ++_vtkJsSmokeSceneClearTicks >= 30;
+                bool fallbackElapsed = string.IsNullOrWhiteSpace(triggerPath) && _vtkJsSmokeSceneClearTicks >= 60;
+                if (_vtkJsSmokeSceneClearStage == 1 && stableLongEnough && (externallyTriggered || fallbackElapsed))
+                {
+                    Clear3D();
+                    _vtkJs.WriteAcceptanceTrace("scene clear requested");
+                    _vtkJsSmokeSceneClearStage = 2;
+                    _vtkJsSmokeSceneClearTicks = 0;
+                    return;
+                }
+                if (_vtkJsSmokeSceneClearStage == 2 && ++_vtkJsSmokeSceneClearTicks >= 20)
+                {
+                    _vtkJs.TraceAcceptanceSceneCleared();
+                    _vtkJsSmokeSceneClearTimer.Stop();
+                    _vtkJsSmokeSceneClearTimer.Dispose();
+                    _vtkJsSmokeSceneClearTimer = null;
+                }
+            };
+            _vtkJsSmokeSceneClearTimer.Start();
+        }
+
+        private void StartVtkJsSmokeActorHighlight()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ACTOR_HIGHLIGHT"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeActorHighlightStage = 0;
+            _vtkJsSmokeActorHighlightTicks = 0;
+            _vtkJsSmokeActorHighlightTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeActorHighlightTimer.Tick += (sender, args) =>
+            {
+                if (_vtkJsSmokeActorHighlightStage == 0)
+                {
+                    if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                        _vtkJs.BrowserAppliedActorCount == 0 || _vtkJs.BrowserAppliedPipelineChunks == 0) return;
+                    string[] actorNames = _vtkJs.GetCapturedActorNames();
+                    if (actorNames.Length == 0) return;
+                    _vtkJs.SetSelection("part", new int[0], new string[] { actorNames[0] });
+                    HighlightActor(actorNames[0]);
+                    _vtkJs.TraceAcceptanceSelectionState("populated");
+                    _vtkJs.TraceAcceptanceActorHighlights("added");
+                    _vtkJsSmokeActorHighlightStage = 1;
+                    return;
+                }
+                if (++_vtkJsSmokeActorHighlightTicks < 15) return;
+                Clear3DSelection();
+                _vtkJs.TraceAcceptanceSelectionState("cleared");
+                _vtkJs.TraceAcceptanceActorHighlights("cleared");
+                _vtkJsSmokeActorHighlightTimer.Stop();
+                _vtkJsSmokeActorHighlightTimer.Dispose();
+                _vtkJsSmokeActorHighlightTimer = null;
+            };
+            _vtkJsSmokeActorHighlightTimer.Start();
+        }
+
+        private void StartVtkJsSmokeActorPresentation()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ACTOR_PRESENTATION"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeActorPresentationTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeActorPresentationTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                    _vtkJs.BrowserAppliedActorCount == 0 || _vtkJs.BrowserAppliedPipelineChunks == 0) return;
+                string[] actorNames = _vtkJs.GetCapturedActorNames();
+                if (actorNames.Length == 0) return;
+                _vtkJsSmokeActorPresentationTimer.Stop();
+                _vtkJsSmokeActorPresentationTimer.Dispose();
+                _vtkJsSmokeActorPresentationTimer = null;
+                string oldName = actorNames[0];
+                string newName = oldName + " [VTK.js presentation smoke]";
+                bool containedBefore = ContainsActor(oldName);
+                UpdateActor(oldName, newName, Color.FromArgb(32, 96, 160));
+                bool oldRemoved = !ContainsActor(oldName);
+                bool newContained = ContainsActor(newName);
+                UpdateActorColorContoursVisibility(new string[] { newName }, false);
+                _vtkJs.WriteAcceptanceTrace("actor registry " + containedBefore + "|" + oldRemoved + "|" + newContained);
+                _vtkJs.TraceAcceptanceActorPresentation(newName);
+            };
+            _vtkJsSmokeActorPresentationTimer.Start();
+        }
+
+        private void StartVtkJsSmokeViewportAppearance()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_VIEWPORT_APPEARANCE"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeViewportAppearanceTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeViewportAppearanceTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeViewportAppearanceTimer.Stop();
+                _vtkJsSmokeViewportAppearanceTimer.Dispose();
+                _vtkJsSmokeViewportAppearanceTimer = null;
+                SetBackground(true, Color.FromArgb(12, 34, 56), Color.FromArgb(78, 90, 123), true);
+                SetLighting(0.35, 0.65, true);
+                _vtkJs.WriteAcceptanceTrace("viewport appearance requested");
+                _vtkJs.TraceAcceptanceViewportAppearance();
+            };
+            _vtkJsSmokeViewportAppearanceTimer.Start();
+        }
+
+        private void StartVtkJsSmokeFluxGlyph()
+        {
+            bool requested = string.Equals(Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_FLUX_GLYPH"),
+                                           "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeFluxGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeFluxGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeFluxGlyphTimer.Stop();
+                _vtkJsSmokeFluxGlyphTimer.Dispose();
+                _vtkJsSmokeFluxGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js flux smoke",
+                    Color = Color.Orange,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { 1, 0, 0 }, new double[] { 0, 1, 0 }
+                };
+                AddOrientedFluxActor(data, 24, false, true);
+                _vtkJs.WriteAcceptanceTrace("flux glyph requested");
+                _vtkJs.TraceAcceptanceDirectionalGlyphs();
+            };
+            _vtkJsSmokeFluxGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeThermalGlyph()
+        {
+            bool requested = string.Equals(Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_THERMAL_GLYPH"),
+                                           "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeThermalGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeThermalGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeThermalGlyphTimer.Stop();
+                _vtkJsSmokeThermalGlyphTimer.Dispose();
+                _vtkJsSmokeThermalGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js thermal smoke",
+                    Color = Color.Firebrick,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { 1, 0, 0 }, new double[] { 0, 1, 0 }
+                };
+                AddOrientedThermosActor(data, 24, true);
+                _vtkJs.WriteAcceptanceTrace("thermal glyph requested");
+                _vtkJs.TraceAcceptanceDirectionalGlyphs();
+            };
+            _vtkJsSmokeThermalGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeSpringGlyph()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SPRING_GLYPH"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeSpringGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeSpringGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeSpringGlyphTimer.Stop();
+                _vtkJsSmokeSpringGlyphTimer.Dispose();
+                _vtkJsSmokeSpringGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js oriented spring smoke",
+                    Color = Color.ForestGreen,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { 1, 0, 0 }, new double[] { 0, 1, 0 }
+                };
+                AddOrientedSpringActor(data, 24, true);
+                _vtkJs.WriteAcceptanceTrace("spring glyph requested");
+                _vtkJs.TraceAcceptanceDirectionalGlyphs();
+            };
+            _vtkJsSmokeSpringGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeGeneralConeGlyph()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_GENERAL_CONE_GLYPH"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJs.WriteAcceptanceTrace("general cone glyph smoke armed");
+            _vtkJsSmokeGeneralConeGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeGeneralConeGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeGeneralConeGlyphTimer.Stop();
+                _vtkJsSmokeGeneralConeGlyphTimer.Dispose();
+                _vtkJsSmokeGeneralConeGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js general cone smoke",
+                    Color = Color.Crimson,
+                    Layer = vtkRendererLayer.Selection
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { -1, 0, 0 }, new double[] { 0, 1, 0 }
+                };
+                try
+                {
+                    AddOrientedConeActors(data, 24);
+                    _vtkJs.WriteAcceptanceTrace("general cone glyph requested");
+                    _vtkJs.TraceAcceptanceDirectionalGlyphs();
+                }
+                catch (Exception exception)
+                {
+                    _vtkJs.WriteAcceptanceTrace("general cone glyph failed: " + exception.Message);
+                    throw;
+                }
+            };
+            _vtkJsSmokeGeneralConeGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeDoubleArrowGlyph()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_DOUBLE_ARROW_GLYPH"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeDoubleArrowGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeDoubleArrowGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeDoubleArrowGlyphTimer.Stop();
+                _vtkJsSmokeDoubleArrowGlyphTimer.Dispose();
+                _vtkJsSmokeDoubleArrowGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js double arrow smoke",
+                    Color = Color.Goldenrod,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }, new double[] { 1, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { 0, 0, 1 }, new double[] { 0, 0, 0 }, new double[] { 0, 1, 0 }
+                };
+                AddOrientedDoubleArrowsActor(data, 24);
+                _vtkJs.WriteAcceptanceTrace("double arrow glyph requested");
+                _vtkJs.TraceAcceptanceDirectionalGlyphs();
+            };
+            _vtkJsSmokeDoubleArrowGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeArrowGlyph()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ARROW_GLYPH"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeArrowGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeArrowGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeArrowGlyphTimer.Stop();
+                _vtkJsSmokeArrowGlyphTimer.Dispose();
+                _vtkJsSmokeArrowGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js oriented arrow smoke",
+                    Color = Color.DodgerBlue,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }, new double[] { 1, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { 1, 0, 0 }, new double[] { 0, 0, 0 }, new double[] { 0, 1, 0 }
+                };
+                AddOrientedArrowsActor(data, 24, true, 2.5);
+                _vtkJs.WriteAcceptanceTrace("arrow glyph requested");
+                _vtkJs.TraceAcceptanceDirectionalGlyphs();
+            };
+            _vtkJsSmokeArrowGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeRotationalGlyph()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ROTATIONAL_GLYPH"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeRotationalGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeRotationalGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeRotationalGlyphTimer.Stop();
+                _vtkJsSmokeRotationalGlyphTimer.Dispose();
+                _vtkJsSmokeRotationalGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js rotational constraint smoke",
+                    Color = Color.MediumPurple,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { 0, 0, 1 }, new double[] { 0, 1, 0 }
+                };
+                AddOrientedRotationalConstraintActor(data, 24);
+                _vtkJs.WriteAcceptanceTrace("rotational glyph requested");
+                _vtkJs.TraceAcceptanceDirectionalGlyphs();
+            };
+            _vtkJsSmokeRotationalGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeDirectionalGlyph()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_DIRECTIONAL_GLYPH"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeDirectionalGlyphTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeDirectionalGlyphTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeDirectionalGlyphTimer.Stop();
+                _vtkJsSmokeDirectionalGlyphTimer.Dispose();
+                _vtkJsSmokeDirectionalGlyphTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js displacement cone smoke",
+                    Color = Color.OrangeRed,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] {
+                    new double[] { 0, 0, 0 }, new double[] { 0.5, 0, 0 }
+                };
+                data.Geometry.Nodes.Normals = new double[][] {
+                    new double[] { 1, 0, 0 }, new double[] { 0, 1, 0 }
+                };
+                AddOrientedDisplacementConstraintActor(data, 24);
+                _vtkJs.WriteAcceptanceTrace("directional glyph requested");
+                _vtkJs.TraceAcceptanceDirectionalGlyphs();
+            };
+            _vtkJsSmokeDirectionalGlyphTimer.Start();
+        }
+
+        private void StartVtkJsSmokeCoordinateOverlay()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_COORDINATE_OVERLAY"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeCoordinateOverlayTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeCoordinateOverlayTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeCoordinateOverlayTimer.Stop();
+                _vtkJsSmokeCoordinateOverlayTimer.Dispose();
+                _vtkJsSmokeCoordinateOverlayTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js axis smoke",
+                    Color = Color.Red,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] { new double[] { 0, 0, 0 } };
+                data.Geometry.Nodes.Normals = new double[][] { new double[] { 1, 0, 0 } };
+                AddCoordinateAxis(data, 24);
+                AddCaptionActor("VTK.js axis caption smoke", "<X & axis>", Color.Red,
+                    new double[] { 0, 0, 0 }, new double[] { 28, 0, 0 }, 1,
+                    vtkRendererLayer.Overlay);
+                _vtkJs.WriteAcceptanceTrace("coordinate overlay requested");
+                _vtkJs.TraceAcceptanceCoordinateOverlays();
+            };
+            _vtkJsSmokeCoordinateOverlayTimer.Start();
+        }
+
+        private void StartVtkJsSmokeSphereSymbol()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_SPHERE_SYMBOL"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            _vtkJsSmokeSphereSymbolTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeSphereSymbolTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.IsBrowserReady) return;
+                _vtkJsSmokeSphereSymbolTimer.Stop();
+                _vtkJsSmokeSphereSymbolTimer.Dispose();
+                _vtkJsSmokeSphereSymbolTimer = null;
+                var data = new vtkMaxActorData
+                {
+                    Name = "VTK.js sphere smoke",
+                    Color = Color.CornflowerBlue,
+                    Layer = vtkRendererLayer.Overlay
+                };
+                data.Geometry.Nodes.Coor = new double[][] { new double[] { 0, 0, 0 } };
+                AddSphereActor(data, 24);
+                _vtkJs.WriteAcceptanceTrace("sphere symbol requested");
+                _vtkJs.TraceAcceptanceSphereSymbols();
+            };
+            _vtkJsSmokeSphereSymbolTimer.Start();
         }
 
         private void StartVtkJsSmokeFieldSwitch()
@@ -1020,7 +2459,11 @@ namespace PrePoMax
             bool exerciseInteraction = string.Equals(
                 Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ANNOTATION_INTERACTION"),
                 "1", StringComparison.Ordinal);
-            if (_vtkJs == null || (!exerciseRegular && !exerciseExtrema && !exerciseInteraction)) return;
+            bool exerciseSettings = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ANNOTATION_SETTINGS"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null ||
+                (!exerciseRegular && !exerciseExtrema && !exerciseInteraction && !exerciseSettings)) return;
             _vtkJsSmokeAnnotationTimer = new System.Windows.Forms.Timer { Interval = 100 };
             _vtkJsSmokeAnnotationTimer.Tick += (sender, args) =>
             {
@@ -1037,7 +2480,8 @@ namespace PrePoMax
                          !string.Equals(_controller.CurrentFieldData.Component, requestedParts[1].Trim(), StringComparison.Ordinal)))
                         return;
                 }
-                if ((exerciseRegular || exerciseInteraction) && _controller.DisplayedMesh.Nodes.Count == 0) return;
+                if ((exerciseRegular || exerciseInteraction || exerciseSettings) &&
+                    _controller.DisplayedMesh.Nodes.Count == 0) return;
                 _vtkJsSmokeAnnotationTimer.Stop();
                 _vtkJsSmokeAnnotationTimer.Dispose();
                 _vtkJsSmokeAnnotationTimer = null;
@@ -1066,6 +2510,13 @@ namespace PrePoMax
                     string name = _controller.Annotations.GetFreeAnnotationName();
                     _controller.Annotations.AddAnnotation(new NodeAnnotation(name, node.Id));
                     _vtkJs.TriggerAcceptanceAnnotationInteraction(name);
+                }
+                if (exerciseSettings)
+                {
+                    CaeMesh.FeNode node = _controller.DisplayedMesh.Nodes.Values.First();
+                    string name = _controller.Annotations.GetFreeAnnotationName();
+                    _controller.Annotations.AddAnnotation(new NodeAnnotation(name, node.Id));
+                    _vtkJs.TriggerAcceptanceAnnotationSettings(name);
                 }
             };
             _vtkJsSmokeAnnotationTimer.Start();
@@ -1117,17 +2568,46 @@ namespace PrePoMax
             bool sequenceRequested = string.Equals(
                 Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ANIMATION_SEQUENCE"),
                 "1", StringComparison.Ordinal);
+            bool followerRequested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_FOLLOWER_REDRAW"),
+                "1", StringComparison.Ordinal);
+            bool pngCaptureRequested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ANIMATION_PNG_CAPTURE"),
+                "1", StringComparison.Ordinal);
+            bool aviCaptureRequested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_ANIMATION_AVI_CAPTURE"),
+                "1", StringComparison.Ordinal);
             if (_vtkJs == null || !requested) return;
             bool animationPrepared = false;
+            bool followerPrepared = false;
+            int followerSettlingTicks = 0;
             int targetFrame = 1;
             int animationFrameCount = 0;
             int lastRequestedFrame = -1;
             _vtkJsSmokeAnimationTimer = new System.Windows.Forms.Timer { Interval = 100 };
-            _vtkJsSmokeAnimationTimer.Tick += (sender, args) =>
+            _vtkJsSmokeAnimationTimer.Tick += async (sender, args) =>
             {
                 if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
                     _controller.CurrentResult == null || _controller.CurrentFieldData == null ||
                     (!string.IsNullOrWhiteSpace(triggerFile) && !File.Exists(triggerFile))) return;
+                if (followerRequested && !followerPrepared)
+                {
+                    try
+                    {
+                        _controller.ApplyFollowerView(CreateVtkJsSmokePlaneFollower());
+                        followerPrepared = true;
+                        _vtkJs.WriteAcceptanceTrace("physical follower requested points=3");
+                    }
+                    catch (Exception exception)
+                    {
+                        _vtkJs.WriteAcceptanceTrace("physical follower setup failed: " + exception.Message);
+                        _vtkJsSmokeAnimationTimer.Stop();
+                        _vtkJsSmokeAnimationTimer.Dispose();
+                        _vtkJsSmokeAnimationTimer = null;
+                    }
+                    return;
+                }
+                if (followerRequested && followerSettlingTicks++ < 5) return;
                 if (!animationPrepared)
                 {
                     try
@@ -1160,6 +2640,99 @@ namespace PrePoMax
                         targetFrame = 1;
                         animationFrameCount = frameCount;
                         animationPrepared = true;
+                        _vtkJs.WriteAcceptanceTrace("animation construction browserOnly actors=" +
+                                                    _vtkJs.AnimationSourceCount +
+                                                    " legacyMaterialized=False");
+                        if (pngCaptureRequested)
+                        {
+                            string exportBaseName = Path.Combine(Path.GetTempPath(),
+                                "prepomax-vtkjs-animation-export-" + Guid.NewGuid().ToString("N") + ".png");
+                            string[] expectedFiles = new[]
+                            {
+                                Path.Combine(Path.GetDirectoryName(exportBaseName), "1_" + Path.GetFileName(exportBaseName)),
+                                Path.Combine(Path.GetDirectoryName(exportBaseName), "2_" + Path.GetFileName(exportBaseName))
+                            };
+                            try
+                            {
+                                await SaveAnimationAsImages(exportBaseName, new[] { 0, 1 }, 1, false, false);
+                                long bytes = expectedFiles.Sum(file => File.Exists(file) ? new FileInfo(file).Length : 0);
+                                if (expectedFiles.Any(file => !File.Exists(file)) || bytes <= 0)
+                                    throw new InvalidOperationException("The browser animation capture did not write two PNG frames.");
+                                string[] hashes;
+                                using (var sha256 = System.Security.Cryptography.SHA256.Create())
+                                {
+                                    hashes = expectedFiles.Select(file =>
+                                    {
+                                        using (FileStream stream = File.OpenRead(file))
+                                            return Convert.ToBase64String(sha256.ComputeHash(stream));
+                                    }).ToArray();
+                                }
+                                bool distinct = !string.Equals(hashes[0], hashes[1], StringComparison.Ordinal);
+                                if (!distinct)
+                                    throw new InvalidOperationException("The browser animation captures are byte-identical.");
+                                _vtkJs.WriteAcceptanceTrace("animation export images=2 bytes=" + bytes +
+                                                            " distinct=True");
+                                await _vtkJs.ActivateAnimationFrameAsync(0, false);
+                            }
+                            finally
+                            {
+                                foreach (string file in expectedFiles)
+                                {
+                                    try { if (File.Exists(file)) File.Delete(file); }
+                                    catch { }
+                                }
+                            }
+                        }
+                        if (aviCaptureRequested)
+                        {
+                            string aviFileName = Path.Combine(Path.GetTempPath(),
+                                "prepomax-vtkjs-animation-export-" + Guid.NewGuid().ToString("N") + ".avi");
+                            try
+                            {
+                                await SaveAnimationAsAVI(aviFileName, new[] { 0, 1 }, 1, 12, false, false, false);
+                                byte[] avi = File.Exists(aviFileName) ? File.ReadAllBytes(aviFileName) : new byte[0];
+                                string ascii = Encoding.ASCII.GetString(avi);
+                                int movi = ascii.IndexOf("movi", StringComparison.Ordinal);
+                                int index = ascii.LastIndexOf("idx1", StringComparison.Ordinal);
+                                bool riff = avi.Length >= 12 && ascii.StartsWith("RIFF", StringComparison.Ordinal) &&
+                                            ascii.Substring(8, 4) == "AVI " &&
+                                            BitConverter.ToUInt32(avi, 4) == avi.Length - 8;
+                                bool indexed = index > movi && index + 8 <= avi.Length &&
+                                               BitConverter.ToUInt32(avi, index + 4) == 32;
+                                var hashes = new List<string>();
+                                int offset = movi + 4;
+                                using (var sha256 = System.Security.Cryptography.SHA256.Create())
+                                {
+                                    for (int frame = 0; frame < 2; frame++)
+                                    {
+                                        if (offset < 4 || offset + 8 > avi.Length ||
+                                            Encoding.ASCII.GetString(avi, offset, 4) != "00dc")
+                                            throw new InvalidDataException("The AVI movi list does not contain two MJPEG chunks.");
+                                        int length = checked((int)BitConverter.ToUInt32(avi, offset + 4));
+                                        int dataOffset = offset + 8;
+                                        if (length < 4 || dataOffset + length > avi.Length ||
+                                            avi[dataOffset] != 0xFF || avi[dataOffset + 1] != 0xD8 ||
+                                            avi[dataOffset + length - 2] != 0xFF || avi[dataOffset + length - 1] != 0xD9)
+                                            throw new InvalidDataException("The AVI contains an invalid MJPEG frame.");
+                                        hashes.Add(Convert.ToBase64String(sha256.ComputeHash(avi, dataOffset, length)));
+                                        offset = dataOffset + length + (length & 1);
+                                    }
+                                }
+                                bool distinct = hashes.Count == 2 &&
+                                                !string.Equals(hashes[0], hashes[1], StringComparison.Ordinal);
+                                bool mjpg = ascii.IndexOf("MJPG", StringComparison.Ordinal) >= 0;
+                                if (!riff || !indexed || !mjpg || !distinct)
+                                    throw new InvalidDataException("The browser AVI structure or frame sequence is invalid.");
+                                _vtkJs.WriteAcceptanceTrace("animation export avi frames=2 bytes=" + avi.Length +
+                                                            " riff=True mjpg=True indexed=True distinct=True");
+                                await _vtkJs.ActivateAnimationFrameAsync(0, false);
+                            }
+                            finally
+                            {
+                                try { if (File.Exists(aviFileName)) File.Delete(aviFileName); }
+                                catch { }
+                            }
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -1200,6 +2773,38 @@ namespace PrePoMax
                 }
             };
             _vtkJsSmokeAnimationTimer.Start();
+        }
+        private FollowerViewParameters CreateVtkJsSmokePlaneFollower()
+        {
+            CaeMesh.FeNode[] nodes = _controller.DisplayedMesh.Nodes.Values.Take(256).ToArray();
+            if (nodes.Length < 3) throw new InvalidOperationException("At least three displayed nodes are required.");
+            CaeMesh.FeNode first = nodes[0];
+            for (int i = 1; i < nodes.Length - 1; i++)
+            {
+                double[] firstDirection = new double[] { nodes[i].Coor[0] - first.Coor[0],
+                                                         nodes[i].Coor[1] - first.Coor[1],
+                                                         nodes[i].Coor[2] - first.Coor[2] };
+                for (int j = i + 1; j < nodes.Length; j++)
+                {
+                    double[] secondDirection = new double[] { nodes[j].Coor[0] - first.Coor[0],
+                                                              nodes[j].Coor[1] - first.Coor[1],
+                                                              nodes[j].Coor[2] - first.Coor[2] };
+                    double x = firstDirection[1] * secondDirection[2] - firstDirection[2] * secondDirection[1];
+                    double y = firstDirection[2] * secondDirection[0] - firstDirection[0] * secondDirection[2];
+                    double z = firstDirection[0] * secondDirection[1] - firstDirection[1] * secondDirection[0];
+                    if (x * x + y * y + z * z > 1E-20)
+                    {
+                        return new FollowerViewParameters
+                        {
+                            Type = FollowerViewTypeEnum.Plane,
+                            CenterNodeId = first.Id,
+                            Direction1NodeId = nodes[i].Id,
+                            Direction2NodeId = nodes[j].Id
+                        };
+                    }
+                }
+            }
+            throw new InvalidOperationException("No non-collinear displayed node triple was found.");
         }
         private void StartVtkJsSmokeCamera()
         {
@@ -1329,6 +2934,60 @@ namespace PrePoMax
             };
             _vtkJsSmokeVisibilityCameraTimer.Start();
         }
+
+        private void StartVtkJsSmokeTransformations()
+        {
+            bool requested = string.Equals(
+                Environment.GetEnvironmentVariable("PREPOMAX_VTKJS_SMOKE_TRANSFORMATIONS"),
+                "1", StringComparison.Ordinal);
+            if (_vtkJs == null || !requested) return;
+            int stage = 0;
+            _vtkJsSmokeTransformationTimer = new System.Windows.Forms.Timer { Interval = 100 };
+            _vtkJsSmokeTransformationTimer.Tick += (sender, args) =>
+            {
+                if (!_vtkJs.HasPublishedTopology || !_vtkJs.IsBrowserReady ||
+                    _vtkJs.BrowserAppliedPipelineChunks < 1) return;
+                if (stage == 0)
+                {
+                    AddSymmetry(0, new double[] { 0, 0, 0 });
+                    AddLinearPattern(new double[] { 2, 0, 0 }, 2);
+                    AddCircularPattern(new double[] { 0, 0, 0 }, new double[] { 0, 0, 1 }, 90, 2);
+                    ApplyTransformations();
+                    _vtkJs.WriteAcceptanceTrace("transformations requested symmetry+linear+circular matrices=7");
+                    stage = 1;
+                }
+                else if (stage == 1 && _vtkJs.BrowserAppliedTransformationMatrices == 7 &&
+                         _vtkJs.BrowserAppliedTransformationActors > 0 &&
+                         _vtkJs.BrowserVisibleTransformationActors == _vtkJs.BrowserAppliedTransformationActors &&
+                         _vtkJs.BrowserPickableTransformationActors == 0)
+                {
+                    _vtkJs.WriteAcceptanceTrace("transformations applied matrices=7 actors=" +
+                                                _vtkJs.BrowserAppliedTransformationActors + " pickable=0");
+                    HideTransformedActors();
+                    stage = 2;
+                }
+                else if (stage == 2 && _vtkJs.BrowserAppliedTransformationMatrices == 7 &&
+                         _vtkJs.BrowserAppliedTransformationActors > 0 &&
+                         _vtkJs.BrowserVisibleTransformationActors == 0)
+                {
+                    _vtkJs.WriteAcceptanceTrace("transformations hidden actors=" +
+                                                _vtkJs.BrowserAppliedTransformationActors);
+                    ShowTransformedActors();
+                    stage = 3;
+                }
+                else if (stage == 3 && _vtkJs.BrowserAppliedTransformationMatrices == 7 &&
+                         _vtkJs.BrowserAppliedTransformationActors > 0 &&
+                         _vtkJs.BrowserVisibleTransformationActors == _vtkJs.BrowserAppliedTransformationActors)
+                {
+                    _vtkJs.WriteAcceptanceTrace("transformations shown actors=" +
+                                                _vtkJs.BrowserAppliedTransformationActors);
+                    _vtkJsSmokeTransformationTimer.Stop();
+                    _vtkJsSmokeTransformationTimer.Dispose();
+                    _vtkJsSmokeTransformationTimer = null;
+                }
+            };
+            _vtkJsSmokeTransformationTimer.Start();
+        }
         private void StartVtkJsSmokeExplodedPreview()
         {
             bool requested = string.Equals(
@@ -1448,6 +3107,102 @@ namespace PrePoMax
         }
         private async void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (_vtkJsSmokeStatusBlockTimer != null)
+            {
+                _vtkJsSmokeStatusBlockTimer.Stop();
+                _vtkJsSmokeStatusBlockTimer.Dispose();
+                _vtkJsSmokeStatusBlockTimer = null;
+            }
+            if (_vtkJsSmokeColorBarTimer != null)
+            {
+                _vtkJsSmokeColorBarTimer.Stop();
+                _vtkJsSmokeColorBarTimer.Dispose();
+                _vtkJsSmokeColorBarTimer = null;
+            }
+            if (_vtkJsSmokeScalarLegendTimer != null)
+            {
+                _vtkJsSmokeScalarLegendTimer.Stop();
+                _vtkJsSmokeScalarLegendTimer.Dispose();
+                _vtkJsSmokeScalarLegendTimer = null;
+            }
+            if (_vtkJsSmokeScaleWidgetTimer != null)
+            {
+                _vtkJsSmokeScaleWidgetTimer.Stop();
+                _vtkJsSmokeScaleWidgetTimer.Dispose();
+                _vtkJsSmokeScaleWidgetTimer = null;
+            }
+            if (_vtkJsSmokeOrientationMarkerTimer != null)
+            {
+                _vtkJsSmokeOrientationMarkerTimer.Stop();
+                _vtkJsSmokeOrientationMarkerTimer.Dispose();
+                _vtkJsSmokeOrientationMarkerTimer = null;
+            }
+            if (_vtkJsSmokeCellClassificationTimer != null)
+            {
+                _vtkJsSmokeCellClassificationTimer.Stop();
+                _vtkJsSmokeCellClassificationTimer.Dispose();
+                _vtkJsSmokeCellClassificationTimer = null;
+            }
+            if (_vtkJsSmokeGenericConstructionTimer != null)
+            {
+                _vtkJsSmokeGenericConstructionTimer.Stop();
+                _vtkJsSmokeGenericConstructionTimer.Dispose();
+                _vtkJsSmokeGenericConstructionTimer = null;
+            }
+            if (_vtkJsSmokeAuxiliaryConstructionTimer != null)
+            {
+                _vtkJsSmokeAuxiliaryConstructionTimer.Stop();
+                _vtkJsSmokeAuxiliaryConstructionTimer.Dispose();
+                _vtkJsSmokeAuxiliaryConstructionTimer = null;
+            }
+            if (_vtkJsSmokeSelectionPrimitiveTimer != null)
+            {
+                _vtkJsSmokeSelectionPrimitiveTimer.Stop();
+                _vtkJsSmokeSelectionPrimitiveTimer.Dispose();
+                _vtkJsSmokeSelectionPrimitiveTimer = null;
+            }
+            if (_vtkJsSmokeSelectionSurfaceTimer != null)
+            {
+                _vtkJsSmokeSelectionSurfaceTimer.Stop();
+                _vtkJsSmokeSelectionSurfaceTimer.Dispose();
+                _vtkJsSmokeSelectionSurfaceTimer = null;
+            }
+            if (_vtkJsSmokeThreeMfExportInputTimer != null)
+            {
+                _vtkJsSmokeThreeMfExportInputTimer.Stop();
+                _vtkJsSmokeThreeMfExportInputTimer.Dispose();
+                _vtkJsSmokeThreeMfExportInputTimer = null;
+            }
+            if (_vtkJsSmokeStaticScalarConstructionTimer != null)
+            {
+                _vtkJsSmokeStaticScalarConstructionTimer.Stop();
+                _vtkJsSmokeStaticScalarConstructionTimer.Dispose();
+                _vtkJsSmokeStaticScalarConstructionTimer = null;
+            }
+            if (_vtkJsSmokeSceneClearTimer != null)
+            {
+                _vtkJsSmokeSceneClearTimer.Stop();
+                _vtkJsSmokeSceneClearTimer.Dispose();
+                _vtkJsSmokeSceneClearTimer = null;
+            }
+            if (_vtkJsSmokeActorHighlightTimer != null)
+            {
+                _vtkJsSmokeActorHighlightTimer.Stop();
+                _vtkJsSmokeActorHighlightTimer.Dispose();
+                _vtkJsSmokeActorHighlightTimer = null;
+            }
+            if (_vtkJsSmokeActorPresentationTimer != null)
+            {
+                _vtkJsSmokeActorPresentationTimer.Stop();
+                _vtkJsSmokeActorPresentationTimer.Dispose();
+                _vtkJsSmokeActorPresentationTimer = null;
+            }
+            if (_vtkJsSmokeViewportAppearanceTimer != null)
+            {
+                _vtkJsSmokeViewportAppearanceTimer.Stop();
+                _vtkJsSmokeViewportAppearanceTimer.Dispose();
+                _vtkJsSmokeViewportAppearanceTimer = null;
+            }
             if (_vtkJsSmokeFieldTimer != null)
             {
                 _vtkJsSmokeFieldTimer.Stop();
@@ -1507,6 +3262,66 @@ namespace PrePoMax
                 _vtkJsSmokeSectionViewTimer.Stop();
                 _vtkJsSmokeSectionViewTimer.Dispose();
                 _vtkJsSmokeSectionViewTimer = null;
+            }
+            if (_vtkJsSmokeSphereSymbolTimer != null)
+            {
+                _vtkJsSmokeSphereSymbolTimer.Stop();
+                _vtkJsSmokeSphereSymbolTimer.Dispose();
+                _vtkJsSmokeSphereSymbolTimer = null;
+            }
+            if (_vtkJsSmokeCoordinateOverlayTimer != null)
+            {
+                _vtkJsSmokeCoordinateOverlayTimer.Stop();
+                _vtkJsSmokeCoordinateOverlayTimer.Dispose();
+                _vtkJsSmokeCoordinateOverlayTimer = null;
+            }
+            if (_vtkJsSmokeDirectionalGlyphTimer != null)
+            {
+                _vtkJsSmokeDirectionalGlyphTimer.Stop();
+                _vtkJsSmokeDirectionalGlyphTimer.Dispose();
+                _vtkJsSmokeDirectionalGlyphTimer = null;
+            }
+            if (_vtkJsSmokeGeneralConeGlyphTimer != null)
+            {
+                _vtkJsSmokeGeneralConeGlyphTimer.Stop();
+                _vtkJsSmokeGeneralConeGlyphTimer.Dispose();
+                _vtkJsSmokeGeneralConeGlyphTimer = null;
+            }
+            if (_vtkJsSmokeRotationalGlyphTimer != null)
+            {
+                _vtkJsSmokeRotationalGlyphTimer.Stop();
+                _vtkJsSmokeRotationalGlyphTimer.Dispose();
+                _vtkJsSmokeRotationalGlyphTimer = null;
+            }
+            if (_vtkJsSmokeArrowGlyphTimer != null)
+            {
+                _vtkJsSmokeArrowGlyphTimer.Stop();
+                _vtkJsSmokeArrowGlyphTimer.Dispose();
+                _vtkJsSmokeArrowGlyphTimer = null;
+            }
+            if (_vtkJsSmokeDoubleArrowGlyphTimer != null)
+            {
+                _vtkJsSmokeDoubleArrowGlyphTimer.Stop();
+                _vtkJsSmokeDoubleArrowGlyphTimer.Dispose();
+                _vtkJsSmokeDoubleArrowGlyphTimer = null;
+            }
+            if (_vtkJsSmokeSpringGlyphTimer != null)
+            {
+                _vtkJsSmokeSpringGlyphTimer.Stop();
+                _vtkJsSmokeSpringGlyphTimer.Dispose();
+                _vtkJsSmokeSpringGlyphTimer = null;
+            }
+            if (_vtkJsSmokeThermalGlyphTimer != null)
+            {
+                _vtkJsSmokeThermalGlyphTimer.Stop();
+                _vtkJsSmokeThermalGlyphTimer.Dispose();
+                _vtkJsSmokeThermalGlyphTimer = null;
+            }
+            if (_vtkJsSmokeFluxGlyphTimer != null)
+            {
+                _vtkJsSmokeFluxGlyphTimer.Stop();
+                _vtkJsSmokeFluxGlyphTimer.Dispose();
+                _vtkJsSmokeFluxGlyphTimer = null;
             }
             string error = null;
             try
@@ -11147,6 +12962,10 @@ namespace PrePoMax
         {
             _frmSettings.SetSettingsToShow(Globals.AnnotationSettingsName);
             tsmiSettings_Click(null, null);
+            if (_vtkJs != null)
+                _frmSettings.BeginInvoke((MethodInvoker)(() =>
+                    _vtkJs.WriteAcceptanceTrace("annotation settings dialog visible=" + _frmSettings.Visible +
+                                                " selected='" + _frmSettings.SelectedSettingsName + "'")));
         }
         private void ShowLegendSettings()
         {
@@ -14881,7 +16700,11 @@ namespace PrePoMax
             InvokeIfRequired(() =>
             {
                 _vtk.Clear();
-                if (_vtkJs != null) _vtkJs.ClearCapturedScene();
+                if (_vtkJs != null)
+                {
+                    _vtkJs.ClearCapturedScene();
+                    _vtkJsHasLegacyExportActors = false;
+                }
                 _vtk.RemoveAllArrowWidgets();
                 _modelTree.Clear();
                 outputLines = new string[0];
@@ -14908,12 +16731,29 @@ namespace PrePoMax
             InvokeIfRequired(() =>
             {
                 _vtk.Clear();
-                if (_vtkJs != null) _vtkJs.ClearCapturedScene();
+                if (_vtkJs != null)
+                {
+                    _vtkJs.ClearCapturedScene();
+                    _vtkJsHasLegacyExportActors = false;
+                }
             });
         }
         public void ClearButKeepParts()
         {
-            InvokeIfRequired(_vtk.ClearButKeepParts);
+            InvokeIfRequired(() =>
+            {
+                _vtk.ClearButKeepParts();
+                if (_vtkJs != null)
+                {
+                    _vtkJs.ClearSelectionState();
+                    _vtkJs.ClearActorHighlights();
+                    _vtkJs.ClearTransientSelectionActors();
+                    _vtkJs.ClearSphereSymbols();
+                    _vtkJs.ClearCoordinateOverlays();
+                    _vtkJs.ClearDirectionalGlyphs();
+                    _vtkJs.WriteCompatibilityTrace("selection-lifecycle", "clear-keep-parts");
+                }
+            });
         }
         public void ClearSelection()
         {
@@ -14921,7 +16761,18 @@ namespace PrePoMax
         }
         public void Clear3DSelection()
         {
-            InvokeIfRequired(() => _vtk.ClearSelection());
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.ClearSelection();
+                else
+                {
+                    _vtkJs.ClearSelectionState();
+                    _vtkJs.ClearActorHighlights();
+                    _vtkJs.ClearTransientSelectionActors();
+                    _vtkJs.WriteCompatibilityTrace("selection-lifecycle", "clear");
+                    _vtkJs.WriteCompatibilityTrace("actor-highlight", "clear");
+                }
+            });
         }
         public void ClearActiveTreeSelection()
         {
@@ -15058,7 +16909,11 @@ namespace PrePoMax
         }
         public void UpdateScalarsAndRedraw()
         {
-            InvokeIfRequired(_vtk.UpdateScalarsAndRedraw);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.UpdateScalarsAndRedraw();
+                else _vtkJs.WriteCompatibilityTrace("result-construction", "scalar-format-browser-only");
+            });
         }
         public void UpdateScalarsAndCameraAndRedraw()
         {
@@ -15067,7 +16922,7 @@ namespace PrePoMax
                 if (_vtkJs == null) _vtk.UpdateScalarsAndCameraAndRedraw();
                 else
                 {
-                    _vtk.UpdateScalarsAndRedraw();
+                    _vtkJs.WriteCompatibilityTrace("result-construction", "scalar-format-camera-browser-only");
                     AdjustVtkJsCameraDistanceAndClipping("update-scalars-adjust");
                 }
             });
@@ -15086,11 +16941,24 @@ namespace PrePoMax
         //
         public vtkMaxActorData[] GetVtkMaxActorData()
         {
-            return InvokeIfRequired(() => _vtk.GetVtkMaxActorData());
+            return InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) return _vtk.GetVtkMaxActorData();
+                vtkMaxActorData[] captured = _vtkJs.GetExportActorData();
+                if (!_vtkJsHasLegacyExportActors)
+                {
+                    _vtkJs.WriteCompatibilityTrace("result-export", "actor-data-browser-only");
+                    return captured;
+                }
+                vtkMaxActorData[] legacy = _vtk.GetVtkMaxActorData();
+                var capturedNames = new HashSet<string>(captured.Select(actor => actor.Name), StringComparer.Ordinal);
+                vtkMaxActorData[] auxiliary = legacy.Where(actor => !capturedNames.Contains(actor.Name)).ToArray();
+                return auxiliary.Length == 0 ? captured : captured.Concat(auxiliary).ToArray();
+            });
         }
         public vtkMaxLookupTable GetLookupTable()
         {
-            return InvokeIfRequired(() => _vtk.GetLookupTable());
+            return InvokeIfRequired(() => _vtkJs == null ? _vtk.GetLookupTable() : _vtkJs.GetExportLookupTable());
         }
         public double[] GetClosestUpView()
         {
@@ -15200,19 +17068,39 @@ namespace PrePoMax
         // Transformations
         public void AddSymmetry(int symmetryPlane, double[] symmetryPoint)
         {
-            InvokeIfRequired(_vtk.AddSymmetry, symmetryPlane, symmetryPoint);
+            if (_vtkJs == null) InvokeIfRequired(_vtk.AddSymmetry, symmetryPlane, symmetryPoint);
+            else
+            {
+                _vtkJs.WriteCompatibilityTrace("transformation", "add-symmetry-browser-only");
+                InvokeIfRequired(_vtkJs.AddSymmetry, symmetryPlane, symmetryPoint);
+            }
         }
         public void AddLinearPattern(double[] displacement, int numOfItems)
         {
-            InvokeIfRequired(_vtk.AddLinearPattern, displacement, numOfItems);
+            if (_vtkJs == null) InvokeIfRequired(_vtk.AddLinearPattern, displacement, numOfItems);
+            else
+            {
+                _vtkJs.WriteCompatibilityTrace("transformation", "add-linear-browser-only");
+                InvokeIfRequired(_vtkJs.AddLinearPattern, displacement, numOfItems);
+            }
         }
         public void AddCircularPattern(double[] axisPoint, double[] axisNormal, double angle, int numOfItems)
         {
-            InvokeIfRequired(_vtk.AddCircularPattern, axisPoint, axisNormal, angle, numOfItems);
+            if (_vtkJs == null) InvokeIfRequired(_vtk.AddCircularPattern, axisPoint, axisNormal, angle, numOfItems);
+            else
+            {
+                _vtkJs.WriteCompatibilityTrace("transformation", "add-circular-browser-only");
+                InvokeIfRequired(_vtkJs.AddCircularPattern, axisPoint, axisNormal, angle, numOfItems);
+            }
         }
         public void ApplyTransformations()
         {
-            InvokeIfRequired(_vtk.ApplyTransforms);
+            if (_vtkJs == null) InvokeIfRequired(_vtk.ApplyTransforms);
+            else
+            {
+                _vtkJs.WriteCompatibilityTrace("transformation", "apply-browser-only");
+                InvokeIfRequired(_vtkJs.ApplyTransformations);
+            }
         }
         public void SetTransformationsStatus(bool status)
         {
@@ -15220,68 +17108,256 @@ namespace PrePoMax
         }
         public void HideTransformedActors()
         {
-            InvokeIfRequired(_vtk.HideTransformedActors);
+            if (_vtkJs == null) InvokeIfRequired(_vtk.HideTransformedActors);
+            else InvokeIfRequired(() => _vtkJs.SetTransformedActorsVisible(false));
         }
         public void ShowTransformedActors()
         {
-            InvokeIfRequired(_vtk.ShowTransformedActors);
+            if (_vtkJs == null) InvokeIfRequired(_vtk.ShowTransformedActors);
+            else InvokeIfRequired(() => _vtkJs.SetTransformedActorsVisible(true));
         }
         //
         public vtkMaxActor Add3DNodes(vtkMaxActorData nodeData)
         {
-            return InvokeIfRequired(() => _vtk.AddPoints(nodeData));
+            return InvokeIfRequired(() =>
+            {
+                if (_vtkJs != null && nodeData.Layer == vtkRendererLayer.Selection &&
+                    _vtkJs.CaptureTransientPrimitive(nodeData))
+                {
+                    _vtkJs.WriteCompatibilityTrace("selection-construction", "points-browser-only");
+                    return null;
+                }
+                if (_vtkJs != null && nodeData.Layer != vtkRendererLayer.Selection && !nodeData.Pickable &&
+                    _vtkJs.CaptureAuxiliaryPrimitive(nodeData))
+                {
+                    _vtkJs.WriteCompatibilityTrace(nodeData.Layer == vtkRendererLayer.Base
+                        ? "auxiliary-construction" : "generic-construction", "points-browser-only");
+                    return null;
+                }
+                if (_vtkJs != null)
+                {
+                    _vtkJsHasLegacyExportActors = true;
+                    if (nodeData.Layer == vtkRendererLayer.Selection)
+                        _vtkJs.WriteCompatibilityTrace("selection-construction", "points-legacy-fallback");
+                    else _vtkJs.WriteCompatibilityTrace("generic-construction", "points-legacy-fallback");
+                }
+                return _vtk.AddPoints(nodeData);
+            });
         }
         public vtkMaxActor Add3DCells(vtkMaxActorData cellData)
         {
             return InvokeIfRequired(() =>
             {
-                if (_vtkJs != null) _vtkJs.CaptureActor(cellData);
+                if (_vtkJs != null && cellData.Layer == vtkRendererLayer.Selection)
+                {
+                    if (TryAddVtkJsSelectionCells(cellData)) return null;
+                    _vtkJsHasLegacyExportActors = true;
+                    _vtkJs.WriteCompatibilityTrace("selection-construction",
+                        IsVtkJsLinePrimitive(cellData) ? "lines-legacy-fallback" : "surface-legacy-fallback");
+                    return _vtk.AddCells(cellData);
+                }
+                if (_vtkJs != null && TryAddVtkJsAuxiliaryCells(cellData)) return null;
+                if (_vtkJs != null)
+                {
+                    _vtkJs.CaptureActor(cellData);
+                    _vtkJsHasLegacyExportActors = true;
+                    _vtkJs.WriteCompatibilityTrace(GetVtkJsGenericConstructionCapability(cellData),
+                        "cells-legacy-fallback");
+                }
                 return _vtk.AddCells(cellData);
+            });
+        }
+        public void Add3DSelectionCells(vtkMaxActorData cellData)
+        {
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null)
+                {
+                    _vtk.AddCells(cellData);
+                    return;
+                }
+                if (!TryAddVtkJsSelectionCells(cellData))
+                {
+                    _vtkJsHasLegacyExportActors = true;
+                    _vtk.AddCells(cellData);
+                    _vtkJs.WriteCompatibilityTrace("selection-construction",
+                        IsVtkJsLinePrimitive(cellData) ? "lines-legacy-fallback" : "surface-legacy-fallback");
+                }
+            });
+        }
+        private bool TryAddVtkJsSelectionCells(vtkMaxActorData cellData)
+        {
+            if (_vtkJs.CaptureSelectionActor(cellData))
+            {
+                _vtkJs.WriteCompatibilityTrace("selection-construction", "surface-browser-only");
+                return true;
+            }
+            if (_vtkJs.CaptureTransientPrimitive(cellData))
+            {
+                _vtkJs.WriteCompatibilityTrace("selection-construction", "lines-browser-only");
+                return true;
+            }
+            return false;
+        }
+        private static bool IsVtkJsLinePrimitive(vtkMaxActorData cellData)
+        {
+            return cellData != null && cellData.Geometry != null &&
+                   cellData.Geometry.Cells != null && cellData.Geometry.Cells.Types != null &&
+                   cellData.Geometry.Cells.Types.Length > 0 &&
+                   cellData.Geometry.Cells.Types.All(type => type == 3 || type == 21);
+        }
+        private bool TryAddVtkJsAuxiliaryCells(vtkMaxActorData cellData)
+        {
+            string capability = GetVtkJsGenericConstructionCapability(cellData);
+            if (_vtkJs.CaptureAuxiliaryActor(cellData))
+            {
+                _vtkJs.WriteCompatibilityTrace(capability, "surface-browser-only");
+                return true;
+            }
+            if (_vtkJs.CaptureAuxiliaryPrimitive(cellData))
+            {
+                _vtkJs.WriteCompatibilityTrace(capability, "primitive-browser-only");
+                return true;
+            }
+            return false;
+        }
+        private static string GetVtkJsGenericConstructionCapability(vtkMaxActorData actorData)
+        {
+            return actorData != null && actorData.Layer == vtkRendererLayer.Base && !actorData.Pickable
+                ? "auxiliary-construction" : "generic-construction";
+        }
+        public void Add3DPart(vtkMaxActorData partData)
+        {
+            InvokeIfRequired(() =>
+            {
+                // Part callers do not consume a vtkMaxActor handle. Once VTK.js accepts the
+                // renderer-neutral data, avoid constructing a duplicate hidden ActiViz actor.
+                if (_vtkJs == null) _vtk.AddCells(partData);
+                else if (_vtkJs.CaptureActor(partData))
+                    _vtkJs.WriteCompatibilityTrace("core-actor-construction", "part-browser-only");
+                else
+                {
+                    _vtkJsHasLegacyExportActors = true;
+                    _vtk.AddCells(partData);
+                    _vtkJs.WriteCompatibilityTrace("core-actor-construction", "part-legacy-fallback");
+                }
+            });
+        }
+        public void Add3DParts(vtkMaxActorData[] partData)
+        {
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null)
+                {
+                    _vtk.AddCells(partData);
+                    return;
+                }
+
+                List<vtkMaxActorData> legacyFallback = new List<vtkMaxActorData>();
+                foreach (vtkMaxActorData actorData in partData)
+                {
+                    if (!_vtkJs.CaptureActor(actorData)) legacyFallback.Add(actorData);
+                }
+                if (legacyFallback.Count > 0)
+                {
+                    _vtkJsHasLegacyExportActors = true;
+                    _vtk.AddCells(legacyFallback.ToArray());
+                    _vtkJs.WriteCompatibilityTrace("core-actor-construction", "parts-legacy-fallback");
+                }
+                if (legacyFallback.Count < partData.Length)
+                    _vtkJs.WriteCompatibilityTrace("core-actor-construction", "parts-browser-only");
             });
         }
         public void Add3DCells(vtkMaxActorData[] cellData)
         {
             InvokeIfRequired(() =>
             {
-                if (_vtkJs != null)
+                if (_vtkJs == null)
                 {
-                    foreach (vtkMaxActorData actorData in cellData) _vtkJs.CaptureActor(actorData);
+                    _vtk.AddCells(cellData);
+                    return;
                 }
-                _vtk.AddCells(cellData);
+                var legacyFallback = new List<vtkMaxActorData>();
+                string capability = cellData.All(actorData =>
+                    GetVtkJsGenericConstructionCapability(actorData) == "auxiliary-construction")
+                    ? "auxiliary-construction" : "generic-construction";
+                foreach (vtkMaxActorData actorData in cellData)
+                {
+                    if (!TryAddVtkJsAuxiliaryCells(actorData)) legacyFallback.Add(actorData);
+                }
+                if (legacyFallback.Count > 0)
+                {
+                    _vtkJsHasLegacyExportActors = true;
+                    _vtk.AddCells(legacyFallback.ToArray());
+                    _vtkJs.WriteCompatibilityTrace(capability, "array-legacy-fallback");
+                }
+                if (legacyFallback.Count < cellData.Length)
+                    _vtkJs.WriteCompatibilityTrace(capability, "array-browser-only");
             });
         }
         public void AddActor(vtkMaxActor actor)
         {
+            if (_vtkJs != null)
+            {
+                // VTK.js selection caches retain vtkMaxActorData and never replay native handles.
+                // Refuse an unexpected legacy cache entry instead of mutating the hidden renderer.
+                _vtkJs.WriteCompatibilityTrace("native-handle-construction", "blocked-browser-only");
+                return;
+            }
             InvokeIfRequired(_vtk.AddActor, actor);
         }
         public vtkMaxActor AddOpenFoamMesh(string fileName, double timeValue, string actorName, Color color)
         {
+            if (_vtkJs != null)
+            {
+                _vtkJs.WriteCompatibilityTrace("openfoam-construction", "native-reader-bypassed");
+                return null;
+            }
             return InvokeIfRequired(() => _vtk.AddOpenFoamMesh(fileName, timeValue, actorName, color));
         }
         public void AddScalarFieldOn3DCells(vtkMaxActorData actorData, bool update)
         {
             InvokeIfRequired(() =>
             {
-                if (_vtkJs != null) _vtkJs.CaptureActor(actorData);
-                _vtk.AddScalarFieldOnCells(actorData, update);
+                if (_vtkJs == null)
+                {
+                    _vtk.AddScalarFieldOnCells(actorData, update);
+                    return;
+                }
+                if (_vtkJs.CaptureActor(actorData))
+                {
+                    _vtkJs.WriteCompatibilityTrace("result-construction", "static-browser-only");
+                    if (update) UpdateScalarsAndCameraAndRedraw();
+                }
+                else
+                {
+                    _vtkJsHasLegacyExportActors = true;
+                    _vtk.AddScalarFieldOnCells(actorData, update);
+                    _vtkJs.WriteCompatibilityTrace("result-construction", "static-legacy-fallback");
+                }
             });
         }
         public bool AddAnimatedScalarFieldOn3DCells(vtkMaxActorData actorData)
         {
-            bool added = _vtk.AddAnimatedScalarFieldOnCells(actorData);
-            if (added && _vtkJs != null) _vtkJs.RegisterAnimation(actorData);
-            return added;
+            if (_vtkJs == null) return _vtk.AddAnimatedScalarFieldOnCells(actorData);
+            bool captured = _vtkJs.RegisterAnimation(actorData);
+            _vtkJs.WriteCompatibilityTrace("result-animation", captured
+                ? "construction-browser-only"
+                : "construction-rejected");
+            return captured;
         }
         public void UpdateActorSurfaceScalarField(string actorName, float[] values, NodesExchangeData extremeNodes,
                                                   float[] frustumCellLocatorValues, bool update)
         {
             InvokeIfRequired(() =>
             {
-                _vtk.UpdateActorScalarField(actorName, values, extremeNodes, frustumCellLocatorValues, update);
-                if (_vtkJs != null)
+                if (_vtkJs == null)
+                    _vtk.UpdateActorScalarField(actorName, values, extremeNodes, frustumCellLocatorValues, update);
+                else
                 {
                     _vtkJs.UpdateActorScalars(actorName, values);
                     _vtkJs.UpdateActorExtrema(actorName, values == null ? null : extremeNodes);
+                    _vtkJs.WriteCompatibilityTrace("result-construction", "scalar-update-browser-only");
                 }
             });
         }
@@ -15289,84 +17365,203 @@ namespace PrePoMax
         {
             InvokeIfRequired(() =>
             {
-                _vtk.UpdateActorsColorContoursVisibility(actorNames, colorContour);
-                if (_vtkJs != null) _vtkJs.SetActorColorContours(actorNames, colorContour);
+                if (_vtkJs == null) _vtk.UpdateActorsColorContoursVisibility(actorNames, colorContour);
+                else
+                {
+                    _vtkJs.SetActorColorContours(actorNames, colorContour);
+                    _vtkJs.WriteCompatibilityTrace("actor-presentation", "contours");
+                }
             });
         }
         public void AddSphereActor(vtkMaxActorData actorData, double symbolSize)
         {
-            InvokeIfRequired(_vtk.AddSphereActor, actorData, symbolSize);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddSphereActor(actorData, symbolSize);
+                else
+                {
+                    _vtkJs.AddSphereSymbols(actorData, symbolSize);
+                    _vtkJs.WriteCompatibilityTrace("sphere-symbols", "add");
+                }
+            });
         }
         public void AddCoordinateAxis(vtkMaxActorData data, double symbolSize)
         {
-            InvokeIfRequired(_vtk.AddCoordinateAxis, data, symbolSize);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddCoordinateAxis(data, symbolSize);
+                else
+                {
+                    _vtkJs.AddCoordinateAxis(data, symbolSize);
+                    // Preserve the legacy observable mutation used to derive the matching caption name.
+                    data.Name += Globals.NameSeparator + "axis";
+                    _vtkJs.WriteCompatibilityTrace("coordinate-axis", "add");
+                }
+            });
         }
         public void AddCaptionActor(string name, string caption, Color color, double[] position,
                                     double[] offsetVector, double fontScaleFactor, vtkRendererLayer layer)
         {
-            InvokeIfRequired(_vtk.AddCaptionActor, name, caption, color, position, offsetVector, fontScaleFactor, layer);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddCaptionActor(name, caption, color, position, offsetVector, fontScaleFactor, layer);
+                else
+                {
+                    _vtkJs.AddCaption(name, caption, color, position, offsetVector, fontScaleFactor);
+                    _vtkJs.WriteCompatibilityTrace("caption", "add");
+                }
+            });
         }
         public void AddOrientedDisplacementConstraintActor(vtkMaxActorData actorData, double symbolSize)
         {
-            InvokeIfRequired(_vtk.AddOrientedDisplacementConstraintActor, actorData, symbolSize);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedDisplacementConstraintActor(actorData, symbolSize);
+                else
+                {
+                    _vtkJs.AddDisplacementConstraintGlyphs(actorData, symbolSize);
+                    actorData.Name += Globals.NameSeparator + "cones";
+                    _vtkJs.WriteCompatibilityTrace("displacement-constraint-cones", "add");
+                }
+            });
         }
         public void AddOrientedConeActors(vtkMaxActorData data, double symbolSize)
         {
-            InvokeIfRequired(_vtk.AddOrientedConeActors, data, symbolSize);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedConeActors(data, symbolSize);
+                else
+                {
+                    _vtkJs.AddGeneralConeGlyphs(data, symbolSize);
+                    data.Name += Globals.NameSeparator + "cones";
+                    _vtkJs.WriteCompatibilityTrace("general-cone", "add");
+                }
+            });
         }
         public void AddOrientedRotationalConstraintActor(vtkMaxActorData actorData, double symbolSize)
         {
-            InvokeIfRequired(_vtk.AddOrientedRotationalConstraintActor, actorData, symbolSize);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedRotationalConstraintActor(actorData, symbolSize);
+                else
+                {
+                    _vtkJs.AddRotationalConstraintGlyphs(actorData, symbolSize);
+                    actorData.Name += Globals.NameSeparator + "cylinder";
+                    _vtkJs.WriteCompatibilityTrace("rotational-constraint", "add");
+                }
+            });
         }
         public void AddOrientedArrowsActor(vtkMaxActorData actorData, double symbolSize, bool invert = false, 
                                            double relativeSize = 1)
         {
-            InvokeIfRequired(_vtk.AddOrientedArrowsActor, actorData, symbolSize, invert, relativeSize);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedArrowsActor(actorData, symbolSize, invert, relativeSize);
+                else
+                {
+                    actorData.Geometry.RemoveZeroLengthNormals();
+                    _vtkJs.AddOrientedArrowGlyphs(actorData, symbolSize, invert, relativeSize);
+                    actorData.Name += Globals.NameSeparator + "arrow";
+                    _vtkJs.WriteCompatibilityTrace("oriented-arrow", "add");
+                }
+            });
         }
         public void AddOrientedDoubleArrowsActor(vtkMaxActorData actorData, double symbolSize)
         {
-            InvokeIfRequired(_vtk.AddOrientedDoubleArrowsActor, actorData, symbolSize);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedDoubleArrowsActor(actorData, symbolSize);
+                else
+                {
+                    actorData.Geometry.RemoveZeroLengthNormals();
+                    _vtkJs.AddDoubleArrowGlyphs(actorData, symbolSize);
+                    actorData.Name += Globals.NameSeparator + "doubleArrow";
+                    _vtkJs.WriteCompatibilityTrace("double-arrow", "add");
+                }
+            });
         }
         public void AddOrientedSpringActor(vtkMaxActorData actorData, double symbolSize, bool invert = false)
         {
-            InvokeIfRequired(_vtk.AddOrientedSpringActor, actorData, symbolSize, invert);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedSpringActor(actorData, symbolSize, invert);
+                else
+                {
+                    _vtkJs.AddSpringGlyphs(actorData, symbolSize, invert);
+                    actorData.Name += Globals.NameSeparator + "spring";
+                    _vtkJs.WriteCompatibilityTrace("oriented-spring", "add");
+                }
+            });
         }
         public void AddOrientedThermosActor(vtkMaxActorData actorData, double symbolSize, bool invert = false)
         {
-            InvokeIfRequired(_vtk.AddOrientedThermoActor, actorData, symbolSize, invert);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedThermoActor(actorData, symbolSize, invert);
+                else
+                {
+                    _vtkJs.AddThermalGlyphs(actorData, symbolSize, invert);
+                    actorData.Name += Globals.NameSeparator + "thermo";
+                    _vtkJs.WriteCompatibilityTrace("oriented-thermal", "add");
+                }
+            });
         }
         public void AddOrientedFluxActor(vtkMaxActorData actorData, double symbolSize, bool center, bool invert)
         {
-            InvokeIfRequired(_vtk.AddOrientedFluxActor, actorData, symbolSize, center, invert);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddOrientedFluxActor(actorData, symbolSize, center, invert);
+                else
+                {
+                    _vtkJs.AddFluxGlyphs(actorData, symbolSize, center, invert);
+                    actorData.Name += Globals.NameSeparator + "flux";
+                    _vtkJs.WriteCompatibilityTrace("oriented-flux", "add");
+                }
+            });
         }
         //
        
         //
         public bool ContainsActor(string actorName)
         {
-            return _vtk.ContainsActor(actorName);
+            if (_vtkJs == null) return _vtk.ContainsActor(actorName);
+            bool contains = _vtkJs.ContainsActor(actorName);
+            _vtkJs.WriteCompatibilityTrace("actor-presentation", "contains-query");
+            return contains;
         }
         public void HighlightActor(string actorName)
         {
-            InvokeIfRequired(_vtk.HighlightActor, actorName);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.HighlightActor(actorName);
+                else
+                {
+                    _vtkJs.HighlightActor(actorName);
+                    _vtkJs.WriteCompatibilityTrace("actor-highlight", "add");
+                }
+            });
         }
         public void UpdateActor(string oldName, string newName, Color newColor)
         {
             InvokeIfRequired(() =>
             {
-                _vtk.UpdateActor(oldName, newName, newColor);
-                if (_vtkJs != null) _vtkJs.UpdateActor(oldName, newName, newColor);
+                if (_vtkJs == null) _vtk.UpdateActor(oldName, newName, newColor);
+                else
+                {
+                    _vtkJs.UpdateActor(oldName, newName, newColor);
+                    _vtkJs.WriteCompatibilityTrace("actor-presentation", "update");
+                }
             });
         }
         public void HideActors(string[] actorNames, bool updateColorContours)
         {
             InvokeIfRequired(() =>
             {
-                _vtk.HideActors(actorNames, updateColorContours, _vtkJs == null);
-                if (_vtkJs != null)
+                if (_vtkJs == null) _vtk.HideActors(actorNames, updateColorContours, true);
+                else
                 {
                     _vtkJs.SetActorVisibility(actorNames, false);
-                    _vtkJs.WriteCompatibilityTrace("camera", "actor-visibility-hide");
+                    _vtkJs.WriteCompatibilityTrace("actor-presentation", "visibility-hide");
                 }
             });
         }
@@ -15374,43 +17569,92 @@ namespace PrePoMax
         {
             InvokeIfRequired(() =>
             {
-                _vtk.ShowActors(actorNames, updateColorContours, _vtkJs == null);
-                if (_vtkJs != null)
+                if (_vtkJs == null) _vtk.ShowActors(actorNames, updateColorContours, true);
+                else
                 {
                     _vtkJs.SetActorVisibility(actorNames, true);
-                    _vtkJs.WriteCompatibilityTrace("camera", "actor-visibility-show");
+                    _vtkJs.WriteCompatibilityTrace("actor-presentation", "visibility-show");
                 }
             });
         }
         // Settings                                             
         public void SetCoorSysVisibility(bool visibility)
         {
-            InvokeIfRequired(_vtk.SetCoorSysVisibility, visibility);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetCoorSysVisibility(visibility);
+                else
+                {
+                    _vtkJs.SetOrientationMarkerVisibility(visibility);
+                    _vtkJs.WriteCompatibilityTrace("orientation-widget", "visibility-browser-only");
+                }
+            });
         }
         // Scale bar
         public void SetScaleWidgetVisibility(bool visibility)
         {
-            InvokeIfRequired(_vtk.SetScaleWidgetVisibility, visibility);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetScaleWidgetVisibility(visibility);
+                else
+                {
+                    _vtkJs.SetScaleWidget(visibility, null);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scale-visibility-browser-only");
+                }
+            });
         }
         private void SetScaleWidgetUnit(UnitSystem unitSystem)
         {
             string unit = "";
             if (unitSystem.UnitSystemType != UnitSystemType.Undefined) unit = unitSystem.LengthUnitAbbreviation;
             //
-            InvokeIfRequired(_vtk.SetScaleWidgetUnit, unit);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetScaleWidgetUnit(unit);
+                else
+                {
+                    _vtkJs.SetScaleWidget(null, unit);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scale-unit-browser-only");
+                }
+            });
         }
         // Scalar bar
         public void InitializeResultWidgetPositions()
         {
-            InvokeIfRequired(_vtk.InitializeResultWidgetPositions);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.InitializeResultWidgetPositions();
+                else
+                {
+                    _vtkJs.InitializeResultWidgetPositions();
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-position-browser-only");
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "shared-position-browser-only");
+                }
+            });
         }
         public void SetScalarBarColorSpectrum(vtkControl.vtkMaxColorSpectrum colorSpectrum)
         {
-            InvokeIfRequired(_vtk.SetScalarBarColorSpectrum, colorSpectrum);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetScalarBarColorSpectrum(colorSpectrum);
+                else
+                {
+                    _vtkJs.SetColorSpectrum(colorSpectrum);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-spectrum-browser-only");
+                }
+            });
         }
         public void SetScalarBarNumberFormat(string numberFormat)
         {
-            InvokeIfRequired(_vtk.SetScalarBarNumberFormat, numberFormat);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetScalarBarNumberFormat(numberFormat);
+                else
+                {
+                    _vtkJs.SetScalarLegendNumberFormat(numberFormat);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-format-browser-only");
+                }
+            });
         }
         public void SetScalarBarText(string fieldName, string componentName, string unitAbbreviation, string complexComponent,
                                      string minMaxType)
@@ -15421,82 +17665,222 @@ namespace PrePoMax
                     ? componentName
                     : componentName + " " + complexComponent;
                 _vtkJs.SetFieldMetadata(fieldName, vtkJsComponent, unitAbbreviation);
+                _vtkJs.SetScalarLegendText(fieldName, componentName, unitAbbreviation, complexComponent, minMaxType);
+                _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-text-browser-only");
             }
-            InvokeIfRequired(_vtk.SetScalarBarText, fieldName, componentName, unitAbbreviation, complexComponent, minMaxType);
+            else InvokeIfRequired(_vtk.SetScalarBarText, fieldName, componentName, unitAbbreviation, complexComponent, minMaxType);
         }
         public void DrawLegendBackground(bool drawBackground)
         {
-            InvokeIfRequired(_vtk.DrawScalarBarBackground, drawBackground);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.DrawScalarBarBackground(drawBackground);
+                else
+                {
+                    _vtkJs.SetScalarLegendAppearance(drawBackground, null);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-background-browser-only");
+                }
+            });
         }
         public void DrawLegendBorder(bool drawBorder)
         {
-            InvokeIfRequired(_vtk.DrawScalarBarBorder, drawBorder);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.DrawScalarBarBorder(drawBorder);
+                else
+                {
+                    _vtkJs.SetScalarLegendAppearance(null, drawBorder);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "scalar-legend-border-browser-only");
+                }
+            });
         }
         // Color bar
         public void InitializeColorBarWidgetPosition()
         {
-            InvokeIfRequired(_vtk.InitializeColorBarWidgetPosition);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.InitializeColorBarWidgetPosition();
+                else
+                {
+                    _vtkJs.InitializeColorBarWidgetPosition();
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "color-bar-position-browser-only");
+                }
+            });
         }
         public void SetColorBarColorsAndLabels(Color[] colors, string[] labels)
         {
-            InvokeIfRequired(_vtk.SetColorBarColorsAndLabels, colors, labels);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetColorBarColorsAndLabels(colors, labels);
+                else
+                {
+                    _vtkJs.SetColorBarItems(colors, labels, false);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "color-bar-set-browser-only");
+                }
+            });
         }
         public void AddColorBarColorsAndLabels(Color[] colors, string[] labels)
         {
-            InvokeIfRequired(_vtk.AddColorBarColorsAndLabels, colors, labels);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.AddColorBarColorsAndLabels(colors, labels);
+                else
+                {
+                    _vtkJs.SetColorBarItems(colors, labels, true);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "color-bar-add-browser-only");
+                }
+            });
         }
         public void DrawColorBarBackground(bool drawBackground)
         {
-            InvokeIfRequired(_vtk.DrawColorBarBackground, drawBackground);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.DrawColorBarBackground(drawBackground);
+                else
+                {
+                    _vtkJs.SetColorBarAppearance(drawBackground, null);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "color-bar-background-browser-only");
+                }
+            });
         }
         public void DrawColorBarBorder(bool drawBorder)
         {
-            InvokeIfRequired(_vtk.DrawColorBarBorder, drawBorder);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.DrawColorBarBorder(drawBorder);
+                else
+                {
+                    _vtkJs.SetColorBarAppearance(null, drawBorder);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "color-bar-border-browser-only");
+                }
+            });
         }
         public void HideColorBar()
         {
-            InvokeIfRequired(_vtk.HideColorBar);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.HideColorBar();
+                else
+                {
+                    _vtkJs.HideColorBar();
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "color-bar-hide-browser-only");
+                }
+            });
         }
         // Status bar
         public void SetStatusBlockVisibility(bool draw)
         {
-            InvokeIfRequired(_vtk.SetStatusBlockVisibility, draw);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetStatusBlockVisibility(draw);
+                else
+                {
+                    _vtkJs.SetStatusBlockVisibility(draw);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "status-block-visibility-browser-only");
+                }
+            });
         }
         public void DrawStatusBlockBackground(bool drawBackground)
         {
-            InvokeIfRequired(_vtk.DrawStatusBlockBackground, drawBackground);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.DrawStatusBlockBackground(drawBackground);
+                else
+                {
+                    _vtkJs.SetStatusBlockAppearance(drawBackground, null);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "status-block-background-browser-only");
+                }
+            });
         }
         public void DrawStatusBlockBorder(bool drawBorder)
         {
-            InvokeIfRequired(_vtk.DrawStatusBlockBorder, drawBorder);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.DrawStatusBlockBorder(drawBorder);
+                else
+                {
+                    _vtkJs.SetStatusBlockAppearance(null, drawBorder);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "status-block-border-browser-only");
+                }
+            });
         }
         public void SetStatusBlock(string name, DateTime dateTime, float analysisTime, string unit, string deformationVariable,
                                    float scaleFactor, vtkControl.vtkMaxFieldDataType fieldType, int stepNumber, int incrementNumber)
         {
-            InvokeIfRequired(_vtk.SetStatusBlock, name, dateTime, analysisTime, unit, deformationVariable, scaleFactor,
-                             fieldType, stepNumber, incrementNumber);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null)
+                    _vtk.SetStatusBlock(name, dateTime, analysisTime, unit, deformationVariable, scaleFactor,
+                                        fieldType, stepNumber, incrementNumber);
+                else
+                {
+                    _vtkJs.SetStatusBlock(name, dateTime, analysisTime, unit, deformationVariable, scaleFactor,
+                                          fieldType, stepNumber, incrementNumber);
+                    _vtkJs.WriteCompatibilityTrace("result-widget", "status-block-content-browser-only");
+                }
+            });
         }
         // General
         public void SetBackground(bool gradient, Color topColor, Color bottomColor, bool redraw)
         {
-            InvokeIfRequired(_vtk.SetBackground, gradient, topColor, bottomColor, redraw);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetBackground(gradient, topColor, bottomColor, redraw);
+                else
+                {
+                    _vtkJs.SetViewportBackground(gradient, topColor, bottomColor, redraw);
+                    _vtkJs.WriteCompatibilityTrace("viewport-appearance", "set-background");
+                }
+            });
         }
         public void SetLighting(double ambient, double diffuse, bool redraw)
         {
-            InvokeIfRequired(_vtk.SetLighting, ambient, diffuse, redraw);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetLighting(ambient, diffuse, redraw);
+                else
+                {
+                    _vtkJs.SetViewportLighting(ambient, diffuse, redraw);
+                    _vtkJs.WriteCompatibilityTrace("viewport-appearance", "set-lighting");
+                }
+            });
         }
         public void SetSmoothing(bool pointSmoothing, bool lineSmoothing, bool redraw)
         {
-            InvokeIfRequired(_vtk.SetSmoothing, pointSmoothing, lineSmoothing, redraw);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetSmoothing(pointSmoothing, lineSmoothing, redraw);
+                else
+                {
+                    _vtkJs.SetGraphicsSmoothing(pointSmoothing, lineSmoothing);
+                    _vtkJs.WriteCompatibilityTrace("graphics-interaction", "smoothing-browser-only");
+                }
+            });
         }
         // Highlight
         public void SetHighlightColor(Color primaryHighlightColor, Color secondaryHighlightColor)
         {
-            InvokeIfRequired(_vtk.SetHighlightColor, primaryHighlightColor, secondaryHighlightColor);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetHighlightColor(primaryHighlightColor, secondaryHighlightColor);
+                else
+                {
+                    _vtkJs.SetHighlightColors(primaryHighlightColor, secondaryHighlightColor);
+                    _vtkJs.WriteCompatibilityTrace("graphics-interaction", "highlight-colors-browser-only");
+                }
+            });
         }
         public void SetMouseHighlightColor(Color mouseHighlightColor)
         {
-            InvokeIfRequired(_vtk.SetMouseHighlightColor, mouseHighlightColor);
+            InvokeIfRequired(() =>
+            {
+                if (_vtkJs == null) _vtk.SetMouseHighlightColor(mouseHighlightColor);
+                else
+                {
+                    _vtkJs.SetMouseHighlightColor(mouseHighlightColor);
+                    _vtkJs.WriteCompatibilityTrace("graphics-interaction", "mouse-highlight-browser-only");
+                }
+            });
         }
         // Symbols
         public void SetDrawSymbolEdges(bool drawSilhouettes)
@@ -15680,51 +18064,197 @@ namespace PrePoMax
         }
         public float GetAnimationScaleFactor(int frameNumber)
         {
-            return _vtk.GetAnimationScaleFactor(frameNumber);
+            return _vtkJs == null
+                ? _vtk.GetAnimationScaleFactor(frameNumber)
+                : _vtkJs.GetAnimationScaleFactor(frameNumber);
         }
         public void SetAnimationAcceleration(bool animationAcceleration)
         {
-            InvokeIfRequired(_vtk.SetAnimationAcceleration, animationAcceleration);
+            if (_vtkJs == null) InvokeIfRequired(_vtk.SetAnimationAcceleration, animationAcceleration);
+            else _vtkJs.WriteCompatibilityTrace("result-animation", "acceleration-browser-managed");
         }
         public void SetAnimationFrameData(float[] time, int[] stepId, int[] stepIncrementId, float[] scale,
                                           double[] allFramesScalarRange, vtkMaxAnimationType animationType)
         {
-            InvokeIfRequired(_vtk.SetAnimationFrameData, time, stepId, stepIncrementId, scale, allFramesScalarRange,
-                             animationType);
-            if (_vtkJs != null)
-                InvokeIfRequired(_vtkJs.SetAnimationFrameData, time, stepId, stepIncrementId, scale, animationType);
+            if (_vtkJs == null)
+                InvokeIfRequired(_vtk.SetAnimationFrameData, time, stepId, stepIncrementId, scale,
+                                 allFramesScalarRange, animationType);
+            else
+                InvokeIfRequired(_vtkJs.SetAnimationFrameData, time, stepId, stepIncrementId, scale,
+                                 allFramesScalarRange, animationType);
         }
         public void SetAnimationFrame(int frameNum, bool scalarRangeFromAllFrames)
         {
             InvokeIfRequired(() =>
             {
                 var totalTimer = Stopwatch.StartNew();
-                _vtk.SetAnimationFrame(frameNum, scalarRangeFromAllFrames, _vtkJs == null, _vtkJs == null);
-                double legacyMs = totalTimer.Elapsed.TotalMilliseconds;
-                if (_vtkJs != null)
+                if (_vtkJs == null)
                 {
-                    _vtkJs.WriteCompatibilityTrace("camera", "animation-frame-adjust-" + frameNum);
-                    var mirrorTimer = Stopwatch.StartNew();
-                    _vtkJs.SetAnimationFrame(frameNum);
-                    mirrorTimer.Stop();
-                    totalTimer.Stop();
-                    _vtkJs.WriteAcceptanceTrace("animation activation frame=" + frameNum +
-                        " legacyMs=" + legacyMs.ToString(System.Globalization.CultureInfo.InvariantCulture) +
-                        " mirrorMs=" + mirrorTimer.Elapsed.TotalMilliseconds.ToString(System.Globalization.CultureInfo.InvariantCulture) +
-                        " totalMs=" + totalTimer.Elapsed.TotalMilliseconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    _vtk.SetAnimationFrame(frameNum, scalarRangeFromAllFrames, true, true);
+                    return;
                 }
+
+                // The browser owns interactive animation activation. Hidden animation actors are
+                // retained only for explicit legacy adapters and must not be mutated here.
+                _vtkJs.WriteCompatibilityTrace("camera", "animation-frame-adjust-" + frameNum);
+                _vtkJs.WriteCompatibilityTrace("result-animation", "frame-browser-only");
+                var browserTimer = Stopwatch.StartNew();
+                _vtkJs.SetAnimationFrame(frameNum, scalarRangeFromAllFrames);
+                browserTimer.Stop();
+                totalTimer.Stop();
+                _vtkJs.WriteAcceptanceTrace("animation activation frame=" + frameNum +
+                    " legacyMs=0" +
+                    " mirrorMs=" + browserTimer.Elapsed.TotalMilliseconds.ToString(System.Globalization.CultureInfo.InvariantCulture) +
+                    " totalMs=" + totalTimer.Elapsed.TotalMilliseconds.ToString(System.Globalization.CultureInfo.InvariantCulture));
             });
         }
-        public void SaveAnimationAsAVI(string fileName, int[] firstLastFrame, int step, int fps, bool scalarRangeFromAllFrames,
-                                       bool swing, bool encoderOptions)
+        public async Task SaveAnimationAsAVI(string fileName, int[] firstLastFrame, int step, int fps,
+                                             bool scalarRangeFromAllFrames, bool swing, bool encoderOptions)
         {
-            InvokeIfRequired(_vtk.SaveAnimationAsAVI, fileName, firstLastFrame, step, fps, scalarRangeFromAllFrames,
-                             swing, encoderOptions);
+            if (this.InvokeRequired)
+            {
+                await (Task)this.Invoke(new Func<Task>(() => SaveAnimationAsAVI(fileName, firstLastFrame, step, fps,
+                                                                                scalarRangeFromAllFrames, swing,
+                                                                                encoderOptions)));
+                return;
+            }
+            if (_vtkJs == null)
+            {
+                _vtk.SaveAnimationAsAVI(fileName, firstLastFrame, step, fps, scalarRangeFromAllFrames,
+                                        swing, encoderOptions);
+                return;
+            }
+            if (encoderOptions)
+                throw new NotSupportedException("VTK.js AVI export uses the built-in Motion JPEG encoder and has no system codec dialog.");
+            if (firstLastFrame == null || firstLastFrame.Length != 2)
+                throw new ArgumentException("The first and last animation frames are required.");
+            if (step < 1) step = 1;
+            if (fps < 1 || fps > 1000)
+                throw new ArgumentOutOfRangeException("AVI frame rate must be between 1 and 1000 frames per second.");
+            int frameCount = _vtkJs.AnimationFrameCount;
+            if (firstLastFrame[0] < 0 || firstLastFrame[1] < firstLastFrame[0] ||
+                firstLastFrame[1] >= frameCount)
+                throw new ArgumentOutOfRangeException("The AVI animation frame range is invalid.");
+            var frames = new List<int>();
+            for (int frame = firstLastFrame[0]; frame <= firstLastFrame[1]; frame += step) frames.Add(frame);
+            if (swing)
+                for (int frame = firstLastFrame[1]; frame >= firstLastFrame[0]; frame -= step) frames.Add(frame);
+
+            string outputPath = Path.GetFullPath(fileName);
+            string directory = Path.GetDirectoryName(outputPath);
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+                throw new DirectoryNotFoundException("The AVI output directory does not exist.");
+            if (File.Exists(outputPath) && CaeGlobals.Tools.IsFileLocked(outputPath))
+                throw new IOException("The file '" + outputPath + "' cannot be replaced.");
+            string stagedPath = Path.Combine(directory, "." + Path.GetFileName(outputPath) + "." +
+                                                        Guid.NewGuid().ToString("N") + ".stage.avi");
+            VtkJsMjpegAviWriter writer = null;
+            long jpegBytes = 0;
+            int width = 0;
+            int height = 0;
+            try
+            {
+                foreach (int frame in frames)
+                {
+                    await _vtkJs.ActivateAnimationFrameAsync(frame, scalarRangeFromAllFrames);
+                    VtkJsJpegCaptureResult capture = await _vtkJs.CaptureJpegAsync();
+                    if (writer == null)
+                    {
+                        width = capture.Width;
+                        height = capture.Height;
+                        writer = new VtkJsMjpegAviWriter(stagedPath, width, height, fps, frames.Count);
+                    }
+                    writer.WriteFrame(capture.Bytes, capture.Width, capture.Height);
+                    jpegBytes += capture.Bytes.Length;
+                }
+                writer.Complete();
+                writer.Dispose();
+                writer = null;
+                if (File.Exists(outputPath)) File.Replace(stagedPath, outputPath, null, true);
+                else File.Move(stagedPath, outputPath);
+            }
+            finally
+            {
+                if (writer != null) writer.Dispose();
+                try { if (File.Exists(stagedPath)) File.Delete(stagedPath); }
+                catch { }
+            }
+            _vtkJs.WriteCompatibilityTrace("result-animation", "avi-browser-only");
+            _vtkJs.WriteAcceptanceTrace("browser animation avi frames=" + frames.Count +
+                                        " jpegBytes=" + jpegBytes + " fileBytes=" + new FileInfo(outputPath).Length +
+                                        " width=" + width + " height=" + height + " fps=" + fps + " codec=MJPG");
         }
-        public void SaveAnimationAsImages(string fileName, int[] firstLastFrame, int step, bool scalarRangeFromAllFrames,
-                                          bool swing)
+        public async Task SaveAnimationAsImages(string fileName, int[] firstLastFrame, int step,
+                                                bool scalarRangeFromAllFrames, bool swing)
         {
-            InvokeIfRequired(_vtk.SaveAnimationAsImages, fileName, firstLastFrame, step, scalarRangeFromAllFrames, swing);
+            if (this.InvokeRequired)
+            {
+                await (Task)this.Invoke(new Func<Task>(() => SaveAnimationAsImages(fileName, firstLastFrame, step,
+                                                                                   scalarRangeFromAllFrames, swing)));
+                return;
+            }
+            if (_vtkJs == null)
+            {
+                _vtk.SaveAnimationAsImages(fileName, firstLastFrame, step, scalarRangeFromAllFrames, swing);
+                return;
+            }
+            if (firstLastFrame == null || firstLastFrame.Length != 2)
+                throw new ArgumentException("The first and last animation frames are required.");
+            if (step < 1) step = 1;
+            int frameCount = _vtkJs.AnimationFrameCount;
+            if (firstLastFrame[0] < 0 || firstLastFrame[1] < firstLastFrame[0] ||
+                firstLastFrame[1] >= frameCount)
+                throw new ArgumentOutOfRangeException("The animation image frame range is invalid.");
+            var frames = new List<int>();
+            for (int frame = firstLastFrame[0]; frame <= firstLastFrame[1]; frame += step) frames.Add(frame);
+            if (swing)
+                for (int frame = firstLastFrame[1]; frame >= firstLastFrame[0]; frame -= step) frames.Add(frame);
+            int numberPlaces = (int)Math.Log10(frames.Count) + 1;
+            string fullBasePath = Path.GetFullPath(fileName);
+            string directory = Path.GetDirectoryName(fullBasePath);
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+                throw new DirectoryNotFoundException("The animation image output directory does not exist.");
+            string baseName = Path.GetFileName(fullBasePath);
+            string operationId = Guid.NewGuid().ToString("N");
+            var outputs = new List<KeyValuePair<string, string>>(frames.Count);
+            for (int index = 0; index < frames.Count; index++)
+            {
+                string output = Path.Combine(directory, (index + 1).ToString().PadLeft(numberPlaces, '0') + "_" + baseName);
+                if (File.Exists(output) && CaeGlobals.Tools.IsFileLocked(output))
+                    throw new IOException("The file '" + output + "' cannot be replaced.");
+                string staged = Path.Combine(directory, "." + Path.GetFileName(output) + "." + operationId + ".stage.png");
+                outputs.Add(new KeyValuePair<string, string>(output, staged));
+            }
+            long totalBytes = 0;
+            int width = 0;
+            int height = 0;
+            try
+            {
+                for (int index = 0; index < frames.Count; index++)
+                {
+                    await _vtkJs.ActivateAnimationFrameAsync(frames[index], scalarRangeFromAllFrames);
+                    VtkJsPngCaptureResult capture = await _vtkJs.CapturePngAsync(outputs[index].Value);
+                    totalBytes += capture.Bytes;
+                    width = capture.Width;
+                    height = capture.Height;
+                }
+                foreach (KeyValuePair<string, string> output in outputs)
+                {
+                    if (File.Exists(output.Key)) File.Replace(output.Value, output.Key, null, true);
+                    else File.Move(output.Value, output.Key);
+                }
+            }
+            finally
+            {
+                foreach (KeyValuePair<string, string> output in outputs)
+                {
+                    try { if (File.Exists(output.Value)) File.Delete(output.Value); }
+                    catch { }
+                }
+            }
+            _vtkJs.WriteCompatibilityTrace("result-animation", "images-browser-only");
+            _vtkJs.WriteAcceptanceTrace("browser animation images=" + frames.Count +
+                                        " bytes=" + totalBytes + " width=" + width + " height=" + height);
         }
         // Widgets
         public void AddArrowWidget(string name, string text, string numberFormat, double[] anchorPoint,

@@ -6,15 +6,47 @@ param(
     [switch]$ExerciseAnnotation,
     [switch]$ExerciseExtrema,
     [switch]$ExerciseAnnotationInteraction,
+    [switch]$ExerciseAnnotationSettings,
     [switch]$ExerciseLargeSelection,
     [switch]$ExerciseCameraState,
     [switch]$ExerciseBoxZoom,
     [switch]$ExerciseVisibilityCamera,
+    [switch]$ExerciseTransformations,
     [switch]$ExerciseExplodedPreview,
     [switch]$ExerciseSectionView,
+    [switch]$ExerciseSphereSymbol,
+    [switch]$ExerciseCoordinateOverlay,
+    [switch]$ExerciseDirectionalGlyph,
+    [switch]$ExerciseGeneralConeGlyph,
+    [switch]$ExerciseRotationalGlyph,
+    [switch]$ExerciseArrowGlyph,
+    [switch]$ExerciseDoubleArrowGlyph,
+    [switch]$ExerciseSpringGlyph,
+    [switch]$ExerciseThermalGlyph,
+    [switch]$ExerciseFluxGlyph,
+    [switch]$ExerciseViewportAppearance,
+    [switch]$ExerciseOrientationMarker,
+    [switch]$ExerciseScaleWidget,
+    [switch]$ExerciseScalarLegend,
+    [switch]$ExerciseColorBar,
+    [switch]$ExerciseStatusBlock,
+    [switch]$ExerciseActorPresentation,
+    [switch]$ExerciseActorHighlight,
+    [switch]$ExerciseSceneClear,
+    [switch]$ExerciseCorePartConstruction,
+    [switch]$ExerciseThreeMfExportInput,
+    [switch]$ExerciseStaticScalarConstruction,
+    [switch]$ExerciseSelectionSurfaceConstruction,
+    [switch]$ExerciseSelectionPrimitiveConstruction,
+    [switch]$ExerciseAuxiliaryConstruction,
+    [switch]$ExerciseGenericConstruction,
+    [switch]$ExerciseCellClassification,
     [ValidateRange(0, 8000000)]
     [int]$SelectionCapacityIds = 0,
     [switch]$ExerciseAnimation,
+    [switch]$ExerciseAnimationPngCapture,
+    [switch]$ExerciseAnimationAviCapture,
+    [switch]$ExerciseFollowerRedraw,
     [switch]$MeasureAnimationCadence,
     [ValidateSet('ScaleFactor', 'TimeIncrements', 'Harmonic')]
     [string]$AnimationMode = 'ScaleFactor',
@@ -23,14 +55,30 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+if ($ExerciseFollowerRedraw -and -not $ExerciseAnimation) {
+    throw 'ExerciseFollowerRedraw requires ExerciseAnimation.'
+}
+if ($ExerciseAnimationPngCapture -and -not $ExerciseAnimation) {
+    throw 'ExerciseAnimationPngCapture requires ExerciseAnimation.'
+}
+if ($ExerciseAnimationAviCapture -and -not $ExerciseAnimation) {
+    throw 'ExerciseAnimationAviCapture requires ExerciseAnimation.'
+}
 $repositoryRoot = Split-Path -Parent $PSScriptRoot
 $executable = Resolve-Path (Join-Path $repositoryRoot 'PrePoMax\bin\x64\Release\PrePoMax.exe')
 $env:PREPOMAX_RENDERER = 'vtkjs'
+$hostTokenBytes = New-Object byte[] 32
+$hostTokenGenerator = [Security.Cryptography.RandomNumberGenerator]::Create()
+try { $hostTokenGenerator.GetBytes($hostTokenBytes) }
+finally { $hostTokenGenerator.Dispose() }
+$smokeHostToken = [Convert]::ToBase64String($hostTokenBytes).Replace('+', '-').Replace('/', '_').TrimEnd('=')
+$env:PREPOMAX_VTKJS_HOST_TOKEN_OVERRIDE = $smokeHostToken
 $traceFile = Join-Path ([System.IO.Path]::GetTempPath()) ("prepomax-vtkjs-smoke-{0}.log" -f [Guid]::NewGuid().ToString('N'))
 $fieldSwitchTrigger = Join-Path ([System.IO.Path]::GetTempPath()) ("prepomax-vtkjs-field-{0}.trigger" -f [Guid]::NewGuid().ToString('N'))
 $pickTrigger = Join-Path ([System.IO.Path]::GetTempPath()) ("prepomax-vtkjs-pick-{0}.trigger" -f [Guid]::NewGuid().ToString('N'))
 $animationTrigger = Join-Path ([System.IO.Path]::GetTempPath()) ("prepomax-vtkjs-animation-{0}.trigger" -f [Guid]::NewGuid().ToString('N'))
 $animationFrameTrigger = Join-Path ([System.IO.Path]::GetTempPath()) ("prepomax-vtkjs-animation-frame-{0}.trigger" -f [Guid]::NewGuid().ToString('N'))
+$sceneClearTrigger = Join-Path ([System.IO.Path]::GetTempPath()) ("prepomax-vtkjs-scene-clear-{0}.trigger" -f [Guid]::NewGuid().ToString('N'))
 $env:PREPOMAX_RENDER_TRACE_FILE = $traceFile
 if (-not [string]::IsNullOrWhiteSpace($SwitchField)) {
     $env:PREPOMAX_VTKJS_SMOKE_FIELD = $SwitchField
@@ -43,12 +91,43 @@ if ($ExercisePick) {
 if ($ExerciseAnnotation) { $env:PREPOMAX_VTKJS_SMOKE_ANNOTATION = '1' }
 if ($ExerciseExtrema) { $env:PREPOMAX_VTKJS_SMOKE_EXTREMA = '1' }
 if ($ExerciseAnnotationInteraction) { $env:PREPOMAX_VTKJS_SMOKE_ANNOTATION_INTERACTION = '1' }
+if ($ExerciseAnnotationSettings) { $env:PREPOMAX_VTKJS_SMOKE_ANNOTATION_SETTINGS = '1' }
 if ($ExerciseLargeSelection) { $env:PREPOMAX_VTKJS_SMOKE_LARGE_SELECTION = '1' }
 if ($ExerciseCameraState) { $env:PREPOMAX_VTKJS_SMOKE_CAMERA = '1' }
 if ($ExerciseBoxZoom) { $env:PREPOMAX_VTKJS_SMOKE_BOX_ZOOM = '1' }
 if ($ExerciseVisibilityCamera) { $env:PREPOMAX_VTKJS_SMOKE_VISIBILITY_CAMERA = '1' }
+if ($ExerciseTransformations) { $env:PREPOMAX_VTKJS_SMOKE_TRANSFORMATIONS = '1' }
 if ($ExerciseExplodedPreview) { $env:PREPOMAX_VTKJS_SMOKE_EXPLODED_PREVIEW = '1' }
 if ($ExerciseSectionView) { $env:PREPOMAX_VTKJS_SMOKE_SECTION_VIEW = '1' }
+if ($ExerciseSphereSymbol) { $env:PREPOMAX_VTKJS_SMOKE_SPHERE_SYMBOL = '1' }
+if ($ExerciseCoordinateOverlay) { $env:PREPOMAX_VTKJS_SMOKE_COORDINATE_OVERLAY = '1' }
+if ($ExerciseDirectionalGlyph) { $env:PREPOMAX_VTKJS_SMOKE_DIRECTIONAL_GLYPH = '1' }
+if ($ExerciseGeneralConeGlyph) { $env:PREPOMAX_VTKJS_SMOKE_GENERAL_CONE_GLYPH = '1' }
+if ($ExerciseRotationalGlyph) { $env:PREPOMAX_VTKJS_SMOKE_ROTATIONAL_GLYPH = '1' }
+if ($ExerciseArrowGlyph) { $env:PREPOMAX_VTKJS_SMOKE_ARROW_GLYPH = '1' }
+if ($ExerciseDoubleArrowGlyph) { $env:PREPOMAX_VTKJS_SMOKE_DOUBLE_ARROW_GLYPH = '1' }
+if ($ExerciseSpringGlyph) { $env:PREPOMAX_VTKJS_SMOKE_SPRING_GLYPH = '1' }
+if ($ExerciseThermalGlyph) { $env:PREPOMAX_VTKJS_SMOKE_THERMAL_GLYPH = '1' }
+if ($ExerciseFluxGlyph) { $env:PREPOMAX_VTKJS_SMOKE_FLUX_GLYPH = '1' }
+if ($ExerciseViewportAppearance) { $env:PREPOMAX_VTKJS_SMOKE_VIEWPORT_APPEARANCE = '1' }
+if ($ExerciseOrientationMarker) { $env:PREPOMAX_VTKJS_SMOKE_ORIENTATION_MARKER = '1' }
+if ($ExerciseScaleWidget) { $env:PREPOMAX_VTKJS_SMOKE_SCALE_WIDGET = '1' }
+if ($ExerciseScalarLegend) { $env:PREPOMAX_VTKJS_SMOKE_SCALAR_LEGEND = '1' }
+if ($ExerciseColorBar) { $env:PREPOMAX_VTKJS_SMOKE_COLOR_BAR = '1' }
+if ($ExerciseStatusBlock) { $env:PREPOMAX_VTKJS_SMOKE_STATUS_BLOCK = '1' }
+if ($ExerciseActorPresentation) { $env:PREPOMAX_VTKJS_SMOKE_ACTOR_PRESENTATION = '1' }
+if ($ExerciseActorHighlight) { $env:PREPOMAX_VTKJS_SMOKE_ACTOR_HIGHLIGHT = '1' }
+if ($ExerciseSceneClear) {
+    $env:PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR = '1'
+    $env:PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR_TRIGGER = $sceneClearTrigger
+}
+if ($ExerciseThreeMfExportInput) { $env:PREPOMAX_VTKJS_SMOKE_3MF_EXPORT_INPUT = '1' }
+if ($ExerciseStaticScalarConstruction) { $env:PREPOMAX_VTKJS_SMOKE_STATIC_SCALAR_CONSTRUCTION = '1' }
+if ($ExerciseSelectionSurfaceConstruction) { $env:PREPOMAX_VTKJS_SMOKE_SELECTION_SURFACE = '1' }
+if ($ExerciseSelectionPrimitiveConstruction) { $env:PREPOMAX_VTKJS_SMOKE_SELECTION_PRIMITIVES = '1' }
+if ($ExerciseAuxiliaryConstruction) { $env:PREPOMAX_VTKJS_SMOKE_AUXILIARY_CONSTRUCTION = '1' }
+if ($ExerciseGenericConstruction) { $env:PREPOMAX_VTKJS_SMOKE_GENERIC_CONSTRUCTION = '1' }
+if ($ExerciseCellClassification) { $env:PREPOMAX_VTKJS_SMOKE_CELL_CLASSIFICATION = '1' }
 if ($SelectionCapacityIds -gt 0) { $env:PREPOMAX_VTKJS_SMOKE_SELECTION_CAPACITY = $SelectionCapacityIds.ToString() }
 if ($ExerciseAnimation) {
     $env:PREPOMAX_VTKJS_SMOKE_ANIMATION = '1'
@@ -56,6 +135,9 @@ if ($ExerciseAnimation) {
     $env:PREPOMAX_VTKJS_SMOKE_ANIMATION_TRIGGER = $animationTrigger
     $env:PREPOMAX_VTKJS_SMOKE_ANIMATION_FRAME_TRIGGER = $animationFrameTrigger
     if ($MeasureAnimationCadence) { $env:PREPOMAX_VTKJS_SMOKE_ANIMATION_SEQUENCE = '1' }
+    if ($ExerciseFollowerRedraw) { $env:PREPOMAX_VTKJS_SMOKE_FOLLOWER_REDRAW = '1' }
+    if ($ExerciseAnimationPngCapture) { $env:PREPOMAX_VTKJS_SMOKE_ANIMATION_PNG_CAPTURE = '1' }
+    if ($ExerciseAnimationAviCapture) { $env:PREPOMAX_VTKJS_SMOKE_ANIMATION_AVI_CAPTURE = '1' }
 }
 elseif ($MeasureAnimationCadence) { throw 'MeasureAnimationCadence requires ExerciseAnimation.' }
 $prePoMaxProcess = $null
@@ -71,15 +153,50 @@ $serverFrustumApplied = $false
 $annotationVisible = $false
 $extremaVisible = $false
 $annotationInteractionApplied = $false
+$annotationSettingsApplied = $false
 $largeSelectionCount = 0
 $cameraStateRetained = $false
 $boxZoomApplied = $false
 $visibilityCameraApplied = $false
+$transformationsBrowserOnly = $false
 $explodedPreviewApplied = $false
 $sectionViewApplied = $false
+$sphereSymbolApplied = $false
+$coordinateOverlayApplied = $false
+$directionalGlyphApplied = $false
+$generalConeGlyphApplied = $false
+$rotationalGlyphApplied = $false
+$arrowGlyphApplied = $false
+$doubleArrowGlyphApplied = $false
+$springGlyphApplied = $false
+$thermalGlyphApplied = $false
+$fluxGlyphApplied = $false
+$viewportAppearanceApplied = $false
+$orientationMarkerBrowserOnly = $false
+$scaleWidgetBrowserOnly = $false
+$scalarLegendBrowserOnly = $false
+$colorBarBrowserOnly = $false
+$statusBlockBrowserOnly = $false
+$actorPresentationApplied = $false
+$actorHighlightApplied = $false
+$sceneClearApplied = $false
+$corePartConstructionBrowserOnly = $false
+$threeMfExportRetainedInput = $false
+$staticScalarConstructionBrowserOnly = $false
+$selectionSurfaceConstructionBrowserOnly = $false
+$selectionPrimitiveConstructionBrowserOnly = $false
+$auxiliaryConstructionBrowserOnly = $false
+$genericConstructionBrowserOnly = $false
+$cellClassificationBrowserOnly = $false
 $sectionCapActors = 0
 $sectionSkippedCells = 0
 $animationFramePublished = $false
+$animationFrameActiVizBypassed = $false
+$animationConstructionBrowserOnly = $false
+$animationExportAdapterMaterialized = $false
+$animationPngCaptureBrowserOnly = $false
+$animationAviCaptureBrowserOnly = $false
+$followerRedrawApplied = $false
 $animationFrames = 0
 $animationFramesPublished = 0
 $animationFrameLatencies = New-Object System.Collections.Generic.List[double]
@@ -122,6 +239,28 @@ function Invoke-CloseConfirmation([int]$ProcessId) {
             }
         }
     }
+    return $false
+}
+function Invoke-AnnotationSettingsDialog([int]$ProcessId) {
+    try {
+        $processCondition = New-Object Windows.Automation.PropertyCondition(
+            [Windows.Automation.AutomationElement]::ProcessIdProperty, $ProcessId)
+        $windows = [Windows.Automation.AutomationElement]::RootElement.FindAll(
+            [Windows.Automation.TreeScope]::Descendants, $processCondition)
+        foreach ($window in $windows) {
+            if ($window.Current.Name -ne 'Edit Settings') { continue }
+            $cancelCondition = New-Object Windows.Automation.PropertyCondition(
+                [Windows.Automation.AutomationElement]::NameProperty, 'Cancel')
+            $cancel = $window.FindFirst([Windows.Automation.TreeScope]::Descendants, $cancelCondition)
+            if ($null -eq $cancel) { continue }
+            $invoke = $cancel.GetCurrentPattern([Windows.Automation.InvokePattern]::Pattern)
+            if ($null -eq $invoke) { continue }
+            $invoke.Invoke()
+            return $true
+        }
+    }
+    catch [Windows.Automation.ElementNotAvailableException] { return $false }
+    catch [Windows.Automation.ElementNotEnabledException] { return $false }
     return $false
 }
 
@@ -284,7 +423,8 @@ try {
         }
         if ($null -eq $listeningPort) { throw 'The renderer child loopback port was not discovered.' }
         $baseUrl = "http://127.0.0.1:$listeningPort"
-        $session = Invoke-RestMethod -Method Post "$baseUrl/api/v1/sessions"
+        $session = Invoke-RestMethod -Method Post "$baseUrl/api/v1/sessions" `
+            -Headers @{ 'X-PrePoMax-Host-Token' = $smokeHostToken }
         $headers = @{ 'X-PrePoMax-Session' = $session.accessToken }
         $isInputDeck = [string]::Equals(
             [System.IO.Path]::GetExtension($resolvedModel.Path), '.inp', [System.StringComparison]::OrdinalIgnoreCase)
@@ -335,6 +475,9 @@ try {
         if ($ExpectFiniteScalars -and $uploadedScene.field.name -eq 'PrePoMax values') {
             throw 'The uploaded result scene did not expose real PrePoMax field metadata.'
         }
+        if ($ExerciseSceneClear) {
+            New-Item -ItemType File -Path $sceneClearTrigger -Force | Out-Null
+        }
         if ($ExerciseAnimation) {
             $staticSceneId = $uploadedScene.sceneId
             $staticRevision = [long]$uploadedScene.sceneRevision
@@ -365,6 +508,51 @@ try {
             if ($null -eq $animationBaseline) {
                 $animationDiagnostic = if (Test-Path $traceFile) { (Get-Content $traceFile -Tail 35) -join ' | ' } else { '<none>' }
                 throw "PrePoMax did not publish animation frame 0 before the delta. Trace: $animationDiagnostic"
+            }
+            $animationConstructionBrowserOnly =
+                (Select-String -Path $traceFile -Pattern 'compatibility bypass capability=result-animation operation=construction-browser-only' -Quiet) -and
+                -not (Select-String -Path $traceFile -Pattern 'compatibility bypass capability=result-animation operation=construction-rejected' -Quiet) -and
+                (Select-String -Path $traceFile -Pattern 'acceptance: animation construction browserOnly actors=[1-9][0-9]* legacyMaterialized=False' -Quiet)
+            if (-not $animationConstructionBrowserOnly) {
+                throw 'Animated result construction did not remain browser-only before export materialization.'
+            }
+            if ($ExerciseAnimationPngCapture) {
+                for ($attempt = 0; $attempt -lt 160 -and -not $animationPngCaptureBrowserOnly; $attempt++) {
+                    Start-Sleep -Milliseconds 250
+                    $setupFailure = Select-String -Path $traceFile -Pattern 'acceptance: animation setup failed:' |
+                        Select-Object -Last 1
+                    if ($null -ne $setupFailure) { throw $setupFailure.Line }
+                    $animationPngCaptureBrowserOnly =
+                        (Select-String -Path $traceFile -Pattern 'compatibility bypass capability=result-animation operation=images-browser-only' -Quiet) -and
+                        (Select-String -Path $traceFile -Pattern 'acceptance: browser animation images=2 bytes=[1-9][0-9]* width=[1-9][0-9]* height=[1-9][0-9]*' -Quiet) -and
+                        (Select-String -Path $traceFile -Pattern 'acceptance: animation export images=2 bytes=[1-9][0-9]* distinct=True' -Quiet) -and
+                        ((Select-String -Path $traceFile -Pattern 'browser PNG captured bytes=[1-9][0-9]* width=[1-9][0-9]* height=[1-9][0-9]*').Count -eq 2)
+                }
+                if (-not $animationPngCaptureBrowserOnly) {
+                    throw 'The browser did not capture, validate, and write both PNG animation frames.'
+                }
+                if (Select-String -Path $traceFile -Pattern 'compatibility bypass capability=result-animation operation=export-legacy-materialized' -Quiet) {
+                    throw 'Browser PNG capture unexpectedly materialized the legacy animation export adapter.'
+                }
+            }
+            if ($ExerciseAnimationAviCapture) {
+                for ($attempt = 0; $attempt -lt 160 -and -not $animationAviCaptureBrowserOnly; $attempt++) {
+                    Start-Sleep -Milliseconds 250
+                    $setupFailure = Select-String -Path $traceFile -Pattern 'acceptance: animation setup failed:' |
+                        Select-Object -Last 1
+                    if ($null -ne $setupFailure) { throw $setupFailure.Line }
+                    $animationAviCaptureBrowserOnly =
+                        (Select-String -Path $traceFile -Pattern 'compatibility bypass capability=result-animation operation=avi-browser-only' -Quiet) -and
+                        (Select-String -Path $traceFile -Pattern 'acceptance: browser animation avi frames=2 jpegBytes=[1-9][0-9]* fileBytes=[1-9][0-9]* width=[1-9][0-9]* height=[1-9][0-9]* fps=12 codec=MJPG' -Quiet) -and
+                        (Select-String -Path $traceFile -Pattern 'acceptance: animation export avi frames=2 bytes=[1-9][0-9]* riff=True mjpg=True indexed=True distinct=True' -Quiet) -and
+                        ((Select-String -Path $traceFile -Pattern 'browser JPEG captured bytes=[1-9][0-9]* width=[1-9][0-9]* height=[1-9][0-9]*').Count -eq 2)
+                }
+                if (-not $animationAviCaptureBrowserOnly) {
+                    throw 'The browser did not capture and encode a valid indexed two-frame Motion JPEG AVI.'
+                }
+                if (Select-String -Path $traceFile -Pattern 'compatibility bypass capability=result-animation operation=export-legacy-materialized' -Quiet) {
+                    throw 'Browser AVI capture unexpectedly materialized the legacy animation export adapter.'
+                }
             }
             if ($animationFrames -lt 2) {
                 throw "The $AnimationMode acceptance model exposes only $animationFrames animation frame; at least two are required."
@@ -402,7 +590,8 @@ try {
                     $traceReady = (Test-Path $traceFile) -and
                         (Select-String -Path $traceFile -Pattern "animation frame=$targetFrame type=$AnimationMode .*generation=" -Quiet) -and
                         (Select-String -Path $traceFile -Pattern "acceptance: animation target requested type=$AnimationMode frame=$targetFrame" -Quiet) -and
-                        (Select-String -Path $traceFile -Pattern "compatibility bypass capability=camera operation=animation-frame-adjust-$targetFrame" -Quiet)
+                        (Select-String -Path $traceFile -Pattern "compatibility bypass capability=camera operation=animation-frame-adjust-$targetFrame" -Quiet) -and
+                        (Select-String -Path $traceFile -Pattern 'compatibility bypass capability=result-animation operation=frame-browser-only' -Quiet)
                     if (-not $traceReady) { continue }
                     $currentScenes = Invoke-RestMethod "$baseUrl/api/v1/scenes" -Headers $headers
                     if ($currentScenes.Count -eq 0) { continue }
@@ -446,8 +635,9 @@ try {
                         Select-Object -Last 1
                 }
                 if ($null -eq $browserLine -or $browserLine.Line -notmatch
-                    'chunks=([0-9]+) bytes=([0-9]+) downloadMs=([0-9]+(?:\.[0-9]+)?) applyMs=([0-9]+(?:\.[0-9]+)?) paintMs=([0-9]+(?:\.[0-9]+)?) totalMs=([0-9]+(?:\.[0-9]+)?) cameraAdjusted=True') {
-                    throw "The browser did not report stable activation for scene revision $browserRevision."
+                    'chunks=([0-9]+) bytes=([0-9]+) downloadMs=([0-9]+(?:\.[0-9]+)?) applyMs=([0-9]+(?:\.[0-9]+)?) paintMs=([0-9]+(?:\.[0-9]+)?) totalMs=([0-9]+(?:\.[0-9]+)?) followerAdjusted=(?:True|False) cameraAdjusted=True') {
+                    $browserDiagnostic = if ($null -eq $browserLine) { '<missing>' } else { $browserLine.Line }
+                    throw "The browser did not report stable activation for scene revision $browserRevision. Telemetry: $browserDiagnostic"
                 }
                 $invariant = [Globalization.CultureInfo]::InvariantCulture
                 $browserFrameSamples.Add([pscustomobject]@{
@@ -460,6 +650,9 @@ try {
                     StablePaintMs = [double]::Parse($Matches[5], $invariant)
                     TotalMs = [double]::Parse($Matches[6], $invariant)
                 })
+                if ($ExerciseFollowerRedraw -and $browserLine.Line -notmatch 'followerAdjusted=True') {
+                    throw "The physical follower did not adjust the camera for animation frame $targetFrame."
+                }
                 $transportLine = Select-String -Path $traceFile -Pattern 'frame transport generation=' |
                     Select-Object -Last 1
                 if ($null -eq $transportLine -or $transportLine.Line -notmatch
@@ -501,12 +694,29 @@ try {
                     MirrorMs = [double]::Parse($Matches[2], $invariant)
                     TotalActivationMs = [double]::Parse($Matches[3], $invariant)
                 })
+                if ($captureFrameSamples[$captureFrameSamples.Count - 1].LegacyActivationMs -ne 0) {
+                    throw "Hidden ActiViz performed animation-frame work for frame $targetFrame."
+                }
+                $animationFrameActiVizBypassed = $true
                 $animationFrameLatencies.Add($frameTimer.Elapsed.TotalMilliseconds)
                 $animationFramesPublished++
                 $previousScene = $animationScene
                 $previousPositionHashes = $animationPositionHashes
             }
             $animationFramePublished = $animationFramesPublished -eq $targetFrames.Count
+            if ($ExerciseFollowerRedraw) {
+                $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+                $followerRedrawApplied =
+                    ($trace -match 'acceptance: physical follower requested points=3').Count -gt 0 -and
+                    ($trace -match 'compatibility bypass capability=camera operation=follower-apply').Count -gt 0 -and
+                    ($trace -match 'compatibility bypass capability=camera operation=follower-update').Count -gt 0 -and
+                    ($trace -match 'browser frame activated .*followerAdjusted=True cameraAdjusted=True').Count -gt 0
+                if (-not $followerRedrawApplied) {
+                    $followerDiagnostic = ($trace | Where-Object { $_ -match 'follower|frame activated' } |
+                        Select-Object -Last 35) -join ' | '
+                    throw "The physical follower redraw did not traverse the controller and browser paths. Trace: $followerDiagnostic"
+                }
+            }
             $uploadedScene = $animationScene
         }
         if (-not [string]::IsNullOrWhiteSpace($SwitchField)) {
@@ -638,6 +848,21 @@ try {
                 throw "The browser annotation move/edit/reset/delete workflow was not applied and echoed by PrePoMax. Trace: $interactionDiagnostic"
             }
         }
+        if ($ExerciseAnnotationSettings) {
+            for ($attempt = 0; $attempt -lt 80 -and -not $annotationSettingsApplied; $attempt++) {
+                Start-Sleep -Milliseconds 250
+                $settingsTraceApplied = (Test-Path $traceFile) -and
+                    (Select-String -Path $traceFile -Pattern "acceptance: annotation action applied name='R_Annotation[^']+' action=settings" -Quiet) -and
+                    (Select-String -Path $traceFile -Pattern "acceptance: annotation settings dialog visible=True selected='Annotations'" -Quiet)
+                if ($settingsTraceApplied) {
+                    $annotationSettingsApplied = Invoke-AnnotationSettingsDialog -ProcessId $prePoMaxProcess.Id
+                }
+            }
+            if (-not $annotationSettingsApplied) {
+                $settingsDiagnostic = if (Test-Path $traceFile) { (Get-Content $traceFile -Tail 35) -join ' | ' } else { '<none>' }
+                throw "The annotation Settings action did not open the real dialog with Annotations selected. Trace: $settingsDiagnostic"
+            }
+        }
         if ($ExerciseLargeSelection -or $SelectionCapacityIds -gt 0) {
             for ($attempt = 0; $attempt -lt 160 -and $largeSelectionCount -eq 0; $attempt++) {
                 Start-Sleep -Milliseconds 250
@@ -713,8 +938,8 @@ try {
                 Start-Sleep -Milliseconds 250
                 $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
                 $visibilityCameraApplied =
-                    ($trace -match 'compatibility bypass capability=camera operation=actor-visibility-hide').Count -gt 0 -and
-                    ($trace -match 'compatibility bypass capability=camera operation=actor-visibility-show').Count -gt 0 -and
+                    ($trace -match 'compatibility bypass capability=actor-presentation operation=visibility-hide').Count -gt 0 -and
+                    ($trace -match 'compatibility bypass capability=actor-presentation operation=visibility-show').Count -gt 0 -and
                     ($trace -match 'actor visibility visible=False count=1').Count -gt 0 -and
                     ($trace -match 'actor visibility visible=True count=1').Count -gt 0 -and
                     ($trace -match "acceptance: visibility camera completed actor='").Count -gt 0
@@ -778,6 +1003,566 @@ try {
         }
     }
 
+    if ($ExerciseSphereSymbol) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $sphereSymbolApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $sphereSymbolApplied =
+                ($trace -match 'compatibility bypass capability=sphere-symbols operation=add').Count -gt 0 -and
+                ($trace -match 'sphere symbol state actors=1 points=1').Count -gt 0 -and
+                ($trace -match 'acceptance: sphere symbols 1\|1\|true').Count -gt 0
+        }
+        if (-not $sphereSymbolApplied) {
+            $sphereDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'sphere symbol|sphere-symbol' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser sphere symbol was not rendered without ActiViz. Trace: $sphereDiagnostic"
+        }
+    }
+
+    if ($ExerciseCoordinateOverlay) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $coordinateOverlayApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $coordinateOverlayApplied =
+                ($trace -match 'compatibility bypass capability=coordinate-axis operation=add').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=caption operation=add').Count -gt 0 -and
+                ($trace -match 'coordinate overlay state axes=1 captions=1').Count -gt 0 -and
+                ($trace -match 'acceptance: coordinate overlays 1\|true\|1\|true').Count -gt 0
+        }
+        if (-not $coordinateOverlayApplied) {
+            $coordinateOverlayDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'coordinate overlay|coordinate-axis|caption' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser coordinate overlay was not rendered without ActiViz. Trace: $coordinateOverlayDiagnostic"
+        }
+    }
+
+    if ($ExerciseDirectionalGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $directionalGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $directionalGlyphApplied =
+                ($trace -match 'compatibility bypass capability=displacement-constraint-cones operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $directionalGlyphApplied) {
+            $directionalGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|displacement-constraint' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser displacement-constraint glyph was not rendered without ActiViz. Trace: $directionalGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseRotationalGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $rotationalGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $rotationalGlyphApplied =
+                ($trace -match 'compatibility bypass capability=rotational-constraint operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $rotationalGlyphApplied) {
+            $rotationalGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|rotational-constraint' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser rotational-constraint glyph was not rendered without ActiViz. Trace: $rotationalGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseGeneralConeGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $generalConeGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $generalConeGlyphApplied =
+                ($trace -match 'compatibility bypass capability=general-cone operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $generalConeGlyphApplied) {
+            $generalConeGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|general-cone|general cone' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser general-cone glyph was not rendered without ActiViz. Trace: $generalConeGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseArrowGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $arrowGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $arrowGlyphApplied =
+                ($trace -match 'compatibility bypass capability=oriented-arrow operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $arrowGlyphApplied) {
+            $arrowGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|oriented-arrow|arrow glyph' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser oriented-arrow glyph was not rendered without ActiViz. Trace: $arrowGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseDoubleArrowGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $doubleArrowGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $doubleArrowGlyphApplied =
+                ($trace -match 'compatibility bypass capability=double-arrow operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $doubleArrowGlyphApplied) {
+            $doubleArrowGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|double-arrow|double arrow' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser double-arrow glyph was not rendered without ActiViz. Trace: $doubleArrowGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseSpringGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $springGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $springGlyphApplied =
+                ($trace -match 'compatibility bypass capability=oriented-spring operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $springGlyphApplied) {
+            $springGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|oriented-spring|spring glyph' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser oriented-spring glyph was not rendered without ActiViz. Trace: $springGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseThermalGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $thermalGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $thermalGlyphApplied =
+                ($trace -match 'compatibility bypass capability=oriented-thermal operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $thermalGlyphApplied) {
+            $thermalGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|oriented-thermal|thermal glyph' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser thermal glyph was not rendered without ActiViz. Trace: $thermalGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseFluxGlyph) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $fluxGlyphApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $fluxGlyphApplied =
+                ($trace -match 'compatibility bypass capability=oriented-flux operation=add').Count -gt 0 -and
+                ($trace -match 'directional glyph state actors=1 points=2').Count -gt 0 -and
+                ($trace -match 'acceptance: directional glyphs 1\|2\|true').Count -gt 0
+        }
+        if (-not $fluxGlyphApplied) {
+            $fluxGlyphDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'directional glyph|oriented-flux|flux glyph' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser flux glyph was not rendered without ActiViz. Trace: $fluxGlyphDiagnostic"
+        }
+    }
+
+    if ($ExerciseViewportAppearance) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $viewportAppearanceApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $viewportAppearanceApplied =
+                ($trace -match 'compatibility bypass capability=viewport-appearance operation=set-background').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=viewport-appearance operation=set-lighting').Count -gt 0 -and
+                ($trace -match 'viewport appearance gradient=True ambient=0.35 diffuse=0.65').Count -gt 0 -and
+                ($trace -match 'acceptance: viewport appearance true\|0.047059,0.133333,0.219608\|0.305882,0.352941,0.482353\|0.35\|0.65\|true').Count -gt 0
+        }
+        if (-not $viewportAppearanceApplied) {
+            $viewportAppearanceDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'viewport appearance|viewport-appearance' }) -join ' | '
+            } else { '<none>' }
+            throw "The browser viewport appearance was not applied without ActiViz. Trace: $viewportAppearanceDiagnostic"
+        }
+    }
+
+    if ($ExerciseActorPresentation) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $actorPresentationApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $presentationServerApplied = $false
+            try {
+                $presentationScenes = Invoke-RestMethod "$baseUrl/api/v1/scenes" -Headers $headers
+                if ($presentationScenes.Count -gt 0) {
+                    $presentationManifest = Invoke-RestMethod "$baseUrl/api/v1/scenes/$($presentationScenes[0].sceneId)/manifest" -Headers $headers
+                    $presentationActor = @($presentationManifest.actors | Where-Object {
+                        $_.name -match ' \[VTK\.js presentation smoke\]$'
+                    }) | Select-Object -First 1
+                    if ($null -ne $presentationActor) {
+                        $rgba = @($presentationActor.material.frontRgba)
+                        $presentationServerApplied = $rgba.Count -eq 4 -and
+                            [Math]::Abs([double]$rgba[0] - (32.0 / 255.0)) -lt 0.000001 -and
+                            [Math]::Abs([double]$rgba[1] - (96.0 / 255.0)) -lt 0.000001 -and
+                            [Math]::Abs([double]$rgba[2] - (160.0 / 255.0)) -lt 0.000001 -and
+                            [Math]::Abs([double]$rgba[3] - 1.0) -lt 0.000001
+                    }
+                }
+            } catch { }
+            $actorPresentationApplied =
+                ($trace -match 'acceptance: actor registry True\|True\|True').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=actor-presentation operation=contains-query').Count -ge 3 -and
+                ($trace -match 'compatibility bypass capability=actor-presentation operation=update').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=actor-presentation operation=contours').Count -gt 0 -and
+                ($trace -match 'browser scene applied scene=.* actors=1 chunks=1').Count -gt 0 -and
+                ($trace -match 'acceptance: actor presentation .* \[VTK.js presentation smoke\]\|0.125490,0.376471,0.627451\|1.00\|true\|false').Count -gt 0 -and
+                $presentationServerApplied
+        }
+        if (-not $actorPresentationApplied) {
+            $actorPresentationDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Select-Object -Last 100) -join ' | '
+            } else { '<none>' }
+            throw "Actor registry, presentation, and contour state did not bypass ActiViz. Trace: $actorPresentationDiagnostic"
+        }
+    }
+
+    if ($ExerciseActorHighlight) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $actorHighlightApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $actorHighlightApplied =
+                ($trace -match 'compatibility bypass capability=actor-highlight operation=add').Count -gt 0 -and
+                ($trace -match 'actor highlight state actors=1').Count -gt 0 -and
+                ($trace -match 'acceptance: selection state populated part\|1\|[1-9][0-9]*').Count -gt 0 -and
+                ($trace -match 'acceptance: actor highlights added 1\|[1-9][0-9]*').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=selection-lifecycle operation=clear').Count -gt 0 -and
+                ($trace -match 'acceptance: selection state cleared none\|0\|0').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=actor-highlight operation=clear').Count -gt 0 -and
+                ($trace -match 'actor highlight state actors=0').Count -gt 0 -and
+                ($trace -match 'acceptance: actor highlights cleared 0\|0').Count -gt 0
+        }
+        if (-not $actorHighlightApplied) {
+            $actorHighlightDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Where-Object { $_ -match 'actor highlight|actor-highlight' }) -join ' | '
+            } else { '<none>' }
+            throw "Actor highlight add/clear did not bypass ActiViz. Trace: $actorHighlightDiagnostic"
+        }
+    }
+
+    if ($ExerciseSceneClear) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $sceneClearApplied; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $sceneClearApplied =
+                ($trace -match 'acceptance: scene clear requested').Count -gt 0 -and
+                ($trace -match 'publishing topology generation=.* actors=0').Count -gt 0 -and
+                ($trace -match 'browser scene applied scene=.* actors=0 chunks=0').Count -gt 0 -and
+                ($trace -match 'acceptance: scene cleared 0\|0\|0\|0\|0\|0\|0\|0\|0\|false').Count -gt 0
+        }
+        if (-not $sceneClearApplied) {
+            $sceneClearDiagnostic = if (Test-Path $traceFile) {
+                ((Get-Content $traceFile) | Select-Object -Last 120) -join ' | '
+            } else { '<none>' }
+            throw "The browser scene-clear lifecycle was incomplete. Trace: $sceneClearDiagnostic"
+        }
+    }
+
+    if ($ExerciseCorePartConstruction) {
+        $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+        $corePartConstructionBrowserOnly =
+            ($trace -match 'compatibility bypass capability=core-actor-construction operation=part(s)?-browser-only').Count -gt 0 -and
+            ($trace -match 'compatibility bypass capability=core-actor-construction operation=part(s)?-legacy-fallback').Count -eq 0
+        if (-not $corePartConstructionBrowserOnly) {
+            $corePartDiagnostic = ($trace | Where-Object { $_ -match 'core-actor-construction' }) -join ' | '
+            throw "Core part construction did not remain browser-only. Trace: $corePartDiagnostic"
+        }
+    }
+
+    if ($ExerciseThreeMfExportInput) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $threeMfExportRetainedInput; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $threeMfExportRetainedInput =
+                ($trace -match 'compatibility bypass capability=result-export operation=captured-actor-data').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-export operation=actor-data-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-export operation=lookup-table-managed').Count -gt 0 -and
+                ($trace -match 'prepared retained export actors=[1-9][0-9]*').Count -gt 0 -and
+                ($trace -match 'prepared retained lookup colors=[2-9][0-9]*|prepared retained lookup colors=[2-9]').Count -gt 0 -and
+                ($trace -match 'acceptance: 3mf export input actors=[1-9][0-9]* points=[1-9][0-9]* cells=[1-9][0-9]* lookupColors=[2-9][0-9]* lookupRange=').Count -gt 0 -and
+                ($trace -match 'acceptance: 3mf lookup palettes=14 manualColors=11').Count -gt 0
+        }
+        if (-not $threeMfExportRetainedInput) {
+            $exportDiagnostic = ($trace | Where-Object { $_ -match 'export|retained export' } | Select-Object -Last 30) -join ' | '
+            throw "The retained-scene 3MF export input was not complete. Trace: $exportDiagnostic"
+        }
+    }
+
+    if ($ExerciseStaticScalarConstruction) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $staticScalarConstructionBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $observedStaticResult =
+                ($trace -match 'acceptance: static scalar construction observed points=[1-9][0-9]* range=').Count -gt 0
+            $syntheticStaticResult =
+                ($trace -match 'compatibility bypass capability=result-construction operation=scalar-update-browser-only').Count -gt 0 -and
+                ($trace -match 'acceptance: static scalar update applied generation=[1-9][0-9]*').Count -gt 0
+            $staticScalarConstructionBrowserOnly =
+                ($trace -match 'compatibility bypass capability=result-construction operation=static-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-construction operation=static-legacy-fallback').Count -eq 0 -and
+                ($trace -match 'compatibility bypass capability=result-construction operation=scalar-format-camera-browser-only').Count -gt 0 -and
+                ($trace -match 'acceptance: static scalar construction applied revision=[1-9][0-9]*').Count -gt 0 -and
+                ($observedStaticResult -or $syntheticStaticResult)
+        }
+        if (-not $staticScalarConstructionBrowserOnly) {
+            $staticDiagnostic = ($trace | Where-Object { $_ -match 'static scalar|result-construction' } |
+                Select-Object -Last 40) -join ' | '
+            throw "Static scalar-result construction did not remain browser-only. Trace: $staticDiagnostic"
+        }
+        $scenes = @(Invoke-RestMethod "$baseUrl/api/v1/scenes" -Headers $headers)
+        $staticScene = Invoke-RestMethod "$baseUrl/api/v1/scenes/$($scenes[0].sceneId)/manifest" -Headers $headers
+        if (-not $ExerciseAnimation -and
+            ([double]$staticScene.field.validRange[0] -ne -5 -or [double]$staticScene.field.validRange[1] -ne 9)) {
+            throw "Static scalar-result range was not published: $($staticScene.field.validRange -join '..')."
+        }
+        $uploadedScene = $staticScene
+    }
+
+    if ($ExerciseSelectionSurfaceConstruction) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $selectionSurfaceConstructionBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $selectionSurfaceConstructionBrowserOnly =
+                ($trace -match 'compatibility bypass capability=selection-construction operation=surface-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=selection-construction operation=surface-legacy-fallback').Count -eq 0 -and
+                ($trace -match 'acceptance: transient selection cache actorData=1 entries=1').Count -gt 0 -and
+                ($trace -match 'acceptance: transient selection exportExcluded=True').Count -gt 0 -and
+                ($trace -match 'acceptance: transient selection added true\|actors=[1-9][0-9]*').Count -gt 0 -and
+                ($trace -match 'acceptance: transient selection cleared false\|actors=[1-9][0-9]*').Count -gt 0
+        }
+        if (-not $selectionSurfaceConstructionBrowserOnly) {
+            $selectionDiagnostic = ($trace | Where-Object { $_ -match 'transient selection|selection-construction' } |
+                Select-Object -Last 40) -join ' | '
+            throw "Transient selection-surface construction did not remain browser-only. Trace: $selectionDiagnostic"
+        }
+    }
+
+    if ($ExerciseSelectionPrimitiveConstruction) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $selectionPrimitiveConstructionBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $selectionPrimitiveConstructionBrowserOnly =
+                ($trace -match 'compatibility bypass capability=selection-construction operation=points-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=selection-construction operation=lines-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=selection-construction operation=(points|lines)-legacy-fallback').Count -eq 0 -and
+                ($trace -match 'acceptance: transient primitives requested pointHandleNull=True lineHandleNull=True').Count -gt 0 -and
+                ($trace -match 'acceptance: transient primitives added 2\|5\|2').Count -gt 0 -and
+                ($trace -match 'acceptance: transient primitives cleared 0\|0\|0').Count -gt 0
+        }
+        if (-not $selectionPrimitiveConstructionBrowserOnly) {
+            $primitiveDiagnostic = ($trace | Where-Object { $_ -match 'transient primitive|selection-construction' } |
+                Select-Object -Last 50) -join ' | '
+            throw "Transient point/line selection construction did not remain browser-only. Trace: $primitiveDiagnostic"
+        }
+    }
+
+    if ($ExerciseTransformations) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $transformationsBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $transformationsBrowserOnly =
+                ($trace -match 'compatibility bypass capability=transformation operation=add-symmetry-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=transformation operation=add-linear-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=transformation operation=add-circular-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=transformation operation=apply-browser-only').Count -gt 0 -and
+                ($trace -match 'acceptance: transformations applied matrices=7 actors=[1-9][0-9]* pickable=0').Count -gt 0 -and
+                ($trace -match 'acceptance: transformations hidden actors=[1-9][0-9]*').Count -gt 0 -and
+                ($trace -match 'acceptance: transformations shown actors=[1-9][0-9]*').Count -gt 0
+        }
+        if (-not $transformationsBrowserOnly) {
+            $transformationDiagnostic = ($trace | Where-Object { $_ -match 'transformation' } |
+                Select-Object -Last 50) -join ' | '
+            throw "Browser-owned transformations were not completed. Trace: $transformationDiagnostic"
+        }
+    }
+
+    if ($ExerciseAuxiliaryConstruction) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $auxiliaryConstructionBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $auxiliaryConstructionBrowserOnly =
+                ($trace -match 'compatibility bypass capability=auxiliary-construction operation=surface-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=auxiliary-construction operation=primitive-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=auxiliary-construction operation=array-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=auxiliary-construction operation=points-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=openfoam-construction operation=native-reader-bypassed').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=auxiliary-construction operation=.*legacy-fallback').Count -eq 0 -and
+                ($trace -match 'acceptance: auxiliary construction requested pointHandleNull=True openFoamHandleNull=True').Count -gt 0 -and
+                ($trace -match 'acceptance: auxiliary primitives added 2\|2\|3\|1').Count -gt 0 -and
+                ($trace -match 'acceptance: auxiliary primitives retained-after-selection-clear 2\|2\|3\|1').Count -gt 0 -and
+                ($trace -match 'acceptance: auxiliary primitives hidden 2\|1\|3\|1').Count -gt 0 -and
+                ($trace -match 'acceptance: auxiliary primitives shown 2\|2\|3\|1').Count -gt 0 -and
+                ($trace -match 'acceptance: auxiliary removal contains surface=False line=False point=False').Count -gt 0 -and
+                ($trace -match 'acceptance: auxiliary primitives removed 0\|0\|0\|0').Count -gt 0
+        }
+        if (-not $auxiliaryConstructionBrowserOnly) {
+            $auxiliaryDiagnostic = ($trace | Where-Object { $_ -match 'auxiliary|openfoam' } |
+                Select-Object -Last 60) -join ' | '
+            throw "Browser-owned auxiliary construction was not completed. Trace: $auxiliaryDiagnostic"
+        }
+    }
+
+    if ($ExerciseGenericConstruction) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $genericConstructionBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $genericConstructionBrowserOnly =
+                ($trace -match 'compatibility bypass capability=generic-construction operation=surface-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=generic-construction operation=points-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=generic-construction operation=.*legacy-fallback').Count -eq 0 -and
+                ($trace -match 'compatibility bypass capability=native-handle-construction operation=blocked-browser-only').Count -gt 0 -and
+                ($trace -match 'acceptance: generic construction requested surfaceHandleNull=True pointHandleNull=True').Count -gt 0 -and
+                ($trace -match 'acceptance: generic construction True\|True').Count -gt 0 -and
+                ($trace -match 'acceptance: generic removal contains surface=False point=False').Count -gt 0
+        }
+        if (-not $genericConstructionBrowserOnly) {
+            $genericDiagnostic = ($trace | Where-Object { $_ -match 'generic|native-handle' } |
+                Select-Object -Last 60) -join ' | '
+            throw "Browser-owned generic construction was not completed. Trace: $genericDiagnostic"
+        }
+    }
+
+    if ($ExerciseOrientationMarker) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $orientationMarkerBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $orientationMarkerBrowserOnly =
+                ($trace -match 'compatibility bypass capability=orientation-widget operation=visibility-browser-only').Count -ge 2 -and
+                ($trace -match 'acceptance: orientation marker requested hidden=True').Count -gt 0 -and
+                ($trace -match 'acceptance: orientation marker hidden false\|0\|true\|200\|0\.706,0\.016,0\.149\|0\.129,0\.808,0\.149\|0\.231,0\.298,0\.753').Count -gt 0 -and
+                ($trace -match 'acceptance: orientation marker visible true\|1\|true\|200\|0\.706,0\.016,0\.149\|0\.129,0\.808,0\.149\|0\.231,0\.298,0\.753').Count -gt 0
+        }
+        if (-not $orientationMarkerBrowserOnly) {
+            $orientationMarkerDiagnostic = ($trace | Where-Object { $_ -match 'orientation marker|orientation-widget' } |
+                Select-Object -Last 60) -join ' | '
+            $orientationMarkerTail = ($trace | Select-Object -Last 80) -join ' | '
+            $orientationMarkerDiagnostic = $orientationMarkerDiagnostic + ' | tail=' + $orientationMarkerTail
+            throw "Browser-owned orientation marker was not completed. Trace: $orientationMarkerDiagnostic"
+        }
+    }
+
+    if ($ExerciseScaleWidget) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $scaleWidgetBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $scaleWidgetBrowserOnly =
+                ($trace -match 'compatibility bypass capability=result-widget operation=scale-visibility-browser-only').Count -ge 2 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=scale-unit-browser-only').Count -gt 0 -and
+                ($trace -match 'acceptance: scale widget hidden false\|mm\|[1-9][0-9]*\.[0-9]{3}\|[0-9.eE+-]*[1-9][0-9.eE+-]*\|6\|[^|]+ mm').Count -gt 0 -and
+                ($trace -match 'acceptance: scale widget visible true\|mm\|[1-9][0-9]*\.[0-9]{3}\|[0-9.eE+-]*[1-9][0-9.eE+-]*\|6\|[^|]+ mm').Count -gt 0
+        }
+        if (-not $scaleWidgetBrowserOnly) {
+            $scaleWidgetDiagnostic = ($trace | Where-Object { $_ -match 'scale widget|result-widget' } |
+                Select-Object -Last 60) -join ' | '
+            $scaleWidgetTail = ($trace | Select-Object -Last 80) -join ' | '
+            throw "Browser-owned scale widget was not completed. Trace: $scaleWidgetDiagnostic | tail=$scaleWidgetTail"
+        }
+    }
+
+    if ($ExerciseScalarLegend) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $scalarLegendBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $scalarLegendBrowserOnly =
+                ($trace -match 'compatibility bypass capability=result-widget operation=scalar-legend-position-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=scalar-legend-spectrum-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=scalar-legend-text-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=scalar-legend-format-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=scalar-legend-background-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=scalar-legend-border-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=scalar-legend-visibility-browser-only').Count -ge 2 -and
+                ($trace -match 'acceptance: scalar legend hidden false\|Displacements\|Magnitude\|mm\|Automatic\|E3\|[-+0-9.eE]+\|[-+0-9.eE]+\|9\|10\|true\|true\|Complex: Real~Displacements: Magnitude~Unit: mm~Automatic').Count -gt 0 -and
+                ($trace -match 'acceptance: scalar legend visible true\|Displacements\|Magnitude\|mm\|Automatic\|E3\|[-+0-9.eE]+\|[-+0-9.eE]+\|9\|10\|true\|true\|Complex: Real~Displacements: Magnitude~Unit: mm~Automatic').Count -gt 0
+        }
+        if (-not $scalarLegendBrowserOnly) {
+            $scalarLegendDiagnostic = ($trace | Where-Object { $_ -match 'scalar legend|result-widget' } |
+                Select-Object -Last 80) -join ' | '
+            $scalarLegendTail = ($trace | Select-Object -Last 80) -join ' | '
+            throw "Browser-owned scalar legend was not completed. Trace: $scalarLegendDiagnostic | tail=$scalarLegendTail"
+        }
+    }
+
+    if ($ExerciseColorBar) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $colorBarBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $colorBarBrowserOnly =
+                ($trace -match 'compatibility bypass capability=result-widget operation=color-bar-position-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=color-bar-set-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=color-bar-add-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=color-bar-background-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=color-bar-border-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=color-bar-hide-browser-only').Count -gt 0 -and
+                ($trace -match 'acceptance: color bar visible true\|3\|Front face~Back face~Load A\|1\.000,0\.000,0\.000~0\.000,0\.000,1\.000~0\.000,1\.000,0\.000\|true\|false').Count -gt 0 -and
+                ($trace -match 'acceptance: color bar hidden false\|0\|\|\|true\|false').Count -gt 0
+        }
+        if (-not $colorBarBrowserOnly) {
+            $colorBarDiagnostic = ($trace | Where-Object { $_ -match 'color bar|result-widget' } |
+                Select-Object -Last 80) -join ' | '
+            $colorBarTail = ($trace | Select-Object -Last 80) -join ' | '
+            throw "Browser-owned categorical color bar was not completed. Trace: $colorBarDiagnostic | tail=$colorBarTail"
+        }
+    }
+
+    if ($ExerciseStatusBlock) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $statusBlockBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $statusBlockBrowserOnly =
+                ($trace -match 'compatibility bypass capability=result-widget operation=shared-position-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=color-bar-position-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=status-block-visibility-browser-only').Count -ge 2 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=status-block-background-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=status-block-border-browser-only').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=result-widget operation=status-block-content-browser-only').Count -gt 0 -and
+                ($trace -match 'acceptance: status block static true\|Name: rotor_case\.frd   Date: [^|]+   Time: 14:20:30~Step: #2   Mode: #5   Frequency: 120 Hz~Deformation variable: DISP   Deformation scale factor: 2[,.]5\|true\|false\|20,20\|20,20\|20,20').Count -gt 0 -and
+                ($trace -match 'acceptance: status block animated true\|Name: rotor_case\.frd   Date: [^|]+   Time: 14:20:30~Step: #3   Mode: #7   Frequency: 120 Hz~Deformation variable: DISP   Deformation scale factor: 2[,.]5~Complex angle: 45[^|]*\|true\|false\|20,20\|20,20\|20,20').Count -gt 0 -and
+                ($trace -match 'acceptance: status block hidden false\|.*\|true\|false\|20,20\|20,20\|20,20').Count -gt 0
+        }
+        if (-not $statusBlockBrowserOnly) {
+            $statusBlockDiagnostic = ($trace | Where-Object { $_ -match 'status block|result widget layout|result-widget' } |
+                Select-Object -Last 100) -join ' | '
+            throw "Browser-owned status block and shared layout were not completed. Trace: $statusBlockDiagnostic"
+        }
+    }
+
+    if ($ExerciseCellClassification) {
+        for ($attempt = 0; $attempt -lt 240 -and -not $cellClassificationBrowserOnly; $attempt++) {
+            Start-Sleep -Milliseconds 250
+            $trace = if (Test-Path $traceFile) { Get-Content $traceFile } else { @() }
+            $cellClassificationBrowserOnly =
+                ($trace -match "captured actor='__VtkJsSmokeStripPixelSurface' points=8 triangles=4").Count -gt 0 -and
+                ($trace -match "captured auxiliary primitive='__VtkJsSmokePolyline' points=3 lines=2").Count -gt 0 -and
+                ($trace -match "actor='__VtkJsSmokeMixedUnsupported': unsupported render cell types=10").Count -gt 0 -and
+                ($trace -match 'acceptance: cell classification requested surfaceHandleNull=True polylineHandleNull=True mixedRejected=True pickablePointRejected=True').Count -gt 0 -and
+                ($trace -match 'acceptance: cell classification true\|true').Count -gt 0 -and
+                ($trace -match 'acceptance: cell classification removal contains surface=False polyline=False').Count -gt 0 -and
+                ($trace -match 'compatibility bypass capability=auxiliary-construction operation=.*legacy-fallback').Count -eq 0
+        }
+        if (-not $cellClassificationBrowserOnly) {
+            $cellClassificationDiagnostic = ($trace | Where-Object { $_ -match 'classification|StripPixel|Polyline|MixedUnsupported|PickablePoint' } |
+                Select-Object -Last 60) -join ' | '
+            if ([string]::IsNullOrWhiteSpace($cellClassificationDiagnostic)) {
+                $cellClassificationDiagnostic = ($trace | Select-Object -Last 80) -join ' | '
+            }
+            throw "Browser-owned cell classification was not completed. Trace: $cellClassificationDiagnostic"
+        }
+    }
+
     Start-Sleep -Seconds 2
     for ($attempt = 0; $attempt -lt 20 -and -not $prePoMaxProcess.HasExited; $attempt++) {
         $prePoMaxProcess.Refresh()
@@ -799,12 +1584,15 @@ try {
     if (-not $rendererExited) { throw 'The renderer child remained alive after FrmMain closed.' }
 
     if (Test-Path $traceFile) {
-        $locatorLine = Select-String -Path $traceFile -Pattern 'publishing topology .*locatorPoints=[0-9]+ locatorCells=[0-9]+' |
-            Select-Object -Last 1
-        if ($null -ne $locatorLine -and $locatorLine.Line -match 'locatorPoints=([0-9]+) locatorCells=([0-9]+)') {
-            $locatorPoints = [long]$Matches[1]
-            $locatorCells = [long]$Matches[2]
-            if ($ExerciseAnimation) { $animationHostFrameBytes += 12L * $locatorPoints }
+        $locatorLines = @(Select-String -Path $traceFile -Pattern 'publishing topology .*locatorPoints=[0-9]+ locatorCells=[0-9]+')
+        for ($index = $locatorLines.Count - 1; $index -ge 0; $index--) {
+            if ($locatorLines[$index].Line -match 'locatorPoints=([0-9]+) locatorCells=([0-9]+)' -and
+                [long]$Matches[1] -gt 0 -and [long]$Matches[2] -gt 0) {
+                $locatorPoints = [long]$Matches[1]
+                $locatorCells = [long]$Matches[2]
+                if ($ExerciseAnimation) { $animationHostFrameBytes += 12L * $locatorPoints }
+                break
+            }
         }
     }
     if (-not [string]::IsNullOrWhiteSpace($ModelPath) -and ($locatorPoints -le 0 -or $locatorCells -le 0)) {
@@ -827,6 +1615,7 @@ try {
         RetainedCameraRoundtrip = $cameraStateRetained
         BrowserBoxZoomApplied = $boxZoomApplied
         BrowserVisibilityCameraApplied = $visibilityCameraApplied
+        TransformationsBrowserOnly = $transformationsBrowserOnly
         ScalarMinimum = if ($null -eq $uploadedScene) { $null } else { $uploadedScene.field.validRange[0] }
         ScalarMaximum = if ($null -eq $uploadedScene) { $null } else { $uploadedScene.field.validRange[1] }
         FieldName = if ($null -eq $uploadedScene) { $null } else { $uploadedScene.field.name }
@@ -842,12 +1631,46 @@ try {
         VisibleAnnotation = $annotationVisible
         VisibleExtrema = $extremaVisible
         AnnotationInteractionApplied = $annotationInteractionApplied
+        AnnotationSettingsApplied = $annotationSettingsApplied
+        FollowerRedrawApplied = $followerRedrawApplied
         ExplodedPreviewApplied = $explodedPreviewApplied
         SectionViewApplied = $sectionViewApplied
+        SphereSymbolApplied = $sphereSymbolApplied
+        CoordinateOverlayApplied = $coordinateOverlayApplied
+        DirectionalGlyphApplied = $directionalGlyphApplied
+        GeneralConeGlyphApplied = $generalConeGlyphApplied
+        RotationalGlyphApplied = $rotationalGlyphApplied
+        ArrowGlyphApplied = $arrowGlyphApplied
+        DoubleArrowGlyphApplied = $doubleArrowGlyphApplied
+        SpringGlyphApplied = $springGlyphApplied
+        ThermalGlyphApplied = $thermalGlyphApplied
+        FluxGlyphApplied = $fluxGlyphApplied
+        ViewportAppearanceApplied = $viewportAppearanceApplied
+        OrientationMarkerBrowserOnly = $orientationMarkerBrowserOnly
+        ScaleWidgetBrowserOnly = $scaleWidgetBrowserOnly
+        ScalarLegendBrowserOnly = $scalarLegendBrowserOnly
+        ColorBarBrowserOnly = $colorBarBrowserOnly
+        StatusBlockBrowserOnly = $statusBlockBrowserOnly
+        ActorPresentationApplied = $actorPresentationApplied
+        ActorHighlightApplied = $actorHighlightApplied
+        BrowserSceneClearApplied = $sceneClearApplied
+        CorePartConstructionBrowserOnly = $corePartConstructionBrowserOnly
+        ThreeMfExportRetainedInput = $threeMfExportRetainedInput
+        StaticScalarConstructionBrowserOnly = $staticScalarConstructionBrowserOnly
+        SelectionSurfaceConstructionBrowserOnly = $selectionSurfaceConstructionBrowserOnly
+        SelectionPrimitiveConstructionBrowserOnly = $selectionPrimitiveConstructionBrowserOnly
+        AuxiliaryConstructionBrowserOnly = $auxiliaryConstructionBrowserOnly
+        GenericConstructionBrowserOnly = $genericConstructionBrowserOnly
+        CellClassificationBrowserOnly = $cellClassificationBrowserOnly
         SectionCapActors = $sectionCapActors
         SectionSkippedCells = $sectionSkippedCells
         LargeSelectionCount = $largeSelectionCount
         AnimationFramePublished = $animationFramePublished
+        AnimationFrameActiVizBypassed = $animationFrameActiVizBypassed
+        AnimationConstructionBrowserOnly = $animationConstructionBrowserOnly
+        AnimationExportAdapterMaterialized = $animationExportAdapterMaterialized
+        AnimationPngCaptureBrowserOnly = $animationPngCaptureBrowserOnly
+        AnimationAviCaptureBrowserOnly = $animationAviCaptureBrowserOnly
         AnimationMode = if ($ExerciseAnimation) { $AnimationMode } else { $null }
         AnimationFrames = if ($ExerciseAnimation) { $animationFrames } else { 0 }
         AnimationFramesPublished = $animationFramesPublished
@@ -876,6 +1699,7 @@ finally {
     }
     Remove-Item -LiteralPath $traceFile -Force -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_RENDER_TRACE_FILE -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_HOST_TOKEN_OVERRIDE -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_FIELD -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_FIELD_TRIGGER -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_PICK_TRIGGER -ErrorAction SilentlyContinue
@@ -883,20 +1707,52 @@ finally {
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANNOTATION -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_EXTREMA -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANNOTATION_INTERACTION -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANNOTATION_SETTINGS -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_LARGE_SELECTION -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_CAMERA -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_BOX_ZOOM -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_VISIBILITY_CAMERA -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_TRANSFORMATIONS -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_EXPLODED_PREVIEW -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SECTION_VIEW -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SPHERE_SYMBOL -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_COORDINATE_OVERLAY -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_DIRECTIONAL_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_GENERAL_CONE_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ROTATIONAL_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ARROW_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_DOUBLE_ARROW_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SPRING_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_THERMAL_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_FLUX_GLYPH -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_VIEWPORT_APPEARANCE -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ORIENTATION_MARKER -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SCALE_WIDGET -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SCALAR_LEGEND -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_COLOR_BAR -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_STATUS_BLOCK -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ACTOR_PRESENTATION -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SCENE_CLEAR_TRIGGER -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_3MF_EXPORT_INPUT -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_STATIC_SCALAR_CONSTRUCTION -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SELECTION_SURFACE -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SELECTION_PRIMITIVES -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_AUXILIARY_CONSTRUCTION -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_GENERIC_CONSTRUCTION -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_CELL_CLASSIFICATION -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_SELECTION_CAPACITY -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANIMATION -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANIMATION_MODE -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANIMATION_SEQUENCE -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_FOLLOWER_REDRAW -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANIMATION_PNG_CAPTURE -ErrorAction SilentlyContinue
+    Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANIMATION_AVI_CAPTURE -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANIMATION_TRIGGER -ErrorAction SilentlyContinue
     Remove-Item Env:PREPOMAX_VTKJS_SMOKE_ANIMATION_FRAME_TRIGGER -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath $fieldSwitchTrigger -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath $pickTrigger -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath $animationTrigger -Force -ErrorAction SilentlyContinue
     Remove-Item -LiteralPath $animationFrameTrigger -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $sceneClearTrigger -Force -ErrorAction SilentlyContinue
 }

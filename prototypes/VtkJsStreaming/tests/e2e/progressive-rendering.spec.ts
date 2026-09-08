@@ -37,7 +37,13 @@ test('renders the first chunk while the second is delayed and visibility does no
   });
   let resourceRequests = 0;
   const resourceUrls: string[] = [];
+  const nonLoopbackRequests: string[] = [];
   page.on('request', (request) => {
+    const requestUrl = new URL(request.url());
+    if ((requestUrl.protocol === 'http:' || requestUrl.protocol === 'ws:')
+      && requestUrl.hostname !== '127.0.0.1') {
+      nonLoopbackRequests.push(request.url());
+    }
     if (request.url().includes('/resources/')) {
       resourceRequests += 1;
       resourceUrls.push(request.url());
@@ -72,6 +78,19 @@ test('renders the first chunk while the second is delayed and visibility does no
     }
   });
   const completeDiagnostics = await readDiagnostics(page);
+  const completeDiagnosticsText = await page.locator('#diagnostics').textContent() ?? '';
+  expect(completeDiagnosticsText).not.toContain('playwright-host-token');
+  expect(completeDiagnosticsText).not.toMatch(/(?:[A-Za-z]:\\|file:\/\/|\/mnt\/)/);
+  expect(completeDiagnostics).toMatchObject({
+    protocolVersion: '1.0',
+    clientVersion: '0.1.0',
+    serverVersion: '0.1.0',
+    counts: { renderPointTuples: 6, renderTriangles: 2, sourcePointIdTuples: 6, sourceElementIdTuples: 2 },
+    bytes: { planned: 152, transferred: 152, decoded: 152 },
+    recovery: { resourceRetries: 0, resourceCancellations: 0, contextLossCount: 0, lastSafeErrorCode: null },
+  });
+  expect(completeDiagnostics.sessionId).toMatch(/^[0-9a-f-]{36}$/);
+  expect(completeDiagnostics.renderer.webglLimits?.maxTextureSize).toBeGreaterThan(0);
   expect(completeDiagnostics.transferredBytes).toBe(152);
   expect(completeDiagnostics.renderer).toMatchObject({
     webgl2Available: true,
@@ -80,7 +99,23 @@ test('renders the first chunk while the second is delayed and visibility does no
     pipelinePoints: 6,
     pipelinePolys: 2,
   });
+  await expect.poll(async () => page.evaluate(() => (window as unknown as {
+    __prepomaxHostMessages: Array<{ type?: string; sceneId?: string; sceneRevision?: number;
+      actorCount?: number; pipelineChunks?: number }>;
+  }).__prepomaxHostMessages.filter((message) => message.type === 'prepomax.scene.applied-v1').at(-1)))
+    .toMatchObject({ sceneId: completeDiagnostics.sceneId, sceneRevision: 1, actorCount: 2, pipelineChunks: 2 });
   expect(resourceRequests).toBe(10);
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({
+    type: 'prepomax.viewport-appearance.updated-v1', gradient: true,
+    topRgb: [12 / 255, 34 / 255, 56 / 255], bottomRgb: [78 / 255, 90 / 255, 123 / 255],
+    ambient: 0.35, diffuse: 0.65, redraw: true,
+  }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.viewportAppearance).toMatchObject({
+    gradient: true, ambient: 0.35, diffuse: 0.65,
+    actorLighting: [{ ambient: 0.35, diffuse: 0.65 }, { ambient: 0.35, diffuse: 0.65 }],
+  });
   await expect.poll(async () => page.evaluate(() => (window as unknown as {
     __prepomaxHostMessages: Array<{ type?: string; position?: number[]; focalPoint?: number[];
       viewUp?: number[]; parallelScale?: number }>;
@@ -135,6 +170,200 @@ test('renders the first chunk while the second is delayed and visibility does no
   }).__prepomaxHostMessages.filter((message) => message.type === 'prepomax.box-zoom.ended-v1').at(-1)))
     .toMatchObject({ type: 'prepomax.box-zoom.ended-v1', applied: false });
   await expect(zoomViewport).toHaveAttribute('data-box-zoom', 'false');
+  await page.locator('#reset-camera').click();
+
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({
+    type: 'prepomax.sphere-symbols.updated-v1',
+    symbols: [{ name: 'Gravity:sphere',
+      points: [[1_234_567.3, 2_345_678.3, 3_456_789.25], [1_234_567.6, 2_345_678.4, 3_456_789.25]],
+      rgba: [0.2, 0.4, 0.8, 1], symbolSize: 24 }],
+  }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.sphereSymbols).toMatchObject({
+    actors: 1, points: 2,
+  });
+  const sphereState = await readDiagnostics(page);
+  expect(sphereState.renderer.sphereSymbols.scales).toHaveLength(2);
+  expect(sphereState.renderer.sphereSymbols.scales.every((scale) => scale > 0)).toBe(true);
+  const initialSphereScale = sphereState.renderer.sphereSymbols.scales[0]!;
+  await page.evaluate((parallelScale) => (window as unknown as {
+    __prepomaxBenchmark: { setParallelScale(scale: number): void };
+  }).__prepomaxBenchmark.setParallelScale(parallelScale), sphereState.renderer.cameraParallelScale / 2);
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.cameraParallelScale)
+    .not.toBe(sphereState.renderer.cameraParallelScale);
+  const zoomedSphereState = await readDiagnostics(page);
+  expect(zoomedSphereState.renderer.sphereSymbols.scales[0]! / initialSphereScale)
+    .toBeCloseTo(zoomedSphereState.renderer.cameraParallelScale / sphereState.renderer.cameraParallelScale, 5);
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({ type: 'prepomax.sphere-symbols.updated-v1', symbols: [] }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.sphereSymbols)
+    .toEqual({ actors: 0, points: 0, scales: [] });
+  await page.locator('#reset-camera').click();
+
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({
+    type: 'prepomax.coordinate-overlays.updated-v1',
+    axes: [{ name: 'Fixture:X:axis', point: [1_234_567.3, 2_345_678.3, 3_456_789.25],
+      direction: [1, 0, 0], rgba: [1, 0, 0, 1], symbolSize: 24 }],
+    captions: [{ name: 'Fixture:X', text: '<X & axis>', position: [1_234_567.3, 2_345_678.3, 3_456_789.25],
+      offsetVector: [28, 0, 0], rgba: [1, 0, 0, 1], fontScaleFactor: 1 }],
+  }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.coordinateAxes.actors).toBe(1);
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.captions)
+    .toEqual({ count: 1, visible: 1, texts: ['<X & axis>'] });
+  await expect(page.locator('.coordinate-caption[title="Fixture:X"]')).toHaveText('<X & axis>');
+  await expect(page.locator('.coordinate-caption[title="Fixture:X"] > *')).toHaveCount(0);
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({
+    type: 'prepomax.annotations.updated-v1',
+    annotations: [{ name: 'overlay-composition', text: 'Annotation beside caption',
+      anchorPoint: [1_234_567.3, 2_345_678.3, 3_456_789.25], offset: [0, 0],
+      drawBackground: false, drawBorder: false, visible: true }],
+  }));
+  await expect(page.locator('.annotation-callout[title="overlay-composition"]')).toBeVisible();
+  await expect(page.locator('.coordinate-caption[title="Fixture:X"]')).toHaveText('<X & axis>');
+  const overlayState = await readDiagnostics(page);
+  const initialAxisScale = overlayState.renderer.coordinateAxes.scales[0]!;
+  expect(initialAxisScale).toBeGreaterThan(0);
+  await page.evaluate((parallelScale) => (window as unknown as {
+    __prepomaxBenchmark: { setParallelScale(scale: number): void };
+  }).__prepomaxBenchmark.setParallelScale(parallelScale), overlayState.renderer.cameraParallelScale / 2);
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.cameraParallelScale)
+    .not.toBe(overlayState.renderer.cameraParallelScale);
+  const zoomedOverlayState = await readDiagnostics(page);
+  expect(zoomedOverlayState.renderer.coordinateAxes.scales[0]! / initialAxisScale)
+    .toBeCloseTo(zoomedOverlayState.renderer.cameraParallelScale / overlayState.renderer.cameraParallelScale, 5);
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({ type: 'prepomax.coordinate-overlays.updated-v1', axes: [], captions: [] }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.coordinateAxes)
+    .toEqual({ actors: 0, scales: [] });
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.captions)
+    .toEqual({ count: 0, visible: 0, texts: [] });
+  await page.locator('#reset-camera').click();
+
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({
+    type: 'prepomax.directional-glyphs.updated-v1',
+    glyphs: [{ name: 'Fixture constraint:cones', kind: 'displacement-cone',
+      points: [[1_234_567.3, 2_345_678.3, 3_456_789.25], [1_234_567.6, 2_345_678.3, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.9, 0.2, 0.1, 1], symbolSize: 24 },
+    { name: 'Fixture rotation:cylinder', kind: 'rotational-constraint',
+      points: [[1_234_567.3, 2_345_678.6, 3_456_789.25], [1_234_567.6, 2_345_678.6, 3_456_789.25]],
+      directions: [[0, 0, 1], [0, 1, 0]], rgba: [0.4, 0.2, 0.8, 1], symbolSize: 24 },
+    { name: 'Fixture load:arrow', kind: 'oriented-arrow',
+      points: [[1_234_567.3, 2_345_678.9, 3_456_789.25], [1_234_567.6, 2_345_678.9, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.1, 0.4, 0.9, 1], symbolSize: 24,
+      invert: false, relativeSize: 1.5 },
+    { name: 'Fixture inverted load:arrow', kind: 'oriented-arrow',
+      points: [[1_234_567.3, 2_345_679.2, 3_456_789.25], [1_234_567.6, 2_345_679.2, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.1, 0.7, 0.4, 1], symbolSize: 24,
+      invert: true, relativeSize: 2.5 },
+    { name: 'Fixture moment:doubleArrow', kind: 'double-arrow',
+      points: [[1_234_567.3, 2_345_679.5, 3_456_789.25], [1_234_567.6, 2_345_679.5, 3_456_789.25]],
+      directions: [[0, 0, 1], [0, 1, 0]], rgba: [0.8, 0.5, 0.1, 1], symbolSize: 24 },
+    { name: 'Fixture spring:spring', kind: 'oriented-spring',
+      points: [[1_234_567.3, 2_345_679.8, 3_456_789.25], [1_234_567.6, 2_345_679.8, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.2, 0.7, 0.2, 1], symbolSize: 24, invert: false },
+    { name: 'Fixture inverted spring:spring', kind: 'oriented-spring',
+      points: [[1_234_567.3, 2_345_680.1, 3_456_789.25], [1_234_567.6, 2_345_680.1, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.2, 0.5, 0.7, 1], symbolSize: 24, invert: true },
+    { name: 'Fixture line arrow:cones', kind: 'general-cone',
+      points: [[1_234_567.3, 2_345_680.4, 3_456_789.25], [1_234_567.6, 2_345_680.4, 3_456_789.25]],
+      directions: [[-1, 0, 0], [0, 1, 0]], rgba: [0.9, 0.1, 0.2, 1], symbolSize: 24 },
+    { name: 'Fixture thermal:thermo', kind: 'oriented-thermal',
+      points: [[1_234_567.3, 2_345_680.7, 3_456_789.25], [1_234_567.6, 2_345_680.7, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.8, 0.1, 0.1, 1], symbolSize: 24, invert: false },
+    { name: 'Fixture inverted thermal:thermo', kind: 'oriented-thermal',
+      points: [[1_234_567.3, 2_345_681, 3_456_789.25], [1_234_567.6, 2_345_681, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.8, 0.3, 0.1, 1], symbolSize: 24, invert: true },
+    { name: 'Fixture centered flux:flux', kind: 'oriented-flux',
+      points: [[1_234_567.3, 2_345_681.3, 3_456_789.25], [1_234_567.6, 2_345_681.3, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.2, 0.5, 0.9, 1], symbolSize: 24,
+      center: true, invert: false },
+    { name: 'Fixture inverted surface flux:flux', kind: 'oriented-flux',
+      points: [[1_234_567.3, 2_345_681.6, 3_456_789.25], [1_234_567.6, 2_345_681.6, 3_456_789.25]],
+      directions: [[1, 0, 0], [0, 1, 0]], rgba: [0.2, 0.8, 0.7, 1], symbolSize: 24,
+      center: false, invert: true }],
+  }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.directionalGlyphs)
+    .toMatchObject({ actors: 12, points: 24, sourcePoints: 33, sourcePolys: 62,
+      generalConeSourcePoints: 13, generalConeSourcePolys: 22,
+      rotationalSourcePoints: 26, rotationalSourcePolys: 12, rotationalSourceLines: 1,
+      springSourcePoints: 950, springSourcePolys: 1856 });
+  const directionalState = await readDiagnostics(page);
+  expect(directionalState.renderer.directionalGlyphs.scales).toHaveLength(24);
+  expect(directionalState.renderer.directionalGlyphs.scales.every((scale) => scale > 0)).toBe(true);
+  const initialDirectionalScale = directionalState.renderer.directionalGlyphs.scales[0]!;
+  expect(directionalState.renderer.directionalGlyphs.scales[4]! / initialDirectionalScale).toBeCloseTo(5, 5);
+  expect(directionalState.renderer.directionalGlyphs.scales[6]! / initialDirectionalScale).toBeCloseTo(2.5 / 0.3, 5);
+  expect(directionalState.renderer.directionalGlyphs.scales[8]! / initialDirectionalScale).toBeCloseTo(1 / 0.3, 5);
+  expect(directionalState.renderer.directionalGlyphs.scales[10]! / initialDirectionalScale).toBeCloseTo(1 / 0.3, 5);
+  expect(directionalState.renderer.directionalGlyphs.scales[12])
+    .toBeCloseTo(directionalState.renderer.directionalGlyphs.scales[10]!, 5);
+  expect(directionalState.renderer.directionalGlyphs.springSourceBounds[0]).toBeCloseTo(-1.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.springSourceBounds[1]).toBeCloseTo(-0.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.springSourceBounds[2]).toBeCloseTo(-0.1267371, 5);
+  expect(directionalState.renderer.directionalGlyphs.springSourceBounds[3]).toBeCloseTo(0.1267371, 5);
+  expect(directionalState.renderer.directionalGlyphs.scales[14])
+    .toBeCloseTo(directionalState.renderer.directionalGlyphs.scales[0]!, 5);
+  const generalConeBounds = directionalState.renderer.directionalGlyphs.generalConeSourceBounds;
+  expect(generalConeBounds[0]).toBeCloseTo(-1, 6);
+  expect(generalConeBounds[1]).toBeCloseTo(0, 6);
+  expect(generalConeBounds[2]).toBeCloseTo(-0.33582255, 5);
+  expect(generalConeBounds[3]).toBeCloseTo(0.35, 5);
+  expect(generalConeBounds[4]).toBeCloseTo(-0.34643751, 5);
+  expect(generalConeBounds[5]).toBeCloseTo(0.34643751, 5);
+  expect(directionalState.renderer.directionalGlyphs.scales[16]! / initialDirectionalScale)
+    .toBeCloseTo(0.5 / 0.3, 5);
+  expect(directionalState.renderer.directionalGlyphs.scales[22])
+    .toBeCloseTo(directionalState.renderer.directionalGlyphs.scales[16]!, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources).toHaveLength(4);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[0])
+    .toMatchObject({ kind: 'oriented-thermal', invert: false, points: 129, polys: 222 });
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[0]!.bounds[0]).toBeCloseTo(0.0581014, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[0]!.bounds[1]).toBeCloseTo(1.15, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[1])
+    .toMatchObject({ kind: 'oriented-thermal', invert: true, points: 129, polys: 222 });
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[1]!.bounds[0]).toBeCloseTo(-1.0418986, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[1]!.bounds[1]).toBeCloseTo(0.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[2])
+    .toMatchObject({ kind: 'oriented-flux', center: true, invert: false, points: 79, polys: 154 });
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[2]!.bounds[0]).toBeCloseTo(-0.1418986, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[2]!.bounds[1]).toBeCloseTo(0.25, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[3])
+    .toMatchObject({ kind: 'oriented-flux', center: false, invert: true, points: 79, polys: 154 });
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[3]!.bounds[0]).toBeCloseTo(-1.0418986, 5);
+  expect(directionalState.renderer.directionalGlyphs.thermalSources[3]!.bounds[1]).toBeCloseTo(-0.65, 5);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources).toHaveLength(3);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[0]?.bounds[0]).toBeCloseTo(0.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[0]?.bounds[1]).toBeCloseTo(1.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[1]?.bounds[0]).toBeCloseTo(-1.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[1]?.bounds[1]).toBeCloseTo(-0.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[2]?.kind).toBe('double-arrow');
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[2]?.bounds[0]).toBeCloseTo(0.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[2]?.bounds[1]).toBeCloseTo(1.05, 5);
+  expect(directionalState.renderer.directionalGlyphs.arrowSources[2]?.polys)
+    .toBeGreaterThan(directionalState.renderer.directionalGlyphs.arrowSources[0]?.polys ?? 0);
+  await page.evaluate((parallelScale) => (window as unknown as {
+    __prepomaxBenchmark: { setParallelScale(scale: number): void };
+  }).__prepomaxBenchmark.setParallelScale(parallelScale), directionalState.renderer.cameraParallelScale / 2);
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.cameraParallelScale)
+    .not.toBe(directionalState.renderer.cameraParallelScale);
+  const zoomedDirectionalState = await readDiagnostics(page);
+  expect(zoomedDirectionalState.renderer.directionalGlyphs.scales[0]! / initialDirectionalScale)
+    .toBeCloseTo(zoomedDirectionalState.renderer.cameraParallelScale
+      / directionalState.renderer.cameraParallelScale, 5);
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({ type: 'prepomax.directional-glyphs.updated-v1', glyphs: [] }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.directionalGlyphs)
+    .toMatchObject({ actors: 0, points: 0, scales: [] });
   await page.locator('#reset-camera').click();
 
   await page.evaluate(() => (window as unknown as {
@@ -588,6 +817,18 @@ test('renders the first chunk while the second is delayed and visibility does no
   expect((await readDiagnostics(page)).renderer.cameraParallelScale).toBe(42);
   await sendHostActorMutation(page, 'Renamed triangle', 'Front triangle', 0xffcc6644);
   await expect(page.getByLabel('Front triangle', { exact: true })).toBeChecked();
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.actorColors
+    .find((actor) => actor.actorName === 'Front triangle')).toMatchObject({
+      color: [0.8, 0.4, 4 / 15], opacity: 1, visible: true, scalarVisibility: true,
+    });
+  await page.evaluate(() => (window as unknown as {
+    __sendPrePoMaxHostMessage(value: unknown): void;
+  }).__sendPrePoMaxHostMessage({
+    type: 'prepomax.actor-contours.updated-v1',
+    actors: [{ name: 'Front triangle', colorContours: false }],
+  }));
+  await expect.poll(async () => (await readDiagnostics(page)).renderer.actorColors
+    .find((actor) => actor.actorName === 'Front triangle')?.scalarVisibility).toBe(false);
   expect(resourceRequests).toBe(requestsBeforeHostControls);
 
   const requestsBeforeHostScalars = resourceRequests;
@@ -678,14 +919,27 @@ test('renders the first chunk while the second is delayed and visibility does no
   }).__prepomaxHostMessages.filter((message) => message.type === 'prepomax.follower-view.applied-v1').at(-1)))
     .toMatchObject({ followerAdjusted: true, cameraAdjusted: true });
   await expect.poll(async () => page.evaluate(() => (window as unknown as {
-    __prepomaxHostMessages: Array<{ type?: string; sceneRevision?: number }>;
+    __prepomaxHostMessages: Array<{ type?: string; sceneId?: string; sceneRevision?: number;
+      actorCount?: number; pipelineChunks?: number }>;
   }).__prepomaxHostMessages.filter((message) => message.type === 'prepomax.scene.applied-v1').at(-1)))
-    .toMatchObject({ sceneRevision: 1 });
+    .toMatchObject({ sceneRevision: 1, actorCount: 2, pipelineChunks: 2 });
   await expect.poll(async () => (await readDiagnostics(page)).renderer).toMatchObject({
     pipelineChunks: 2, pipelinePoints: 6, pipelinePolys: 2,
     cameraParallelScale: 42,
     explodedPreview: { actorCount: 0, offsets: [] },
   });
+
+  await sendHostEmptyScene(page);
+  await expect(page.locator('#status')).toHaveText('Loaded empty scene.', { timeout: 30_000 });
+  await expect.poll(async () => page.evaluate(() => (window as unknown as {
+    __prepomaxHostMessages: Array<{ type?: string; sceneId?: string; sceneRevision?: number;
+      actorCount?: number; pipelineChunks?: number }>;
+  }).__prepomaxHostMessages.filter((message) => message.type === 'prepomax.scene.applied-v1').at(-1)))
+    .toMatchObject({ sceneRevision: 1, actorCount: 0, pipelineChunks: 0 });
+  await expect.poll(async () => (await readDiagnostics(page)).renderer).toMatchObject({
+    rendererActors: 0, pipelineChunks: 0, pipelinePoints: 0, pipelinePolys: 0,
+  });
+  expect(nonLoopbackRequests).toEqual([]);
 });
 
 test('resource integrity failure is visible and a clean reload recovers', async ({ page }) => {
@@ -701,9 +955,18 @@ test('resource integrity failure is visible and a clean reload recovers', async 
     }
   });
   await page.goto('/');
+  await sendHostSceneReplacement(page, 'Front triangle', [
+    1_234_567.5, 2_345_678.25, 3_456_789.75,
+    1_234_568.5, 2_345_678.25, 3_456_789.75,
+    1_234_567.5, 2_345_679.25, 3_456_789.75,
+  ]);
   await page.locator('#connect').click();
   await expect(page.locator('#error')).toBeVisible();
   await expect(page.locator('#error')).toContainText(/SHA-256 mismatch|Expected \d+ bytes/);
+  await expect.poll(async () => (await readDiagnostics(page)).recovery).toMatchObject({
+    resourceRetries: 1,
+    lastSafeErrorCode: 'resource-hash-invalid',
+  });
   await page.unroute('**/resources/*');
   await page.locator('#connect').click();
   await expect(page.locator('#status')).toHaveText('Loaded 2 actors.', { timeout: 30_000 });
@@ -719,7 +982,17 @@ test('resource integrity failure is visible and a clean reload recovers', async 
 });
 
 interface Diagnostics {
+  protocolVersion: string;
+  clientVersion: string;
+  serverVersion: string | null;
+  sessionId: string | null;
+  sceneId: string | null;
   sceneRevision: number;
+  counts: { renderPointTuples: number; renderTriangles: number; sourcePointIdTuples: number;
+    sourceElementIdTuples: number };
+  bytes: { planned: number; transferred: number; decoded: number };
+  recovery: { resourceRetries: number; resourceCancellations: number; contextLossCount: number;
+    lastSafeErrorCode: string | null };
   transferredBytes: number;
   scalarUpdateBytes: number;
   frameUpdateBytes: number;
@@ -740,16 +1013,22 @@ interface Diagnostics {
   picks: { count: number; lastMs: number; p50Ms: number; p95Ms: number };
   renderer: {
     webgl2Available: boolean;
+    webglLimits: null | { maxTextureSize: number; maxRenderbufferSize: number; maxVertexAttribs: number;
+      maxCombinedTextureImageUnits: number };
     rendererActors: number;
     pipelineChunks: number;
     pipelinePoints: number;
     pipelinePolys: number;
     visiblePipelineChunks: number;
+    viewportAppearance: { gradient: boolean; topRgb: number[]; bottomRgb: number[]; ambient: number;
+      diffuse: number; actorLighting: { ambient: number; diffuse: number }[] };
     cameraDirection: number[];
+    cameraViewUp: number[];
     cameraPosition: number[];
     cameraFocalPoint: number[];
     cameraParallelScale: number;
-    actorColors: { actorId: string; color: number[]; opacity: number }[];
+    actorColors: { actorId: string; actorName: string; color: number[]; opacity: number;
+      visible: boolean; scalarVisibility: boolean }[];
     actorPositions: { actorName: string; position: number[] }[];
     topologyTokens: string[];
     explodedPreview: { actorCount: number; offsets: { actorName: string; offset: number[] }[] };
@@ -766,6 +1045,16 @@ interface Diagnostics {
       overflow: boolean;
     };
     annotations: { count: number; visible: number };
+    sphereSymbols: { actors: number; points: number; scales: number[] };
+    coordinateAxes: { actors: number; scales: number[] };
+    captions: { count: number; visible: number; texts: (string | null)[] };
+    directionalGlyphs: { actors: number; points: number; scales: number[]; sourcePoints: number; sourcePolys: number;
+      rotationalSourcePoints: number; rotationalSourcePolys: number; rotationalSourceLines: number;
+      generalConeSourcePoints: number; generalConeSourcePolys: number; generalConeSourceBounds: number[];
+      springSourcePoints: number; springSourcePolys: number; springSourceBounds: number[];
+      arrowSources: { kind: string; points: number; polys: number; bounds: number[] }[];
+      thermalSources: { kind: string; invert?: boolean; center?: boolean; points: number; polys: number;
+        bounds: number[] }[] };
   };
 }
 
@@ -971,6 +1260,25 @@ async function sendHostSceneReplacement(
     });
     if (!response.ok) throw new Error(`Host scene replacement request failed: ${response.status}`);
   }, { name: actorName, points: coordinates });
+}
+
+async function sendHostEmptyScene(
+  page: import('../../src/client/node_modules/@playwright/test/index.js').Page,
+): Promise<void> {
+  await page.evaluate(async () => {
+    const body = new Uint8Array(12);
+    body.set(new TextEncoder().encode('PMXSCN1\0'));
+    new DataView(body.buffer).setInt32(8, 0, true);
+    const response = await fetch('http://127.0.0.1:5174/api/v1/host/scene', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.prepomax.render-scene-v1',
+        'X-PrePoMax-Host-Token': 'playwright-host-token',
+      },
+      body,
+    });
+    if (!response.ok) throw new Error(`Host empty-scene replacement request failed: ${response.status}`);
+  });
 }
 
 async function sendHostCustomCamera(

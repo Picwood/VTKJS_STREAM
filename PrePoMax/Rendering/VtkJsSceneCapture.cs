@@ -18,8 +18,23 @@ namespace PrePoMax.Rendering
 
         public bool Capture(vtkMaxActorData actorData, out string diagnostic)
         {
+            return Capture(actorData, false, out diagnostic);
+        }
+
+        public bool CaptureSelection(vtkMaxActorData actorData, out string diagnostic)
+        {
+            return Capture(actorData, true, out diagnostic);
+        }
+
+        public bool CaptureAuxiliary(vtkMaxActorData actorData, out string diagnostic)
+        {
+            return Capture(actorData, true, out diagnostic);
+        }
+
+        private bool Capture(vtkMaxActorData actorData, bool allowNonPart, out string diagnostic)
+        {
             CapturedActor actor;
-            if (!TryCapture(actorData, null, null, out actor, out diagnostic)) return false;
+            if (!TryCapture(actorData, null, null, allowNonPart, out actor, out diagnostic)) return false;
             lock (_gate) _actors[actor.Name] = actor;
             diagnostic = "captured actor='" + actor.Name + "' points=" + actor.SourcePointIds.Length +
                          " triangles=" + actor.SourceElementIds.Length +
@@ -47,7 +62,7 @@ namespace PrePoMax.Rendering
                 locatorNodes = actorData.CellLocator.NodesAnimation[frameNumber];
             }
             CapturedActor actor;
-            if (!TryCapture(actorData, actorData.Geometry.NodesAnimation[frameNumber], locatorNodes,
+            if (!TryCapture(actorData, actorData.Geometry.NodesAnimation[frameNumber], locatorNodes, false,
                             out actor, out diagnostic)) return false;
             lock (_gate) _actors[actor.Name] = actor;
             diagnostic = "captured animation actor='" + actor.Name + "' frame=" + frameNumber +
@@ -234,6 +249,12 @@ namespace PrePoMax.Rendering
             lock (_gate) return _actors.Keys.OrderBy(name => name, StringComparer.Ordinal).ToArray();
         }
 
+        public bool ContainsActor(string actorName)
+        {
+            if (actorName == null) return false;
+            lock (_gate) return _actors.ContainsKey(actorName);
+        }
+
         public VtkJsScalarSnapshot ScalarSnapshot(IEnumerable<string> actorNames)
         {
             if (actorNames == null) throw new ArgumentNullException("actorNames");
@@ -260,15 +281,117 @@ namespace PrePoMax.Rendering
             }
         }
 
+        public vtkMaxActorData[] ExportActorData(ISet<string> hiddenActorNames,
+                                                  IDictionary<string, bool> colorContours)
+        {
+            lock (_gate)
+            {
+                return _actors.Values
+                    .Where(actor => hiddenActorNames == null || !hiddenActorNames.Contains(actor.Name))
+                    .OrderBy(actor => actor.Name, StringComparer.Ordinal)
+                    .Select(actor => CreateExportActorData(actor, colorContours))
+                    .ToArray();
+            }
+        }
+
+        public bool TryGetScalarRange(ISet<string> hiddenActorNames, IDictionary<string, bool> colorContours,
+                                      out double minimum, out double maximum)
+        {
+            minimum = double.PositiveInfinity;
+            maximum = double.NegativeInfinity;
+            lock (_gate)
+            {
+                foreach (CapturedActor actor in _actors.Values)
+                {
+                    if (hiddenActorNames != null && hiddenActorNames.Contains(actor.Name)) continue;
+                    if (colorContours == null || !colorContours.TryGetValue(actor.Name, out bool contours) || !contours)
+                        continue;
+                    foreach (float value in actor.Scalars)
+                    {
+                        if (float.IsNaN(value) || float.IsInfinity(value)) continue;
+                        if (value < minimum) minimum = value;
+                        if (value > maximum) maximum = value;
+                    }
+                }
+            }
+            return !double.IsInfinity(minimum) && !double.IsInfinity(maximum);
+        }
+
+        private static vtkMaxActorData CreateExportActorData(CapturedActor actor,
+                                                              IDictionary<string, bool> colorContours)
+        {
+            bool contours = colorContours != null && colorContours.TryGetValue(actor.Name, out bool enabled) && enabled;
+            var data = new vtkMaxActorData
+            {
+                Name = actor.Name,
+                IsAPart = true,
+                Color = Color.FromArgb(actor.Argb),
+                ColorTable = new[] { Color.FromArgb(actor.Argb), Color.Black, Color.Black },
+                ColorContours = contours,
+                Geometry = new PartExchangeData(),
+                ModelEdges = actor.ModelEdges,
+                ElementEdges = null,
+                CellLocator = CreateLocatorData(actor)
+            };
+            int pointCount = actor.Coordinates.Length / 3;
+            data.Geometry.Nodes.Coor = new double[pointCount][];
+            data.Geometry.Nodes.Ids = (int[])actor.SourcePointIds.Clone();
+            for (int point = 0; point < pointCount; point++)
+            {
+                data.Geometry.Nodes.Coor[point] = new[]
+                {
+                    actor.Coordinates[point * 3],
+                    actor.Coordinates[point * 3 + 1],
+                    actor.Coordinates[point * 3 + 2]
+                };
+            }
+            data.Geometry.Nodes.Values = contours ? (float[])actor.Scalars.Clone() : null;
+            data.Geometry.Cells.CellNodeIds = new int[actor.SourceElementIds.Length][];
+            data.Geometry.Cells.Ids = (int[])actor.SourceElementIds.Clone();
+            data.Geometry.Cells.Types = Enumerable.Repeat(5, actor.SourceElementIds.Length).ToArray();
+            for (int triangle = 0; triangle < actor.SourceElementIds.Length; triangle++)
+            {
+                data.Geometry.Cells.CellNodeIds[triangle] = new[]
+                {
+                    checked((int)actor.Connectivity[triangle * 3]),
+                    checked((int)actor.Connectivity[triangle * 3 + 1]),
+                    checked((int)actor.Connectivity[triangle * 3 + 2])
+                };
+            }
+            return data;
+        }
+
+        private static PartExchangeData CreateLocatorData(CapturedActor actor)
+        {
+            if (actor.LocatorNodeIds.Length == 0) return null;
+            var locator = new PartExchangeData();
+            locator.Nodes.Ids = (int[])actor.LocatorNodeIds.Clone();
+            locator.Nodes.Coor = new double[actor.LocatorNodeIds.Length][];
+            for (int point = 0; point < locator.Nodes.Coor.Length; point++)
+            {
+                locator.Nodes.Coor[point] = new[] { actor.LocatorCoordinates[point * 3],
+                    actor.LocatorCoordinates[point * 3 + 1], actor.LocatorCoordinates[point * 3 + 2] };
+            }
+            locator.Cells.Ids = (int[])actor.LocatorElementIds.Clone();
+            locator.Cells.Types = (int[])actor.LocatorCellTypes.Clone();
+            locator.Cells.CellNodeIds = actor.LocatorCells.Select(cell => (int[])cell.Clone()).ToArray();
+            return locator;
+        }
+
         private static bool TryCapture(vtkMaxActorData actorData, NodesExchangeData frameNodes,
                                        NodesExchangeData locatorFrameNodes,
+                                       bool allowNonPart,
                                        out CapturedActor actor, out string diagnostic)
         {
             actor = null;
             diagnostic = null;
             PartExchangeData geometry = actorData == null ? null : actorData.Geometry;
             if (actorData == null) { diagnostic = "ignored null actor"; return false; }
-            if (!actorData.IsAPart) { diagnostic = "ignored non-part actor='" + actorData.Name + "'"; return false; }
+            if (!actorData.IsAPart && !allowNonPart)
+            {
+                diagnostic = "ignored non-part actor='" + actorData.Name + "'";
+                return false;
+            }
             if (geometry == null || geometry.Nodes == null || geometry.Nodes.Coor == null ||
                 geometry.Cells == null || geometry.Cells.CellNodeIds == null || geometry.Cells.Types == null)
             {
@@ -279,6 +402,15 @@ namespace PrePoMax.Rendering
             {
                 diagnostic = "rejected part actor='" + actorData.Name + "': points=" + geometry.Nodes.Coor.Length +
                              " cells=" + geometry.Cells.CellNodeIds.Length + " types=" + geometry.Cells.Types.Length;
+                return false;
+            }
+            int[] unsupportedTypes = geometry.Cells.Types.Where(type =>
+                type != 5 && type != 6 && type != 8 && type != 9 && type != 22 && type != 23)
+                .Distinct().OrderBy(type => type).ToArray();
+            if (unsupportedTypes.Length > 0)
+            {
+                diagnostic = "rejected part actor='" + actorData.Name +
+                             "': unsupported render cell types=" + string.Join(",", unsupportedTypes);
                 return false;
             }
 
@@ -328,6 +460,23 @@ namespace PrePoMax.Rendering
                 {
                     case 5: // VTK_TRIANGLE
                         AddTriangle(nodes, 0, 1, 2, sourceElementId, coordinates, connectivity, sourceElementIds);
+                        break;
+                    case 6: // VTK_TRIANGLE_STRIP
+                        if (nodes == null || nodes.Length < 3)
+                            throw new InvalidDataException("A triangle strip must contain at least three points.");
+                        for (int index = 0; index < nodes.Length - 2; index++)
+                        {
+                            if ((index & 1) == 0)
+                                AddTriangle(nodes, index, index + 1, index + 2, sourceElementId,
+                                            coordinates, connectivity, sourceElementIds);
+                            else
+                                AddTriangle(nodes, index + 1, index, index + 2, sourceElementId,
+                                            coordinates, connectivity, sourceElementIds);
+                        }
+                        break;
+                    case 8: // VTK_PIXEL: 0,1,3,2 is the perimeter order
+                        AddTriangle(nodes, 0, 1, 3, sourceElementId, coordinates, connectivity, sourceElementIds);
+                        AddTriangle(nodes, 0, 3, 2, sourceElementId, coordinates, connectivity, sourceElementIds);
                         break;
                     case 9: // VTK_QUAD
                         AddTriangle(nodes, 0, 1, 2, sourceElementId, coordinates, connectivity, sourceElementIds);
@@ -415,7 +564,8 @@ namespace PrePoMax.Rendering
                 scalars,
                 connectivity.ToArray(),
                 sourceElementIds.ToArray(),
-                locatorCoordinates, locatorNodeIds, locatorElementIds, locatorCellTypes, locatorCells);
+                locatorCoordinates, locatorNodeIds, locatorElementIds, locatorCellTypes, locatorCells,
+                actorData.ModelEdges);
             return true;
         }
 
@@ -486,7 +636,7 @@ namespace PrePoMax.Rendering
                                  double[] coordinates, int[] sourcePointIds, float[] scalars,
                                  uint[] connectivity, int[] sourceElementIds, double[] locatorCoordinates,
                                  int[] locatorNodeIds, int[] locatorElementIds, int[] locatorCellTypes,
-                                 int[][] locatorCells)
+                                 int[][] locatorCells, PartExchangeData modelEdges)
             {
                 Name = name;
                 Argb = argb;
@@ -508,6 +658,7 @@ namespace PrePoMax.Rendering
                 LocatorElementIds = locatorElementIds;
                 LocatorCellTypes = locatorCellTypes;
                 LocatorCells = locatorCells;
+                ModelEdges = modelEdges;
             }
 
             public string Name { get; private set; }
@@ -530,6 +681,7 @@ namespace PrePoMax.Rendering
             public int[] LocatorElementIds { get; private set; }
             public int[] LocatorCellTypes { get; private set; }
             public int[][] LocatorCells { get; private set; }
+            public PartExchangeData ModelEdges { get; private set; }
 
             public CapturedActor WithPresentation(string name, int argb)
             {
@@ -537,7 +689,7 @@ namespace PrePoMax.Rendering
                     name, argb, Pickable, BackfaceCulling, SmoothShading, SectionViewPossible,
                     Ambient, Diffuse, LineWidth, PointSize,
                     Coordinates, SourcePointIds, Scalars, Connectivity, SourceElementIds,
-                    LocatorCoordinates, LocatorNodeIds, LocatorElementIds, LocatorCellTypes, LocatorCells);
+                    LocatorCoordinates, LocatorNodeIds, LocatorElementIds, LocatorCellTypes, LocatorCells, ModelEdges);
             }
 
             public CapturedActor WithScalars(float[] scalars)
@@ -546,7 +698,7 @@ namespace PrePoMax.Rendering
                     Name, Argb, Pickable, BackfaceCulling, SmoothShading, SectionViewPossible,
                     Ambient, Diffuse, LineWidth, PointSize,
                     Coordinates, SourcePointIds, scalars, Connectivity, SourceElementIds,
-                    LocatorCoordinates, LocatorNodeIds, LocatorElementIds, LocatorCellTypes, LocatorCells);
+                    LocatorCoordinates, LocatorNodeIds, LocatorElementIds, LocatorCellTypes, LocatorCells, ModelEdges);
             }
 
             public CapturedActor WithFrame(double[] coordinates, float[] scalars, double[] locatorCoordinates)
@@ -555,7 +707,7 @@ namespace PrePoMax.Rendering
                     Name, Argb, Pickable, BackfaceCulling, SmoothShading, SectionViewPossible,
                     Ambient, Diffuse, LineWidth, PointSize,
                     coordinates, SourcePointIds, scalars, Connectivity, SourceElementIds,
-                    locatorCoordinates, LocatorNodeIds, LocatorElementIds, LocatorCellTypes, LocatorCells);
+                    locatorCoordinates, LocatorNodeIds, LocatorElementIds, LocatorCellTypes, LocatorCells, ModelEdges);
             }
         }
     }

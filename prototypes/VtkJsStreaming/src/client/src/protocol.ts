@@ -130,6 +130,16 @@ export interface ActorPresentationUpdatedPayload {
   }[];
 }
 
+export interface HostActorContour {
+  readonly name: string;
+  readonly colorContours: boolean;
+}
+
+export interface HostActorContourStateMessage {
+  readonly type: 'prepomax.actor-contours.updated-v1';
+  readonly actors: readonly HostActorContour[];
+}
+
 export interface ActorRemovedPayload {
   readonly actorIds: readonly string[];
 }
@@ -269,6 +279,11 @@ export interface HostSelectionStateMessage {
   readonly edgeNodeIds: readonly (readonly number[])[];
 }
 
+export interface HostActorHighlightStateMessage {
+  readonly type: 'prepomax.actor-highlights.updated-v1';
+  readonly actorNames: readonly string[];
+}
+
 export interface HostAnnotation {
   readonly name: string;
   readonly text: string;
@@ -282,6 +297,150 @@ export interface HostAnnotation {
 export interface HostAnnotationStateMessage {
   readonly type: 'prepomax.annotations.updated-v1';
   readonly annotations: readonly HostAnnotation[];
+}
+
+export interface HostSphereSymbol {
+  readonly name: string;
+  readonly points: readonly (readonly [number, number, number])[];
+  readonly rgba: readonly [number, number, number, number];
+  readonly symbolSize: number;
+}
+
+export interface HostSphereSymbolStateMessage {
+  readonly type: 'prepomax.sphere-symbols.updated-v1';
+  readonly symbols: readonly HostSphereSymbol[];
+}
+
+export interface HostTransientPrimitive {
+  readonly name: string;
+  readonly points: readonly (readonly [number, number, number])[];
+  readonly lines: readonly (readonly [number, number])[];
+  readonly drawPoints: boolean;
+  readonly rgba: readonly [number, number, number, number];
+  readonly pointSize: number;
+  readonly lineWidth: number;
+  readonly visible?: boolean;
+}
+
+export interface HostTransientPrimitiveStateMessage {
+  readonly type: 'prepomax.transient-primitives.updated-v1';
+  readonly primitives: readonly HostTransientPrimitive[];
+}
+
+export interface HostCoordinateAxis {
+  readonly name: string;
+  readonly point: readonly [number, number, number];
+  readonly direction: readonly [number, number, number];
+  readonly rgba: readonly [number, number, number, number];
+  readonly symbolSize: number;
+}
+
+export interface HostCaption {
+  readonly name: string;
+  readonly text: string;
+  readonly position: readonly [number, number, number];
+  readonly offsetVector: readonly [number, number, number] | null;
+  readonly rgba: readonly [number, number, number, number];
+  readonly fontScaleFactor: number;
+}
+
+export interface HostCoordinateOverlayStateMessage {
+  readonly type: 'prepomax.coordinate-overlays.updated-v1';
+  readonly axes: readonly HostCoordinateAxis[];
+  readonly captions: readonly HostCaption[];
+}
+
+export interface HostDirectionalGlyph {
+  readonly name: string;
+  readonly kind: 'displacement-cone' | 'general-cone' | 'rotational-constraint' | 'oriented-arrow' | 'double-arrow' | 'oriented-spring' | 'oriented-thermal' | 'oriented-flux';
+  readonly points: readonly (readonly [number, number, number])[];
+  readonly directions: readonly (readonly [number, number, number])[];
+  readonly rgba: readonly [number, number, number, number];
+  readonly symbolSize: number;
+  readonly invert?: boolean;
+  readonly center?: boolean;
+  readonly relativeSize?: number;
+}
+
+export interface HostDirectionalGlyphStateMessage {
+  readonly type: 'prepomax.directional-glyphs.updated-v1';
+  readonly glyphs: readonly HostDirectionalGlyph[];
+}
+
+export interface HostViewportAppearanceMessage {
+  readonly type: 'prepomax.viewport-appearance.updated-v1';
+  readonly gradient: boolean;
+  readonly topRgb: readonly [number, number, number];
+  readonly bottomRgb: readonly [number, number, number];
+  readonly ambient: number;
+  readonly diffuse: number;
+  readonly redraw: boolean;
+}
+
+export interface HostOrientationMarkerMessage {
+  readonly type: 'prepomax.orientation-marker.updated-v1';
+  readonly visible: boolean;
+}
+
+export interface HostScaleWidgetMessage {
+  readonly type: 'prepomax.scale-widget.updated-v1';
+  readonly visible: boolean;
+  readonly unit: string;
+}
+
+export interface HostScalarLegendMessage {
+  readonly type: 'prepomax.scalar-legend.updated-v1';
+  readonly visible: boolean;
+  readonly fieldName: string;
+  readonly componentName: string;
+  readonly unit: string;
+  readonly complexComponent: string;
+  readonly minMaxType: string;
+  readonly numberFormat: string;
+  readonly drawBackground: boolean;
+  readonly drawBorder: boolean;
+  readonly minimum: number;
+  readonly maximum: number;
+  readonly colors: readonly (readonly [number, number, number])[];
+}
+
+export interface HostColorBarMessage {
+  readonly type: 'prepomax.color-bar.updated-v1';
+  readonly visible: boolean;
+  readonly drawBackground: boolean;
+  readonly drawBorder: boolean;
+  readonly colors: readonly (readonly [number, number, number])[];
+  readonly labels: readonly string[];
+}
+
+export interface HostStatusBlockMessage {
+  readonly type: 'prepomax.status-block.updated-v1';
+  readonly visible: boolean;
+  readonly drawBackground: boolean;
+  readonly drawBorder: boolean;
+  readonly lines: readonly string[];
+}
+
+export interface HostResultWidgetLayoutMessage {
+  readonly type: 'prepomax.result-widget-layout.updated-v1';
+  readonly scalarLegend: Readonly<{ top: number; left: number }>;
+  readonly colorBar: Readonly<{ top: number; left: number }>;
+  readonly statusBlock: Readonly<{ top: number; right: number }>;
+}
+
+export interface HostGraphicsInteractionMessage {
+  readonly type: 'prepomax.graphics-interaction.updated-v1';
+  readonly pointSmoothing: boolean;
+  readonly lineSmoothing: boolean;
+  readonly primaryHighlightRgb: readonly [number, number, number];
+  readonly secondaryHighlightRgb: readonly [number, number, number];
+  readonly mouseHighlightRgb: readonly [number, number, number];
+}
+
+export interface HostTransformationStateMessage {
+  readonly type: 'prepomax.transformations.updated-v1';
+  readonly visible: boolean;
+  readonly matrices: readonly (readonly number[])[];
 }
 
 export type HostAnnotationAction = 'reset' | 'delete' | 'settings';
