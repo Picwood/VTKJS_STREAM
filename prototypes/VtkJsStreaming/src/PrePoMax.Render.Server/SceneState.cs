@@ -534,12 +534,24 @@ internal sealed class SceneState
                 return PickResolutionResult.Invalid("The candidate source node is not a vertex of the rendered triangle.");
             }
 
-            const double tolerance = 1e-4;
-            if (request.WorldPosition[0] < chunk.Bounds[0] - tolerance || request.WorldPosition[0] > chunk.Bounds[1] + tolerance
-                || request.WorldPosition[1] < chunk.Bounds[2] - tolerance || request.WorldPosition[1] > chunk.Bounds[3] + tolerance
-                || request.WorldPosition[2] < chunk.Bounds[4] - tolerance || request.WorldPosition[2] > chunk.Bounds[5] + tolerance)
+            // Validate against the actual Float32 geometry sent to the renderer.
+            // Original double mesh bounds can differ after origin-relative encoding.
+            var positions = resourceCatalog[chunk.Resources.Positions.ResourceId];
+            for (var axis = 0; axis < 3; axis++)
             {
-                return PickResolutionResult.Invalid("The world hit lies outside the selected chunk bounds.");
+                double minimum = double.PositiveInfinity, maximum = double.NegativeInfinity;
+                for (var vertex = 0; vertex < 3; vertex++)
+                {
+                    int localIndex = checked((int)ReadUInt32(connectivity, triangleOffset + vertex));
+                    double value = ReadSingle(positions, localIndex * 3 + axis);
+                    minimum = Math.Min(minimum, value); maximum = Math.Max(maximum, value);
+                }
+                double origin = current.Manifest.WorldOrigin[axis];
+                double relativeHit = request.WorldPosition[axis] - origin;
+                double tolerance = Math.Max(1e-4, Math.Abs(origin) * 1.7763568394002505e-15 +
+                    Math.Max(Math.Abs(minimum), Math.Abs(maximum)) * 1.7763568394002505e-15);
+                if (relativeHit < minimum - tolerance || relativeHit > maximum + tolerance)
+                    return PickResolutionResult.Invalid("The world hit lies outside the selected triangle bounds.");
             }
 
             return PickResolutionResult.Success(new ResolvedPick(

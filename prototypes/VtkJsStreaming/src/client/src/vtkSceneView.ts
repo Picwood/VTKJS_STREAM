@@ -24,7 +24,7 @@ import type { LoadedAttributes, LoadedGeometry } from './chunkLoader';
 import type { AreaResolveRequest, FrustumResolveRequest, HostAnnotation, HostAnnotationAction, HostCaption, HostColorBarMessage, HostCoordinateAxis, HostDirectionalGlyph, HostGraphicsInteractionMessage, HostResultWidgetLayoutMessage, HostScalarLegendMessage, HostSphereSymbol, HostStatusBlockMessage, HostTransientPrimitive, HostViewportAppearanceMessage, PickResolveRequest, ScalarFieldMetadata, SelectionSectionPlane } from './protocol';
 import { toVtkLineCells, toVtkTriangleCells } from './resourceDecoder';
 import type { SectionGeometryActor } from './sectionGeometryBinary';
-import { resolveTriangleSource } from './pickResolver';
+import { intersectPickedTriangle, resolveTriangleSource } from './pickResolver';
 import { getNodeOverlayStride } from './selectionOverlay';
 import { clipPolygonToSection, type SectionSelectionPoint } from './sectionSelection';
 import { toRelativeTransformationMatrix } from './hostTransformations';
@@ -140,6 +140,12 @@ export type CameraView = 'isometric' | 'front' | 'back' | 'left' | 'right' | 'to
 
 type Vector3 = readonly [number, number, number];
 type Matrix3 = readonly [Vector3, Vector3, Vector3];
+interface DisplayCoordinateRenderView {
+  worldToDisplay(x: number, y: number, z: number,
+    renderer: ReturnType<VtkGenericRenderWindow['getRenderer']>): [number, number, number];
+  displayToWorld(x: number, y: number, z: number,
+    renderer: ReturnType<VtkGenericRenderWindow['getRenderer']>): [number, number, number];
+}
 
 function add(first: ArrayLike<number>, second: ArrayLike<number>): [number, number, number] {
   return [first[0]! + second[0]!, first[1]! + second[1]!, first[2]! + second[2]!];
@@ -569,7 +575,8 @@ export class VtkSceneView {
     this.#orientationMarker.setEnabled(true);
     this.#selector = this.#window.getInteractor().getView().getSelector() as ConcreteHardwareSelector;
     this.#selector.setFieldAssociation(FieldAssociations.FIELD_ASSOCIATION_CELLS);
-    this.#selector.setCaptureZValues(true);
+    // Only primitive IDs are needed; the hit is recovered from triangle geometry.
+    this.#selector.setCaptureZValues(false);
     this.#annotationLayer = document.createElement('div');
     this.#annotationLayer.className = 'annotation-layer';
     container.appendChild(this.#annotationLayer);
@@ -1732,16 +1739,23 @@ export class VtkSceneView {
       projection[2] / projectionLength] as const;
     const center = [(bounds[0]! + bounds[1]!) / 2, (bounds[2]! + bounds[3]!) / 2,
       (bounds[4]! + bounds[5]!) / 2] as const;
-    const radius = 0.525 * Math.hypot(bounds[1]! - bounds[0]!, bounds[3]! - bounds[2]!,
-      bounds[5]! - bounds[4]!);
+    const radius = Math.max(1e-12, 0.525 * Math.hypot(bounds[1]! - bounds[0]!, bounds[3]! - bounds[2]!,
+      bounds[5]! - bounds[4]!));
     const distanceToCenter = direction[0] * (center[0] - position[0])
       + direction[1] * (center[1] - position[1]) + direction[2] * (center[2] - position[2]);
-    const motion = distanceToCenter - radius;
+    // In parallel projection distance does not change the zoom. Perspective
+    // views keep their distance unless the updated bounds require backing out.
+    const distance = camera.getParallelProjection() ? radius : Math.max(distanceToCenter, radius);
+    const motion = distanceToCenter - distance;
     const nextPosition = [position[0] + motion * direction[0], position[1] + motion * direction[1],
       position[2] + motion * direction[2]] as const;
     camera.setPosition(...nextPosition);
-    camera.setFocalPoint(nextPosition[0] + direction[0], nextPosition[1] + direction[1],
-      nextPosition[2] + direction[2]);
+    // Trackball rotation pivots at the focal point. A fixed one-unit distance
+    // leaves that pivot beside the camera on large models and rotates the mesh
+    // behind the near plane. Keep it on the model's center-depth plane, while
+    // preserving the current view direction and pan.
+    camera.setFocalPoint(position[0] + direction[0] * distanceToCenter,
+      position[1] + direction[1] * distanceToCenter, position[2] + direction[2] * distanceToCenter);
   }
 
   public getCameraParameters(): CameraParameters {
@@ -1882,14 +1896,15 @@ export class VtkSceneView {
       const properties = node.getProperties();
       const pipeline = properties.prop ? this.#chunksByProp.get(properties.prop as VtkActor) : undefined;
       const primitiveIndex = properties.attributeID ?? node.getSelectionList()[0];
-      const relativeWorld = properties.worldPosition;
-      if (!pipeline || primitiveIndex === undefined || !relativeWorld
+      if (!pipeline || primitiveIndex === undefined
         || !pipeline.sourcePointIds || !pipeline.sourceElementIds) {
         return null;
       }
-      const visualHit: [number, number, number] = [relativeWorld[0], relativeWorld[1], relativeWorld[2]];
       const explodedOffset = this.#explodedOffsets.get(pipeline.actorName) ?? [0, 0, 0];
-      const relativeHit = subtract(visualHit, explodedOffset);
+      const relativeHit = intersectPickedTriangle(pipeline.connectivity, pipeline.positions, primitiveIndex,
+        subtract(near, explodedOffset), subtract(far, explodedOffset));
+      if (!relativeHit) return null;
+      const visualHit = add(relativeHit, explodedOffset);
       const mapping = resolveTriangleSource(
         pipeline.connectivity,
         pipeline.positions,
@@ -1900,7 +1915,7 @@ export class VtkSceneView {
       );
       const cameraDirection = this.#window.getRenderer().getActiveCamera().getDirectionOfProjection();
       const renderer = this.#window.getRenderer();
-      const renderView = this.#window.getApiSpecificRenderWindow();
+      const renderView = this.#window.getApiSpecificRenderWindow() as unknown as DisplayCoordinateRenderView;
       const hitDisplay = renderView.worldToDisplay(visualHit[0], visualHit[1], visualHit[2], renderer);
       const sevenCssPixels = 7 * canvas.width / bounds.width;
       const precisionPoint = renderView.displayToWorld(hitDisplay[0] + sevenCssPixels,
@@ -2173,6 +2188,7 @@ export class VtkSceneView {
       cameraPosition: [...camera.getPosition()],
       cameraFocalPoint: [...camera.getFocalPoint()],
       cameraParallelScale: camera.getParallelScale(),
+      cameraClippingRange: [...camera.getClippingRange()],
       actorColors: pipelines.map((pipeline) => ({
         actorId: pipeline.actorId,
         actorName: pipeline.actorName,
@@ -2431,7 +2447,7 @@ export class VtkSceneView {
     const canvas = this.#container.querySelector('canvas');
     if (!canvas || canvas.clientWidth <= 0 || canvas.clientHeight <= 0) return;
     const renderer = this.#window.getRenderer();
-    const renderView = this.#window.getApiSpecificRenderWindow();
+    const renderView = this.#window.getApiSpecificRenderWindow() as unknown as DisplayCoordinateRenderView;
     const camera = renderer.getActiveCamera();
     const scaleX = canvas.width / canvas.clientWidth;
     const scaleY = canvas.height / canvas.clientHeight;
@@ -2530,7 +2546,7 @@ export class VtkSceneView {
     const canvas = this.#container.querySelector('canvas');
     if (!canvas || canvas.clientWidth <= 0 || canvas.clientHeight <= 0) return;
     const renderer = this.#window.getRenderer();
-    const renderView = this.#window.getApiSpecificRenderWindow();
+    const renderView = this.#window.getApiSpecificRenderWindow() as unknown as DisplayCoordinateRenderView;
     const scaleX = canvas.width / canvas.clientWidth;
     const scaleY = canvas.height / canvas.clientHeight;
     const point = renderView.worldToDisplay(state.anchorPoint[0] - this.#worldOrigin[0],

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrePoMax · Engineering workspace</title>
+  <meta name="description" content="Prepare finite element models, export CalculiX input and explore externally computed results." />
+</head>
+<body>
+  <div class="web-app">
+    <header class="web-header">
+      <a class="web-brand" href="/">PrePoMax <span>WEB WORKSPACE</span></a>
+      <nav aria-label="Workflow"><button id="prepare-tab" class="active">01 Prepare</button><button id="results-tab">02 Results</button></nav>
+      <span class="pilot-badge">LOCAL PILOT</span>
+      <button id="open-project" class="primary">Open / import</button>
+      <button id="save-project" disabled>Download project</button>
+    </header>
+    <div class="project-bar"><strong id="project-name">Untitled workspace</strong><span id="project-summary">Open a project or import a volume mesh to begin.</span><span id="revision">No project</span><button id="refresh">Refresh</button><button id="undo" disabled>Undo</button><button id="redo" disabled>Redo</button></div>
+    <main class="web-workspace">
+      <aside class="tree-panel"><div class="panel-label">MODEL EXPLORER</div><div id="model-tree"><p class="muted">Your model hierarchy will appear here.</p></div></aside>
+      <section class="view-panel" aria-label="Model viewport">
+        <div class="view-toolbar"><button id="fit" disabled>Fit model</button><label>View <select id="camera" disabled><option value="isometric">Isometric</option><option value="front">Front</option><option value="right">Right</option><option value="top">Top</option></select></label><label><input id="scalar-colors" type="checkbox" checked /> Scalar colors</label><span id="scene-counts"></span></div>
+        <div id="web-viewport"><div id="empty-state"><span class="empty-mark">FE</span><h1>A workspace for your analysis.</h1><p>Prepare your model here. Run your solver externally.<br />Bring the results back to inspect them in 3D.</p><button id="empty-open" class="primary">Open a project or import mesh</button><small>PMA projects · mesh-only INP · Medit · Gmsh 2.2</small></div></div>
+      </section>
+      <aside class="properties-panel">
+        <section id="prepare-panel">
+          <div class="panel-label">PREPROCESSING</div>
+          <div id="object-info"><h2>Model properties</h2><p class="muted">Select an object in the model tree to inspect it.</p></div>
+          <label class="field">Action<select id="edit-action" disabled><option value="material-add">Create elastic material</option><option value="material-save">Edit elastic material</option><option value="material-rename">Rename material</option><option value="material-remove">Remove unused material</option><option value="section-assign">Assign section material</option><option value="nodeset-add">Create node set by ID</option><option value="support-add">Create fixed support</option><option value="force-add">Create nodal force</option><option value="force-save">Edit force</option><option value="step-add">Create static step</option></select></label>
+          <form id="edit-form"><div id="editor-fields"></div><button id="apply-edit" class="primary" disabled>Apply to model</button></form>
+          <p class="hint">Edits create a project revision and clear its old results. Undo restores the previous revision.</p>
+          <div class="export-card"><h2>Ready for your solver</h2><p>Download the current CalculiX input, run it externally, then upload its FRD results.</p><button id="export-input" disabled>Export CalculiX input ↗</button></div>
+        </section>
+        <section id="results-panel" hidden>
+          <div class="panel-label">POSTPROCESSING</div><h2>Inspect your results</h2>
+          <p class="muted">Upload the FRD from the current model revision. Node coordinates and element connectivity must match.</p>
+          <label class="upload-result">Upload FRD results<input id="result-file" type="file" accept=".frd" disabled /></label>
+          <p class="hint">Use results from your current exported input. FRD does not prove which loads or materials were used.</p>
+          <label class="field">Field / component / frame<select id="result-field" disabled><option value="">Mesh geometry</option></select></label>
+          <label class="field">Displacement scale<input id="deformation" type="number" value="0" min="-1000000" max="1000000" step="any" disabled /></label>
+          <button id="show-field" class="primary" disabled>Display selected field</button>
+          <div id="field-summary" class="hint"></div>
+        </section>
+        <p class="pilot-note">Pilot workspaces expire after 8 hours and are cleared when the server stops. Download your PMA to keep your work.</p>
+      </aside>
+    </main>
+    <footer><span class="status-dot"></span><output id="web-status" aria-live="polite">Starting workspace…</output><progress id="web-progress" value="0" max="1" hidden></progress></footer>
+    <div id="web-error" role="alert" hidden></div>
+  </div>
+  <dialog id="import-dialog"><form id="import-form"><h2>Open a project or import a mesh</h2><p>PMA restores a supported project. Mesh imports create a static model with an elastic material and solid sections.</p><label class="field">File<input id="import-file" type="file" accept=".pma,.inp,.mesh,.msh" required /></label><div class="numeric-pair"><label class="field">Mesh elastic modulus<input id="import-e" type="number" step="any" value="210000" required /></label><label class="field">Poisson ratio<input id="import-nu" type="number" step="any" value="0.3" required /></label></div><p class="hint">Use a consistent unit system. INP import reads mesh definitions, not a full analysis deck. Current limits: 64 MiB upload; mesh imports 32 MiB; expanded PMA 128 MiB. Existing work remains available through Undo.</p><div class="dialog-actions"><button id="cancel-import" type="button">Cancel</button><button type="submit" class="primary">Open in workspace</button></div></form></dialog>
+  <script type="module" src="/src/workspace.ts"></script>
+</body>
+</html>

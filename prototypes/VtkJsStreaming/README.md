@@ -1,5 +1,11 @@
 # VTK.js streaming renderer prototype
 
+The project is pivoting to a [browser pre/post workspace](../../docs/ONLINE_PRE_POST.md).
+Its new `workspace.html` entry shares the existing rendering modules and is
+served by `portable/PrePoMax.Web`. The local pilot supports model edits, external
+solver-input export and validated FRD attachment. The embedded renderer and
+protocol evidence below remain the rendering baseline.
+
 This prototype implements the vertical slice described in the repository-level `VTKJS_STREAMING_RENDERER_SPEC.md`. The protocol projects remain isolated from ActiViz; the copied PrePoMax application now contains an opt-in integration adapter that publishes real part surfaces to the renderer.
 
 ## Current status

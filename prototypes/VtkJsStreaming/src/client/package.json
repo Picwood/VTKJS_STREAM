@@ -8,15 +8,22 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test --config ../../tests/e2e/playwright.config.mts"
+    "test:e2e": "playwright test --config ../../tests/e2e/playwright.config.mts",
+    "test:web": "playwright test --config ../../tests/web-workspace/playwright.config.mts"
   },
   "dependencies": {
-    "@kitware/vtk.js": "36.6.0"
+    "@kitware/vtk.js": "36.14.2"
+  },
+  "overrides": {
+    "brace-expansion": "1.1.21",
+    "js-yaml": "4.3.2",
+    "nanoid": "3.3.18",
+    "source-map-js": "1.2.2"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",
     "typescript": "7.0.2",
-    "vite": "8.2.0",
-    "vitest": "4.1.10"
+    "vite": "8.3.5",
+    "vitest": "4.1.12"
   }
 }

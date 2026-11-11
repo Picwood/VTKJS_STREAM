@@ -1,4 +1,5 @@
 import './style.css';
+import { nextStableFrame, setHostVisible } from './stableFrame';
 import { ChunkLoader, type LoadProgress } from './chunkLoader';
 import type {
   ActorPresentationUpdatedPayload, ActorRemovedPayload, ActorVisibilityUpdatedPayload, AreaCompletedPayload, CameraUpdatedPayload, FieldUpdatedPayload, FrameUpdatedPayload, FrustumCompletedPayload,
@@ -144,6 +145,7 @@ let areaDrag: { pointerId: number; startX: number; startY: number; operation: Ho
   mode: 'area' | 'box-zoom' } | null = null;
 let boxZoomEnabled = false;
 let suppressNextClick = false;
+let pendingSurfaceClick: number | null = null;
 let sceneGeneration = 0;
 const resourceConcurrency = readResourceConcurrency();
 const longTasks: number[] = [];
@@ -153,6 +155,9 @@ let firstStableFrameAt: number | null = null;
 let scalarActivationMs: number | null = null;
 let fieldUpdateStartedAt: number | null = null;
 const launchParameters = new URLSearchParams(window.location.search);
+const preferRenderedAreaSelection = launchParameters.get('surfaceSelection') === '1';
+let meshNodeSelectionActive = false;
+let meshNodeSelectionRectangle = false;
 const embeddedWebView = (window as unknown as {
   chrome?: { webview?: {
     addEventListener?(type: string, listener: (event: {
@@ -197,7 +202,18 @@ elements.downloadDiagnostics.addEventListener('click', downloadDiagnostics);
 elements.switchField.addEventListener('click', () => void switchField());
 elements.viewport.addEventListener('click', (event) => {
   if (suppressNextClick) { suppressNextClick = false; return; }
-  void resolvePick(event);
+  if (meshNodeSelectionActive || !preferRenderedAreaSelection) {
+    void resolvePick(event);
+  } else if (event.detail >= 2) {
+    if (pendingSurfaceClick !== null) window.clearTimeout(pendingSurfaceClick);
+    pendingSurfaceClick = null;
+    void resolvePick(event, true);
+  } else {
+    pendingSurfaceClick = window.setTimeout(() => {
+      pendingSurfaceClick = null;
+      void resolvePick(event);
+    }, 350);
+  }
 });
 elements.viewport.addEventListener('pointerdown', beginAreaDrag, true);
 elements.viewport.addEventListener('pointermove', updateAreaDrag, true);
@@ -360,7 +376,7 @@ async function loadScene(
     }, signal);
     allChunksLoadedAt = performance.now();
     if (hostSectionView.enabled) await resolveSectionGeometry();
-    await nextStableFrame();
+    await nextStableFrame(signal);
     firstStableFrameAt = performance.now();
     notifyCameraChanged(view.getCameraParameters());
     if (!deferSceneApplied) notifySceneApplied();
@@ -504,7 +520,7 @@ function updateDiagnostics(progress: LoadProgress | null = latestProgress): void
   elements.diagnostics.textContent = JSON.stringify(diagnostics, null, 2);
 }
 
-async function resolvePick(event: MouseEvent): Promise<void> {
+async function resolvePick(event: MouseEvent, growConnected = false): Promise<void> {
   if (!currentApi || !manifest || pickInProgress) {
     return;
   }
@@ -515,6 +531,7 @@ async function resolvePick(event: MouseEvent): Promise<void> {
   activePick = controller;
   pickInProgress = true;
   const startedAt = performance.now();
+  clearError();
   const selectionOperation = getSelectionOperation(event);
   try {
     const candidate = await view.pick(event.clientX, event.clientY);
@@ -541,8 +558,8 @@ async function resolvePick(event: MouseEvent): Promise<void> {
     }
     showPick(response.payload.result);
     const actorName = scene.actors.find((actor) => actor.actorId === response.payload.result.actorId)?.name;
-    if (actorName) notifyPrePoMaxHost(response.payload.result, actorName, selectionOperation);
-    setStatus(`Selected element ${response.payload.result.sourceElementId}, node ${response.payload.result.candidateSourceNodeId}.`);
+    if (actorName) notifyPrePoMaxHost(response.payload.result, actorName, selectionOperation, growConnected);
+    setStatus(`${growConnected ? 'Growing from' : 'Selected'} element ${response.payload.result.sourceElementId}, node ${response.payload.result.candidateSourceNodeId}.`);
   } catch (error) {
     if (controller.signal.aborted) {
       return;
@@ -569,7 +586,8 @@ function getSelectionOperation(event: MouseEvent): HostSelectionOperation {
   return 'replace';
 }
 
-function notifyPrePoMaxHost(pick: ResolvedPick, actorName: string, operation: HostSelectionOperation): void {
+function notifyPrePoMaxHost(pick: ResolvedPick, actorName: string, operation: HostSelectionOperation,
+  growConnected: boolean): void {
   const message: HostValidatedPickMessage = {
     type: 'prepomax.pick.validated-v1',
     validated: true,
@@ -581,6 +599,7 @@ function notifyPrePoMaxHost(pick: ResolvedPick, actorName: string, operation: Ho
     selectionPrecision: pick.selectionPrecision,
     actorName,
     operation,
+    ...(growConnected ? { growConnected: true as const } : {}),
   };
   const hostWindow = window as unknown as {
     chrome?: { webview?: { postMessage(value: string): void } };
@@ -589,7 +608,8 @@ function notifyPrePoMaxHost(pick: ResolvedPick, actorName: string, operation: Ho
 }
 
 function beginAreaDrag(event: PointerEvent): void {
-  if ((!boxZoomEnabled && !event.altKey) || event.button !== 0 || areaDrag || !manifest) return;
+  if ((!boxZoomEnabled && !event.altKey && !(meshNodeSelectionActive && meshNodeSelectionRectangle))
+    || event.button !== 0 || areaDrag || !manifest) return;
   areaDrag = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY,
     operation: getSelectionOperation(event), mode: boxZoomEnabled ? 'box-zoom' : 'area' };
   try { elements.viewport.setPointerCapture(event.pointerId); } catch { /* Synthetic acceptance events have no active pointer. */ }
@@ -664,25 +684,33 @@ async function resolveArea(startX: number, startY: number, endX: number, endY: n
   pickInProgress = true;
   try {
     const completelyInside = endX > startX;
-    const frustum = view.createFrustum(startX, startY, endX, endY, completelyInside);
-    try {
-      const frustumResponse = await api.sendCommand<FrustumCompletedPayload>(scene.sceneId, scene.sceneRevision,
-        'frustum.resolve', frustum, controller.signal);
-      if (frustumResponse.type !== 'command.completed' || frustumResponse.payload.commandType !== 'frustum.resolve')
-        throw new Error('The server returned an unexpected frustum response.');
-      if (generation !== sceneGeneration || controller.signal.aborted) return;
-      const result = frustumResponse.payload.result;
-      const message: HostValidatedAreaMessage = {
-        type: 'prepomax.area.validated-v1', validated: true, triangles: [], cameraDirection: result.cameraDirection,
-        completelyInside: result.completelyInside, operation, locatorValidated: true,
-        sourceNodeIds: result.sourceNodeIds, sourceElementIds: result.sourceElementIds, actorNames: result.actorNames,
-      };
-      const hostWindow = window as unknown as { chrome?: { webview?: { postMessage(value: string): void } } };
-      hostWindow.chrome?.webview?.postMessage(JSON.stringify(message));
-      setStatus(`Frustum selected ${result.sourceNodeIds.length} nodes and ${result.sourceElementIds.length} elements.`);
+    if (meshNodeSelectionActive) {
+      const frustum = view.createFrustum(startX, startY, endX, endY, completelyInside);
+      notifyHost({ type: 'prepomax.node-selection.frustum-v1', frustum, operation });
+      setStatus('Resolving rectangle against the full mesh…');
       return;
-    } catch (error) {
-      if ((error as { code?: string }).code !== 'frustum-unavailable') throw error;
+    }
+    if (!preferRenderedAreaSelection) {
+      const frustum = view.createFrustum(startX, startY, endX, endY, completelyInside);
+      try {
+        const frustumResponse = await api.sendCommand<FrustumCompletedPayload>(scene.sceneId, scene.sceneRevision,
+          'frustum.resolve', frustum, controller.signal);
+        if (frustumResponse.type !== 'command.completed' || frustumResponse.payload.commandType !== 'frustum.resolve')
+          throw new Error('The server returned an unexpected frustum response.');
+        if (generation !== sceneGeneration || controller.signal.aborted) return;
+        const result = frustumResponse.payload.result;
+        const message: HostValidatedAreaMessage = {
+          type: 'prepomax.area.validated-v1', validated: true, triangles: [], cameraDirection: result.cameraDirection,
+          completelyInside: result.completelyInside, operation, locatorValidated: true,
+          sourceNodeIds: result.sourceNodeIds, sourceElementIds: result.sourceElementIds, actorNames: result.actorNames,
+        };
+        const hostWindow = window as unknown as { chrome?: { webview?: { postMessage(value: string): void } } };
+        hostWindow.chrome?.webview?.postMessage(JSON.stringify(message));
+        setStatus(`Frustum selected ${result.sourceNodeIds.length} nodes and ${result.sourceElementIds.length} elements.`);
+        return;
+      } catch (error) {
+        if ((error as { code?: string }).code !== 'frustum-unavailable') throw error;
+      }
     }
     const candidate = await view.selectArea(startX, startY, endX, endY, completelyInside);
     if (generation !== sceneGeneration || controller.signal.aborted) return;
@@ -711,8 +739,24 @@ async function resolveArea(startX: number, startY: number, endX: number, endY: n
 
 function applyHostMessage(value: unknown): void {
   const type = (value as { type?: unknown } | null)?.type;
-  if (type === 'prepomax.session.bootstrap-v1') void applySessionBootstrap(value);
+  if (type === 'prepomax.host.visibility-v1' && launchParameters.get('embedded') === '1') {
+    const visible = (value as { visible?: unknown }).visible;
+    if (typeof visible === 'boolean') setHostVisible(visible);
+  }
+  else if (type === 'prepomax.session.bootstrap-v1') void applySessionBootstrap(value);
   else if (type === 'prepomax.selection.updated-v1') applyHostSelection(value);
+  else if (type === 'prepomax.node-selection.mode-v1' && launchParameters.get('embedded') === '1') {
+    const active = (value as { active?: unknown }).active;
+    if (typeof active === 'boolean') {
+      if (!active && meshNodeSelectionActive) {
+        if (pendingSurfaceClick !== null) window.clearTimeout(pendingSurfaceClick);
+        pendingSurfaceClick = null;
+        activePick?.abort();
+      }
+      meshNodeSelectionActive = active;
+      meshNodeSelectionRectangle = active && (value as { rectangle?: unknown }).rectangle === true;
+    }
+  }
   else if (type === 'prepomax.annotations.updated-v1') applyHostAnnotations(value);
   else if (type === 'prepomax.sphere-symbols.updated-v1') applyHostSphereSymbols(value);
   else if (type === 'prepomax.transient-primitives.updated-v1') applyHostTransientPrimitives(value);
@@ -1485,10 +1529,6 @@ function unloadScene(): void {
   updateDiagnostics();
 }
 
-function nextStableFrame(): Promise<void> {
-  return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
-}
-
 function readBrowserMemory(): object | null {
   const memory = (performance as Performance & { memory?: {
     usedJSHeapSize: number;
@@ -1578,7 +1618,11 @@ declare global {
 if (['1'].includes(new URLSearchParams(window.location.search).get('benchmark') ?? '')
   || ['1'].includes(new URLSearchParams(window.location.search).get('testHooks') ?? '')) {
   window.__prepomaxBenchmark = {
-    measureOrbit: (frameCount) => view.measureOrbit(frameCount),
+    measureOrbit: async (frameCount) => {
+      const samples = await view.measureOrbit(frameCount);
+      updateDiagnostics();
+      return samples;
+    },
     setParallelScale: (parallelScale) => {
       if (!Number.isFinite(parallelScale) || parallelScale <= 0) throw new Error('The benchmark scale is invalid.');
       const camera = view.getCameraParameters();

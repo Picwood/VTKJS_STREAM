@@ -31,6 +31,7 @@ export default defineConfig({
   },
   build: {
     rolldownOptions: {
+      input: { renderer: 'index.html', workspace: 'workspace.html' },
       output: {
         strictExecutionOrder: true,
         codeSplitting: {

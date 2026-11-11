@@ -812,8 +812,10 @@ test('renders the first chunk while the second is delayed and visibility does no
   });
   await expect.poll(async () => {
     const camera = (await readDiagnostics(page)).renderer;
-    return Math.hypot(...camera.cameraFocalPoint.map((value, index) => value - camera.cameraPosition[index]!));
-  }).toBeCloseTo(1, 6);
+    const center = [.5, .5, 0];
+    return camera.cameraFocalPoint.reduce((depth, value, index) =>
+      depth + (value - center[index]!) * camera.cameraDirection[index]!, 0);
+  }).toBeCloseTo(0, 6);
   expect((await readDiagnostics(page)).renderer.cameraParallelScale).toBe(42);
   await sendHostActorMutation(page, 'Renamed triangle', 'Front triangle', 0xffcc6644);
   await expect(page.getByLabel('Front triangle', { exact: true })).toBeChecked();

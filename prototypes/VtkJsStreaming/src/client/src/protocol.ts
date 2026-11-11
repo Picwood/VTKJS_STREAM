@@ -255,6 +255,7 @@ export interface HostValidatedPickMessage {
   readonly selectionPrecision: number;
   readonly actorName: string;
   readonly operation: HostSelectionOperation;
+  readonly growConnected?: true;
 }
 
 export interface HostValidatedAreaMessage {

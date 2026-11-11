@@ -12,6 +12,13 @@ using PrePoMax.Render.Contracts;
 using PrePoMax.Render.Server;
 using PrePoMax.Render.SyntheticData;
 
+// Let the real host resolve both shared frameworks without creating a web host.
+if (args.Length == 1 && args[0] == "--check-runtime")
+{
+    Console.WriteLine($"Renderer runtime ready: .NET {Environment.Version}");
+    return;
+}
+
 var jsonOptions = new JsonSerializerOptions
 {
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
