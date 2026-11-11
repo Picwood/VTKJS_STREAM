@@ -1,0 +1,9 @@
+*Heading
+Nested mesh import fixture
+*Include,input=mesh.inc
+*Nset,nset=SUPPORT
+LEFT
+*Elset,elset=VOLUME_ALIAS
+VOLUME
+*Surface,name=LOADED,type=ELEMENT
+VOLUME_ALIAS,S1

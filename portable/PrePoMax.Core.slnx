@@ -1,0 +1,14 @@
+<Solution>
+  <Project Path="STL/STL.csproj" />
+  <Project Path="CaeGlobals/CaeGlobals.csproj" />
+  <Project Path="CaeMesh/CaeMesh.csproj" />
+  <Project Path="CaeModel/CaeModel.csproj" />
+  <Project Path="CaeJob/CaeJob.csproj" />
+  <Project Path="CaeResults/CaeResults.csproj" />
+  <Project Path="PrePoMax.Persistence/PrePoMax.Persistence.csproj" />
+  <Project Path="PrePoMax.Cli/PrePoMax.Cli.csproj" />
+  <Project Path="PrePoMax.Application/PrePoMax.Application.csproj" />
+  <Project Path="PrePoMax.Web/PrePoMax.Web.csproj" />
+  <Project Path="PrePoMax.ViewerHost/PrePoMax.ViewerHost.csproj" />
+  <Project Path="PrePoMax.PmxInspect/PrePoMax.PmxInspect.csproj" />
+</Solution>

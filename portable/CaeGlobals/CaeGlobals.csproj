@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <DefineConstants>$(DefineConstants);PREPOMAX_MODERN_NCALC</DefineConstants>
+    <AssemblyName>CaeGlobals</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1701</WarningsAsErrors>
+  </PropertyGroup>
+  <!-- Explicit migration boundary: only shared production sources. -->
+  <ItemGroup>
+    <Compile Include="../../CaeGlobals/Tools.Results.cs" />
+    <Compile Include="../../CaeGlobals/Tools.FileIO.cs" />
+    <Compile Include="../../CaeGlobals/Extensions.Collections.cs" />
+    <Compile Include="../../CaeGlobals/CaeException.cs" Link="CaeException.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/Vec3D.cs" Link="CommonClasses/Vec3D.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/Geometry.cs" Link="CommonClasses/Geometry.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/Geometry2.cs" Link="CommonClasses/Geometry2.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/Matrix.cs" Link="CommonClasses/Matrix.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/OrderedDictionary.cs" Link="CommonClasses/OrderedDictionary.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/UniqueQueue.cs" Link="CommonClasses/UniqueQueue.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/SortedIntKey.cs" Link="CommonClasses/SortedIntKey.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/NamedClass.cs" Link="CommonClasses/NamedClass.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/EmptyNamedClass.cs" Link="CommonClasses/EmptyNamedClass.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/EventArgs.cs" Link="CommonClasses/EventArgs.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/DataExchange/*.cs" Link="CommonClasses/DataExchange/%(Filename)%(Extension)" />
+    <Compile Include="../../CaeGlobals/Comparers/*.cs" Link="Comparers/%(Filename)%(Extension)" />
+    <Compile Include="../../CaeGlobals/Octree/**/*.cs" Link="Octree/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="../../CaeGlobals/StringCompressor.cs" Link="StringCompressor.cs" />
+    <Compile Include="../../CaeGlobals/StringSplitter.cs" Link="StringSplitter.cs" />
+    <Compile Include="../../CaeGlobals/OrderedDisplayNameAttribute.cs" Link="OrderedDisplayNameAttribute.cs" />
+    <Compile Include="../../CaeGlobals/Properties/AssemblyInfo.cs" Link="Properties/AssemblyInfo.cs" />
+    <Compile Include="../../CaeGlobals/DynamicTypeDescriptor/StandardValueAttribute.cs" />
+    <Compile Include="../../CaeGlobals/Tools.Numeric.cs" />
+    <Compile Include="../../CaeGlobals/Extensions.Numeric.cs" />
+    <Compile Include="../../CaeGlobals/Selection/**/*.cs" />
+    <Compile Include="../../CaeGlobals/CommonClasses/RegionType.cs" />
+    <Compile Include="../../CaeGlobals/IMultiRegion.cs" />
+    <Compile Include="../../CaeGlobals/IMasterSlaveMultiRegion.cs" />
+    <Compile Include="../../CaeGlobals/Equation/*.cs" />
+    <Compile Include="../../CaeGlobals/UnitSystem/**/*.cs" />
+    <Compile Include="../../CaeGlobals/NCalc/MyNCalc.cs" />
+    <Compile Include="../../CaeGlobals/IContainsEquations.cs" />
+    <Compile Include="../../CaeGlobals/ReadWrite.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="UnitsNet" Version="4.89.1" />
+    <PackageReference Include="NCalc" Version="7.1.0" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+*Heading
+Mesh-only tetrahedron
+** Node and element IDs need not be consecutive
+*Node, nset=ALLNODES
+10, 0, 0, 0
+20, 1.D0, 0, 0
+30, 0, 1, 0
+40, 0, 0, 1
+*Element, type=C3D4, elset=VOLUME
+100, 10, 20, 30, 40
+*Nset, nset=LEFT
+10,30,40
+*Nset, nset=RIGHT
+20
+*Elset, elset=GENERATED, generate
+100,100,1

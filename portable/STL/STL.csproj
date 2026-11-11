@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>QuantumConcepts.Formats.StereoLithography</AssemblyName>
+    <RootNamespace>QuantumConcepts.Formats.STL</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <!-- Compile the production sources, without changing the net48 solution. -->
+  <ItemGroup>
+    <Compile Include="../../STL/*.cs" Link="%(Filename)%(Extension)" />
+    <Compile Include="../../STL/Properties/AssemblyInfo.cs" Link="Properties/AssemblyInfo.cs" />
+  </ItemGroup>
+</Project>
