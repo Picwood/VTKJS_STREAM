@@ -259,3 +259,13 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+# Vendored third-party tools and solver binaries (kept local)
+/ccxview/
+/CalculiX/
+/cgx_2.23
+
+# Large local model fixtures
+/scripts/*.pma
+
+# Playwright output
+test-results/
