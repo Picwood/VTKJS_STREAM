@@ -1,0 +1,21 @@
+name: Portable core
+on:
+  push:
+    paths: ['STL/**', 'CaeGlobals/**', 'CaeMesh/**', 'CaeModel/**', 'CaeJob/**', 'CaeResults/**', 'portable/**', 'prototypes/VtkJsStreaming/src/PrePoMax.Render.Contracts/**', 'prototypes/VtkJsStreaming/src/PrePoMax.Render.SyntheticData/**', 'prototypes/VtkJsStreaming/src/PrePoMax.Render.Server/HostSceneUploadReader.cs', 'prototypes/VtkJsStreaming/Directory.Build.props', 'scripts/test-portable.sh', '.github/workflows/portable-core.yml']
+  pull_request:
+    paths: ['STL/**', 'CaeGlobals/**', 'CaeMesh/**', 'CaeModel/**', 'CaeJob/**', 'CaeResults/**', 'portable/**', 'prototypes/VtkJsStreaming/src/PrePoMax.Render.Contracts/**', 'prototypes/VtkJsStreaming/src/PrePoMax.Render.SyntheticData/**', 'prototypes/VtkJsStreaming/src/PrePoMax.Render.Server/HostSceneUploadReader.cs', 'prototypes/VtkJsStreaming/Directory.Build.props', 'scripts/test-portable.sh', '.github/workflows/portable-core.yml']
+  workflow_dispatch:
+jobs:
+  core:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Characterize portable production sources
+        shell: bash
+        run: bash scripts/test-portable.sh
