@@ -113,6 +113,13 @@ namespace CaeGlobals
         }
 
         // ISerialization
+        public override SelectionNode DeepCopy()
+        {
+            SelectionNodeIds copy = (SelectionNodeIds)base.DeepCopy();
+            copy._itemIds = _itemIds == null ? null : (int[])_itemIds.Clone();
+            return copy;
+        }
+
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

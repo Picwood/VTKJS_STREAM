@@ -8,7 +8,6 @@
 // Contributors:
 
 using CaeGlobals;
-using CaeMesh.Meshing;
 using Octree;
 using System;
 using System.Collections.Generic;
@@ -75,7 +74,7 @@ namespace CaeMesh
             base.CopyFrom(meshSetupItem);
             //
             _creationIds = meshSetupItem.CreationIds?.ToArray();
-            _creationData = meshSetupItem.CreationData?.DeepClone();
+            _creationData = meshSetupItem.CreationData?.DeepCopy();
         }
         // ISerialization
         public new void GetObjectData(SerializationInfo info, StreamingContext context)

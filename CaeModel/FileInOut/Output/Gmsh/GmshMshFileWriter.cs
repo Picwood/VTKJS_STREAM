@@ -13,9 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Globalization;
 using CaeMesh;
 using CaeGlobals;
-using CaeModel;
 using System.Xml.Linq;
 
 namespace FileInOut.Output
@@ -95,9 +95,12 @@ namespace FileInOut.Output
             int min = int.MaxValue;
             int max = -int.MaxValue;
             Dictionary<int, int[]> dimSortedNodeIds = new Dictionary<int, int[]>();
-            foreach (var entry in dimNodeIds)
+            HashSet<int> writtenNodeIds = new HashSet<int>();
+            foreach (var entry in dimNodeIds.OrderBy(entry => entry.Key))
             {
-                nodeIds = entry.Value.ToArray();
+                // Classify shared nodes on the lowest incident dimension, once globally.
+                nodeIds = entry.Value.Where(id => writtenNodeIds.Add(id)).ToArray();
+                if (nodeIds.Length == 0) continue;
                 Array.Sort(nodeIds);
                 dimSortedNodeIds[entry.Key] = nodeIds;
                 //
@@ -105,32 +108,36 @@ namespace FileInOut.Output
                 if (nodeIds[0] < min) min = nodeIds[0];
                 if (nodeIds[nodeIds.Length - 1] > max) max = nodeIds[nodeIds.Length - 1];
             }
+            if (count == 0) min = max = 0;
+            int[] exportedElementIds = elementTypeElements.Values.SelectMany(list => list).Select(element => element.Id).ToArray();
+            int minElementId = exportedElementIds.Length == 0 ? 0 : exportedElementIds.Min();
+            int maxElementId = exportedElementIds.Length == 0 ? 0 : exportedElementIds.Max();
             // File
             StringBuilder sb = new StringBuilder();
             // Header
             sb.AppendLine("$MeshFormat");
-            sb.AppendLine("4.1 0 8     MSH4.1, ASCII");
+            sb.AppendLine("4.1 0 8");
             sb.AppendLine("$EndMeshFormat");
             // Nodes
             sb.AppendLine("$Nodes");
             // 1 6 1 6     1 entity bloc, 6 nodes total, min/max node tags: 1 and 6
-            sb.AppendFormat("{0} {1} {2} {3}{4}", dimSortedNodeIds.Count, count, min, max, Environment.NewLine);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "{0} {1} {2} {3}{4}", dimSortedNodeIds.Count, count, min, max, Environment.NewLine);
             //
             foreach (var entry in dimSortedNodeIds)
             {
                 // 2 1 0 6     2D entity(surface) 1, no parametric coordinates, 6 nodes
-                sb.AppendFormat("{0} {1} {2} {3}{4}", entry.Key, 1, 0, entry.Value.Length, Environment.NewLine);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "{0} {1} {2} {3}{4}", entry.Key, 1, 0, entry.Value.Length, Environment.NewLine);
                 //
                 FeNode node;
                 for (int i = 0; i < entry.Value.Length; i++)
                 {
                     node = mesh.Nodes[entry.Value[i]];
-                    sb.AppendFormat("{0}{1}", node.Id, Environment.NewLine);
+                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0}{1}", node.Id, Environment.NewLine);
                 }
                 for (int i = 0; i < entry.Value.Length; i++)
                 {
                     node = mesh.Nodes[entry.Value[i]];
-                    sb.AppendFormat("{0} {1} {2}{3}", node.X, node.Y, node.Z, Environment.NewLine);
+                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0} {1} {2}{3}", node.X, node.Y, node.Z, Environment.NewLine);
                 }
             }
             sb.AppendLine("$EndNodes");
@@ -142,13 +149,13 @@ namespace FileInOut.Output
             //
            
             //1 2 1 2     1 entity bloc, 2 elements total, min/ max element tags: 1 and 2
-            sb.AppendFormat("{0} {1} {2} {3}{4}", elementTypeElements.Count, mesh.Elements.Count(), 1, mesh.MaxElementId,
+            sb.AppendFormat(CultureInfo.InvariantCulture, "{0} {1} {2} {3}{4}", elementTypeElements.Count, exportedElementIds.Length, minElementId, maxElementId,
                             Environment.NewLine);
             //
             foreach (var entry in elementTypeElements)
             {
                 //2 1 3 2     2D entity(surface) 1, element type 3(4 - node quad), 2 elements
-                sb.AppendFormat("{0} {1} {2} {3}{4}", dimMap[entry.Key], 1, typeMap[entry.Key], entry.Value.Count, Environment.NewLine);
+                sb.AppendFormat(CultureInfo.InvariantCulture, "{0} {1} {2} {3}{4}", dimMap[entry.Key], 1, typeMap[entry.Key], entry.Value.Count, Environment.NewLine);
                 //
                 foreach (var element in entry.Value)
                 {

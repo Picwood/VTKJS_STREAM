@@ -323,19 +323,19 @@ namespace CaeMesh
             sb.AppendLine("int      uselocalh                   ... Switch to enable / disable usage of local mesh size modifiers.");
             sb.AppendLine("1");
             sb.AppendLine("double   maxh		                ... Maximum global mesh size allowed.");
-            if (relativeSize) sb.AppendLine((_factorMax * bbDiagonal).ToString());
-            else sb.AppendLine(_maxH.ToString());
+            if (relativeSize) sb.AppendLine((_factorMax * bbDiagonal).ToString(System.Globalization.CultureInfo.InvariantCulture));
+            else sb.AppendLine(_maxH.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("double   minh		                ... Minimum global mesh size allowed.");
-            if (relativeSize) sb.AppendLine((_factorMin * bbDiagonal).ToString());
-            else sb.AppendLine(_minH.ToString());
+            if (relativeSize) sb.AppendLine((_factorMin * bbDiagonal).ToString(System.Globalization.CultureInfo.InvariantCulture));
+            else sb.AppendLine(_minH.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("double   fineness	                ... Mesh density: 0...1 (0 => coarse; 1 => fine).");
-            sb.AppendLine(_fineness.ToString());
+            sb.AppendLine(_fineness.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("double   grading                     ... Mesh grading: 0...1 (0 => uniform mesh; 1 => aggressive local grading).");
-            sb.AppendLine(_grading.ToString());
+            sb.AppendLine(_grading.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("double   elementsperedge	            ... Number of elements to generate per edge of the geometry.");
-            sb.AppendLine(_elementsPerEdge.ToString());
+            sb.AppendLine(_elementsPerEdge.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("double   elementspercurve	        ... Elements to generate per curvature radius.");
-            sb.AppendLine(_elementsPerCurve.ToString());
+            sb.AppendLine(_elementsPerCurve.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("int      closeedgeenable		        ... Enable / Disable mesh refinement at close edges.");
             sb.AppendLine("0");
             sb.AppendLine("double 	closeedgefact		        ... Factor to use for refinement at close edges (larger => finer).");
@@ -345,9 +345,9 @@ namespace CaeMesh
             sb.AppendLine("double   minedgelen                  ... Minimum edge length to use while subdividing the edges (default = 1e-4).");
             sb.AppendLine("0.0001");
             sb.AppendLine("int      second_order		        ... Generate second-order surface and volume elements.");
-            sb.AppendLine(Convert.ToInt32(_secondOrder && _midsideNodesOnGeometry).ToString());
+            sb.AppendLine(Convert.ToInt32(_secondOrder && _midsideNodesOnGeometry).ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("int      quad_dominated		        ... Creates a Quad-dominated mesh.");
-            sb.AppendLine(Convert.ToInt32(_quadDominated).ToString());
+            sb.AppendLine(Convert.ToInt32(_quadDominated).ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("char*    meshsize_filename           ... Optional external mesh size file.");
             sb.AppendLine("");
             sb.AppendLine("int      optsurfmeshenable	        ... Enable / Disable automatic surface mesh optimization.");
@@ -355,9 +355,9 @@ namespace CaeMesh
             sb.AppendLine("int      optvolmeshenable	        ... Enable / Disable automatic volume mesh optimization.");
             sb.AppendLine("1");
             sb.AppendLine("int      optsteps_3d			        ... Number of optimize steps to use for 3-D mesh optimization.");
-            sb.AppendLine(_optimizeSteps3D.ToString());            
+            sb.AppendLine(_optimizeSteps3D.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("int      optsteps_2d			        ... Number of optimize steps to use for 2-D mesh optimization.");
-            sb.AppendLine(_optimizeSteps2D.ToString());
+            sb.AppendLine(_optimizeSteps2D.ToString(System.Globalization.CultureInfo.InvariantCulture));
             sb.AppendLine("int      invert_tets			        ... Invert all the volume elements.");
             sb.AppendLine("0");
             sb.AppendLine("int      invert_trigs		        ... Invert all the surface triangle elements.");
@@ -402,7 +402,7 @@ namespace CaeMesh
             _hausdorff = meshingParameters.Hausdorff;
             _keepModelEdges = meshingParameters.KeepModelEdges;
         }
-        public MeshingParameters DeepCopy()
+        public virtual MeshingParameters DeepCopy()
         {
             return new MeshingParameters(this);
         }

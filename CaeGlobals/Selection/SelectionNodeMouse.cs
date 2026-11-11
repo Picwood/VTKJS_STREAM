@@ -140,6 +140,18 @@ namespace CaeGlobals
             }
         }
         // ISerialization
+        public override SelectionNode DeepCopy()
+        {
+            SelectionNodeMouse copy = (SelectionNodeMouse)base.DeepCopy();
+            copy._pickedPoint = _pickedPoint == null ? null : (double[])_pickedPoint.Clone();
+            copy._selectionDirection = _selectionDirection == null ? null : (double[])_selectionDirection.Clone();
+            copy._planeParameters = _planeParameters == null ? null :
+                _planeParameters.Select(row => row == null ? null : (double[])row.Clone()).ToArray();
+            copy._partOffsets = _partOffsets == null ? null :
+                _partOffsets.Select(row => row == null ? null : (double[])row.Clone()).ToArray();
+            return copy;
+        }
+
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);

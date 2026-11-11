@@ -47,7 +47,7 @@ namespace FileInOut.Output.Calculix
         {
             return string.Format("Hash: {0}, Date: {1}, Unit system: {2}{3}",
                                  _hashName,
-                                 DateTime.Now.ToShortDateString(), _unitSystemType,
+                                 DateTime.Now.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture), _unitSystemType,
                                  Environment.NewLine);
         }
     }

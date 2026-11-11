@@ -59,7 +59,15 @@ namespace CaeGlobals
                 memoryStream.Position = 0;
                 using (var gZipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
                 {
-                    gZipStream.Read(buffer, 0, buffer.Length);
+                    int offset = 0;
+                    while (offset < buffer.Length)
+                    {
+                        int read = gZipStream.Read(buffer, offset, buffer.Length - offset);
+                        if (read == 0) throw new InvalidDataException("Compressed string is shorter than its declared length.");
+                        offset += read;
+                    }
+                    if (gZipStream.ReadByte() != -1)
+                        throw new InvalidDataException("Compressed string exceeds its declared length.");
                 }
 
                 return Encoding.UTF8.GetString(buffer);

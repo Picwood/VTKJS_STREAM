@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CaeGlobals;
 using System.Runtime.Serialization;
-using CaeResults;
 using FileInOut.Output.Calculix;
 using System.Xml.Linq;
 

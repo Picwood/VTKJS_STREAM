@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -88,6 +88,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tools.Results.cs" />
+    <Compile Include="Tools.FileIO.cs" />
+    <Compile Include="Extensions.Collections.cs" />
     <Compile Include="CenterWinDialog.cs" />
     <Compile Include="CommonClasses\DataExchange\CellsExchangeData.cs" />
     <Compile Include="CommonClasses\DataExchange\NodesExchangeData.cs" />
@@ -114,6 +117,12 @@
     <Compile Include="DynamicTypeDescriptor\StandardValueEditorUI.designer.cs">
       <DependentUpon>StandardValueEditorUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="CaeException.cs" />
+    <Compile Include="DynamicTypeDescriptor\StandardValueAttribute.cs" />
+    <Compile Include="Selection\SelectionExtensions.cs" />
+    <Compile Include="Tools.Numeric.cs" />
+    <Compile Include="Extensions.Numeric.cs" />
+
     <Compile Include="ExceptionTools.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Editors\FilteredFileNameEditor.cs" />

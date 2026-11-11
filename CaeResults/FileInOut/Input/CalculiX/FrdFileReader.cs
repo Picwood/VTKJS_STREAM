@@ -21,7 +21,7 @@ using System.Globalization;
 namespace CaeResults
 {
     [Serializable]
-    public static class FrdFileReader
+    public static partial class FrdFileReader
     {
         static Dictionary<string, string> componentNameMap = new Dictionary<string, string>()
         {
@@ -60,18 +60,22 @@ namespace CaeResults
         private static readonly int _gapMaterialId = -1;
         private static readonly int _springMaterialId = -2;
         //
-        private static HashSet<int[]> _bemaNodeIds;
 
 
         // Methods                                                                                                                  
-        static public FeResults Read(string fileName)
+        public static FrdFileData ReadData(string fileName)
+        {
+            return ReadData(fileName, null);
+        }
+        private static FrdFileData ReadData(string fileName, Action<FrdFileData> initializeResults)
         {
             if (fileName != null && File.Exists(fileName))
             {
-                if (fileName.ToUpper().Contains("RESULTSFORLASTITERATIONS.FRD"))
+                HashSet<int[]> beamNodeIds = null;
+                if (fileName.IndexOf("RESULTSFORLASTITERATIONS.FRD", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     CompareIntArray comparer = new CompareIntArray();
-                    _bemaNodeIds = new HashSet<int[]>(comparer);
+                    beamNodeIds = new HashSet<int[]>(comparer);
                 }
                 //
                 string[] lines = Tools.ReadAllLines(fileName);
@@ -88,7 +92,7 @@ namespace CaeResults
                 Dictionary<int, string> materialIdMaterialName = null;
                 Dictionary<int, List<int>> materialIdElementIds = null;
                 //
-                FeResults result = new FeResults(fileName, null);
+                FrdFileData result = new FrdFileData();
                 Field field;
                 FieldData fieldData = null;
                 FieldData prevFieldData = null;
@@ -112,18 +116,18 @@ namespace CaeResults
                     }
                     else if (setID.StartsWith("    3C", StringComparison.Ordinal)) // Elements
                     {
-                        elements = GetElements(dataSet, gapMaterialIds, springMaterialIds, out materialIdElementIds);
+                        elements = GetElements(dataSet, gapMaterialIds, springMaterialIds, beamNodeIds, out materialIdElementIds);
                         //elements = GetElementsFast(dataSet));
                     }
                     else if (setID.StartsWith("    1PSTEP", StringComparison.Ordinal)) // Fields
                     {
                         GetField(dataSet, constantWidth, prevFieldData, nodeIdsLookUp, out fieldData, out field);
-                        result.AddField(fieldData, field);
-                        prevFieldData = fieldData.DeepClone();
+                        result.Fields.Add(new KeyValuePair<FieldData, Field>(fieldData, field));
+                        prevFieldData = new FieldData(fieldData);
                     }
                 }
                 //
-                result.Preprocess();
+
                 //
                 if (nodes != null && elements != null)
                 {
@@ -131,7 +135,9 @@ namespace CaeResults
                     //
                     FeMesh mesh = new FeMesh(nodes, elements, MeshRepresentation.Results);
                     mesh.ResetPartsColor();
-                    result.SetMesh(mesh, nodeIdsLookUp);
+                    result.Mesh = mesh;
+                    result.NodeIdsLookUp = nodeIdsLookUp;
+                    initializeResults?.Invoke(result);
                     // Material element sets
                     FeElementSet elementSet;
                     if (materialIdMaterialName != null && materialIdElementIds != null &&
@@ -217,13 +223,6 @@ namespace CaeResults
                     return false;
             }
             return true;
-
-
-            int start = 13;
-            string values = lines[1].Substring(start, lines[1].Length - start);
-            if (values.Contains(' ')) return true;
-            if (values[0] == ' ' && values[12] == ' ' && values[24] == ' ') return true;
-            return false;
         }
         static private DateTime GetDateTime(string[] lines)
         {
@@ -236,12 +235,12 @@ namespace CaeResults
                 if (lines[i].Contains("1UDATE"))
                 {
                     tmp = lines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    dateTime = DateTime.Parse(tmp[1]);
+                    dateTime = DateTime.Parse(tmp[1], CultureInfo.InvariantCulture);
                 }
                 else if (lines[i].Contains("1UTIME"))
                 {
                     tmp = lines[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    time = DateTime.Parse(tmp[1]);
+                    time = DateTime.Parse(tmp[1], CultureInfo.InvariantCulture);
                 }
             }
             //
@@ -370,11 +369,11 @@ namespace CaeResults
                     start += 10;
                     node = new FeNode();
                     node.Id = id;
-                    node.X = double.Parse(lines[i].Substring(start, width));
+                    node.X = double.Parse(lines[i].Substring(start, width), NumberStyles.Float, CultureInfo.InvariantCulture);
                     start += width;
-                    node.Y = double.Parse(lines[i].Substring(start, width));
+                    node.Y = double.Parse(lines[i].Substring(start, width), NumberStyles.Float, CultureInfo.InvariantCulture);
                     start += width;
-                    node.Z = double.Parse(lines[i].Substring(start, width));
+                    node.Z = double.Parse(lines[i].Substring(start, width), NumberStyles.Float, CultureInfo.InvariantCulture);
 
                     nodes.Add(id, node);
                     nodeIdsLookUp.Add(id, i - 1);
@@ -393,17 +392,17 @@ namespace CaeResults
 
                     if (lines[i][start] == '-') width = 13;
                     else width = 12;
-                    node.X = double.Parse(lines[i].Substring(start, width));
+                    node.X = double.Parse(lines[i].Substring(start, width), NumberStyles.Float, CultureInfo.InvariantCulture);
                     start += width;
 
                     if (lines[i][start] == '-') width = 13;
                     else width = 12;
-                    node.Y = double.Parse(lines[i].Substring(start, width));
+                    node.Y = double.Parse(lines[i].Substring(start, width), NumberStyles.Float, CultureInfo.InvariantCulture);
                     start += width;
 
                     if (lines[i][start] == '-') width = 13;
                     else width = 12;
-                    node.Z = double.Parse(lines[i].Substring(start, width));
+                    node.Z = double.Parse(lines[i].Substring(start, width), NumberStyles.Float, CultureInfo.InvariantCulture);
 
                     nodes.Add(id, node);
                     nodeIdsLookUp.Add(id, i - 1);
@@ -414,7 +413,7 @@ namespace CaeResults
             return nodes;
         }
         static private Dictionary<int, FeElement> GetElements(string[] lines, HashSet<int> gapMaterialIds,
-                                                              HashSet<int> springMaterialIds,
+                                                              HashSet<int> springMaterialIds, HashSet<int[]> beamNodeIds,
                                                               out Dictionary<int, List<int>> materialIdElementIds)
         {
             //        el.id   type       ?   mat.id      
@@ -455,13 +454,13 @@ namespace CaeResults
                         record1 = lines[++i].Split(splitter, StringSplitOptions.RemoveEmptyEntries);
                         if (TryGetLinearBeamElement(id, record1, out element))
                         {
-                            if (_bemaNodeIds != null)
+                            if (beamNodeIds != null)
                             {
-                                nodeIds = element.NodeIds;
+                                nodeIds = (int[])element.NodeIds.Clone();
                                 Array.Sort(nodeIds);
-                                if (_bemaNodeIds.Contains(nodeIds))
+                                if (beamNodeIds.Contains(nodeIds))
                                     break;
-                                else _bemaNodeIds.Add(nodeIds);
+                                else beamNodeIds.Add(nodeIds);
                             }
                             elements.Add(id, element);
                         }
@@ -719,7 +718,7 @@ namespace CaeResults
             //
             record = line.Split(splitter, StringSplitOptions.RemoveEmptyEntries);                   // 100CL
             globalIncrementId = int.Parse(record[1]) - 100;
-            time = float.Parse(record[2]);
+            time = float.Parse(record[2], NumberStyles.Float, CultureInfo.InvariantCulture);
             numOfVal = int.Parse(record[3]);
             methodId = int.Parse(record[4]);
             // Steady state dynamics
@@ -825,9 +824,14 @@ namespace CaeResults
             if (lines.Length - lineNum < numOfVal) numOfVal = lines.Length - lineNum;
             //
             float[][] values = new float[components.Count][];
-            for (int i = 0; i < values.Length; i++) values[i] = new float[nodeIdsLookUp.Count];
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = new float[nodeIdsLookUp.Count];
+                // A field can cover only a subset of mesh nodes. Unread values
+                // are unknown, not physical zeroes (also used for invalid values).
+                for (int j = 0; j < values[i].Length; j++) values[i][j] = float.NaN;
+            }
             //
-            bool directIds = nodeIdsLookUp.Count == numOfVal;
             int width;
             int lineNumInt = lineNum;
             int componentsCount = components.Count;
@@ -850,23 +854,18 @@ namespace CaeResults
                 // -2           0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00
                 // -2           0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00
 
-                // Are there multiple data lines for one node
-                int numDataLines = 0;
-                if (numOfVal < lines.Length - lineNumInt)
+                // Continuation counts can differ between nodes. Index actual
+                // node records instead of inferring a stride from the first one.
+                var nodeRecordLines = new List<int>();
+                for (int lineIndex = lineNumInt; lineIndex < lines.Length; lineIndex++)
                 {
-                    for (int i = lineNumInt; i < lines.Length; i++)
-                    {
-                        if (numDataLines == 0 && lines[i].Trim().StartsWith("-1", StringComparison.Ordinal)) numDataLines = 1;
-                        else if (numDataLines >= 1 && lines[i].Trim().StartsWith("-2", StringComparison.Ordinal)) numDataLines++;
-                        else if (numDataLines >= 1 && lines[i].Trim().StartsWith("-1", StringComparison.Ordinal)) break;
-                    }
+                    if (lines[lineIndex].TrimStart().StartsWith("-1", StringComparison.Ordinal))
+                        nodeRecordLines.Add(lineIndex);
                 }
-                else numDataLines = 1;
-                //
                 width = 12;
                 //
                 //for (int i = 0; i < numOfVal; i++)
-                Parallel.For(0, numOfVal, i =>  
+                Parallel.For(0, Math.Min(numOfVal, nodeRecordLines.Count), i =>
                 {
                     int lineId;
                     int nodeId;
@@ -876,16 +875,13 @@ namespace CaeResults
                     string substring;
                     float value;
                     //
-                    lineId = lineNumInt + i * numDataLines;
+                    lineId = nodeRecordLines[i];
                     line = lines[lineId];
                     // Node id
-                    if (directIds) nodeValueId = i;
-                    else
-                    {
-                        start = 3;
-                        nodeId = int.Parse(line.Substring(start, 10));
-                        if (!nodeIdsLookUp.TryGetValue(nodeId, out nodeValueId)) nodeValueId = -1;
-                    }
+                    // Equal record counts do not imply equal node ordering.
+                    start = 3;
+                    nodeId = int.Parse(line.Substring(start, 10));
+                    if (!nodeIdsLookUp.TryGetValue(nodeId, out nodeValueId)) nodeValueId = -1;
                     // Values
                     start = 13;
                     for (int j = 0; j < componentsCount; j++)
@@ -895,7 +891,6 @@ namespace CaeResults
                         {
                             if (lines.Length > lineId + 1 && lines[lineId + 1].Trim().StartsWith("-2", StringComparison.Ordinal))
                             {
-                                i++;
                                 lineId++;
                                 line = lines[lineId];
                                 start = 13;
@@ -904,10 +899,13 @@ namespace CaeResults
                             else continue;
                         }
                         //
+                        // A continuation may itself be truncated. Do not read
+                        // past it or reinterpret later values as missing components.
+                        if (start + width > line.Length) break;
                         if (nodeValueId != -1)
                         {
                             substring = line.Substring(start, width);
-                            if (!float.TryParse(substring, out value)) value = float.NaN;
+                            if (!float.TryParse(substring, NumberStyles.Float, CultureInfo.InvariantCulture, out value)) value = float.NaN;
                             // Try/catch version is a little faster
                             //try { value = float.Parse(substring); }
                             //catch { value = float.NaN; }
@@ -938,13 +936,10 @@ namespace CaeResults
                     lineId = i + lineNum;
                     line = lines[lineId];
                     // Node id
-                    if (directIds) nodeValueId = i;
-                    else
-                    {
-                        start = 3;
-                        nodeId = int.Parse(line.Substring(start, 10));
-                        if (!nodeIdsLookUp.TryGetValue(nodeId, out nodeValueId)) nodeValueId = -1;
-                    }
+                    // Equal record counts do not imply equal node ordering.
+                    start = 3;
+                    nodeId = int.Parse(line.Substring(start, 10));
+                    if (!nodeIdsLookUp.TryGetValue(nodeId, out nodeValueId)) nodeValueId = -1;
                     // Values
                     start = 13;
                     for (int j = 0; j < components.Count; j++)
@@ -956,7 +951,7 @@ namespace CaeResults
                         //
                         if (start + width > line.Length) continue;
                         //
-                        if (nodeValueId != -1) values[j][nodeValueId] = float.Parse(line.Substring(start, width));
+                        if (nodeValueId != -1) values[j][nodeValueId] = float.Parse(line.Substring(start, width), NumberStyles.Float, CultureInfo.InvariantCulture);
                         start += width;
                     }
                 }

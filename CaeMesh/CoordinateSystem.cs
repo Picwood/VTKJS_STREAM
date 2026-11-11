@@ -16,7 +16,6 @@ using CaeGlobals;
 using DynamicTypeDescriptor;
 using System.Runtime.Serialization;
 using System.Drawing;
-using System.Net.Configuration;
 
 namespace CaeMesh
 {
@@ -200,6 +199,32 @@ namespace CaeMesh
             if (_pointXYCreationData == null) _pointXYCreatedFrom = CsPointCreatedFromEnum.Coordinates;
         }
 
+
+        // Evaluated snapshot for synchronous export, not an editable project clone.
+        internal CoordinateSystem CopyForExport()
+        {
+            var copy = (CoordinateSystem)MemberwiseClone();
+            copy._x1 = new EquationContainer(typeof(StringLengthConverter), _x1.Value);
+            copy._y1 = new EquationContainer(typeof(StringLengthConverter), _y1.Value);
+            copy._z1 = new EquationContainer(typeof(StringLengthConverter), _z1.Value);
+            copy._x2 = new EquationContainer(typeof(StringLengthConverter), _x2.Value);
+            copy._y2 = new EquationContainer(typeof(StringLengthConverter), _y2.Value);
+            copy._z2 = new EquationContainer(typeof(StringLengthConverter), _z2.Value);
+            copy._x3 = new EquationContainer(typeof(StringLengthConverter), _x3.Value);
+            copy._y3 = new EquationContainer(typeof(StringLengthConverter), _y3.Value);
+            copy._z3 = new EquationContainer(typeof(StringLengthConverter), _z3.Value);
+            copy._centerCreationIds = _centerCreationIds?.ToArray();
+            copy._centerCreationData = _centerCreationData?.DeepCopy();
+            copy._pointXCreationIds = _pointXCreationIds?.ToArray();
+            copy._pointXCreationData = _pointXCreationData?.DeepCopy();
+            copy._pointXYCreationIds = _pointXYCreationIds?.ToArray();
+            copy._pointXYCreationData = _pointXYCreationData?.DeepCopy();
+            copy._center = null;
+            copy._dx = null;
+            copy._dy = null;
+            copy._dz = null;
+            return copy;
+        }
 
         // Methods                                                                                                                  
         private void SetX1(EquationContainer value, bool checkEquation = true)

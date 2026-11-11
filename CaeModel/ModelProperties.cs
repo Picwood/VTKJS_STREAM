@@ -45,28 +45,8 @@ namespace CaeModel
         CFD
     }
     //
-    [Serializable]
-    public enum ModelSpaceEnum
+    public static partial class ExtensionMethods
     {
-        [StandardValue("Undefined", Visible = false)]
-        Undefined = 0,
-        [StandardValue("ThreeD", DisplayName = "3D")]
-        ThreeD = 1,
-        [StandardValue("PlaneStress", DisplayName = "2D plane stress")]
-        PlaneStress = 2,
-        [StandardValue("PlaneStrain", DisplayName = "2D plane strain")]
-        PlaneStrain = 3,
-        [StandardValue("Axisymmetric", DisplayName = "2D axisymmetric")]
-        Axisymmetric = 4
-    }    
-    //
-    public static class ExtensionMethods
-    {
-        // ModelSpaceEnum
-        public static bool IsTwoD(this ModelSpaceEnum modelSpace)
-        {
-            return (int)modelSpace > 1; // 2, 3 or 4 is 2D
-        }
         //
         public static Dictionary<Type, HashSet<Enum>> GetAvailableElementTypes(this ModelSpaceEnum modelSpace,
                                                                                bool allowMixedModel)

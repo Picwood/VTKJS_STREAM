@@ -14,8 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
-using System.Windows.Forms.VisualStyles;
 using System.Diagnostics;
+using System.IO;
 
 namespace CaeMesh
 {
@@ -353,6 +353,7 @@ namespace CaeMesh
             if (numOfEntries <= -1) data = null;
             else
             {
+                if (numOfEntries > 100_000_000) throw new InvalidDataException("Visualization array exceeds its limit.");
                 data = new int[numOfEntries];
                 for (int i = 0; i < data.Length; i++) data[i] = br.ReadInt32();
             }
@@ -2097,7 +2098,7 @@ namespace CaeMesh
             Dictionary<int[], int[]> allEdgeCells = new Dictionary<int[], int[]>(comparer);
             foreach (int[] cell in sectionPlaneCells)
             {
-                cellEdges = FeMesh.GetVisualizationEdgeCells(cell, ElementFaceType.Face);
+                cellEdges = MeshTopology.GetVisualizationEdgeCells(cell, ElementFaceType.Face);
                 for (int i = 0; i < cellEdges.Length; i++)
                 {
                     sorted = cellEdges[i].ToArray();

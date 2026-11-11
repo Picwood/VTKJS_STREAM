@@ -36,7 +36,7 @@ namespace CaeResults
         private string _fieldName;
         private string _componentName;
         private LimitPlotBasedOnEnum _limitPlotBasedOn;
-        private OrderedDictionary<string, double> _itemNameLimit;
+        private CaeGlobals.OrderedDictionary<string, double> _itemNameLimit;
 
 
         // Properties                                                                                                               
@@ -47,7 +47,7 @@ namespace CaeResults
             get { return _limitPlotBasedOn; }
             set { _limitPlotBasedOn = value; }
         }
-        public OrderedDictionary<string, double> ItemNameLimit
+        public CaeGlobals.OrderedDictionary<string, double> ItemNameLimit
         {
             get { return _itemNameLimit; }
             set { _itemNameLimit = value; }
@@ -61,7 +61,7 @@ namespace CaeResults
             _fieldName = filedName;
             _componentName = componentName;
             _limitPlotBasedOn = LimitPlotBasedOnEnum.Parts;
-            _itemNameLimit = new OrderedDictionary<string, double>("ItemNameLimit");
+            _itemNameLimit = new CaeGlobals.OrderedDictionary<string, double>("ItemNameLimit");
         }
 
 

@@ -65,6 +65,41 @@ namespace FileInOut.Output.Calculix
         }
 
         // Methods                                                                                                                  
+        // Export owns rendered keyword data, never the editor's arbitrary Parent graph.
+        public CalculixUserKeyword CopyForExport()
+        {
+            return (CalculixUserKeyword)CopyForExport(this, new HashSet<CalculixKeyword>());
+        }
+        private static CalculixKeyword CopyForExport(CalculixKeyword source, HashSet<CalculixKeyword> path)
+        {
+            if (!path.Add(source)) throw new InvalidOperationException("Cyclic CalculiX keyword tree.");
+            try
+            {
+                CalculixKeyword copy;
+                if (source is CalculixUserKeyword user)
+                {
+                    var userCopy = new CalculixUserKeyword(user.Data) { Active = user.Active };
+                    if (user.IsSuppressed) userCopy.Suppress();
+                    copy = userCopy;
+                }
+                else if (source is CalDeactivated deactivated) copy = new CalDeactivated(deactivated.Name);
+                else copy = new ExportedKeyword(source.GetKeywordString(), source.GetDataString());
+                copy.Active = source.Active;
+                foreach (var child in source.Keywords) copy.AddKeyword(CopyForExport(child, path));
+                return copy;
+            }
+            finally { path.Remove(source); }
+        }
+        [Serializable]
+        private sealed class ExportedKeyword : CalculixKeyword
+        {
+            private readonly string _header;
+            private readonly string _data;
+            public ExportedKeyword(string header, string data) { _header = header; _data = data; }
+            public override string GetKeywordString() => _header;
+            public override string GetDataString() => _data;
+        }
+
         public void Suppress()
         {
             _suppressed = true;

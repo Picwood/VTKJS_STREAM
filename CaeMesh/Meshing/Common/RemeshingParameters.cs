@@ -39,6 +39,16 @@ namespace CaeMesh
             _regionName = regionName;
             _regionType = regionType;
         }
+        public RemeshingParameters(RemeshingParameters parameters)
+            : base(parameters)
+        {
+            _regionName = parameters._regionName;
+            _regionType = parameters._regionType;
+        }
+        public override MeshingParameters DeepCopy()
+        {
+            return new RemeshingParameters(this);
+        }
         public RemeshingParameters(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

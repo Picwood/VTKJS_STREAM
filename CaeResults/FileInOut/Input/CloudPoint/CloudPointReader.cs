@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.IO;
 using CaeMesh;
 using CaeGlobals;
-using System.Configuration;
+using System.Globalization;
 using Octree;
 
 namespace CaeResults
@@ -55,14 +55,14 @@ namespace CaeResults
                         if (tmp.Length > 3)
                         {
                             cloudPoint = new CloudPoint();
-                            cloudPoint.Coor = new double[] { double.Parse(tmp[0]), double.Parse(tmp[1]), double.Parse(tmp[2]) };
+                            cloudPoint.Coor = new double[] { double.Parse(tmp[0], NumberStyles.Float, CultureInfo.InvariantCulture), double.Parse(tmp[1], NumberStyles.Float, CultureInfo.InvariantCulture), double.Parse(tmp[2], NumberStyles.Float, CultureInfo.InvariantCulture) };
                             if (numValues == -1) numValues = tmp.Length - 3;
                             //
                             if (numValues != tmp.Length - 3)
                                 throw new CaeException("The data file does not contain the same number of values in each line");
                             //
                             cloudPoint.Values = new double[numValues];
-                            for (int j = 0; j < numValues; j++) cloudPoint.Values[j] = double.Parse(tmp[j + 3]);
+                            for (int j = 0; j < numValues; j++) cloudPoint.Values[j] = double.Parse(tmp[j + 3], NumberStyles.Float, CultureInfo.InvariantCulture);
                             //
                             cloudPoints.Add(cloudPoint);
 

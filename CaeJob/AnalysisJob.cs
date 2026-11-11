@@ -26,18 +26,6 @@ using System.Runtime.InteropServices;
 
 namespace CaeJob
 {
-    [Serializable]
-    public enum JobStatus
-    {
-        None,
-        InQueue,
-        Running,
-        OK,
-        Killed,
-        TimedOut,
-        Failed,
-        FailedWithResults,
-    }
     //
     [Serializable]
     public enum FEMSolverEnum

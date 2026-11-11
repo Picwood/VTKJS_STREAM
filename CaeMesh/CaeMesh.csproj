@@ -45,6 +45,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MeshGeometryIds.cs" />
+    <Compile Include="MeshTransforms.cs" />
     <Compile Include="BoundingBox.cs" />
     <Compile Include="ContactSearch\GeometryFilterEnum.cs" />
     <Compile Include="ContactSearch\NodeData.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Elements\FeElementType.cs" />
     <Compile Include="FeGroup.cs" />
     <Compile Include="FeMesh.cs" />
+    <Compile Include="FeMesh.Legacy.cs" />
     <Compile Include="FeReferencePoint.cs" />
     <Compile Include="Geometry\GeometrySelection.cs" />
     <Compile Include="Geometry\GeomEdge.cs" />
@@ -96,6 +99,8 @@
     <Compile Include="Geometry\GeomSurface.cs" />
     <Compile Include="Geometry\GeometryItem.cs" />
     <Compile Include="Meshing\Common\LocalMeshSize.cs" />
+    <Compile Include="Meshing\Common\BoxMeshSize.cs" />
+    <Compile Include="Meshing\Common\CadFaceMeshSize.cs" />
     <Compile Include="Meshing\BaramMesh\BaramBaseGridCaseWriter.cs" />
     <Compile Include="Meshing\BaramMesh\BaramBlockMeshDictBuilder.cs" />
     <Compile Include="Meshing\BaramMesh\BaramCastellationCaseWriter.cs" />
@@ -122,6 +127,7 @@
     <Compile Include="Meshing\Gmsh\Mesher\GmshEdge.cs" />
     <Compile Include="Meshing\Gmsh\Mesher\GmshVolume.cs" />
     <Compile Include="Meshing\Gmsh\Mesher\GmshData.cs" />
+    <Compile Include="Meshing\Gmsh\Mesher\GmshData.Legacy.cs" />
     <Compile Include="Meshing\Gmsh\GmshAPI.cs" />
     <Compile Include="Meshing\Gmsh\SetupItems\SweepMesh.cs" />
     <Compile Include="Meshing\Gmsh\SetupItems\ShellGmsh.cs" />
@@ -156,6 +162,7 @@
     <Compile Include="Elements\3D\LinearTetraElement.cs" />
     <Compile Include="Elements\2D\LinearTriangleElement.cs" />
     <Compile Include="GeometryTools.cs" />
+    <Compile Include="MeshTopology.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Meshing\Common\MeshingParameters.cs" />
     <Compile Include="Parts\PartType.cs" />

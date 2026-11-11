@@ -23,7 +23,7 @@ namespace CaeMesh
     }
     
     [Serializable]
-    public class GmshData
+    public partial class GmshData
     {
         // Variables                                                                                                                
 
@@ -61,11 +61,6 @@ namespace CaeMesh
         // Constructors                                                                                                             
         public GmshData()
         {
-        }
-        //
-        public void WriteToFile(string fileName)
-        {
-            this.DumpToFile(fileName);
         }
     }
 }

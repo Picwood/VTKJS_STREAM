@@ -9,11 +9,11 @@
 
 using CaeGlobals;
 using CaeMesh;
-using CaeResults;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -263,9 +263,9 @@ namespace FileInOut.Input
                     {
                         node = new FeNode();
                         node.Id = nodeId++;
-                        node.X = double.Parse(tmp[0]);
-                        node.Y = double.Parse(tmp[1]);
-                        node.Z = double.Parse(tmp[2]);
+                        node.X = double.Parse(tmp[0], CultureInfo.InvariantCulture);
+                        node.Y = double.Parse(tmp[1], CultureInfo.InvariantCulture);
+                        node.Z = double.Parse(tmp[2], CultureInfo.InvariantCulture);
                         if (tmp.Length > 3) possibleNodeId = int.Parse(tmp[3]);
                         else possibleNodeId = 0;
                         // If the node id is not equal to 0 check if the node exists by coordinates

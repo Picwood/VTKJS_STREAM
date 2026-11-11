@@ -17,20 +17,6 @@ using System.Reflection;
 
 namespace CaeGlobals
 {
-    public class CaeException : Exception
-    {
-        public CaeException()
-        {
-        }
-        public CaeException(string message)
-            : base(message)
-        {
-        }
-        public CaeException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-    }
     //
     public static class ExceptionTools
     {

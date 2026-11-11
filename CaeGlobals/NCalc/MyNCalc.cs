@@ -15,6 +15,10 @@ using System.Threading.Tasks;
 using UnitsNet;
 using UnitsNet.Units;
 using NCalc;
+#if PREPOMAX_MODERN_NCALC
+using FunctionArgs = NCalc.Handlers.FunctionEventArgs;
+using ParameterArgs = NCalc.Handlers.ParameterEventArgs;
+#endif
 using System.Text.RegularExpressions;
 using System.Reflection;
 
@@ -157,7 +161,12 @@ namespace CaeGlobals
                     }
                     else
                     {
+#if PREPOMAX_MODERN_NCALC
+                        // Modern iteration returns the scalar directly when there are no enumerable parameters.
+                        return new double[] { ConvertFromString(scalarEquation, null) };
+#else
                         throw new CaeException("Equation error:" + Environment.NewLine + "Equation return type unrecognized.");
+#endif
                     }
                 }
                 else
@@ -200,14 +209,22 @@ namespace CaeGlobals
         //
         static public Expression GetExpression(string expression)
         {
+#if PREPOMAX_MODERN_NCALC
+            Expression e = new Expression(expression, ExpressionOptions.IgnoreCaseAtBuiltInFunctions);
+#else
             Expression e = new Expression(expression, EvaluateOptions.IgnoreCase);
+#endif
             AddParametersToExpression(e);
             AddFunctionsToExpression(e);
             return e;
         }
         static public Expression GetArrayExpression(string expression)
         {
+#if PREPOMAX_MODERN_NCALC
+            Expression e = new Expression(expression, ExpressionOptions.IgnoreCaseAtBuiltInFunctions | ExpressionOptions.IterateParameters);
+#else
             Expression e = new Expression(expression, EvaluateOptions.IgnoreCase | EvaluateOptions.IterateParameters);
+#endif
             AddParametersToExpression(e);
             return e;
         }
@@ -232,7 +249,7 @@ namespace CaeGlobals
             Expression e = new Expression(expression);
             //
             e.EvaluateFunction += delegate (string name, FunctionArgs args) {
-                args.EvaluateParameters();
+                EvaluateFunctionParameters(args);
                 args.Result = 0;
             };
             e.EvaluateParameter += delegate (string name, ParameterArgs args) {
@@ -329,55 +346,76 @@ namespace CaeGlobals
                                   "Truncate(^)",
                                   "If(^, , )" };
         }
+        // Keep the legacy and modern evaluator APIs at a small shared boundary.
+        private static int GetFunctionParameterCount(FunctionArgs args)
+        {
+#if PREPOMAX_MODERN_NCALC
+            return args.Parameters.Count;
+#else
+            return args.Parameters.Length;
+#endif
+        }
+        private static object EvaluateFunctionParameter(FunctionArgs args, int index)
+        {
+#if PREPOMAX_MODERN_NCALC
+            return args.Parameters.Evaluate(index);
+#else
+            return args.Parameters[index].Evaluate();
+#endif
+        }
+        private static void EvaluateFunctionParameters(FunctionArgs args)
+        {
+            for (int i = 0; i < GetFunctionParameterCount(args); i++) EvaluateFunctionParameter(args, i);
+        }
         // User functions
         private static void ExtensionFunctions(string name, FunctionArgs functionArgs)
         {
             if (name.ToLower() == "ln")
             {
-                double param1 = Convert.ToDouble(functionArgs.Parameters[0].Evaluate());
+                double param1 = Convert.ToDouble(EvaluateFunctionParameter(functionArgs, 0));
                 //
                 functionArgs.Result = (double)Math.Log(param1, Math.E);
             }
             else if (name.ToLower() == "dist")
             {
-                if (functionArgs.Parameters.Length != 2)
+                if (GetFunctionParameterCount(functionArgs) != 2)
                     throw new ArgumentException("Dist() requires two parameters: Dist(NodeId1, NodeId2).");
-                functionArgs.EvaluateParameters();
-                int id1 = Convert.ToInt32(functionArgs.Parameters[0].Evaluate());
-                int id2 = Convert.ToInt32(functionArgs.Parameters[1].Evaluate());
+                EvaluateFunctionParameters(functionArgs);
+                int id1 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 0));
+                int id2 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 1));
                 //
                 if (Dist != null) functionArgs.Result = Dist(id1, id2);
                 else functionArgs.Result = double.NaN;
             }
             else if (name.ToLower() == "distx")
             {
-                if (functionArgs.Parameters.Length != 2)
+                if (GetFunctionParameterCount(functionArgs) != 2)
                     throw new ArgumentException("DistX() requires two parameters: DistX(NodeId1, NodeId2).");
-                functionArgs.EvaluateParameters();
-                int id1 = Convert.ToInt32(functionArgs.Parameters[0].Evaluate());
-                int id2 = Convert.ToInt32(functionArgs.Parameters[1].Evaluate());
+                EvaluateFunctionParameters(functionArgs);
+                int id1 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 0));
+                int id2 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 1));
                 //
                 if (DistX != null) functionArgs.Result = DistX(id1, id2);
                 else functionArgs.Result = double.NaN;
             }
             else if (name.ToLower() == "disty")
             {
-                if (functionArgs.Parameters.Length != 2)
+                if (GetFunctionParameterCount(functionArgs) != 2)
                     throw new ArgumentException("DistY() requires two parameters: DistY(NodeId1, NodeId2).");
-                functionArgs.EvaluateParameters();
-                int id1 = Convert.ToInt32(functionArgs.Parameters[0].Evaluate());
-                int id2 = Convert.ToInt32(functionArgs.Parameters[1].Evaluate());
+                EvaluateFunctionParameters(functionArgs);
+                int id1 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 0));
+                int id2 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 1));
                 //
                 if (DistY != null) functionArgs.Result = DistY(id1, id2);
                 else functionArgs.Result = double.NaN;
             }
             else if (name.ToLower() == "distz")
             {
-                if (functionArgs.Parameters.Length != 2)
+                if (GetFunctionParameterCount(functionArgs) != 2)
                     throw new ArgumentException("DistZ() requires two parameters: DistZ(NodeId1, NodeId2).");
-                functionArgs.EvaluateParameters();
-                int id1 = Convert.ToInt32(functionArgs.Parameters[0].Evaluate());
-                int id2 = Convert.ToInt32(functionArgs.Parameters[1].Evaluate());
+                EvaluateFunctionParameters(functionArgs);
+                int id1 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 0));
+                int id2 = Convert.ToInt32(EvaluateFunctionParameter(functionArgs, 1));
                 //
                 if (DistZ != null) functionArgs.Result = DistZ(id1, id2);
                 else functionArgs.Result = double.NaN;

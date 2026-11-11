@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using System.IO;
 using CaeMesh;
 using CaeGlobals;
-using vtkControl;
 
 namespace CaeResults
 {

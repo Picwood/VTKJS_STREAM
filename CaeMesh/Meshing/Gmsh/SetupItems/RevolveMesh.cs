@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 using CaeGlobals;
 using CaeMesh.Meshing;
 using DynamicTypeDescriptor;
-using GmshCommon;
 
 namespace CaeMesh
 {
@@ -84,8 +83,8 @@ namespace CaeMesh
         {
             base.CopyFrom(revolveMesh);
             //
-            if (_axisCenter != null) _axisCenter = revolveMesh._axisCenter.ToArray();
-            if (_axisDirection != null) _axisDirection = revolveMesh._axisDirection.ToArray();
+            _axisCenter = revolveMesh._axisCenter?.ToArray();
+            _axisDirection = revolveMesh._axisDirection?.ToArray();
             _angleDeg = revolveMesh._angleDeg;
             _middleR = revolveMesh._middleR;
         }

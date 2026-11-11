@@ -19,7 +19,7 @@ using System.Runtime.Serialization;
 namespace CaeModel
 {
     [Serializable]
-    public abstract class VariablePressure : Load, ISerializable
+    public abstract partial class VariablePressure : Load, ISerializable
     {
         // Variables                                                                                                                
         protected string _surfaceName;          //ISerializable
@@ -60,8 +60,6 @@ namespace CaeModel
         }
 
         // Methods                                                                                                                  
-        public abstract double GetPressureForPoint(FeModel model, double[] point);
-        public abstract double[] GetPressuresForPoints(FeModel model, double[][] points);
         // ISerialization
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {

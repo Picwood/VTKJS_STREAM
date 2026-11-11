@@ -52,6 +52,14 @@ namespace CaeMesh
         }
 
 
+        public FeNodeSet(FeNodeSet source) : base(source)
+        {
+            _creationData = source._creationData?.DeepCopy();
+            _creationIds = source._creationIds?.ToArray();
+            _centerOfGravity = source._centerOfGravity?.ToArray();
+            _boundingBox = source._boundingBox?.Select(row => row?.ToArray()).ToArray();
+        }
+
         // Methods                                                                                                                  
         public int[] GetMaxNRandomNodeIds(int n)
         {

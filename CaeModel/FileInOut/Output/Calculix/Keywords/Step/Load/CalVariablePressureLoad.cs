@@ -19,7 +19,7 @@ using CaeGlobals;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalVariablePressureLoad : CalLoad
+    internal partial class CalVariablePressureLoad : CalLoad
     {
         // Variables                                                                                                                
         protected VariablePressure _load;
@@ -45,16 +45,6 @@ namespace FileInOut.Output.Calculix
             _complexLoadType = complexLoadType;
             _surfaceFaceType = surfaceFaceType;
         }
-        public CalVariablePressureLoad(FeModel model, VariablePressure load, ComplexLoadTypeEnum complexLoadType)
-        {
-            _load = load;
-            _dLoads = model.GetElementDLoadsFromVariablePressureLoad(_load);
-            _complexLoadType = complexLoadType;
-            //
-            _surfaceFaceType = model.Mesh.Surfaces[load.SurfaceName].SurfaceFaceTypes;
-        }
-
-
         // Methods                                                                                                                  
         public override string GetKeywordString()
         {

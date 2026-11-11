@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 using CaeGlobals;
 using CaeMesh.Meshing;
 using DynamicTypeDescriptor;
-using GmshCommon;
 
 namespace CaeMesh
 {
@@ -74,8 +73,8 @@ namespace CaeMesh
         {
             base.CopyFrom(extrudeMesh);
             //
-            if (_direction != null) _direction = extrudeMesh._direction.ToArray();
-            if (_extrudeCenter != null) _extrudeCenter = extrudeMesh._extrudeCenter.ToArray();
+            _direction = extrudeMesh._direction?.ToArray();
+            _extrudeCenter = extrudeMesh._extrudeCenter?.ToArray();
         }
         // ISerialization
         public new void GetObjectData(SerializationInfo info, StreamingContext context)

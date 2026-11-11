@@ -194,6 +194,18 @@ namespace CaeMesh
         }
 
 
+        // Evaluated snapshot for synchronous export, not an editable project clone.
+        internal FeReferencePoint CopyForExport()
+        {
+            var copy = (FeReferencePoint)MemberwiseClone();
+            copy._x = new EquationContainer(typeof(StringLengthConverter), _x.Value);
+            copy._y = new EquationContainer(typeof(StringLengthConverter), _y.Value);
+            copy._z = new EquationContainer(typeof(StringLengthConverter), _z.Value);
+            copy._creationIds = _creationIds?.ToArray();
+            copy._creationData = _creationData?.DeepCopy();
+            return copy;
+        }
+
         // Methods                                                                                                                  
         private void SetX(EquationContainer value, bool checkEquation = true)
         {

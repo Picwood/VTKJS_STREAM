@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 using CaeGlobals;
 using CaeMesh.Meshing;
 using DynamicTypeDescriptor;
-using GmshCommon;
 
 namespace CaeMesh
 {
@@ -112,21 +111,11 @@ namespace CaeMesh
             //
             _numberOfLayerSmoothSteps = sweepMesh._numberOfLayerSmoothSteps;
             _numberOfGlobalSmoothSteps = sweepMesh._numberOfGlobalSmoothSteps;
-            if (_direction != null) _direction = sweepMesh._direction.ToArray();
-            if (_sweepCenter != null) _sweepCenter = sweepMesh._sweepCenter.ToArray();
-            if (_sideSurfaceIds != null) sweepMesh._sideSurfaceIds.ToArray();
-            if (_layerGroupEdgeIds != null)
-            {
-                sweepMesh._layerGroupEdgeIds = new int[_layerGroupEdgeIds.Length][][];
-                for (int i = 0; i < _layerGroupEdgeIds.Length; i++)
-                {
-                    sweepMesh._layerGroupEdgeIds[i] = new int[_layerGroupEdgeIds[i].Length][];
-                    for (int j = 0; j < _layerGroupEdgeIds[i].Length; j++)
-                    {
-                        _layerGroupEdgeIds[i][j] = _layerGroupEdgeIds[i][j].ToArray();
-                    }
-                }
-            }
+            _direction = sweepMesh._direction?.ToArray();
+            _sweepCenter = sweepMesh._sweepCenter?.ToArray();
+            _sideSurfaceIds = sweepMesh._sideSurfaceIds?.ToArray();
+            _layerGroupEdgeIds = sweepMesh._layerGroupEdgeIds?
+                .Select(group => group?.Select(edgeIds => edgeIds?.ToArray()).ToArray()).ToArray();
         }
         // ISerialization
         public new void GetObjectData(SerializationInfo info, StreamingContext context)

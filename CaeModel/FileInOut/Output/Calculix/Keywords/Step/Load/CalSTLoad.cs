@@ -19,7 +19,7 @@ using CaeGlobals;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalSTLoad : CalLoad
+    internal partial class CalSTLoad : CalLoad
     {
         // Variables                                                                                                                
         private STLoad _load;
@@ -31,13 +31,12 @@ namespace FileInOut.Output.Calculix
 
 
         // Constructor                                                                                                              
-        public CalSTLoad(FeModel model, STLoad load, ComplexLoadTypeEnum complexLoadType)
+        public CalSTLoad(STLoad load, CLoad[] resolvedLoads, ComplexLoadTypeEnum complexLoadType)
         {
             _load = load;
-            _cLoads = model.GetNodalCLoadsFromSurfaceTraction(_load);
+            _cLoads = resolvedLoads;
             _complexLoadType = complexLoadType;
         }
-
 
         // Methods                                                                                                                  
         public override string GetKeywordString()

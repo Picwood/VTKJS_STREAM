@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using CaeMesh;
 using System.ComponentModel;
 using CaeGlobals;
-using CaeJob;
 
 namespace CaeModel
 {

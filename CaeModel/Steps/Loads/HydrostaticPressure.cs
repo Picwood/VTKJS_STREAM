@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CaeMesh;
 using CaeGlobals;
-using CaeResults;
 using System.Runtime.Serialization;
 using DynamicTypeDescriptor;
 
@@ -32,7 +31,7 @@ namespace CaeModel
     }
 
     [Serializable]
-    public class HydrostaticPressure : VariablePressure, IPreviewable, ISerializable
+    public partial class HydrostaticPressure : VariablePressure, ISerializable
     {
         // Variables                                                                                                                
         private EquationContainer _x1;                                      //ISerializable
@@ -286,52 +285,8 @@ namespace CaeModel
             //
             return true;
         }
-        public FeResults GetPreview(FeModel model, string resultName, UnitSystem unitSystem)
-        {
-            FeMesh targetMesh = model.Mesh;
-            PartExchangeData allData = new PartExchangeData();
-            targetMesh.GetAllNodesAndCells(out allData.Nodes.Ids, out allData.Nodes.Coor, out allData.Cells.Ids,
-                                           out allData.Cells.CellNodeIds, out allData.Cells.Types);
-            //
-            FeSurface surface = targetMesh.Surfaces[_surfaceName];
-            FeNodeSet nodeSet = targetMesh.NodeSets[surface.NodeSetName];
-            HashSet<int> nodeIds = new HashSet<int>(nodeSet.Labels);
-            //
-            float[] values = new float[allData.Nodes.Coor.Length];
-            //
-            for (int i = 0; i < values.Length; i++)
-            {
-                if (nodeIds.Contains(allData.Nodes.Ids[i]))
-                {
-                    values[i] = (float)GetPressureForPoint(model, allData.Nodes.Coor[i]);
-                }
-                else
-                {
-                    values[i] = float.NaN;
-                }
-            }
-            //
-            Dictionary<int, int> nodeIdsLookUp = new Dictionary<int, int>();
-            for (int i = 0; i < allData.Nodes.Coor.Length; i++) nodeIdsLookUp.Add(allData.Nodes.Ids[i], i);
-            FeResults results = new FeResults(resultName, unitSystem);
-            results.SetMesh(targetMesh, nodeIdsLookUp);
-            // Add distances
-            FieldData fieldData = new FieldData(FOFieldNames.Imported);
-            fieldData.GlobalIncrementId = 1;
-            fieldData.StepType = StepTypeEnum.Static;
-            fieldData.Time = 1;
-            fieldData.MethodId = 1;
-            fieldData.StepId = 1;
-            fieldData.StepIncrementId = 1;
-            // Add values
-            Field field = new Field(fieldData.Name);
-            field.AddComponent(FOComponentNames.PRESS, values);
-            results.AddField(fieldData, field);
-            //
-            return results;
-        }
         // Variable pressure
-        public override double GetPressureForPoint(FeModel model, double[] point)
+        public double GetPressureForPoint(double[] point)
         {
             DateTime now = DateTime.Now;
             TimeSpan delta = now - _lastUpdate;
@@ -357,7 +312,7 @@ namespace CaeModel
             else if (_hydrostaticPressureCutoff == HydrostaticPressureCutoffEnum.Negative) return p < 0 ? 0 : p;
             else throw new NotSupportedException();
         }
-        public override double[] GetPressuresForPoints(FeModel model, double[][] points)
+        public double[] GetPressuresForPoints(double[][] points)
         {
             double[] values = new double[points.Length];
             _n = new Vec3D(_n1.Value, _n2.Value, _n3.Value);

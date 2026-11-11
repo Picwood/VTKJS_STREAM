@@ -37,6 +37,15 @@ namespace FileInOut.Output.Calculix
         }
 
 
+        // Resolve export-only regions without cloning or modifying the model load.
+        public static CalGravityLoad CreateForExport(GravityLoad load, string regionName, ComplexLoadTypeEnum complexLoadType)
+        {
+            var snapshot = new GravityLoad(load.Name, regionName, load.RegionType, load.F1.Value, load.F2.Value, load.F3.Value,
+                                      load.TwoD, load.Complex, load.PhaseDeg.Value);
+            snapshot.AmplitudeName = load.AmplitudeName;
+            return new CalGravityLoad(snapshot, complexLoadType);
+        }
+
         // Methods                                                                                                                  
         public override string GetKeywordString()
         {

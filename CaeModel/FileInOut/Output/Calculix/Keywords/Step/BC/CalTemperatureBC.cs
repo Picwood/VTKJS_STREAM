@@ -19,7 +19,7 @@ using CaeGlobals;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalTemperatureBC : CalBC
+    internal partial class CalTemperatureBC : CalBC
     {
         // Variables                                                                                                                
         private string _nodeSetNameOfSurface;
@@ -32,13 +32,13 @@ namespace FileInOut.Output.Calculix
 
 
         // Constructor                                                                                                              
-        public CalTemperatureBC(FeModel model, TemperatureBC temperatureBC, string nodeSetNameOfSurface)
+        public CalTemperatureBC(TemperatureBC temperatureBC, TemperatureBC[] resolvedTemperatures,
+                                string nodeSetNameOfSurface)
         {
             _temperatureBC = temperatureBC;
-            _temperatureBCs = model.GetNodalTemperaturesFromVariableTemperatureBC(temperatureBC);
+            _temperatureBCs = resolvedTemperatures;
             _nodeSetNameOfSurface = nodeSetNameOfSurface;
         }
-
 
         // Methods                                                                                                                  
         public override string GetKeywordString()

@@ -13,35 +13,25 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.OleDb;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
-using System.IO.Ports;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization;
 using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Input;
 using System.Xml.Linq;
-using static GmshCommon.Gmsh;
 
 namespace CaeMesh
 {
     [Serializable]
-    public class FeMesh : ISerializable
+    public partial class FeMesh : ISerializable
     {
         // Variables                                                                                                                
-        private static int _partDigits = 10000;
-        private static int _typeDigits = _partDigits * 10;
         //
         [NonSerialized] private Dictionary<int, FeNode> _nodes;                     // Deep copy
         [NonSerialized] private Dictionary<int, FeElement> _elements;               // Deep copy
@@ -50,13 +40,13 @@ namespace CaeMesh
         [NonSerialized] private Dictionary<int, HashSet<int>> _nodeIdElementIds;    // Deep copy
         //
         private MeshRepresentation _meshRepresentation;                             //ISerializable
-        private OrderedDictionary<string, MeshSetupItem> _meshSetupItems;           //ISerializable
-        private OrderedDictionary<string, BasePart> _parts;                         //ISerializable
-        private OrderedDictionary<string, FeNodeSet> _nodeSets;                     //ISerializable
-        private OrderedDictionary<string, FeElementSet> _elementSets;               //ISerializable
-        private OrderedDictionary<string, FeSurface> _surfaces;                     //ISerializable
-        private OrderedDictionary<string, FeReferencePoint> _referencePoints;       //ISerializable
-        private OrderedDictionary<string, CoordinateSystem> _coordinateSystems;     //ISerializable
+        private CaeGlobals.OrderedDictionary<string, MeshSetupItem> _meshSetupItems;           //ISerializable
+        private CaeGlobals.OrderedDictionary<string, BasePart> _parts;                         //ISerializable
+        private CaeGlobals.OrderedDictionary<string, FeNodeSet> _nodeSets;                     //ISerializable
+        private CaeGlobals.OrderedDictionary<string, FeElementSet> _elementSets;               //ISerializable
+        private CaeGlobals.OrderedDictionary<string, FeSurface> _surfaces;                     //ISerializable
+        private CaeGlobals.OrderedDictionary<string, FeReferencePoint> _referencePoints;       //ISerializable
+        private CaeGlobals.OrderedDictionary<string, CoordinateSystem> _coordinateSystems;     //ISerializable
         private int _maxNodeId;                                                     //ISerializable
         private int _maxElementId;                                                  //ISerializable
         private BoundingBox _boundingBox;                                           //ISerializable
@@ -73,26 +63,26 @@ namespace CaeMesh
             get { return _elements; }
             set { _elements = value; }
         }
-        public OrderedDictionary<string, MeshSetupItem> MeshSetupItems
+        public CaeGlobals.OrderedDictionary<string, MeshSetupItem> MeshSetupItems
         {
             get { return _meshSetupItems; }
         }
-        public OrderedDictionary<string, BasePart> Parts
+        public CaeGlobals.OrderedDictionary<string, BasePart> Parts
         {
             get { return _parts; }
             set { _parts = value; }
         }
-        public OrderedDictionary<string, FeNodeSet> NodeSets
+        public CaeGlobals.OrderedDictionary<string, FeNodeSet> NodeSets
         {
             get { return _nodeSets; }
         }
-        public OrderedDictionary<string, FeElementSet> ElementSets { get { return _elementSets; } set { _elementSets = value; } }
-        public OrderedDictionary<string, FeSurface> Surfaces { get { return _surfaces; } set { _surfaces = value; } }
-        public OrderedDictionary<string, FeReferencePoint> ReferencePoints
+        public CaeGlobals.OrderedDictionary<string, FeElementSet> ElementSets { get { return _elementSets; } set { _elementSets = value; } }
+        public CaeGlobals.OrderedDictionary<string, FeSurface> Surfaces { get { return _surfaces; } set { _surfaces = value; } }
+        public CaeGlobals.OrderedDictionary<string, FeReferencePoint> ReferencePoints
         {
             get { return _referencePoints; }
         }
-        public OrderedDictionary<string, CoordinateSystem> CoordinateSystems { get { return _coordinateSystems; } }
+        public CaeGlobals.OrderedDictionary<string, CoordinateSystem> CoordinateSystems { get { return _coordinateSystems; } }
         public int MaxNodeId
         {
             get { return _maxNodeId; }
@@ -151,16 +141,16 @@ namespace CaeMesh
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
             //
             _meshRepresentation = representation;
-            _meshSetupItems = new OrderedDictionary<string, MeshSetupItem>("Mesh Setup Items", sc);
+            _meshSetupItems = new CaeGlobals.OrderedDictionary<string, MeshSetupItem>("Mesh Setup Items", sc);
             //
-            _nodeSets = new OrderedDictionary<string, FeNodeSet>("Node Sets", sc);
-            _elementSets = new OrderedDictionary<string, FeElementSet>("Element Sets", sc);
+            _nodeSets = new CaeGlobals.OrderedDictionary<string, FeNodeSet>("Node Sets", sc);
+            _elementSets = new CaeGlobals.OrderedDictionary<string, FeElementSet>("Element Sets", sc);
             //
-            _surfaces = new OrderedDictionary<string, FeSurface>("Surfaces", sc);
-            _referencePoints = new OrderedDictionary<string, FeReferencePoint>("Reference Points", sc);
-            _coordinateSystems = new OrderedDictionary<string, CoordinateSystem>("Coordinate Systems", sc);
+            _surfaces = new CaeGlobals.OrderedDictionary<string, FeSurface>("Surfaces", sc);
+            _referencePoints = new CaeGlobals.OrderedDictionary<string, FeReferencePoint>("Reference Points", sc);
+            _coordinateSystems = new CaeGlobals.OrderedDictionary<string, CoordinateSystem>("Coordinate Systems", sc);
             //
-            _parts = new OrderedDictionary<string, BasePart>("Base Parts", sc);
+            _parts = new CaeGlobals.OrderedDictionary<string, BasePart>("Base Parts", sc);
             ExtractParts(inpElementTypeSets, partNamePrefix, importOptions);
             //
             UpdateMaxNodeAndElementIds();
@@ -176,9 +166,9 @@ namespace CaeMesh
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
             //
             _meshRepresentation = mesh._meshRepresentation;
-            _meshSetupItems = new OrderedDictionary<string, MeshSetupItem>("Mesh Setup Items", sc);
+            _meshSetupItems = new CaeGlobals.OrderedDictionary<string, MeshSetupItem>("Mesh Setup Items", sc);
             //
-            _parts = new OrderedDictionary<string, BasePart>("Base Parts", sc);
+            _parts = new CaeGlobals.OrderedDictionary<string, BasePart>("Base Parts", sc);
             foreach (var partName in partsToKeep)
             {
                 _parts.Add(partName, mesh.Parts[partName].DeepCopy());
@@ -204,11 +194,11 @@ namespace CaeMesh
                 _elements.Add(elementId, mesh.Elements[elementId].DeepCopy());
             }
             //
-            _nodeSets = new OrderedDictionary<string, FeNodeSet>("Node Sets", sc);
-            _elementSets = new OrderedDictionary<string, FeElementSet>("Element Sets", sc);
-            _surfaces = new OrderedDictionary<string, FeSurface>("Surfaces", sc);
-            _referencePoints = new OrderedDictionary<string, FeReferencePoint>("Reference Points", sc);
-            _coordinateSystems = new OrderedDictionary<string, CoordinateSystem>("Coordinate Systems", sc);
+            _nodeSets = new CaeGlobals.OrderedDictionary<string, FeNodeSet>("Node Sets", sc);
+            _elementSets = new CaeGlobals.OrderedDictionary<string, FeElementSet>("Element Sets", sc);
+            _surfaces = new CaeGlobals.OrderedDictionary<string, FeSurface>("Surfaces", sc);
+            _referencePoints = new CaeGlobals.OrderedDictionary<string, FeReferencePoint>("Reference Points", sc);
+            _coordinateSystems = new CaeGlobals.OrderedDictionary<string, CoordinateSystem>("Coordinate Systems", sc);
             //
             _maxNodeId = mesh._maxNodeId;
             _maxElementId = mesh._maxElementId;
@@ -217,13 +207,25 @@ namespace CaeMesh
             //
             ComputeBoundingBox();
         }
+        // Export-only mesh snapshot. Meshing setup is not used by input generation.
+        public FeMesh CreateExportSnapshot()
+        {
+            var copy = new FeMesh(this, _parts.Keys.ToArray());
+            copy._nodeSets = _nodeSets.CopyValues(set => new FeNodeSet(set));
+            copy._elementSets = _elementSets.CopyValues(set => new FeElementSet(set));
+            copy._surfaces = _surfaces.CopyValues(surface => new FeSurface(surface));
+            copy._referencePoints = _referencePoints.CopyValues(point => point.CopyForExport());
+            copy._coordinateSystems = _coordinateSystems.CopyValues(system => system.CopyForExport());
+            return copy;
+        }
+
         public FeMesh(SerializationInfo info, StreamingContext context)
         {
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
-            OrderedDictionary<string, MeshingParameters> meshingParameters
-                = new OrderedDictionary<string, MeshingParameters>("mp");
-            OrderedDictionary<string, FeMeshRefinement> meshRefinements
-                = new OrderedDictionary<string, FeMeshRefinement>("mr");
+            CaeGlobals.OrderedDictionary<string, MeshingParameters> meshingParameters
+                = new CaeGlobals.OrderedDictionary<string, MeshingParameters>("mp");
+            CaeGlobals.OrderedDictionary<string, FeMeshRefinement> meshRefinements
+                = new CaeGlobals.OrderedDictionary<string, FeMeshRefinement>("mr");
             //
             foreach (SerializationEntry entry in info)
             {
@@ -232,19 +234,19 @@ namespace CaeMesh
                     case "_meshRepresentation":
                         _meshRepresentation = (MeshRepresentation)entry.Value; break;
                     case "_meshingParameters":      // Compatibility for version v1.4.1
-                        meshingParameters = (OrderedDictionary<string, MeshingParameters>)entry.Value; break;
+                        meshingParameters = (CaeGlobals.OrderedDictionary<string, MeshingParameters>)entry.Value; break;
                     case "_meshRefinements":        // Compatibility for version v1.4.1
-                        meshRefinements = (OrderedDictionary<string, FeMeshRefinement>)entry.Value; break;
+                        meshRefinements = (CaeGlobals.OrderedDictionary<string, FeMeshRefinement>)entry.Value; break;
                     case "_meshSetupItems":
-                        _meshSetupItems = (OrderedDictionary<string, MeshSetupItem>)entry.Value; break;
+                        _meshSetupItems = (CaeGlobals.OrderedDictionary<string, MeshSetupItem>)entry.Value; break;
                     case "_parts":
                         if (entry.Value is Dictionary<string, BasePart> bpd)
                         {
                             // Compatibility for version v0.5.1
                             bpd.OnDeserialization(null);
-                            _parts = new OrderedDictionary<string, BasePart>("", bpd, sc);
+                            _parts = new CaeGlobals.OrderedDictionary<string, BasePart>("", bpd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, BasePart> bpod) _parts = bpod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, BasePart> bpod) _parts = bpod;
                         else if (entry.Value == null) _parts = null;
                         else throw new NotSupportedException();
                         break;
@@ -253,9 +255,9 @@ namespace CaeMesh
                         {
                             // Compatibility for version v0.5.1
                             nsd.OnDeserialization(null);
-                            _nodeSets = new OrderedDictionary<string, FeNodeSet>("", nsd, sc);
+                            _nodeSets = new CaeGlobals.OrderedDictionary<string, FeNodeSet>("", nsd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, FeNodeSet> nsod) _nodeSets = nsod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, FeNodeSet> nsod) _nodeSets = nsod;
                         else if (entry.Value == null) _nodeSets = null;
                         else throw new NotSupportedException();
                         break;
@@ -264,9 +266,9 @@ namespace CaeMesh
                         {
                             // Compatibility for version v0.5.1
                             esd.OnDeserialization(null);
-                            _elementSets = new OrderedDictionary<string, FeElementSet>("", esd, sc);
+                            _elementSets = new CaeGlobals.OrderedDictionary<string, FeElementSet>("", esd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, FeElementSet> esod) _elementSets = esod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, FeElementSet> esod) _elementSets = esod;
                         else if (entry.Value == null) _elementSets = null;
                         else throw new NotSupportedException();
                         break;
@@ -275,9 +277,9 @@ namespace CaeMesh
                         {
                             // Compatibility for version v0.5.1
                             sd.OnDeserialization(null);
-                            _surfaces = new OrderedDictionary<string, FeSurface>("", sd, sc);
+                            _surfaces = new CaeGlobals.OrderedDictionary<string, FeSurface>("", sd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, FeSurface> sod) _surfaces = sod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, FeSurface> sod) _surfaces = sod;
                         else if (entry.Value == null) _surfaces = null;
                         else throw new NotSupportedException();
                         break;
@@ -286,14 +288,14 @@ namespace CaeMesh
                         {
                             // Compatibility for version v0.5.1
                             rpd.OnDeserialization(null);
-                            _referencePoints = new OrderedDictionary<string, FeReferencePoint>("", rpd, sc);
+                            _referencePoints = new CaeGlobals.OrderedDictionary<string, FeReferencePoint>("", rpd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, FeReferencePoint> rpod) _referencePoints = rpod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, FeReferencePoint> rpod) _referencePoints = rpod;
                         else if (entry.Value == null) _referencePoints = null;
                         else throw new NotSupportedException();
                         break;
                     case "_coordinateSystems":
-                        _coordinateSystems = (OrderedDictionary<string, CoordinateSystem>)entry.Value; break;
+                        _coordinateSystems = (CaeGlobals.OrderedDictionary<string, CoordinateSystem>)entry.Value; break;
                     case "_maxNodeId":
                         _maxNodeId = (int)entry.Value; break;
                     case "_maxElementId":
@@ -309,14 +311,14 @@ namespace CaeMesh
             }
             // Compatibility for version v1.4.1
             if (_meshSetupItems == null) _meshSetupItems =
-                    new OrderedDictionary<string, MeshSetupItem>("Mesh Setup Items", sc);
+                    new CaeGlobals.OrderedDictionary<string, MeshSetupItem>("Mesh Setup Items", sc);
             meshingParameters.OnDeserialization(null);
             meshRefinements.OnDeserialization(null);
             foreach (var entry in meshingParameters) _meshSetupItems.Add(entry.Key, entry.Value);
             foreach (var entry in meshRefinements) _meshSetupItems.Add(entry.Key, entry.Value);
             // Compatibility for version v.2.1.0
             if (_coordinateSystems == null)
-                _coordinateSystems = new OrderedDictionary<string, CoordinateSystem>("Coordinate Systems", sc);
+                _coordinateSystems = new CaeGlobals.OrderedDictionary<string, CoordinateSystem>("Coordinate Systems", sc);
             // Compatibility for version v.2.4.4
             _meshSetupItems.OnDeserialization(null);
             foreach (var entry in _meshSetupItems.ToArray())
@@ -378,7 +380,7 @@ namespace CaeMesh
                     }
                 }
                 // Parts
-                OrderedDictionary<string, BasePart> parts = mesh._parts;
+                CaeGlobals.OrderedDictionary<string, BasePart> parts = mesh._parts;
                 if (parts == null) bw.Write(-1);
                 else
                 {
@@ -398,6 +400,7 @@ namespace CaeMesh
             else mesh.Nodes.Clear();
             //
             int numOfNodes = br.ReadInt32();
+            if (numOfNodes < 0 || numOfNodes > 10_000_000) throw new InvalidDataException("Invalid binary mesh node count.");
             int id;
             double x, y, z;
             for (int i = 0; i < numOfNodes; i++)
@@ -406,7 +409,9 @@ namespace CaeMesh
                 x = br.ReadDouble();
                 y = br.ReadDouble();
                 z = br.ReadDouble();
-                mesh.Nodes.Add(id, new FeNode(id, x, y, z));
+                if (id <= 0 || !double.IsFinite(x) || !double.IsFinite(y) || !double.IsFinite(z) ||
+                    !mesh.Nodes.TryAdd(id, new FeNode(id, x, y, z)))
+                    throw new InvalidDataException("Invalid or duplicate binary mesh node.");
             }
             // Elements
             if (mesh.Elements == null) mesh.Elements = new Dictionary<int, FeElement>();
@@ -416,6 +421,7 @@ namespace CaeMesh
             int[] nodeIds;
             vtkCellType cellType;
             int numOfElements = br.ReadInt32();
+            if (numOfElements < 0 || numOfElements > 10_000_000) throw new InvalidDataException("Invalid binary mesh element count.");
             for (int i = 0; i < numOfElements; i++)
             {
                 partId = br.ReadInt32();
@@ -423,11 +429,15 @@ namespace CaeMesh
                 cellType = (vtkCellType)br.ReadInt32();
 
                 numOfNodes = br.ReadInt32();
+                if (id <= 0 || numOfNodes is < 2 or > 32 || mesh.Elements.ContainsKey(id))
+                    throw new InvalidDataException("Invalid or duplicate binary mesh element.");
                 nodeIds = new int[numOfNodes];
                 for (int j = 0; j < numOfNodes; j++)
                 {
                     nodeIds[j] = br.ReadInt32();
                 }
+                if (nodeIds.Distinct().Count() != nodeIds.Length || nodeIds.Any(nodeId => !mesh.Nodes.ContainsKey(nodeId)))
+                    throw new InvalidDataException("Binary mesh element has invalid node references.");
                 //
                 switch (cellType)
                 {
@@ -474,8 +484,7 @@ namespace CaeMesh
                         mesh.Elements.Add(id, new ParabolicHexaElement(id, nodeIds) { PartId = partId });
                         break;
                     default:
-                        if (Debugger.IsAttached) Debugger.Break();
-                        break;
+                        throw new InvalidDataException("Unsupported binary mesh cell type.");
                 }
             }
             // Parts
@@ -484,6 +493,11 @@ namespace CaeMesh
             {
                 VisualizationData visualization;
                 int numOfParts = br.ReadInt32();
+                if (numOfParts < 0 || numOfParts > 100_000) throw new InvalidDataException("Invalid binary mesh part count.");
+                bool reconstructedParts = numOfParts > 0 && mesh._parts.Count == 0;
+                BasePart[] binaryParts = reconstructedParts ? mesh.ReconstructBinaryResultParts() : Array.Empty<BasePart>();
+                if (reconstructedParts && binaryParts.Length != numOfParts)
+                    throw new InvalidDataException("Result mesh part count does not match its elements.");
                 //
                 if (version >= 2_004_004 || version == -1)
                 {
@@ -491,20 +505,79 @@ namespace CaeMesh
                     {
                         partName = br.ReadString();
                         VisualizationData.ReadFromBinaryStream(out visualization, br, version);
-                        mesh._parts[partName].Visualization = visualization;
+                        if (reconstructedParts)
+                        {
+                            BasePart part = binaryParts[i];
+                            part.Name = partName;
+                            if (mesh._parts.ContainsKey(partName))
+                                throw new InvalidDataException("Duplicate result mesh part name.");
+                            mesh._parts.Add(partName, part);
+                            part.Visualization = visualization;
+                        }
+                        else mesh._parts[partName].Visualization = visualization;
                     }
                 }
                 else
                 {
-                    foreach (var entry in mesh._parts)
+                    if (reconstructedParts)
                     {
-                        VisualizationData.ReadFromBinaryStream(out visualization, br, version);
-                        entry.Value.Visualization = visualization;
+                        for (int i = 0; i < numOfParts; i++)
+                        {
+                            VisualizationData.ReadFromBinaryStream(out visualization, br, version);
+                            BasePart part = binaryParts[i];
+                            if (mesh._parts.ContainsKey(part.Name))
+                                throw new InvalidDataException("Duplicate reconstructed result mesh part name.");
+                            mesh._parts.Add(part.Name, part);
+                            part.Visualization = visualization;
+                        }
+                    }
+                    else
+                    {
+                        if (mesh._parts.Count != numOfParts)
+                            throw new InvalidDataException("Result mesh part count does not match its metadata.");
+                        foreach (var entry in mesh._parts)
+                        {
+                            VisualizationData.ReadFromBinaryStream(out visualization, br, version);
+                            entry.Value.Visualization = visualization;
+                        }
                     }
                 }
             }
             //
             mesh.UpdateNodeIdElementIds();
+        }
+
+        private BasePart[] ReconstructBinaryResultParts()
+        {
+            var groups = new List<(int PartId, List<int> Elements, HashSet<int> Nodes, HashSet<Type> Types)>();
+            var byId = new Dictionary<int, int>();
+            foreach (var entry in _elements)
+            {
+                FeElement element = entry.Value;
+                if (!byId.TryGetValue(element.PartId, out int index))
+                {
+                    index = groups.Count;
+                    byId.Add(element.PartId, index);
+                    groups.Add((element.PartId, new List<int>(), new HashSet<int>(), new HashSet<Type>()));
+                }
+                var group = groups[index];
+                group.Elements.Add(entry.Key);
+                group.Nodes.UnionWith(element.NodeIds);
+                group.Types.Add(element.GetType());
+            }
+            var parts = new List<BasePart>(groups.Count);
+            foreach (var group in groups)
+            {
+                if (!group.Types.All(type => typeof(FeElement1D).IsAssignableFrom(type)) &&
+                    !group.Types.All(type => typeof(FeElement2D).IsAssignableFrom(type)) &&
+                    !group.Types.All(type => typeof(FeElement3D).IsAssignableFrom(type)))
+                    throw new InvalidDataException("Result part mixes incompatible element dimensions.");
+                int[] nodes = group.Nodes.Order().ToArray();
+                int[] elements = group.Elements.Order().ToArray();
+                var part = new ResultPart("Binary_part_" + parts.Count, group.PartId, nodes, elements, group.Types.ToArray());
+                parts.Add(part);
+            }
+            return parts.ToArray();
         }
 
 
@@ -540,6 +613,18 @@ namespace CaeMesh
                     //
                     SetItemValidity(mp, valid, items);
                     if (!valid && mp.Active) invalidItems.Add("Meshing parameters: " + mp.Name);
+                }
+                else if (entry.Value is CadFaceMeshSize faceSize)
+                {
+                    valid = faceSize.IsProperlyDefined();
+                    SetItemValidity(faceSize, valid, items);
+                    if (!valid && faceSize.Active) invalidItems.Add("CAD face mesh size: " + faceSize.Name);
+                }
+                else if (entry.Value is BoxMeshSize boxSize)
+                {
+                    valid = boxSize.IsProperlyDefined();
+                    SetItemValidity(boxSize, valid, items);
+                    if (!valid && boxSize.Active) invalidItems.Add("Box mesh size: " + boxSize.Name);
                 }
                 else if (entry.Value is LocalMeshSize lms)
                 {
@@ -1240,7 +1325,7 @@ namespace CaeMesh
                 if (part.PartId >= 9900)
                 {
                     toManyPartsId = true;
-                    MessageBoxes.ShowWarning("The number of parts is too large. Only the first 9900 parts were created.");
+                    ReportWarning("The number of parts is too large. Only the first 9900 parts were created.");
                     break;
                 }
             }
@@ -6973,54 +7058,31 @@ namespace CaeMesh
         }
         public static int[] GetPartIdsFromGeometryIds(int[] geometryIds)
         {
-            if (geometryIds == null) return null;
-            //
-            HashSet<int> partIds = new HashSet<int>();
-            int[] itemTypePartIds;
-            for (int i = 0; i < geometryIds.Length; i++)
-            {
-                itemTypePartIds = GetItemTypePartIdsFromGeometryId(geometryIds[i]);
-                partIds.Add(itemTypePartIds[2]);
-            }
-            //
-            return partIds.ToArray();
+            return MeshGeometryIds.GetPartIdsFromGeometryIds(geometryIds);
         }
         public static int GetPartIdFromGeometryId(int geometryId)
         {
-            return GetItemTypePartIdsFromGeometryId(geometryId)[2];
+            return MeshGeometryIds.GetPartIdFromGeometryId(geometryId);
         }
         public static int[] GetItemTypePartIdsFromGeometryId(int geometryId)
         {
-            // geometryId = itemId * 100000 + typeId * 10000 + partId;
-            int partId = geometryId % _partDigits;
-            int typeId = (geometryId / _partDigits) % 10;     // GeometryType
-            int itemId = geometryId / _typeDigits;
-            return new int[] { itemId, typeId, partId };
+            return MeshGeometryIds.GetItemTypePartIdsFromGeometryId(geometryId);
         }
         public static int GetTypeIdFromGeometryId(int geometryId)
         {
-            // geometryId = itemId * 100000 + typeId * 10000 + partId;
-            //int partId = geometryId % _partDigits;
-            int typeId = (geometryId / 10000) % 10;     // GeometryType
-            //int itemId = geometryId / _typeDigits;
-            return typeId;
+            return MeshGeometryIds.GetTypeIdFromGeometryId(geometryId);
         }
         public static int GetItemIdFromGeometryId(int geometryId)
         {
-            // geometryId = itemId * 100000 + typeId * 10000 + partId;
-            //int partId = geometryId % _partDigits;
-            //int typeId = (geometryId / 10000) % 10;     // GeometryType
-            int itemId = geometryId / _typeDigits;
-            return itemId;
+            return MeshGeometryIds.GetItemIdFromGeometryId(geometryId);
         }
         public static int GetGeometryPartIdFromGeometryId(int geometryId)
         {
-            int[] itemTypePartIds = GetItemTypePartIdsFromGeometryId(geometryId);
-            return GetGeometryId(0, (int)GeometryType.Part, itemTypePartIds[2]);
+            return MeshGeometryIds.GetGeometryPartIdFromGeometryId(geometryId);
         }
         public static int GetGeometryId(int itemId, int typeId, int partId)
         {
-            return itemId * _typeDigits + typeId * _partDigits + partId;
+            return MeshGeometryIds.GetGeometryId(itemId, typeId, partId);
         }
         //
         private int GetNextEdgeNodeId(int n1Id, int n2Id, HashSet<int> n2Neighbours, double angle)
@@ -7738,6 +7800,7 @@ namespace CaeMesh
                         }
                     }
                 }
+                else if (entry.Value is BoxMeshSize || entry.Value is CadFaceMeshSize) { } // Coordinate regions have no part references.
                 else throw new NotSupportedException("MeshSetupItemTypeException");
             }
         }
@@ -8291,7 +8354,7 @@ namespace CaeMesh
                 }
             }
             //
-            Selection splitSelection = selection.DeepClone();
+            Selection splitSelection = selection.DeepCopy();
             if (wasSplit) splitSelection.Nodes = singlePartSelections;
             return splitSelection;
         }
@@ -8308,7 +8371,7 @@ namespace CaeMesh
                 foreach (var partName in partNames)
                 {
                     part = _parts[partName];
-                    singlePartSelection = selectionNode.DeepClone();
+                    singlePartSelection = (SelectionNodeIds)selectionNode.DeepCopy();
                     singlePartSelection.SelectAll = false;
                     singlePartSelection.SetPartId(part.PartId);
                     //
@@ -8390,7 +8453,7 @@ namespace CaeMesh
                     //
                     foreach (var entry in partIdItemIds)
                     {
-                        singlePartSelection = selectionNode.DeepClone();
+                        singlePartSelection = (SelectionNodeIds)selectionNode.DeepCopy();
                         singlePartSelection.SetPartId(entry.Key);
                         singlePartSelection.ItemIds = entry.Value.ToArray();
                         //
@@ -9248,56 +9311,7 @@ namespace CaeMesh
         }
         public static int[][] GetVisualizationEdgeCells(int[] cell, ElementFaceType elementFaceType)
         {
-            //int[] lookUp3 = new int[] { 0, 1, 2, 0 };
-            //int[] lookUp4 = new int[] { 0, 1, 2, 3, 0 };
-            //int[] lookUp6 = new int[] { 0, 3, 1, 4, 2, 5, 0 };
-            //int[] lookUp8 = new int[] { 0, 4, 1, 5, 2, 6, 3, 7, 0 };
-
-            if (elementFaceType == ElementFaceType.Edge)
-            {
-                if (cell.Length == 2) return new int[][] { new int[] { cell[0], cell[1] } };
-                else if (cell.Length == 3) return new int[][] { new int[] { cell[0], cell[1], cell[2] } };
-                else throw new NotSupportedException();
-            }
-            else
-            {
-                if (cell.Length == 3)
-                {
-                    return new int[][] { new int[] { cell[0], cell[1] },
-                                         new int[] { cell[1], cell[2] },
-                                         new int[] { cell[2], cell[0] } };
-                }
-                else if (cell.Length == 4)
-                {
-                    return new int[][] { new int[] { cell[0], cell[1] },
-                                         new int[] { cell[1], cell[2] },
-                                         new int[] { cell[2], cell[3] },
-                                         new int[] { cell[3], cell[0] } };
-                }
-                else if (cell.Length == 6)
-                {
-                    return new int[][] { new int[] { cell[0], cell[1], cell[3] },
-                                         new int[] { cell[1], cell[2], cell[4] },
-                                         new int[] { cell[2], cell[0], cell[5] } };
-
-                    //return new int[][] {    new int[] { cell[0], cell[3], cell[1] },
-                    //                        new int[] { cell[1], cell[4], cell[2] },
-                    //                        new int[] { cell[2], cell[5], cell[0] } };
-                }
-                else if (cell.Length == 8)
-                {
-                    return new int[][] { new int[] { cell[0], cell[1], cell[4] },
-                                         new int[] { cell[1], cell[2], cell[5] },
-                                         new int[] { cell[2], cell[3], cell[6] },
-                                         new int[] { cell[3], cell[0], cell[7] } };
-
-                    //return new int[][] {    new int[] { cell[0], cell[4], cell[1] },
-                    //                        new int[] { cell[1], cell[5], cell[2] },
-                    //                        new int[] { cell[2], cell[6], cell[3] },
-                    //                        new int[] { cell[3], cell[7], cell[0] } };
-                }
-                else throw new NotSupportedException();
-            }
+            return MeshTopology.GetVisualizationEdgeCells(cell, elementFaceType);
         }
         public static void InvertVisualizationCell(int[] cell)
         {
@@ -9840,8 +9854,7 @@ namespace CaeMesh
             {
                 if (numberOfCopies > 0)
                 {
-                    FeMesh mesh = this.DeepCopy();
-                    translatedPartNames = AddPartsFromMesh(mesh, partNames, reservedPartNames, reservedPartIds);
+                    translatedPartNames = AddPartsFromMesh(this, partNames, reservedPartNames, reservedPartIds);
                     allTranslatedPartNames.AddRange(translatedPartNames);
                 }
                 //
@@ -9872,17 +9885,11 @@ namespace CaeMesh
         }
         public static void TranslatePoint(double[] pointCoor, double[] translateVector)
         {
-            double[][] translated = new double[][] { pointCoor };
-            TranslatePoints(translated, translateVector);
+            MeshTransforms.TranslatePoint(pointCoor, translateVector);
         }
         public static void TranslatePoints(double[][] pointCoor, double[] translateVector)
         {
-            for (int i = 0; i < pointCoor.Length; i++)
-            {
-                pointCoor[i][0] += translateVector[0];
-                pointCoor[i][1] += translateVector[1];
-                pointCoor[i][2] += translateVector[2];
-            }
+            MeshTransforms.TranslatePoints(pointCoor, translateVector);
         }
         //
         public string[] RotateParts(string[] partNames, double[] rotateCenter, double[] rotateAxis, double rotateAngle,
@@ -9898,8 +9905,7 @@ namespace CaeMesh
             {
                 if (numberOfCopies > 0)
                 {
-                    FeMesh mesh = this.DeepCopy();
-                    rotatedPartNames = AddPartsFromMesh(mesh, partNames, reservedPartNames, reservedPartIds);
+                    rotatedPartNames = AddPartsFromMesh(this, partNames, reservedPartNames, reservedPartIds);
                     allTranslatedPartNames.AddRange(rotatedPartNames);
                 }
                 //
@@ -9931,60 +9937,15 @@ namespace CaeMesh
         }
         public static void RotatePoint(double[] point, double[] rotateCenter, double[] rotateAxis, double rotateAngle)
         {
-            double[][] rotated = new double[][] { point };
-            RotatePoints(rotated, rotateCenter, rotateAxis, rotateAngle);
+            MeshTransforms.RotatePoint(point, rotateCenter, rotateAxis, rotateAngle);
         }
         public static void RotatePoints(double[][] points, double[] rotateCenter, double[] rotateAxis, double rotateAngle)
         {
-            // Matrix
-            double[] x;
-            double[][] m = RotationMatrix(rotateAxis, rotateAngle);
-            for (int i = 0; i < points.Length; i++)
-            {
-                // Translate to origin
-                points[i][0] -= rotateCenter[0];
-                points[i][1] -= rotateCenter[1];
-                points[i][2] -= rotateCenter[2];
-                // Copy
-                 x = points[i].ToArray();
-                // Rotate
-                points[i][0] = m[0][0] * x[0] + m[0][1] * x[1] + m[0][2] * x[2];
-                points[i][1] = m[1][0] * x[0] + m[1][1] * x[1] + m[1][2] * x[2];
-                points[i][2] = m[2][0] * x[0] + m[2][1] * x[1] + m[2][2] * x[2];
-                // Translate to rotation center
-                points[i][0] += rotateCenter[0];
-                points[i][1] += rotateCenter[1];
-                points[i][2] += rotateCenter[2];
-            }
+            MeshTransforms.RotatePoints(points, rotateCenter, rotateAxis, rotateAngle);
         }
         private static double[][] RotationMatrix(double[] rotateAxis, double rotateAngle)
         {
-            //https://stackoverflow.com/questions/6721544/circular-rotation-around-an-arbitrary-axis
-            //https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
-            double[][] m = new double[3][];
-            m[0] = new double[3];
-            m[1] = new double[3];
-            m[2] = new double[3];
-            //
-            Vec3D u = new Vec3D(rotateAxis);
-            u.Normalize();
-            //
-            double cosPhi = Math.Cos(rotateAngle);
-            double sinPhi = Math.Sin(rotateAngle);
-            //
-            m[0][0] = cosPhi + (Math.Pow(u.X, 2) * (1 - cosPhi));
-            m[0][1] = u.X * u.Y * (1 - cosPhi) - u.Z * sinPhi;
-            m[0][2] = u.X * u.Z * (1 - cosPhi) + u.Y * sinPhi;
-            //
-            m[1][0] = u.Y * u.X * (1 - cosPhi) + u.Z * sinPhi;
-            m[1][1] = cosPhi + (Math.Pow(u.Y, 2) * (1 - cosPhi));
-            m[1][2] = u.Y * u.Z * (1 - cosPhi) - u.X * sinPhi;
-            //
-            m[2][0] = u.Z * u.X * (1 - cosPhi) - u.Y * sinPhi;
-            m[2][1] = u.Z * u.Y * (1 - cosPhi) + u.X * sinPhi;
-            m[2][2] = cosPhi + (Math.Pow(u.Z, 2) * (1 - cosPhi));
-            //
-            return m;
+            return MeshTransforms.RotationMatrix(rotateAxis, rotateAngle);
         }
         //
         public string[] MirrorParts(string[] partNames, double[] mirrorPoint, double[] mirrorDirection, bool copy,
@@ -9994,9 +9955,8 @@ namespace CaeMesh
             //
             if (copy)
             {
-                FeMesh mesh = this.DeepCopy();
                 // Copy parts and get their names
-                mirroredPartNames = AddPartsFromMesh(mesh, mirroredPartNames, reservedPartNames, reservedPartIds);
+                mirroredPartNames = AddPartsFromMesh(this, mirroredPartNames, reservedPartNames, reservedPartIds);
             }
             //
             HashSet<int> nodeLabels = new HashSet<int>();
@@ -10050,23 +10010,11 @@ namespace CaeMesh
         }
         public static void MirrorPoint(double[] point, double[] mirrorPoint, double[] mirrorDirection)
         {
-            double[][] mirror = new double[][] { point };
-            MirrorPoints(mirror, mirrorPoint, mirrorDirection);
+            MeshTransforms.MirrorPoint(point, mirrorPoint, mirrorDirection);
         }
         public static void MirrorPoints(double[][] points, double[] mirrorPoint, double[] mirrorDirection)
         {
-            double d;
-            Vec3D x;
-            Vec3D p = new Vec3D(mirrorPoint);
-            Vec3D n = new Vec3D(mirrorDirection);
-            n.Normalize();
-            //
-            for (int i = 0; i < points.Length; i++)
-            {
-                x = new Vec3D(points[i]);
-                d = Vec3D.DotProduct(x - p, n);
-                points[i] = new Vec3D(x - 2 * d * n).Coor;
-            }
+            MeshTransforms.MirrorPoints(points, mirrorPoint, mirrorDirection);
         }
         //
         public void ScaleAllParts(double scale)
@@ -10084,8 +10032,7 @@ namespace CaeMesh
             //
             if (copy)
             {
-                FeMesh mesh = this.DeepCopy();
-                scaledPartNames = AddPartsFromMesh(mesh, scaledPartNames, reservedPartNames, reservedPartIds);
+                scaledPartNames = AddPartsFromMesh(this, scaledPartNames, reservedPartNames, reservedPartIds);
             }
             //
             HashSet<int> nodeLabels = new HashSet<int>();
@@ -10122,17 +10069,11 @@ namespace CaeMesh
         }
         public static void ScalePoint(double[] point, double[] scaleCenter, double[] scaleFactors)
         {
-            double[][] scaled = new double[][] { point };
-            ScalePoints(scaled, scaleCenter, scaleFactors);
+            MeshTransforms.ScalePoint(point, scaleCenter, scaleFactors);
         }
         public static void ScalePoints(double[][] points, double[] scaleCenter, double[] scaleFactors)
         {
-            for (int i = 0; i < points.Length; i++)
-            {
-                points[i][0] = scaleCenter[0] + (points[i][0] - scaleCenter[0]) * scaleFactors[0];
-                points[i][1] = scaleCenter[1] + (points[i][1] - scaleCenter[1]) * scaleFactors[1];
-                points[i][2] = scaleCenter[2] + (points[i][2] - scaleCenter[2]) * scaleFactors[2];
-            }
+            MeshTransforms.ScalePoints(points, scaleCenter, scaleFactors);
         }
         // Tools
         public string[] CreatePrismaticBoundaryLayer(int[] geometrySurfaceIds, double thickness, bool preview,
@@ -11236,46 +11177,19 @@ namespace CaeMesh
             return elementIdSize;
         }
         // Clone
-        public FeMesh DeepCopy()
-        {
-            try
-            {
-                FeMesh mesh = this.DeepClone();
-                //
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (BinaryWriter bw = new BinaryWriter(ms))
-                    {
-                        WriteToBinaryWriter(this, bw);
-                        //
-                        bw.Flush();
-                        bw.BaseStream.Seek(0, SeekOrigin.Begin);
-                        using (BinaryReader br = new BinaryReader(bw.BaseStream))
-                        {
-                            ReadFromBinaryReader(mesh, br, -1);
-                        }
-                    }
-                }
-                //
-                return mesh;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        static partial void ReportWarning(string message);
         // ISerialization
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             // Using typeof() works also for null fields
             info.AddValue("_meshRepresentation", _meshRepresentation, typeof(MeshRepresentation));
-            info.AddValue("_meshSetupItems", _meshSetupItems, typeof(OrderedDictionary<string, MeshSetupItem>));
-            info.AddValue("_parts", _parts, typeof(OrderedDictionary<string, BasePart>));
-            info.AddValue("_nodeSets", _nodeSets, typeof(OrderedDictionary<string, FeNodeSet>));
-            info.AddValue("_elementSets", _elementSets, typeof(OrderedDictionary<string, FeElementSet>));
-            info.AddValue("_surfaces", _surfaces, typeof(OrderedDictionary<string, FeSurface>));
-            info.AddValue("_referencePoints", _referencePoints, typeof(OrderedDictionary<string, FeReferencePoint>));
-            info.AddValue("_coordinateSystems", _coordinateSystems, typeof(OrderedDictionary<string, CoordinateSystem>));
+            info.AddValue("_meshSetupItems", _meshSetupItems, typeof(CaeGlobals.OrderedDictionary<string, MeshSetupItem>));
+            info.AddValue("_parts", _parts, typeof(CaeGlobals.OrderedDictionary<string, BasePart>));
+            info.AddValue("_nodeSets", _nodeSets, typeof(CaeGlobals.OrderedDictionary<string, FeNodeSet>));
+            info.AddValue("_elementSets", _elementSets, typeof(CaeGlobals.OrderedDictionary<string, FeElementSet>));
+            info.AddValue("_surfaces", _surfaces, typeof(CaeGlobals.OrderedDictionary<string, FeSurface>));
+            info.AddValue("_referencePoints", _referencePoints, typeof(CaeGlobals.OrderedDictionary<string, FeReferencePoint>));
+            info.AddValue("_coordinateSystems", _coordinateSystems, typeof(CaeGlobals.OrderedDictionary<string, CoordinateSystem>));
             info.AddValue("_maxNodeId", _maxNodeId, typeof(int));
             info.AddValue("_maxElementId", _maxElementId, typeof(int));
             info.AddValue("_boundingBox", _boundingBox, typeof(BoundingBox));

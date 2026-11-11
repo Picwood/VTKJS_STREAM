@@ -47,7 +47,7 @@ namespace CaeResults
         {
             _elementSizeType = elementSizeType;
             _deformationVariableName = deformationVariableName;
-            OrderedDictionary<string, string> map = FeResults.GetPossibleDeformationFieldOutputNamesMap();
+            CaeGlobals.OrderedDictionary<string, string> map = FeResults.GetPossibleDeformationFieldOutputNamesMap();
             _parentNames = new string[] { map[_deformationVariableName] };
         }
 

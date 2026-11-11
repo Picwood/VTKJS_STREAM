@@ -8,7 +8,6 @@
 // Contributors:
 
 using CaeGlobals;
-using CaeMesh.Meshing;
 using Octree;
 using System;
 using System.Collections.Generic;

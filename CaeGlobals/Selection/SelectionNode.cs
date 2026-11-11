@@ -69,6 +69,14 @@ namespace CaeGlobals
         {
             _selectOperation = selectOperation;
         }
+        public virtual SelectionNode DeepCopy()
+        {
+            SelectionNode copy = (SelectionNode)MemberwiseClone();
+            copy._partIds = _partIds == null ? null : (int[])_partIds.Clone();
+            // Cached IDs belong to the original node, not its independent copy.
+            copy._hash = -1;
+            return copy;
+        }
         // ISerialization
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

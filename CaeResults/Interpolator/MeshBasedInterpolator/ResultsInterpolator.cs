@@ -16,7 +16,6 @@ using CaeMesh;
 using CaeGlobals;
 using DynamicTypeDescriptor;
 using System.Collections.Concurrent;
-using Priority_Queue;
 
 namespace CaeResults
 {

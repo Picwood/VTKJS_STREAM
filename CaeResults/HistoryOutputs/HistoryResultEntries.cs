@@ -162,6 +162,8 @@ namespace CaeResults
                 if (exists == 1)
                 {
                     numItems = br.ReadInt32();
+                    if (numItems < 0 || numItems > 100_000_000)
+                        throw new InvalidDataException("Invalid history time count.");
                     for (int i = 0; i < numItems; i++) historyResultEntries.Time.Add(br.ReadDouble());
                 }
                 // Values
@@ -169,6 +171,8 @@ namespace CaeResults
                 if (exists == 1)
                 {
                     numItems = br.ReadInt32();
+                    if (numItems < 0 || numItems > 100_000_000)
+                        throw new InvalidDataException("Invalid history value count.");
                     for (int i = 0; i < numItems; i++) historyResultEntries.Values.Add(br.ReadDouble());
                 }
                 // Count
@@ -176,6 +180,8 @@ namespace CaeResults
                 if (exists == 1)
                 {
                     numItems = br.ReadInt32();
+                    if (numItems < 0 || numItems > 100_000_000)
+                        throw new InvalidDataException("Invalid history sample count.");
                     for (int i = 0; i < numItems; i++) historyResultEntries.Count.Add(br.ReadInt32());
                 }
                 // Local
@@ -195,12 +201,16 @@ namespace CaeResults
             if (exists == 1)
             {
                 int numOfBytes = Tools.ReadIntFromFileStream(fileStream);
+                if (numOfBytes <= 0 || numOfBytes > 512 * 1024 * 1024)
+                    throw new InvalidDataException("Invalid compressed history entry size.");
+                if (numOfBytes > fileStream.Length - fileStream.Position)
+                    throw new EndOfStreamException("Truncated compressed history entry.");
                 byte[] compressedData = new byte[numOfBytes];
-                fileStream.Read(compressedData, 0, compressedData.Length);
+                Tools.ReadFileStreamExactly(fileStream, compressedData);
                 //
                 HistoryResultEntries historyResultEntries;
                 using (MemoryStream memoryStream = new MemoryStream(compressedData))
-                using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream)))
+                using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream, 1024L * 1024 * 1024)))
                 {
                     historyResultEntries = ReadFromBinaryReader(br, version);
                 }

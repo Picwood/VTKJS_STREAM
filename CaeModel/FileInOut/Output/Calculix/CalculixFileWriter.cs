@@ -28,49 +28,46 @@ using System.Diagnostics;
 namespace FileInOut.Output
 {
     [Serializable]
-    public static class CalculixFileWriter
+    public static partial class CalculixFileWriter
     {
         // Methods                                                                                                                  
-        static public void Write(string fileName, FeModel model, ConvertPyramidsToEnum convertPyramidsTo,
-                                 Dictionary<int, double[]> deformations = null)
+        // The caller owns preparation (including removal of inactive parts).
+        // Export is synchronous and must not run concurrently on the same model.
+        static public string GetInputText(FeModel model, ConvertPyramidsToEnum convertPyramidsTo,
+                                          Dictionary<int, double[]> deformations = null)
         {
-            // Copy model
-            FeModel copy = model.DeepCopy();
-            string[] inactivePartNames = copy.Mesh.GetInactivePartNames();
-            copy.Mesh.RemoveParts(inactivePartNames, out _, false);
-            //
-            List<CalculixKeyword> keywords = GetAllKeywords(copy, convertPyramidsTo, deformations);
-            // Write file
-            StringBuilder sb = new StringBuilder();
-            foreach (var keyword in keywords)
-            {
-                WriteKeywordRecursively(sb, keyword);
-            }
-            // Write to file in multiple steps
-            int step = 10_000_000;
-            int upper;
-            using (StreamWriter sw = new StreamWriter(fileName, false))
-            {
-                for (int i = 0; i < sb.Length; i+=step)
-                {
-                    upper = Math.Min(sb.Length - i, step);
-                    sw.Write(sb.ToString(i, upper));
-                }
-            }
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            if (model.Mesh.GetInactivePartNames().Length != 0)
+                throw new CaeException("Prepare the export model by removing inactive parts before generating input.");
+            var text = new StringBuilder();
+            foreach (var keyword in GetAllKeywords(model, convertPyramidsTo, deformations))
+                WriteKeywordRecursively(text, keyword);
+            return text.ToString();
         }
-        static private void Clean(FeModel model)
+
+        // Generate before opening the destination so model/export errors cannot truncate it.
+        static public void WritePreparedModel(string fileName, FeModel model, ConvertPyramidsToEnum convertPyramidsTo,
+                                              Dictionary<int, double[]> deformations = null)
         {
-            foreach (var entry in model.Sections)
-            {
-                if (entry.Value is MassSection ms)
-                {
-                    if (ms is PointMassSection pms)
-                    {
-                        pms.ElementSetName = null;
-                    }
-                }
-            }
+            string text = GetInputText(model, convertPyramidsTo, deformations);
+            File.WriteAllText(fileName, text, new UTF8Encoding(false));
         }
+
+        // Owns the mesh snapshot; model definitions require exclusive synchronous access.
+        static public string GetActiveInputText(FeModel model, ConvertPyramidsToEnum convertPyramidsTo,
+                                                Dictionary<int, double[]> deformations = null)
+        {
+            if (model == null) throw new ArgumentNullException(nameof(model));
+            return GetInputText(model.CreateActiveExportView(), convertPyramidsTo, deformations);
+        }
+
+        static public void WriteActiveModel(string fileName, FeModel model, ConvertPyramidsToEnum convertPyramidsTo,
+                                            Dictionary<int, double[]> deformations = null)
+        {
+            string text = GetActiveInputText(model, convertPyramidsTo, deformations);
+            File.WriteAllText(fileName, text, new UTF8Encoding(false));
+        }
+
         static public void WriteMaterials(string fileName, FeModel model, string[] materialNames)
         {
             List<CalculixKeyword> keywords = new List<CalculixKeyword>();
@@ -101,7 +98,7 @@ namespace FileInOut.Output
                 foreach (var entry in model.CalculixUserKeywords)
                 {
                     // Deep clone to prevent the changes in user keywords
-                    AddUserKeywordByIndices(keywords, entry.Key, entry.Value.DeepClone());
+                    AddUserKeywordByIndices(keywords, entry.Key, entry.Value.CopyForExport());
                 }
             }
             //
@@ -111,13 +108,8 @@ namespace FileInOut.Output
                                                              Dictionary<int, double[]> deformations = null,
                                                              bool addAllMaterials = false)
         {
-            // Clone surfaces
-            OrderedDictionary<string, FeSurface> originalSurfaces = model.Mesh.Surfaces;
-            OrderedDictionary<string, FeElementSet> originalElementSets = model.Mesh.ElementSets;
-            //
-            model.Mesh.Surfaces = originalSurfaces.DeepClone();
-            model.Mesh.ElementSets = originalElementSets.DeepClone();
-            Dictionary<int, FeElement> replacedElements = new Dictionary<int, FeElement>();
+            var exportState = new CalculixExportState(model);
+            Dictionary<int, FeElement> replacedElements = exportState.ReplacedElements;
             //
             try
             {
@@ -136,7 +128,7 @@ namespace FileInOut.Output
                 List<SectionData> additionalSectionData = new List<SectionData>();
                 List<Material> additionalMaterials = new List<Material>();
                 List<BoundaryCondition> additionalBoundaryConditions = new List<BoundaryCondition>();
-                OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads;
+                CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads;
                 List<double[]> equationParameters = new List<double[]>();
                 //
                 // Collect pre-tension loads to use them in reference point preparation
@@ -242,26 +234,17 @@ namespace FileInOut.Output
                 //
                 return keywords;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
             finally
             {
-                model.Mesh.ElementSets = originalElementSets;
-                model.Mesh.Surfaces = originalSurfaces;
-                //
-                foreach (var entry in replacedElements) model.Mesh.Elements[entry.Key] = entry.Value;
-                //
-                Clean(model);
+                exportState.Dispose();
             }
         }
-        static private void GetPretensionLoads(FeModel model, out OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads)
+        static private void GetPretensionLoads(FeModel model, out CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads)
         {
             string name;
             List<PreTensionLoad> preTensionLoadsList;
             preTensionLoads =
-                new OrderedDictionary<string, List<PreTensionLoad>>("Pretension Loads", StringComparer.OrdinalIgnoreCase);
+                new CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>>("Pretension Loads", StringComparer.OrdinalIgnoreCase);
             foreach (var step in model.StepCollection.StepsList)
             {
                 if (step.Active)
@@ -280,7 +263,7 @@ namespace FileInOut.Output
                 }
             }
         }
-        static private void GetReferencePoints(FeModel model, OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
+        static private void GetReferencePoints(FeModel model, CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
                                                ref int maxNodeId, ref List<FeNodeSet> additionalNodeSets,
                                                out Dictionary<string, string[]> referencePointsNodeSetNames,
                                                out Dictionary<string, int[]> referencePointsNodeIds)
@@ -1028,7 +1011,7 @@ namespace FileInOut.Output
             {
                 foreach (var entry in model.CalculixUserKeywords)
                 {
-                    if (AddUserKeywordByIndices(keywords, entry.Key, entry.Value.DeepClone()))
+                    if (AddUserKeywordByIndices(keywords, entry.Key, entry.Value.CopyForExport()))
                     {
                         if (entry.Value.IsSuppressed) unsuppresedCount++;
                         entry.Value.Unsuppress();
@@ -1474,7 +1457,7 @@ namespace FileInOut.Output
             }
             return materialNames;
         }
-        static private void AppendPreTensionSections(OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
+        static private void AppendPreTensionSections(CaeGlobals.OrderedDictionary<string, List<PreTensionLoad>> preTensionLoads,
                                                      Dictionary<string, int[]> referencePointsNodeIds,
                                                      CalculixKeyword parent)
         {
@@ -2009,29 +1992,15 @@ namespace FileInOut.Output
                 }
                 else if (load is GravityLoad gl)
                 {
-                    MassSection massSection; 
-                    GravityLoad glClone = gl.DeepClone();
-                    if (gl.RegionType == RegionTypeEnum.MassSection)
-                    {
-                        massSection = (MassSection)model.Sections[glClone.RegionName];
-                        glClone.RegionName = massSection.ElementSetName;
-                    }
-                    //
-                    CalGravityLoad gLoad = new CalGravityLoad(glClone, complexLoadType);
-                    parent.AddKeyword(gLoad);
+                    string regionName = gl.RegionType == RegionTypeEnum.MassSection
+                        ? ((MassSection)model.Sections[gl.RegionName]).ElementSetName : gl.RegionName;
+                    parent.AddKeyword(CalGravityLoad.CreateForExport(gl, regionName, complexLoadType));
                 }
                 else if (load is CentrifLoad cfl)
                 {
-                    MassSection massSection;
-                    CentrifLoad cflClone = cfl.DeepClone();
-                    if (cfl.RegionType == RegionTypeEnum.MassSection)
-                    {
-                        massSection = (MassSection)model.Sections[cflClone.RegionName];
-                        cflClone.RegionName = massSection.ElementSetName;
-                    }
-                    //
-                    CalCentrifLoad cLoad = new CalCentrifLoad(cflClone, complexLoadType);
-                    parent.AddKeyword(cLoad);
+                    string regionName = cfl.RegionType == RegionTypeEnum.MassSection
+                        ? ((MassSection)model.Sections[cfl.RegionName]).ElementSetName : cfl.RegionName;
+                    parent.AddKeyword(CalCentrifLoad.CreateForExport(cfl, regionName, complexLoadType));
                 }
                 else if (load is PreTensionLoad ptl)
                 {

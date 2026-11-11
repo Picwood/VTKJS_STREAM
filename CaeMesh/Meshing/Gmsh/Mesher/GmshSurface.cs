@@ -65,6 +65,7 @@ namespace CaeMesh
                 if (!Collapsed)
                 {
                     edgeIds = fixedEdgeIds;
+                    EdgeIds = fixedEdgeIds;
                     edgeLengths = fixedEdgeLengths;
                     _edgeVertexIds = fixedEdgeVertexIds;
                 }

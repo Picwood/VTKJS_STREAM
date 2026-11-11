@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace CaeGlobals
 {
@@ -487,6 +486,15 @@ namespace CaeGlobals
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+        //
+        // Copy values explicitly while retaining the caller's ordering and key comparer.
+        public OrderedDictionary<TKey, TValue> CopyValues(Func<TValue, TValue> copyValue)
+        {
+            if (copyValue == null) throw new ArgumentNullException(nameof(copyValue));
+            var copy = new OrderedDictionary<TKey, TValue>(_name, Count, _dictionary.Comparer);
+            foreach (TKey key in _list) copy.Add(key, copyValue(_dictionary[key]));
+            return copy;
         }
         //
         public OrderedDictionary<TKey, TValue> DeepCopy()

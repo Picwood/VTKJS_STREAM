@@ -48,6 +48,16 @@ namespace CaeMesh
                 InertiaMatrixOrigin = null;
             }
         }
+        public PartMassProperties DeepCopy()
+        {
+            PartMassProperties copy = this;
+            copy.CenterOfMass = CenterOfMass == null ? null : (double[])CenterOfMass.Clone();
+            copy.InertiaMatrixCG = InertiaMatrixCG == null ? null :
+                InertiaMatrixCG.Select(row => row == null ? null : (double[])row.Clone()).ToArray();
+            copy.InertiaMatrixOrigin = InertiaMatrixOrigin == null ? null :
+                InertiaMatrixOrigin.Select(row => row == null ? null : (double[])row.Clone()).ToArray();
+            return copy;
+        }
         //public PartMassProperties(PartMassProperties massProperties)
         //{
         //    PartMassProperties copy = new PartMassProperties(true);

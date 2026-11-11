@@ -14,7 +14,6 @@ using System.Runtime.Serialization;
 using System.Text;
 using CaeGlobals;
 using CaeMesh;
-using CaeResults;
 using DynamicTypeDescriptor;
 
 namespace CaeModel
@@ -28,7 +27,7 @@ namespace CaeModel
         Vector
     }
     [Serializable]
-    public abstract class Distribution : NamedClass, ISerializable
+    public abstract partial class Distribution : NamedClass, ISerializable
     {
         // Variables                                                                                                                
         protected DistributionTypeEnum _distributionType;           //ISerializable
@@ -89,8 +88,6 @@ namespace CaeModel
 
         // Methods                                                                                                                  
         public abstract bool ImportDistribution();
-        public abstract void GetMagnitudesAndDistancesForPoints(FeModel model, double[][] points, out double[][] magnitudes,
-                                                                out double[][] distances);
         // ISerialization
         public new void GetObjectData(SerializationInfo info, StreamingContext context)
         {

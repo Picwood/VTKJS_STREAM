@@ -16,7 +16,6 @@ using CaeMesh;
 using CaeGlobals;
 using DynamicTypeDescriptor;
 using System.Collections.Concurrent;
-using Priority_Queue;
 
 namespace CaeResults
 {
@@ -139,6 +138,7 @@ namespace CaeResults
         }
         public void InterpolateByGauss(double[] point, double radius, out double[] distance, out double[] values)
         {
+            ValidateRadius(radius);
             Dictionary<int, BoundingBox> regions = GetClosestRegions(point, radius);
             //
             double absX;
@@ -165,8 +165,10 @@ namespace CaeResults
                                 if (absZ < radius)
                                 {
                                     d = Math.Sqrt(absX * absX + absY * absY + absZ * absZ);
+                                    // Candidate boxes may include points outside the sphere.
+                                    if (d >= radius) continue;
                                     //
-                                    w = Math.Exp(Math.Pow(-s * d / radius, 2));
+                                    w = Math.Exp(-Math.Pow(s * d / radius, 2));
                                     cloudPointWeight.Add(cloudPoint, w);
                                 }
                             }
@@ -204,6 +206,7 @@ namespace CaeResults
         }
         public void InterpolateByShepard(double[] point, double radius, out double[] distance, out double[] values)
         {
+            ValidateRadius(radius);
             Dictionary<int, BoundingBox> regions = GetClosestRegions(point, radius);
             //
             bool foundExactPosition = false;
@@ -230,6 +233,8 @@ namespace CaeResults
                                 if (absZ < radius)
                                 {
                                     d = Math.Sqrt(absX * absX + absY * absY + absZ * absZ);
+                                    // Candidate boxes may include points outside the sphere.
+                                    if (d >= radius) continue;
                                     //
                                     if (d == 0)
                                     {
@@ -278,8 +283,16 @@ namespace CaeResults
             //
 
         }
+        private static void ValidateRadius(double radius)
+        {
+            if (radius <= 0 || double.IsNaN(radius) || double.IsInfinity(radius))
+                throw new ArgumentOutOfRangeException(nameof(radius), "Interpolation radius must be finite and positive.");
+        }
         private Dictionary<int, BoundingBox> GetClosestRegions(double[] point, double radius)
         {
+            if (point == null) throw new ArgumentNullException(nameof(point));
+            if (point.Length != 3 || point.Any(value => double.IsNaN(value) || double.IsInfinity(value)))
+                throw new ArgumentException("Query requires three finite coordinates.", nameof(point));
             int i;
             int j;
             int k;
@@ -376,14 +389,27 @@ namespace CaeResults
         //
         private BoundingBox ComputeAllPointsBoundingBox(CloudPoint[] cloudPoints)
         {
+            if (cloudPoints == null) throw new ArgumentNullException(nameof(cloudPoints));
+            if (cloudPoints.Length == 0)
+                throw new ArgumentException("At least one cloud point is required.", nameof(cloudPoints));
             _numOfValues = -1;
             BoundingBox bb = new BoundingBox();
-            bb.IncludeFirstCoor(cloudPoints[0].Coor);
-            for (int i = 1; i < cloudPoints.Length; i++)
+            for (int i = 0; i < cloudPoints.Length; i++)
             {
-                bb.IncludeCoorFast(cloudPoints[i].Coor);
-                if (_numOfValues == -1) _numOfValues = cloudPoints[i].Values.Length;
-                if (_numOfValues != cloudPoints[i].Values.Length)
+                CloudPoint point = cloudPoints[i];
+                if (point == null || point.Coor == null || point.Coor.Length != 3 ||
+                    point.Values == null || point.Values.Length == 0)
+                    throw new ArgumentException("Each cloud point requires three coordinates and at least one value.",
+                                                nameof(cloudPoints));
+                if (point.Coor.Any(value => double.IsNaN(value) || double.IsInfinity(value)))
+                    throw new ArgumentException("Cloud point " + i + " requires finite coordinates.", nameof(cloudPoints));
+                if (i == 0)
+                {
+                    _numOfValues = point.Values.Length;
+                    bb.IncludeFirstCoor(point.Coor);
+                }
+                else bb.IncludeCoorFast(point.Coor);
+                if (_numOfValues != point.Values.Length)
                     throw new CaeException("The interpolator does not contain the same number of values at each cloud point.");
             }
             return bb;

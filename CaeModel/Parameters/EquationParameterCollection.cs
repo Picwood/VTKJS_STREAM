@@ -22,8 +22,8 @@ namespace CaeModel
     public class EquationParameterCollection
     {
         // Variables                                                                                                                
-        private OrderedDictionary<string, EquationParameter> _parameters;
-        private OrderedDictionary<string, EquationParameter> _overriddenParameters;
+        private CaeGlobals.OrderedDictionary<string, EquationParameter> _parameters;
+        private CaeGlobals.OrderedDictionary<string, EquationParameter> _overriddenParameters;
 
 
         // Properties                                                                                                               
@@ -38,7 +38,7 @@ namespace CaeModel
             }
         }
         // OverriddenParameters are used only during regeneration
-        public OrderedDictionary<string, EquationParameter> OverriddenParameters { get { return _overriddenParameters; } }
+        public CaeGlobals.OrderedDictionary<string, EquationParameter> OverriddenParameters { get { return _overriddenParameters; } }
         public ICollection<string> Keys
         {
             get { return _parameters.Keys; }
@@ -53,10 +53,10 @@ namespace CaeModel
         public EquationParameterCollection()
         {
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
-            _parameters = new OrderedDictionary<string, EquationParameter>("Parameters", sc);
-            _overriddenParameters = new OrderedDictionary<string, EquationParameter>("OverriddenParameters", sc);
+            _parameters = new CaeGlobals.OrderedDictionary<string, EquationParameter>("Parameters", sc);
+            _overriddenParameters = new CaeGlobals.OrderedDictionary<string, EquationParameter>("OverriddenParameters", sc);
         }
-        public EquationParameterCollection(OrderedDictionary<string, EquationParameter> parameters)
+        public EquationParameterCollection(CaeGlobals.OrderedDictionary<string, EquationParameter> parameters)
             : this()
         {
             // Use for each to keep the string comparer OrdinalIgnoreCase

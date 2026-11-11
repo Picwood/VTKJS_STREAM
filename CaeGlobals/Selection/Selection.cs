@@ -238,6 +238,13 @@ namespace CaeGlobals
             }
             return true;
         }
+        public Selection DeepCopy()
+        {
+            Selection copy = (Selection)MemberwiseClone();
+            copy._nodes = _nodes == null ? null :
+                _nodes.Select(node => node == null ? null : node.DeepCopy()).ToList();
+            return copy;
+        }
         // ISerialization
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

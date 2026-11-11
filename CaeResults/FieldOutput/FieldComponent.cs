@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using CaeMesh;
 using CaeGlobals;
 using System.Security.Cryptography;
+using System.IO;
 
 namespace CaeResults
 {
@@ -63,6 +64,8 @@ namespace CaeResults
             string name = br.ReadString();
             bool invariant = br.ReadBoolean();
             int numValues = br.ReadInt32();
+            if (numValues < 0 || numValues > 100_000_000)
+                throw new InvalidDataException("Invalid result component value count.");
             //
             float[] values = new float[numValues];
             for (int i = 0; i < numValues; i++) values[i] = br.ReadSingle();
@@ -71,33 +74,30 @@ namespace CaeResults
         }
         public void UpdateMaxMin()
         {
-            if (Values != null)
+            // Missing samples must not poison an otherwise valid field range.
+            // An unavailable range has no corresponding sample index.
+            Max = new IDValuePair { Id = -1, Value = float.NaN };
+            Min = new IDValuePair { Id = -1, Value = float.NaN };
+            if (Values == null) return;
+            for (int i = 0; i < Values.Length; i++)
             {
-                Max = new IDValuePair { Id = 0, Value = Values[0] };
-                Min = new IDValuePair { Id = 0, Value = Values[0] };
-                //
-                for (int i = 0; i < Values.Length; i++)
-                {
-                    if (Values[i] > Max.Value)
-                    {
-                        Max.Value = Values[i];
-                        Max.Id = i;
-                    }
-                    else if (Values[i] < Min.Value)
-                    {
-                        Min.Value = Values[i];
-                        Min.Id = i;
-                    }
-                }
+                float value = Values[i];
+                if (float.IsNaN(value)) continue;
+                if (Max.Id == -1 || value > Max.Value)
+                    Max = new IDValuePair { Id = i, Value = value };
+                if (Min.Id == -1 || value < Min.Value)
+                    Min = new IDValuePair { Id = i, Value = value };
             }
         }
+
         public void SetValuesToZero()
         {
-            for (int i = 0; i < Values.Length; i++) Values[i] = 0;
+            SetValuesTo(0);
         }
         public void SetValuesTo(float value)
         {
             for (int i = 0; i < Values.Length; i++) Values[i] = value;
+            UpdateMaxMin();
         }
 
     }

@@ -8,6 +8,7 @@
 // Contributors:
 
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,8 @@ namespace FileInOut.Output.Calculix
         // Constructor                                                                                                              
         public CalEquation(double[] parameters)
         {
-            if (parameters.Length % 3 != 0) throw new NotSupportedException();
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+            if (parameters.Length == 0 || parameters.Length % 3 != 0) throw new NotSupportedException();
             _parameters = parameters;
         }
 
@@ -48,15 +50,15 @@ namespace FileInOut.Output.Calculix
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine((_parameters.Length / 3).ToString());
-            sb.Append(_parameters[0]);
+            sb.Append(_parameters[0].ToString(CultureInfo.InvariantCulture));
             for (int i = 1; i < _parameters.Length; i++)
             {
                 sb.Append(", ");
                 if (i % 12 == 0) sb.AppendLine();
-                sb.Append(_parameters[i].ToString());
+                sb.Append(_parameters[i].ToString(CultureInfo.InvariantCulture));
             }
             //
-            if (_parameters.Length % 12 != 0) sb.AppendLine();
+            sb.AppendLine();
             //
             return sb.ToString();
         }

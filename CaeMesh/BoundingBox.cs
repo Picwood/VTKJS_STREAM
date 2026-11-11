@@ -75,7 +75,13 @@ namespace CaeMesh
             Reset();
         }
         public BoundingBox(BoundingBox box)
+            : this(box, CopyTag)
         {
+        }
+        public BoundingBox(BoundingBox box, Func<object, object> copyTag)
+        {
+            if (box == null) throw new ArgumentNullException(nameof(box));
+            if (copyTag == null) throw new ArgumentNullException(nameof(copyTag));
             MinX = box.MinX;
             MinY = box.MinY;
             MinZ = box.MinZ;
@@ -84,7 +90,19 @@ namespace CaeMesh
             MaxY = box.MaxY;
             MaxZ = box.MaxZ;
             //
-            if (box.Tag != null) Tag = box.Tag.DeepClone();
+            if (box.Tag != null) Tag = copyTag(box.Tag);
+        }
+
+        private static object CopyTag(object tag)
+        {
+            // The explosion algorithm uses an immutable integer index.
+            if (tag is int) return tag;
+#if NET8_0_OR_GREATER
+            throw new NotSupportedException("Copying this bounding-box tag requires an explicit copyTag callback.");
+#else
+            // Retain existing Windows support for arbitrary legacy serialized tags.
+            return tag.DeepClone();
+#endif
         }
 
 
@@ -598,6 +616,10 @@ namespace CaeMesh
         public BoundingBox DeepCopy()
         {
             return new BoundingBox(this);
+        }
+        public BoundingBox DeepCopy(Func<object, object> copyTag)
+        {
+            return new BoundingBox(this, copyTag);
         }
     }
 }

@@ -17,7 +17,6 @@ using System.ComponentModel;
 using System.Globalization;
 using UnitsNet.Units;
 using UnitsNet;
-using System.Windows.Forms;
 
 namespace CaeGlobals
 {

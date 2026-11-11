@@ -24,28 +24,25 @@ using System.Linq.Expressions;
 using System.Numerics;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Runtime.Serialization;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using vtkControl;
 using static CaeGlobals.Geometry2;
 
 namespace CaeResults
 {
     [Serializable]
-    public class FeResults : ISerializable
+    public partial class FeResults : ISerializable
     {
         // Variables                                                                                                                
         [NonSerialized]
         private Dictionary<int, int> _nodeIdsLookUp;            // [globalId][resultsId] for values
         [NonSerialized]
-        private OrderedDictionary<FieldData, Field> _fields;
+        private CaeGlobals.OrderedDictionary<FieldData, Field> _fields;
         [NonSerialized]
-        private OrderedDictionary<string, Field> _fieldDataHashField;
+        private CaeGlobals.OrderedDictionary<string, Field> _fieldDataHashField;
         [NonSerialized]
         private Dictionary<int, FeNode> _undeformedNodes;
         [NonSerialized]
@@ -133,8 +130,8 @@ namespace CaeResults
         private string _hashName;
         private string _fileName;
         private FeMesh _mesh;
-        private OrderedDictionary<string, ResultFieldOutput> _resultFieldOutputs;
-        private OrderedDictionary<string, ResultHistoryOutput> _resultHistoryOutputs;
+        private CaeGlobals.OrderedDictionary<string, ResultFieldOutput> _resultFieldOutputs;
+        private CaeGlobals.OrderedDictionary<string, ResultHistoryOutput> _resultHistoryOutputs;
         [NonSerialized]
         private HistoryResults _history;
         private DateTime _dateTime;
@@ -156,7 +153,7 @@ namespace CaeResults
         {
             get
             {
-                OrderedDictionary<string, string> possibleNames = GetPossibleDeformationFieldOutputNamesMap();
+                CaeGlobals.OrderedDictionary<string, string> possibleNames = GetPossibleDeformationFieldOutputNamesMap();
                 foreach (var entry in possibleNames)
                 {
                     if (entry.Value == _deformationFieldOutputName) return entry.Key;
@@ -166,7 +163,7 @@ namespace CaeResults
             set
             {
                 string newDeformationFieldOutputName;
-                OrderedDictionary<string, string> possibleNames = GetPossibleDeformationFieldOutputNamesMap();
+                CaeGlobals.OrderedDictionary<string, string> possibleNames = GetPossibleDeformationFieldOutputNamesMap();
                 if (possibleNames.TryGetValue(value, out newDeformationFieldOutputName)) { }
                 else newDeformationFieldOutputName = possibleNames.Values.First();
                 // Reset global mesh deformation settings if needed
@@ -185,13 +182,13 @@ namespace CaeResults
             _fileName = fileName;
             _hashName = Tools.GetRandomString(8);
             _mesh = null;
-            _resultFieldOutputs = new OrderedDictionary<string, ResultFieldOutput>("ResultFieldOutputs",
+            _resultFieldOutputs = new CaeGlobals.OrderedDictionary<string, ResultFieldOutput>("ResultFieldOutputs",
                                                                                    StringComparer.OrdinalIgnoreCase);
-            _resultHistoryOutputs = new OrderedDictionary<string, ResultHistoryOutput>("ResultHistoryOutputs",
+            _resultHistoryOutputs = new CaeGlobals.OrderedDictionary<string, ResultHistoryOutput>("ResultHistoryOutputs",
                                                                                        StringComparer.OrdinalIgnoreCase);
             _nodeIdsLookUp = null;
-            _fields = new OrderedDictionary<FieldData, Field>("Fields");
-            _fieldDataHashField = new OrderedDictionary<string, Field>("HashFieldPairs");
+            _fields = new CaeGlobals.OrderedDictionary<FieldData, Field>("Fields");
+            _fieldDataHashField = new CaeGlobals.OrderedDictionary<string, Field>("HashFieldPairs");
             _history = new HistoryResults("History");
             if (unitSystem == null) _unitSystem = new UnitSystem();
             else _unitSystem = unitSystem;
@@ -211,9 +208,9 @@ namespace CaeResults
                     case "_mesh":
                         _mesh = (FeMesh)entry.Value; break;
                     case "_resultFieldOutputs":
-                        _resultFieldOutputs = (OrderedDictionary<string, ResultFieldOutput>)entry.Value; break;
+                        _resultFieldOutputs = (CaeGlobals.OrderedDictionary<string, ResultFieldOutput>)entry.Value; break;
                     case "_resultHistoryOutputs":
-                        _resultHistoryOutputs = (OrderedDictionary<string, ResultHistoryOutput>)entry.Value; break;
+                        _resultHistoryOutputs = (CaeGlobals.OrderedDictionary<string, ResultHistoryOutput>)entry.Value; break;
                     case "_history":
                         _history = (HistoryResults)entry.Value; break;  // Compatibility for version v2.3.5
                     case "_dateTime":
@@ -236,8 +233,8 @@ namespace CaeResults
             info.AddValue("_hashName", _hashName, typeof(string));
             info.AddValue("_fileName", _fileName, typeof(string));
             info.AddValue("_mesh", _mesh, typeof(FeMesh));
-            info.AddValue("_resultFieldOutputs", _resultFieldOutputs, typeof(OrderedDictionary<string, ResultFieldOutput>));
-            info.AddValue("_resultHistoryOutputs", _resultHistoryOutputs, typeof(OrderedDictionary<string, ResultHistoryOutput>));
+            info.AddValue("_resultFieldOutputs", _resultFieldOutputs, typeof(CaeGlobals.OrderedDictionary<string, ResultFieldOutput>));
+            info.AddValue("_resultHistoryOutputs", _resultHistoryOutputs, typeof(CaeGlobals.OrderedDictionary<string, ResultHistoryOutput>));
             //info.AddValue("_history", _history, typeof(HistoryResults)); - not needed - Compatibility for version v2.3.5
             info.AddValue("_dateTime", _dateTime, typeof(DateTime));
             info.AddValue("_unitSystem", _unitSystem, typeof(UnitSystem));
@@ -263,8 +260,8 @@ namespace CaeResults
                 {
                     Dictionary<int, FeNode> tmp = results.Mesh.Nodes;
                     results.Mesh.Nodes = results._undeformedNodes;
-                    FeMesh.WriteToBinaryWriter(results.Mesh, bw);
-                    results.Mesh.Nodes = tmp;
+                    try { FeMesh.WriteToBinaryWriter(results.Mesh, bw); }
+                    finally { results.Mesh.Nodes = tmp; }
                     // Node lookup
                     if (results._nodeIdsLookUp == null) bw.Write(-1);
                     else
@@ -301,37 +298,43 @@ namespace CaeResults
                     // Set complex to real
                     ComplexResultTypeEnum prevComplexResultType = results._complexResultType;
                     float prevComplexAngleDeg = results._complexAngleDeg;
-                    results.SetComplexResultTypeAndAngle(ComplexResultTypeEnum.Real, 0);
-                    // Delete complex results
-                    results.RemoveComplexResults();
-                    // Write the number of fields
-                    Tools.WriteIntToFileStream(fileStream, results._fields.Count);
-                    // Write fields separately to prevent BinaryWriter out of memory exception
-                    foreach (var entry in results._fields)
+                    try
                     {
-                        entry.Value.RemoveInvariants();
-                        //
-                        using (BinaryWriter bw = new BinaryWriter(new MemoryStream()))
+                        results.SetComplexResultTypeAndAngle(ComplexResultTypeEnum.Real, 0);
+                        // Delete complex results
+                        results.RemoveComplexResults();
+                        // Write the number of fields
+                        Tools.WriteIntToFileStream(fileStream, results._fields.Count);
+                        // Write fields separately to prevent BinaryWriter out of memory exception
+                        foreach (var entry in results._fields)
                         {
-                            FieldData.WriteToBinaryWriter(entry.Key, bw);
-                            Field.WriteToBinaryWriter(entry.Value, bw);
-                            // Rewind the writer
-                            bw.Flush();
-                            bw.BaseStream.Position = 0;
-                            // Compress the writer
-                            byte[] compressedData = Tools.Compress(bw.BaseStream, compressionLevel);
-                            // Write the length of the compressed data
-                            Tools.WriteIntToFileStream(fileStream, compressedData.Length);
-                            // Write the compressed data
-                            fileStream.Write(compressedData, 0, compressedData.Length);
+                            entry.Value.RemoveInvariants();
+                            try
+                            {
+                                //
+                                using (BinaryWriter bw = new BinaryWriter(new MemoryStream()))
+                                {
+                                    FieldData.WriteToBinaryWriter(entry.Key, bw);
+                                    Field.WriteToBinaryWriter(entry.Value, bw);
+                                    // Rewind the writer
+                                    bw.Flush();
+                                    bw.BaseStream.Position = 0;
+                                    // Compress the writer
+                                    byte[] compressedData = Tools.Compress(bw.BaseStream, compressionLevel);
+                                    // Write the length of the compressed data
+                                    Tools.WriteIntToFileStream(fileStream, compressedData.Length);
+                                    // Write the compressed data
+                                    fileStream.Write(compressedData, 0, compressedData.Length);
+                                }
+                            }
+                            finally { entry.Value.ComputeInvariants(); }
                         }
-                        //
-                        entry.Value.ComputeInvariants();
                     }
-                    // Prepare complex
-                    results.PrepareComplexResults();
-                    // Reset complex
-                    results.SetComplexResultTypeAndAngle(prevComplexResultType, prevComplexAngleDeg);
+                    finally
+                    {
+                        results.PrepareComplexResults();
+                        results.SetComplexResultTypeAndAngle(prevComplexResultType, prevComplexAngleDeg);
+                    }
                 }
                 // History
                 if (results._history == null)
@@ -354,19 +357,23 @@ namespace CaeResults
             int numOfBytes;
             FieldData fieldData;
             Field field;
-            HistoryResults history;
             byte[] compressedData;
             // Read the result state
             int exists = Tools.ReadIntFromFileStream(fileStream);
+            if (exists is not (-1 or 1)) throw new InvalidDataException("Invalid result state.");
             if (exists == 1)
             {
                 // Mesh
                 numOfBytes = Tools.ReadIntFromFileStream(fileStream);
+                if (numOfBytes <= 0 || numOfBytes > 512 * 1024 * 1024)
+                    throw new InvalidDataException("Invalid compressed result mesh size.");
+                if (numOfBytes > fileStream.Length - fileStream.Position)
+                    throw new EndOfStreamException("Truncated compressed result mesh.");
                 compressedData = new byte[numOfBytes];
-                fileStream.Read(compressedData, 0, compressedData.Length);
+                Tools.ReadFileStreamExactly(fileStream, compressedData);
                 //
                 using (MemoryStream memoryStream = new MemoryStream(compressedData))
-                using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream)))
+                using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream, 1024L * 1024 * 1024)))
                 {
                     FeMesh.ReadFromBinaryReader(results.Mesh, br, version);
                     //
@@ -376,35 +383,39 @@ namespace CaeResults
                     if (exists == 1)
                     {
                         numItems = br.ReadInt32();
-                        results._nodeIdsLookUp = new Dictionary<int, int>();
-                        for (int i = 0; i < numItems; i++) results._nodeIdsLookUp.Add(br.ReadInt32(), br.ReadInt32());
+                        results._nodeIdsLookUp = ReadNodeIdsLookUp(br, numItems, results.Mesh.Nodes.Count);
                     }
                 }
                 // Read the fields state
                 exists = Tools.ReadIntFromFileStream(fileStream);
+                if (exists is not (-1 or 1)) throw new InvalidDataException("Invalid result fields state.");
                 if (exists == 1)
                 {
                     numItems = Tools.ReadIntFromFileStream(fileStream);
-                    results._fields = new OrderedDictionary<FieldData, Field>("Fields");
-                    results._fieldDataHashField = new OrderedDictionary<string, Field>("HashFieldPairs");
+                    if (numItems < 0 || numItems > 100_000) throw new InvalidDataException("Invalid result field count.");
+                    results._fields = new CaeGlobals.OrderedDictionary<FieldData, Field>("Fields");
+                    results._fieldDataHashField = new CaeGlobals.OrderedDictionary<string, Field>("HashFieldPairs");
                     for (int i = 0; i < numItems; i++)
                     {
                         numOfBytes = Tools.ReadIntFromFileStream(fileStream);
+                        if (numOfBytes <= 0 || numOfBytes > 512 * 1024 * 1024)
+                            throw new InvalidDataException("Invalid compressed result field size.");
+                        if (numOfBytes > fileStream.Length - fileStream.Position)
+                            throw new EndOfStreamException("Truncated compressed result field.");
                         compressedData = new byte[numOfBytes];
-                        fileStream.Read(compressedData, 0, compressedData.Length);
+                        Tools.ReadFileStreamExactly(fileStream, compressedData);
                         //
                         using (MemoryStream memoryStream = new MemoryStream(compressedData))
-                        using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream)))
+                        using (BinaryReader br = new BinaryReader(Tools.Decompress(memoryStream, 1024L * 1024 * 1024)))
                         {
                             try
                             {
                                 fieldData = FieldData.ReadFromBinaryReader(br, version);
                                 field = Field.ReadFromBinaryReader(br, version);
                             }
-                            catch
+                            catch (Exception ex) when (ex is IOException || ex is ArgumentException || ex is OverflowException)
                             {
-                                fieldData = null;
-                                field = null;
+                                throw new InvalidDataException("Unable to read result field " + (i + 1) + ".", ex);
                             }
                         }
                         //
@@ -420,7 +431,7 @@ namespace CaeResults
                     // Compatibility v1.5.3
                     if (results._resultFieldOutputs == null)
                         results._resultFieldOutputs =
-                            new OrderedDictionary<string, ResultFieldOutput>("ResultFieldOutputs",
+                            new CaeGlobals.OrderedDictionary<string, ResultFieldOutput>("ResultFieldOutputs",
                                                                              StringComparer.OrdinalIgnoreCase);
                 }
                 // Compatibility v2.3.5
@@ -428,6 +439,7 @@ namespace CaeResults
                 {
                     // Read the history state
                     exists = Tools.ReadIntFromFileStream(fileStream);
+                    if (exists is not (-1 or 1)) throw new InvalidDataException("Invalid result history state.");
                     if (exists == 1)
                     {
                         results._history = HistoryResults.ReadFromFileStream(fileStream, version);
@@ -436,7 +448,7 @@ namespace CaeResults
             }
             // Compatibility v2.1.0
             if (results._resultHistoryOutputs == null)
-                results._resultHistoryOutputs = new OrderedDictionary<string, ResultHistoryOutput>("ResultHistoryOutputs",
+                results._resultHistoryOutputs = new CaeGlobals.OrderedDictionary<string, ResultHistoryOutput>("ResultHistoryOutputs",
                                                                                                    StringComparer.OrdinalIgnoreCase);
         }
         // Uncompressed - old version
@@ -457,16 +469,15 @@ namespace CaeResults
                 if (exist == 1)
                 {
                     numItems = br.ReadInt32();
-                    results._nodeIdsLookUp = new Dictionary<int, int>();
-                    for (int i = 0; i < numItems; i++) results._nodeIdsLookUp.Add(br.ReadInt32(), br.ReadInt32());
+                    results._nodeIdsLookUp = ReadNodeIdsLookUp(br, numItems, results.Mesh.Nodes.Count);
                 }
                 // Fields
                 exist = br.ReadInt32();
                 if (exist == 1)
                 {
                     numItems = br.ReadInt32();
-                    results._fields = new OrderedDictionary<FieldData, Field>("Fields");
-                    results._fieldDataHashField = new OrderedDictionary<string, Field>("HashFieldPairs");
+                    results._fields = new CaeGlobals.OrderedDictionary<FieldData, Field>("Fields");
+                    results._fieldDataHashField = new CaeGlobals.OrderedDictionary<string, Field>("HashFieldPairs");
                     for (int i = 0; i < numItems; i++)
                     {
                         fieldData = FieldData.ReadFromBinaryReader(br, version);
@@ -483,18 +494,35 @@ namespace CaeResults
                     results.PrepareComplexResults();
                     // Compatibility v1.5.3
                     if (results._resultFieldOutputs == null)
-                        results._resultFieldOutputs = new OrderedDictionary<string, ResultFieldOutput>("ResultFieldOutputs",
+                        results._resultFieldOutputs = new CaeGlobals.OrderedDictionary<string, ResultFieldOutput>("ResultFieldOutputs",
                                                                                                        StringComparer.OrdinalIgnoreCase);
                 }
             }
             // Compatibility v2.1.0
             if (results._resultHistoryOutputs == null)
-                results._resultHistoryOutputs = new OrderedDictionary<string, ResultHistoryOutput>("ResultHistoryOutputs",
+                results._resultHistoryOutputs = new CaeGlobals.OrderedDictionary<string, ResultHistoryOutput>("ResultHistoryOutputs",
                                                                                                    StringComparer.OrdinalIgnoreCase);
         }
 
+        private static Dictionary<int, int> ReadNodeIdsLookUp(BinaryReader reader, int count, int nodeCount)
+        {
+            if (count < 0 || count > 10_000_000)
+                throw new InvalidDataException("Invalid result node lookup count.");
+            var lookup = new Dictionary<int, int>(Math.Min(count, nodeCount));
+            for (int i = 0; i < count; i++)
+            {
+                int nodeId = reader.ReadInt32();
+                int resultId = reader.ReadInt32();
+                if (nodeId <= 0 || resultId < 0 || resultId >= nodeCount)
+                    throw new InvalidDataException("Invalid result node lookup entry.");
+                if (!lookup.TryAdd(nodeId, resultId))
+                    throw new InvalidDataException($"Duplicate result node lookup entry for node {nodeId}.");
+            }
+            return lookup;
+        }
 
-        // Methods                                                                                                                  
+
+        // Methods
         public string[] CheckValidity(List<Tuple<NamedClass, string>> items)
         {
             // Tuple<NamedClass, string>   ...   Tuple<invalidItem, stepName>
@@ -1073,10 +1101,10 @@ namespace CaeResults
             }
             return deformations;
         }
-        public static OrderedDictionary<string, string> GetPossibleDeformationFieldOutputNamesMap()
+        public static CaeGlobals.OrderedDictionary<string, string> GetPossibleDeformationFieldOutputNamesMap()
         {
-            OrderedDictionary<string, string> names =
-                new OrderedDictionary<string, string>("Deformation Names", StringComparer.OrdinalIgnoreCase);
+            CaeGlobals.OrderedDictionary<string, string> names =
+                new CaeGlobals.OrderedDictionary<string, string>("Deformation Names", StringComparer.OrdinalIgnoreCase);
             names.Add("Displacements", FOFieldNames.Disp);
             names.Add("Forces", FOFieldNames.Forc);
             names.Add("Surface Normals", FOFieldNames.SurfaceNormal);
@@ -1093,7 +1121,7 @@ namespace CaeResults
         public string[] GetExistingDeformationFieldOutputNames()
         {
             string[] fieldNames = GetAllFieldNames();
-            OrderedDictionary<string, string> possibleNames = GetPossibleDeformationFieldOutputNamesMap();
+            CaeGlobals.OrderedDictionary<string, string> possibleNames = GetPossibleDeformationFieldOutputNamesMap();
             List<string> existingFieldNames = new List<string>();
             foreach (var entry in possibleNames)
             {
@@ -1968,62 +1996,8 @@ namespace CaeResults
                 foreach (var elementId in part.Labels) _mesh.Elements[elementId].PartId = part.PartId;
             }
         }
-        public void CopyMeshItemsFromMesh(FeMesh mesh)
-        {
-            foreach (var entry in mesh.NodeSets)
-            {
-                _mesh.NodeSets.Add(entry.Key, entry.Value.DeepClone());
-            }
-            //
-            string newName;
-            FeElementSet newElementSet;
-            foreach (var entry in mesh.ElementSets)
-            {
-                if (_mesh.ElementSets.ContainsKey(entry.Key))
-                    newName = _mesh.ElementSets.GetNextNumberedKey(entry.Key);
-                else newName = entry.Key;
-                //
-                newElementSet = entry.Value.DeepClone();
-                newElementSet.Name = newName;
-                //
-                _mesh.ElementSets.Add(newElementSet.Name, newElementSet);
-            }
-            //
-            foreach (var entry in mesh.Surfaces)
-            {
-                _mesh.Surfaces.Add(entry.Key, entry.Value.DeepClone());
-            }
-        }
-        public void CopyFeatureItemsFromMesh(FeMesh mesh, int resultViewId)
-        {
-            FeReferencePoint referencePoint;
-            foreach (var entry in mesh.ReferencePoints)
-            {
-                referencePoint = entry.Value.DeepClone();
-                referencePoint.CreationData = null;
-                referencePoint.CreationIds = null;
-                referencePoint.CreatedFrom = FeReferencePointCreatedFrom.Coordinates;
-                //
-                _mesh.ReferencePoints.Add(entry.Key, referencePoint);
-            }
-            CoordinateSystem coordinateSystem;
-            foreach (var entry in mesh.CoordinateSystems)
-            {
-                coordinateSystem = entry.Value.DeepClone();
-                //
-                coordinateSystem.CenterCreationData = null;
-                coordinateSystem.CenterCreationIds = null;
-                coordinateSystem.CenterCreatedFrom = CsPointCreatedFromEnum.Coordinates;
-                coordinateSystem.PointXCreationData = null;
-                coordinateSystem.PointXCreationIds = null;
-                coordinateSystem.PointXCreatedFrom = CsPointCreatedFromEnum.Coordinates;
-                coordinateSystem.PointXYCreationData = null;
-                coordinateSystem.PointXYCreationIds = null;
-                coordinateSystem.PointXYCreatedFrom = CsPointCreatedFromEnum.Coordinates;
-                //
-                _mesh.CoordinateSystems.Add(entry.Key, coordinateSystem);
-            }
-        }
+
+
         //
         public void AddField(FieldData fieldData, Field field)
         {
@@ -3361,7 +3335,7 @@ namespace CaeResults
         private float[][] ComputeFieldFromResultFieldOutputEquation(ResultFieldOutputEquation resultFieldOutput,
                                                                     int stepId, int stepIncrementId)
         {
-            OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
+            CaeGlobals.OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
             try
             {
                 FieldData sourceFieldData;
@@ -3404,9 +3378,9 @@ namespace CaeResults
                 //
                 return new float[][] { values };
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -3675,7 +3649,7 @@ namespace CaeResults
         {
             parentNames = new HashSet<string>();
             parameterNameFieldNameComponentName = new Dictionary<string, string[]>();
-            OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
+            CaeGlobals.OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
             //
             try
             {
@@ -3938,7 +3912,7 @@ namespace CaeResults
         }
         private HistoryResultSet GetHistorySetFromEquation(ResultHistoryOutputFromEquation resultHistoryOutput)
         {
-            OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
+            CaeGlobals.OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
             //
             try
             {
@@ -4027,9 +4001,9 @@ namespace CaeResults
                 //
                 return historyResultSet;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             finally
             {
@@ -4780,7 +4754,7 @@ namespace CaeResults
         {
             parentNames = new HashSet<string>();
             parameterNameHistoryComponent = new Dictionary<string, HistoryResultComponent>();
-            OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
+            CaeGlobals.OrderedDictionary<string, object> existingParameters = MyNCalc.ExistingParameters.DeepCopy();
             //
             try
             {
@@ -4803,7 +4777,6 @@ namespace CaeResults
                 HistoryResultSet historyResultSet;
                 HistoryResultField historyResultField;
                 HistoryResultComponent historyResultComponent;
-                HistoryResultEntries historyResultEntry;
                 //
                 int numRows = -1;
                 int numColumns = -1;
@@ -6323,7 +6296,7 @@ namespace CaeResults
             if (slipWearResultsToKeep == SlipWearResultsEnum.All) { }
             else if (slipWearResultsToKeep == SlipWearResultsEnum.SlipWearSteps)
             {
-                OrderedDictionary<FieldData, Field> fields = new OrderedDictionary<FieldData, Field>("Fields");
+                CaeGlobals.OrderedDictionary<FieldData, Field> fields = new CaeGlobals.OrderedDictionary<FieldData, Field>("Fields");
                 //
                 foreach (var entry in _fields)
                 {
@@ -6337,7 +6310,7 @@ namespace CaeResults
             else if (slipWearResultsToKeep == SlipWearResultsEnum.LastIncrementOfSlipWearSteps)
             {
                 int lastIncrementId;
-                OrderedDictionary<FieldData, Field> fields = new OrderedDictionary<FieldData, Field>("Fields");
+                CaeGlobals.OrderedDictionary<FieldData, Field> fields = new CaeGlobals.OrderedDictionary<FieldData, Field>("Fields");
                 //
                 foreach (var entry in _fields)
                 {
@@ -6356,7 +6329,7 @@ namespace CaeResults
             {
                 int lastIncrementId;
                 int lastStepId = slipStepIds.Last();
-                OrderedDictionary<FieldData, Field> fields = new OrderedDictionary<FieldData, Field>("Fields");
+                CaeGlobals.OrderedDictionary<FieldData, Field> fields = new CaeGlobals.OrderedDictionary<FieldData, Field>("Fields");
                 //
                 foreach (var entry in _fields)
                 {
@@ -6531,7 +6504,6 @@ namespace CaeResults
             int count = 0;
             List<float> maxCombination;
             //
-            Field resultField;
             object myLock = new object();
             //
             List<float>[] combinationsArray = combinations.ToArray();

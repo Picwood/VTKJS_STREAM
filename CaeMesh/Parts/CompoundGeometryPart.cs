@@ -39,15 +39,17 @@ namespace CaeMesh
         }
 
         public CompoundGeometryPart(CompoundGeometryPart part)
-            : this(part.Name, part.CreatedFromPartNames, part.SubPartNames)
+            : base((GeometryPart)part)
         {
+            _createdFromPartNames = part._createdFromPartNames == null ? null : part._createdFromPartNames.ToArray();
+            _subPartNames = part._subPartNames == null ? null : part._subPartNames.ToArray();
         }
 
 
         // Methods                                                                                                                  
         public override BasePart DeepCopy()
         {
-            return new GeometryPart(this);
+            return new CompoundGeometryPart(this);
         }
         public override PartProperties GetProperties()
         {

@@ -32,28 +32,30 @@ using System.Collections.Concurrent;
 namespace CaeModel
 {
     [Serializable]
-    public class FeModel : ISerializable
+    public partial class FeModel : ISerializable
     {
         [ThreadStatic]
         private static bool _omitCylindersForSerialization;
+        static partial void ReportWarning(string message);
+        static partial void ReportParameterError(ref bool handled);
         // Variables                                                                                                                
         private string _name;                                                                   //ISerializable
         private string _hashName;                                                               //ISerializable
         private FeMesh _geometry;                                                               //ISerializable
         private FeMesh _mesh;                                                                   //ISerializable
-        protected OrderedDictionary<string, UserViewParameters> _userViews;                     //ISerializable
+        protected CaeGlobals.OrderedDictionary<string, UserViewParameters> _userViews;                     //ISerializable
         private EquationParameterCollection _parameters;                                        //ISerializable
-        private OrderedDictionary<string, FeCylinder> _cylinders;                               //ISerializable
-        private OrderedDictionary<string, Material> _materials;                                 //ISerializable
-        private OrderedDictionary<string, Section> _sections;                                   //ISerializable
-        private OrderedDictionary<string, Constraint> _constraints;                             //ISerializable
-        private OrderedDictionary<string, SurfaceInteraction> _surfaceInteractions;             //ISerializable
-        private OrderedDictionary<string, ContactPair> _contactPairs;                           //ISerializable
-        private OrderedDictionary<string, Distribution> _distributions;                         //ISerializable
-        private OrderedDictionary<string, Amplitude> _amplitudes;                               //ISerializable
-        private OrderedDictionary<string, InitialCondition> _initialConditions;                 //ISerializable
+        private CaeGlobals.OrderedDictionary<string, FeCylinder> _cylinders;                               //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Material> _materials;                                 //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Section> _sections;                                   //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Constraint> _constraints;                             //ISerializable
+        private CaeGlobals.OrderedDictionary<string, SurfaceInteraction> _surfaceInteractions;             //ISerializable
+        private CaeGlobals.OrderedDictionary<string, ContactPair> _contactPairs;                           //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Distribution> _distributions;                         //ISerializable
+        private CaeGlobals.OrderedDictionary<string, Amplitude> _amplitudes;                               //ISerializable
+        private CaeGlobals.OrderedDictionary<string, InitialCondition> _initialConditions;                 //ISerializable
         private StepCollection _stepCollection;                                                 //ISerializable
-        private OrderedDictionary<int[], Calculix.CalculixUserKeyword> _calculixUserKeywords;   //ISerializable
+        private CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> _calculixUserKeywords;   //ISerializable
         private ModelProperties _properties;                                                    //ISerializable
         private UnitSystem _unitSystem;                                                         //ISerializable
 
@@ -63,19 +65,19 @@ namespace CaeModel
         public string HashName { get { return _hashName; } }
         public FeMesh Geometry { get { return _geometry; } }
         public FeMesh Mesh { get { return _mesh; } }
-        public OrderedDictionary<string, UserViewParameters> UserViews { get { return _userViews; } }
+        public CaeGlobals.OrderedDictionary<string, UserViewParameters> UserViews { get { return _userViews; } }
         public EquationParameterCollection Parameters { get { return _parameters; } }
-        public OrderedDictionary<string, FeCylinder> Cylinders { get { return _cylinders; } }
-        public OrderedDictionary<string, Material> Materials { get { return _materials; } }
-        public OrderedDictionary<string, Section> Sections { get { return _sections; } }
-        public OrderedDictionary<string, Constraint> Constraints { get { return _constraints; } }
-        public OrderedDictionary<string, SurfaceInteraction> SurfaceInteractions { get { return _surfaceInteractions; } }
-        public OrderedDictionary<string, ContactPair> ContactPairs { get { return _contactPairs; } }
-        public OrderedDictionary<string, Distribution> Distributions { get { return _distributions; } }
-        public OrderedDictionary<string, Amplitude> Amplitudes { get { return _amplitudes; } }
-        public OrderedDictionary<string, InitialCondition> InitialConditions { get { return _initialConditions; } }
+        public CaeGlobals.OrderedDictionary<string, FeCylinder> Cylinders { get { return _cylinders; } }
+        public CaeGlobals.OrderedDictionary<string, Material> Materials { get { return _materials; } }
+        public CaeGlobals.OrderedDictionary<string, Section> Sections { get { return _sections; } }
+        public CaeGlobals.OrderedDictionary<string, Constraint> Constraints { get { return _constraints; } }
+        public CaeGlobals.OrderedDictionary<string, SurfaceInteraction> SurfaceInteractions { get { return _surfaceInteractions; } }
+        public CaeGlobals.OrderedDictionary<string, ContactPair> ContactPairs { get { return _contactPairs; } }
+        public CaeGlobals.OrderedDictionary<string, Distribution> Distributions { get { return _distributions; } }
+        public CaeGlobals.OrderedDictionary<string, Amplitude> Amplitudes { get { return _amplitudes; } }
+        public CaeGlobals.OrderedDictionary<string, InitialCondition> InitialConditions { get { return _initialConditions; } }
         public StepCollection StepCollection { get { return _stepCollection; } }
-        public OrderedDictionary<int[], Calculix.CalculixUserKeyword> CalculixUserKeywords 
+        public CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> CalculixUserKeywords
         { 
             get { return _calculixUserKeywords; } 
             set 
@@ -98,7 +100,7 @@ namespace CaeModel
 
         // Constructors                                                                                                             
         public FeModel(string name, UnitSystem unitSystem, bool resetGlobalNCalcParameters,
-                       OrderedDictionary<string, EquationParameter> overriddenParameters = null)
+                       CaeGlobals.OrderedDictionary<string, EquationParameter> overriddenParameters = null)
         {
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
             //
@@ -106,17 +108,17 @@ namespace CaeModel
             _hashName = Tools.GetRandomString(8);
             _geometry = new FeMesh(MeshRepresentation.Geometry);
             _mesh = new FeMesh(MeshRepresentation.Mesh);
-            _userViews = new OrderedDictionary<string, UserViewParameters>("User Views", sc);
+            _userViews = new CaeGlobals.OrderedDictionary<string, UserViewParameters>("User Views", sc);
             _parameters = new EquationParameterCollection();
-            _cylinders = new OrderedDictionary<string, FeCylinder>("Cylinders", sc);
-            _materials = new OrderedDictionary<string, Material>("Materials", sc);
-            _sections = new OrderedDictionary<string, Section>("Sections", sc);
-            _constraints = new OrderedDictionary<string, Constraint>("Constraints", sc);
-            _surfaceInteractions = new OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
-            _contactPairs = new OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
-            _initialConditions = new OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
-            _distributions = new OrderedDictionary<string, Distribution>("Distributions", sc);
-            _amplitudes = new OrderedDictionary<string, Amplitude>("Amplitudes", sc);
+            _cylinders = new CaeGlobals.OrderedDictionary<string, FeCylinder>("Cylinders", sc);
+            _materials = new CaeGlobals.OrderedDictionary<string, Material>("Materials", sc);
+            _sections = new CaeGlobals.OrderedDictionary<string, Section>("Sections", sc);
+            _constraints = new CaeGlobals.OrderedDictionary<string, Constraint>("Constraints", sc);
+            _surfaceInteractions = new CaeGlobals.OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
+            _contactPairs = new CaeGlobals.OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
+            _initialConditions = new CaeGlobals.OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
+            _distributions = new CaeGlobals.OrderedDictionary<string, Distribution>("Distributions", sc);
+            _amplitudes = new CaeGlobals.OrderedDictionary<string, Amplitude>("Amplitudes", sc);
             _stepCollection = new StepCollection();
             _properties = new ModelProperties();
             if (unitSystem == null) _unitSystem = new UnitSystem();
@@ -129,51 +131,29 @@ namespace CaeModel
                 foreach (var entry in overriddenParameters) _parameters.AddOverriddenParameter(entry.Key, entry.Value);
             }
         }
-        public FeModel(FeModel model)
-        {
-            FeModel copy = model.DeepCopy();
-            _name = copy._name;
-            _hashName = copy._hashName;
-            _geometry = copy._geometry;
-            _mesh = copy._mesh;
-            _userViews = copy._userViews;
-            _parameters = copy._parameters;
-            _cylinders = copy._cylinders;
-            _materials = copy._materials;
-            _sections = copy._sections;
-            _constraints = copy._constraints;
-            _surfaceInteractions = copy._surfaceInteractions;
-            _contactPairs = copy._contactPairs;
-            _distributions = copy._distributions;
-            _amplitudes = copy._amplitudes;
-            _initialConditions = copy._initialConditions;
-            _stepCollection = copy._stepCollection;
-            _calculixUserKeywords = copy._calculixUserKeywords;
-            _properties = copy._properties;
-            _unitSystem = copy._unitSystem;
-        }
+
         public FeModel(SerializationInfo info, StreamingContext context)
         {
             StringComparer sc = StringComparer.OrdinalIgnoreCase;
             // Compatibility for version v.0.6.0
-            _surfaceInteractions = new OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
-            _contactPairs = new OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
+            _surfaceInteractions = new CaeGlobals.OrderedDictionary<string, SurfaceInteraction>("Surface Tractions", sc);
+            _contactPairs = new CaeGlobals.OrderedDictionary<string, ContactPair>("Contact Pairs", sc);
             // Compatibility for version v.0.7.0
             _unitSystem = new UnitSystem();
             // Compatibility for version v.0.8.0
             _hashName = Tools.GetRandomString(8);
             // Compatibility for version v.1.0.0
-            _initialConditions = new OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
+            _initialConditions = new CaeGlobals.OrderedDictionary<string, InitialCondition>("Initial Conditions", sc);
             // Compatibility for version v.2.3.3
-            _distributions = new OrderedDictionary<string, Distribution>("Distributions", sc);
+            _distributions = new CaeGlobals.OrderedDictionary<string, Distribution>("Distributions", sc);
             // Compatibility for version v.1.2.1
-            _amplitudes = new OrderedDictionary<string, Amplitude>("Amplitudes", sc);
+            _amplitudes = new CaeGlobals.OrderedDictionary<string, Amplitude>("Amplitudes", sc);
             // Compatibility for version v.1.4.0
             _parameters = new EquationParameterCollection();
             // Compatibility for version v.2.3.9
-            _userViews = new OrderedDictionary<string, UserViewParameters>("User Views", sc);
+            _userViews = new CaeGlobals.OrderedDictionary<string, UserViewParameters>("User Views", sc);
             // Compatibility for version v.3.x.x
-            _cylinders = new OrderedDictionary<string, FeCylinder>("Cylinders", sc);
+            _cylinders = new CaeGlobals.OrderedDictionary<string, FeCylinder>("Cylinders", sc);
             //
             foreach (SerializationEntry entry in info)
             {
@@ -187,10 +167,10 @@ namespace CaeModel
                     case "_mesh":
                         _mesh = (FeMesh)entry.Value; break;
                     case "_userViews":
-                        _userViews = (OrderedDictionary<string, UserViewParameters>)entry.Value;
+                        _userViews = (CaeGlobals.OrderedDictionary<string, UserViewParameters>)entry.Value;
                         break;
                     case "_parameters":                         // Compatibility for version v.2.1.11
-                        if (entry.Value is OrderedDictionary<string, EquationParameter> dic)
+                        if (entry.Value is CaeGlobals.OrderedDictionary<string, EquationParameter> dic)
                         {
                             dic.OnDeserialization(null);
                             _parameters = new EquationParameterCollection(dic);
@@ -198,16 +178,16 @@ namespace CaeModel
                         else _parameters = (EquationParameterCollection)entry.Value;
                         break;
                     case "_cylinders":
-                        _cylinders = (OrderedDictionary<string, FeCylinder>)entry.Value;
+                        _cylinders = (CaeGlobals.OrderedDictionary<string, FeCylinder>)entry.Value;
                         break;
                     case "_materials":
                         if (entry.Value is Dictionary<string, Material> md)
                         {
                             // Compatibility for version v.0.5.1
                             md.OnDeserialization(null);
-                            _materials = new OrderedDictionary<string, Material>("Materials", md, sc);
+                            _materials = new CaeGlobals.OrderedDictionary<string, Material>("Materials", md, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, Material> mod) _materials = mod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, Material> mod) _materials = mod;
                         else if (entry.Value == null) _materials = null;
                         else throw new NotSupportedException();
                         break;
@@ -216,9 +196,9 @@ namespace CaeModel
                         {
                             // Compatibility for version v.0.5.1
                             sd.OnDeserialization(null);
-                            _sections = new OrderedDictionary<string, Section>("Sections", sd, sc);
+                            _sections = new CaeGlobals.OrderedDictionary<string, Section>("Sections", sd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, Section> sod) _sections = sod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, Section> sod) _sections = sod;
                         else if (entry.Value == null) _sections = null;
                         else throw new NotSupportedException();
                         break;
@@ -227,22 +207,22 @@ namespace CaeModel
                         {
                             // Compatibility for version v.0.5.1
                             cd.OnDeserialization(null);
-                            _constraints = new OrderedDictionary<string, Constraint>("Constraints", cd, sc);
+                            _constraints = new CaeGlobals.OrderedDictionary<string, Constraint>("Constraints", cd, sc);
                         }
-                        else if (entry.Value is OrderedDictionary<string, Constraint> cod) _constraints = cod;
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<string, Constraint> cod) _constraints = cod;
                         else if (entry.Value == null) _constraints = null;
                         else throw new NotSupportedException();
                         break;
                     case "_surfaceInteractions":
-                        _surfaceInteractions = (OrderedDictionary<string, SurfaceInteraction>)entry.Value; break;
+                        _surfaceInteractions = (CaeGlobals.OrderedDictionary<string, SurfaceInteraction>)entry.Value; break;
                     case "_contactPairs":
-                        _contactPairs = (OrderedDictionary<string, ContactPair>)entry.Value; break;
+                        _contactPairs = (CaeGlobals.OrderedDictionary<string, ContactPair>)entry.Value; break;
                     case "_distributions":
-                        _distributions = (OrderedDictionary<string, Distribution>)entry.Value; break;
+                        _distributions = (CaeGlobals.OrderedDictionary<string, Distribution>)entry.Value; break;
                     case "_amplitudes":
-                        _amplitudes = (OrderedDictionary<string, Amplitude>)entry.Value; break;
+                        _amplitudes = (CaeGlobals.OrderedDictionary<string, Amplitude>)entry.Value; break;
                     case "_initialConditions":
-                        _initialConditions = (OrderedDictionary<string, InitialCondition>)entry.Value; break;
+                        _initialConditions = (CaeGlobals.OrderedDictionary<string, InitialCondition>)entry.Value; break;
                     case "_stepCollection":
                         _stepCollection = (StepCollection)entry.Value; break;
                     case "_calculixUserKeywords":
@@ -250,9 +230,9 @@ namespace CaeModel
                         {
                             // Compatibility for version v.0.5.1
                             cukd.OnDeserialization(null);
-                            _calculixUserKeywords = new OrderedDictionary<int[], Calculix.CalculixUserKeyword>("Keywords", cukd);
+                            _calculixUserKeywords = new CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword>("Keywords", cukd);
                         }
-                        else if (entry.Value is OrderedDictionary<int[], Calculix.CalculixUserKeyword> cukod)
+                        else if (entry.Value is CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword> cukod)
                             _calculixUserKeywords = cukod;
                         else if (entry.Value == null) _calculixUserKeywords = null;
                         else throw new NotSupportedException();
@@ -544,7 +524,7 @@ namespace CaeModel
                     throw new CaeException("The selected file does not contain 2D geometry in x-y plane.");
                 else if (!Check2DSurfaceNormals(mesh))
                 {
-                    MessageBoxes.ShowWarning("The imported geometry contains faces oriented in the wrong direction (negative Z). " +
+                    ReportWarning("The imported geometry contains faces oriented in the wrong direction (negative Z). " +
                                              "To use them in the analysis, change their orientation.");
                 }
             }
@@ -1084,10 +1064,7 @@ namespace CaeModel
             else return -1;
         }
         //
-        public void UpdateUserKeywordStates(bool remove, out int suppresedCount, out int unsuppresedCount)
-        {
-            FileInOut.Output.CalculixFileWriter.UpdateUserKeywordStates(this, remove, out suppresedCount, out unsuppresedCount);
-        }        
+
         // Import                                                                                   
         public string[] ImportGeometryFromStlFile(string fileName)
         {
@@ -1099,26 +1076,8 @@ namespace CaeModel
             //
             return addedPartNames;
         }        
-        public string[] ImportGeometryFromBrepFile(string visFileName, string brepFileName)
-        {
-            FeMesh mesh = VisFileReader.Read(visFileName);
-            //
-            if (mesh.Parts.GetValueByIndex(0) is GeometryPart gp)
-            {
-                gp.CADFileDataFromFile(brepFileName);
-                gp.SmoothShaded = true;
-            }
-            //
-            string[] addedPartNames = ImportGeometry(mesh, GetReservedPartNames());
-            //
-            return addedPartNames;
-        }
-        public void ImportMeshFromVolFile(string fileName)
-        {
-            FeMesh mesh = VolFileReader.Read(fileName, ElementsToImport.Shell | ElementsToImport.Solid);
-            //
-            ImportMesh(mesh, GetReservedPartNames(), true, false);
-        }
+
+
         public bool ImportMeshFromMmgFile(string fileName,
                                           ElementsToImport elementsToImport = ElementsToImport.All,
                                           bool convertToSecondOrder = false)
@@ -1139,70 +1098,7 @@ namespace CaeModel
             //
             return noErrors;
         }
-        
-        public void ImportGeneratedMeshFromMeshFile(string fileName, BasePart part, bool convertToSecondOrder,
-                                                    bool splitCompoundMesh, bool mergeCompoundParts)
-        {
-            ElementsToImport elementsToImport;
-            GeometryPart subPart;
-            if (part.PartType == PartType.SolidAsShell) elementsToImport = ElementsToImport.Solid;
-            else if (part.PartType == PartType.Shell) elementsToImport = ElementsToImport.Shell;
-            else if (part.PartType == PartType.Compound)
-            {
-                subPart = _geometry.Parts[(part as CompoundGeometryPart).SubPartNames[0]] as GeometryPart;
-                if (subPart.PartType == PartType.SolidAsShell) elementsToImport = ElementsToImport.Solid;
-                else if (subPart.PartType == PartType.Shell) elementsToImport = ElementsToImport.Shell;
-                else throw new NotSupportedException();
-            }
-            else throw new NotSupportedException();
-            // Get part names - determine, if one part or multiple parts are needed
-            string[] prevPartNames;
-            if (part is CompoundGeometryPart cgp)
-            {
-                if (mergeCompoundParts) prevPartNames = new string[] { part.Name };
-                else prevPartNames = cgp.SubPartNames.ToArray();
-            }
-            else prevPartNames = new string[] { part.Name };
-            // Called after meshing in PrePoMax - the parts are sorted by id
-            FeMesh mesh;
-            if (Path.GetExtension(fileName) == ".vol")
-                mesh = VolFileReader.Read(fileName, elementsToImport, convertToSecondOrder);
-            else if (Path.GetExtension(fileName) == ".mesh")
-                mesh = MmgFileReader.Read(fileName, elementsToImport, MeshRepresentation.Mesh, convertToSecondOrder);
-            else if (Path.GetExtension(fileName) == ".inp")
-                mesh = InpFileReader.ReadMesh(fileName, elementsToImport, convertToSecondOrder);
-            else throw new NotSupportedException();
-            // Split compound mesh
-            if (splitCompoundMesh) mesh.SplitSolidCompoundMesh();
-            // Merge parts if only one part is expected
-            string[] partNames = mesh.Parts.Keys.ToArray();
-            if (prevPartNames.Length != partNames.Length)
-            {
-                if (prevPartNames.Length == 1 && partNames.Length > 1)
-                {
-                    mesh.MergeMeshParts(mesh.Parts.Keys.ToArray(), out _, out _);
-                    partNames = mesh.Parts.Keys.ToArray();
-                }
-                else throw new NotSupportedException();
-            }
-            // Rename the imported part/s
-            BasePart[] importedParts = new BasePart[partNames.Length];
-            for (int i = 0; i < partNames.Length; i++)
-            {
-                importedParts[i] = mesh.Parts[partNames[i]];
-                importedParts[i].Name = prevPartNames[i];
-            }
-            mesh.Parts.Clear();
-            for (int i = 0; i < partNames.Length; i++) mesh.Parts.Add(importedParts[i].Name, importedParts[i]);
-            //
-            ImportMesh(mesh, null, false);
-            // Recolor parts at the end of the import
-            foreach (var importedPart in importedParts)
-            {
-                if (_geometry.Parts.ContainsKey(importedPart.Name) && _mesh.Parts.ContainsKey(importedPart.Name))
-                    _mesh.Parts[importedPart.Name].Color = _geometry.Parts[importedPart.Name].Color;
-            }
-        }
+
         public static bool DeepCompare(object obj, object another)
         {
             if (ReferenceEquals(obj, another))
@@ -1250,219 +1146,11 @@ namespace CaeModel
             }
             return result;
         }
-        public void ImportGeneratedRemeshFromMeshFile(string fileName, int[] elementIds, BasePart part,
-                                                      bool convertToSecondOrder, Dictionary<(int, int), FeNode> midNodes)
-        {
-            // Remove elements from the mesh
-            HashSet<int> possiblyUnrefNodeIds = new HashSet<int>();
-            foreach (var elId in elementIds) possiblyUnrefNodeIds.UnionWith(_mesh.Elements[elId].NodeIds);  // contains midside nodes
-            HashSet<int> removedNodeIds =
-                _mesh.RemoveElementsByIds(new HashSet<int>(elementIds), possiblyUnrefNodeIds, false, false, true);
-            HashSet<int> borderNodeIds = new HashSet<int>(possiblyUnrefNodeIds.Except(removedNodeIds));     // contains midside nodes
-            Dictionary<int, FeNode> borderNodes = new Dictionary<int, FeNode>();
-            foreach (var ndId in borderNodeIds) borderNodes.Add(ndId, _mesh.Nodes[ndId]);                   // contains midside nodes
-            HashSet<int> remainingNodeIds = new HashSet<int>(_mesh.Nodes.Keys.Except(removedNodeIds));
-            // Read the mmg file and renumber nodes and elements
-            double epsilon = 1E-6;
-            double max = part.BoundingBox.GetDiagonal();
-            Dictionary<string, Dictionary<int, int>> partNameNewSurfIdOldSurfId = new Dictionary<string, Dictionary<int, int>>();
-            Dictionary<string, Dictionary<int, int>> partNameNewEdgeIdOldEdgeId = new Dictionary<string, Dictionary<int, int>>();
-            FeMesh mmgMesh = MmgFileReader.Read(fileName, ElementsToImport.Shell,
-                                                                MeshRepresentation.Mesh, convertToSecondOrder,
-                                                                _mesh.MaxNodeId + 1, _mesh.MaxElementId + 1,
-                                                                borderNodes, midNodes,
-                                                                epsilon * max,
-                                                                partNameNewSurfIdOldSurfId, partNameNewEdgeIdOldEdgeId);
-            // Get surface nodes before modification
-            Dictionary<int, HashSet<int>> surfaceIdNodeIds = part.Visualization.GetSurfaceIdNodeIds();
-            foreach (var entry in surfaceIdNodeIds) entry.Value.ExceptWith(removedNodeIds);
-            // Get edge nodes before modification
-            Dictionary<int, HashSet<int>> edgeIdNodeIds = part.Visualization.GetEdgeIdNodeIds();
-            foreach (var entry in edgeIdNodeIds) entry.Value.ExceptWith(removedNodeIds);
-            // Add elements to mesh                                                                                     
-            FeElement element;
-            HashSet<Type> elementTypes = new HashSet<Type>();
-            foreach (var entry in mmgMesh.Elements)
-            {
-                element = entry.Value;
-                element.PartId = part.PartId;
-                elementTypes.Add(element.GetType());
-                _mesh.Elements.Add(entry.Key, element);
-            }
-            // Add elements to part
-            HashSet<int> newPartElementIds = new HashSet<int>(part.Labels);
-            newPartElementIds.UnionWith(mmgMesh.Elements.Keys);
-            part.Labels = newPartElementIds.ToArray();
-            Array.Sort(part.Labels);
-            // Add element types to part
-            if (part is MeshPart mp) mp.AddElementTypes(elementTypes.ToArray());
-            // Add nodes to mesh                                                                                        
-            foreach (var entry in mmgMesh.Nodes)
-            {
-                if (!_mesh.Nodes.ContainsKey(entry.Key)) _mesh.Nodes.Add(entry.Key, entry.Value);
-            }
-            // Add nodes to part
-            HashSet<int> newPartNodeIds = new HashSet<int>(part.NodeLabels);
-            newPartNodeIds.UnionWith(mmgMesh.Nodes.Keys);
-            part.NodeLabels = newPartNodeIds.ToArray();
-            Array.Sort(part.NodeLabels);
-            // Update node ids
-            _mesh.UpdateMaxNodeAndElementIds();
-            _mesh.UpdateNodeIdElementIds();
-            // Model vertices                                                                                           
-            HashSet<int> vertexNodeIds = new HashSet<int>();
-            // Get vertices from part - only those that were not removed
-            foreach (var nodeId in part.Visualization.VertexNodeIds)
-            {
-                if (!removedNodeIds.Contains(nodeId)) vertexNodeIds.Add(nodeId);
-            }
-            // Get vertices from mmgPart
-            foreach (var entry in mmgMesh.Parts) vertexNodeIds.UnionWith(entry.Value.Visualization.VertexNodeIds);
-            // Model edges                                                                                              
-            int elementId = mmgMesh.MaxElementId + 1;
-            LinearBeamElement beamElement;
-            List<FeElement1D> edgeElements = new List<FeElement1D>();
-            // Get model edges from part - only edges that are not completely removed
-            int[] key;
-            CompareIntArray comparer = new CompareIntArray();
-            HashSet<int[]> edgeKeys = new HashSet<int[]>(comparer);
-            //
-            foreach (var edgeCell in part.Visualization.EdgeCells)
-            {
-                if (remainingNodeIds.Contains(edgeCell[0]) && remainingNodeIds.Contains(edgeCell[1]))
-                {
-                    key = Tools.GetSortedKey(edgeCell[0], edgeCell[1]);
-                    if (!edgeKeys.Contains(key))
-                    {
-                        beamElement = new LinearBeamElement(elementId++, key);
-                        edgeElements.Add(beamElement);
-                        edgeKeys.Add(key);
-                    }
-                }
-            }
-            // Get model edges from mmgPart
-            foreach (var entry in mmgMesh.Parts)
-            {
-                foreach (var edgeCell in entry.Value.Visualization.EdgeCells)
-                {
-                    key = Tools.GetSortedKey(edgeCell[0], edgeCell[1]);
-                    if (!edgeKeys.Contains(key))
-                    {
-                        beamElement = new LinearBeamElement(elementId++, key);
-                        edgeElements.Add(beamElement);
-                        edgeKeys.Add(key);
-                    }
-                }
-            }
-            // Add edge elements to mesh
-            foreach (var edgeElement in edgeElements) _mesh.Elements.Add(edgeElement.Id, edgeElement);
-            // Extract visualization                                                                                    
-            _mesh.ExtractShellPartVisualization(part, false, -1);
-            //
-            _mesh.ConvertLineFeElementsToEdges(vertexNodeIds, false, part.Name);
-            // Renumber surfaces                                                                                        
-            BasePart mmgPart;
-            Dictionary<int, HashSet<int>> itemIdNodeIds;
-            foreach (var partNewSurfIdOldSurfId in partNameNewSurfIdOldSurfId)
-            {
-                mmgPart = mmgMesh.Parts[partNewSurfIdOldSurfId.Key];
-                itemIdNodeIds = mmgPart.Visualization.GetSurfaceIdNodeIds();
-                //
-                foreach (var newSurfIdOldSurfId in partNewSurfIdOldSurfId.Value)
-                {
-                    surfaceIdNodeIds[newSurfIdOldSurfId.Value].UnionWith(itemIdNodeIds[newSurfIdOldSurfId.Key]);
-                    surfaceIdNodeIds[newSurfIdOldSurfId.Value].IntersectWith(part.NodeLabels);
-                }
-            }
-            _mesh.RenumberVisualizationSurfaces(part, surfaceIdNodeIds);
-            // Renumber edges                                                                                           
-            foreach (var partNewEdgeIdOldEdgeId in partNameNewEdgeIdOldEdgeId)
-            {
-                if (mmgMesh.Parts.TryGetValue(partNewEdgeIdOldEdgeId.Key, out mmgPart))
-                {
-                    itemIdNodeIds = mmgPart.Visualization.GetEdgeIdNodeIds();
-                    //
-                    foreach (var newEdgeIdOldEdgeId in partNewEdgeIdOldEdgeId.Value)
-                    {
-                        edgeIdNodeIds[newEdgeIdOldEdgeId.Value].UnionWith(itemIdNodeIds[newEdgeIdOldEdgeId.Key]);
-                        edgeIdNodeIds[newEdgeIdOldEdgeId.Value].IntersectWith(part.NodeLabels);
-                    }
-                }
-            }
-            _mesh.RenumberPartVisualizationEdges(part, edgeIdNodeIds);
-            //
-            _mesh.RemoveElementsByType<FeElement1D>();
-            //
-            _mesh.ComputeVolumeArea(part);
-            //
-            UpdateMeshPartsElementTypes(false);
-        }
-        public List<string> ImportModelFromInpFile(string fileName, Action<string> WriteDataToOutput)
-        {
-            OrderedDictionary<int[], Calculix.CalculixUserKeyword> indexedUserKeywords;
-            InpFileReader.Read(fileName,
-                               ElementsToImport.Solid | ElementsToImport.Shell, 
-                               this,
-                               WriteDataToOutput,
-                               out indexedUserKeywords);
-            //
-            CalculixUserKeywords = indexedUserKeywords;
-            //
-            return InpFileReader.Errors;
-        }
-        public List<string> ImportMaterialsFromInpFile(string fileName, Action<string> WriteDataToOutput)
-        {
-            FeModel model = new FeModel("Imported Materials", _unitSystem, false);
-            model.Properties.ModelSpace = _properties.ModelSpace;
-            // Add existing model materials to account for indexing of material user keywords
-            string existingMaterialName;
-            foreach (var entry in _materials)
-            {
-                existingMaterialName = "_internal_for_indices_" + entry.Key;
-                model.Materials.Add(existingMaterialName, entry.Value.DeepClone());
-            }
-            List<string> existingMaterialNames = model.Materials.Keys.ToList();
-            //
-            InpFileReader.Read(fileName,
-                               ElementsToImport.Solid | ElementsToImport.Shell,
-                               model,
-                               WriteDataToOutput,
-                               out OrderedDictionary<int[], Calculix.CalculixUserKeyword>  indexedUserKeywords);
-            //
-            CalculixUserKeywords = indexedUserKeywords;
-            // Remove existing model materials
-            foreach (var materialName in existingMaterialNames) model.Materials.Remove(materialName);
-            //
-            string name;
-            foreach (var entry in model.Materials)
-            {
-                name = entry.Key;
-                if (_materials.ContainsKey(name))
-                {
-                    name += "_Imported";
-                    if (_materials.ContainsKey(name))
-                    {
-                        name = _materials.GetNextNumberedKey(name);
-                    }
-                }
-                entry.Value.Name = name;
-                _materials.Add(name, entry.Value);
-            }
-            //
-            return InpFileReader.Errors;
-        }
-        public void ImportMeshFromUnvFile(string fileName)
-        {
-            FeMesh mesh = UnvFileReader.Read(fileName, ElementsToImport.Shell | ElementsToImport.Solid);
-            //
-            ImportMesh(mesh, GetReservedPartNames(), true, false);
-        }
-        public void ImportMeshFromObjFile(string fileName)
-        {
-            FeMesh mesh = ObjFileReader.Read(fileName);
-            //
-            ImportMesh(mesh, GetReservedPartNames(), true, false);
-        }
+
+
+
+
+
         //
         private string[] ImportGeometry(FeMesh mesh, ICollection<string> reservedPartNames)
         {
@@ -1490,19 +1178,18 @@ namespace CaeModel
             _mesh.AddMesh(mesh, reservedPartNames, GetReservedPartIds(), forceRenameParts, renumberNodesAndElements);
         }
         // Update                                                                                   
-        public void UpdateGeometryPartMassPropertiesFromVisFile(string visFileName, string partName)
+
+        // Setters
+        // Definitions are borrowed for synchronous export; mesh edits are isolated.
+        internal FeModel CreateActiveExportView()
         {
-            FeMesh mesh = VisFileReader.Read(visFileName);
-            //
-            if (mesh.Parts.Count == 1)
-            {
-                BasePart part = _geometry.Parts[partName];
-                BasePart updatedPart = mesh.Parts.First().Value;
-                //part.Visualization = updatedPart.Visualization;
-                part.MassProperties = updatedPart.MassProperties;
-            }
+            var copy = (FeModel)MemberwiseClone();
+            copy._mesh = _mesh.CreateExportSnapshot();
+            string[] inactiveParts = copy._mesh.GetInactivePartNames();
+            if (inactiveParts.Length != 0) copy._mesh.RemoveParts(inactiveParts, out _, false);
+            return copy;
         }
-        // Setters                                                                                  
+
         public void SetMesh(FeMesh mesh)
         {
             _mesh = mesh;
@@ -2404,35 +2091,8 @@ namespace CaeModel
         }
         public CLoad[] GetNodalCLoadsFromConstantSurfaceTraction(STLoad load)
         {
-            List<CLoad> loads = new List<CLoad>();
-            //
-            if (load.FMagnitude.Value != 0)
-            {
-                double area;
-                Dictionary<int, double> nodalForces;
-                GetDistributedNodalValuesFromSurface(load.SurfaceName, out nodalForces, out area);
-                //
-                double f1ByArea = load.F1.Value / area;
-                double f2ByArea = load.F2.Value / area;
-                double f3ByArea = load.F3.Value / area;
-                //
-                CLoad cLoad;
-                double phaseDeg = load.PhaseDeg.Value;
-                foreach (var entry in nodalForces)
-                {
-                    if (entry.Value != 0)
-                    {
-                        cLoad = new CLoad("_CLoad_" + entry.Key.ToString(), entry.Key,
-                                          f1ByArea * entry.Value,
-                                          f2ByArea * entry.Value,
-                                          f3ByArea * entry.Value, load.TwoD, load.Complex, phaseDeg, true);
-                        cLoad.AmplitudeName = load.AmplitudeName;
-                        loads.Add(cLoad);
-                    }
-                }
-            }
-            //
-            return loads.ToArray();
+            return SurfaceTractionConverter.GetNodalCLoadsFromConstantSurfaceTraction(_mesh, load,
+                                                                                     CreateSurfaceLoadThicknessResolver());
         }
         public CLoad[] GetNodalCLoadsFromSurfaceTractionByDistribution(STLoad load)
         {
@@ -2586,60 +2246,30 @@ namespace CaeModel
             //
             return loads.ToArray();
         }
+        private Func<int, double> CreateSurfaceLoadThicknessResolver()
+        {
+            Dictionary<int, int> assignments = null;
+            Section[] sections = null;
+            return elementId =>
+            {
+                if (assignments == null)
+                {
+                    GetSectionAssignments(out assignments);
+                    sections = _sections.Values.Where(section => !(section is MassSection)).ToArray();
+                }
+                int sectionId = assignments[elementId];
+                if (sectionId == -1)
+                    throw new CaeException("Missing section assignment at element " + elementId +
+                                           " from part " + _mesh.GetPartFromId(_mesh.Elements[elementId].PartId) + ".");
+                return sections[sectionId].Thickness.Value;
+            };
+        }
         public void GetDistributedNodalValuesFromSurface(string surfaceName,
                                                          out Dictionary<int, double> nodalValues,
                                                          out double area)
         {
-            nodalValues = new Dictionary<int, double>();
-            area = 0;
-            //
-            int nodeId;
-            int sectionId = 0;
-            int[] nodeIds;
-            double A;
-            double thickness;
-            double[] equValue;
-            FeElement element;
-            Dictionary<int, int> elementIdSectionId;
-            Dictionary<int, double> sectionIdThickness = new Dictionary<int, double>();
-            // Get element thicknesses
-            GetSectionAssignments(out elementIdSectionId);
-            foreach (var entry in _sections)
-            {
-                thickness = entry.Value.Thickness.Value;
-                sectionIdThickness.Add(sectionId++, thickness);
-            }
-            //
-            FeSurface surface = _mesh.Surfaces[surfaceName];
-            if (surface.ElementFaces == null) return;
-            //
-            foreach (var entry in surface.ElementFaces)
-            {
-                foreach (var elementId in _mesh.ElementSets[entry.Value].Labels)
-                {
-                    element = _mesh.Elements[elementId];
-                    A = element.GetArea(entry.Key, _mesh.Nodes);
-                    // Is shell edge face
-                    if (element is FeElement2D element2D && entry.Key != FeFaceName.S1 && entry.Key != FeFaceName.S2)
-                    {
-                        sectionId = elementIdSectionId[elementId];
-                        if (sectionId == -1) throw new CaeException("Missing section assignment at element " + elementId +
-                                                                    " from part " + _mesh.GetPartFromId(element.PartId) + ".");
-                        thickness = sectionIdThickness[sectionId];
-                        A *= thickness;
-                    }
-                    area += A;
-                    nodeIds = element.GetNodeIdsFromFaceName(entry.Key);
-                    equValue = element.GetEquivalentForcesFromFaceName(entry.Key);
-                    //
-                    for (int i = 0; i < nodeIds.Length; i++)
-                    {
-                        nodeId = nodeIds[i];
-                        if (nodalValues.ContainsKey(nodeId)) nodalValues[nodeId] += A * equValue[i];
-                        else nodalValues.Add(nodeId, A * equValue[i]);
-                    }
-                }
-            }
+            SurfaceTractionConverter.GetDistributedNodalValuesFromSurface(_mesh, surfaceName, out nodalValues,
+                                                                           out area, CreateSurfaceLoadThicknessResolver());
         }
         public CLoad[] GetNodalCLoadsFromImportedSurfaceTraction(ImportedSTLoad load)
         {
@@ -2757,6 +2387,376 @@ namespace CaeModel
             //
             return loads.ToArray();
         }
+
+        public void GetExpandedAxisymmetricElementFromNodeIds(int[] nodeIds, out FeElement expandedElement,
+                                                             out Dictionary<int, FeNode> expandedNodes)
+        {
+            expandedElement = null;
+            expandedNodes = new Dictionary<int, FeNode>();
+            // Node coor
+            double[][] coor = new double[nodeIds.Length][];
+            for (int i = 0; i < nodeIds.Length; i++) coor[i] = _mesh.Nodes[nodeIds[i]].Coor;
+            //
+            double cos = Math.Cos(Math.PI / 180 * 0.01);
+            double sin = Math.Sin(Math.PI / 180 * 0.01);
+            //
+            if (nodeIds.Length == 2)
+            {
+                // Triangle
+                if (coor[0][0] == 0)
+                {
+                    expandedNodes.Add(1, new FeNode(1, coor[0]));
+                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
+                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
+                    expandedElement = new LinearTriangleElement(31, new int[] { 1, 2, 3 });
+                }
+                // Triangle
+                else if (coor[1][0] == 0)
+                {
+                    expandedNodes.Add(1, new FeNode(1, coor[1]));
+                    expandedNodes.Add(2, new FeNode(2, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
+                    expandedNodes.Add(3, new FeNode(3, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
+                    expandedElement = new LinearTriangleElement(32, new int[] { 1, 2, 3 });
+                }
+                // Quad
+                else
+                {
+                    expandedNodes.Add(1, new FeNode(1, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
+                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
+                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
+                    expandedNodes.Add(4, new FeNode(4, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
+                    expandedElement = new LinearQuadrilateralElement(41, new int[] { 1, 2, 3, 4 });
+                }
+            }
+            else if (nodeIds.Length == 3)
+            {
+                // Triangle
+                if (coor[0][0] == 0)
+                {
+                    expandedNodes.Add(1, new FeNode(1, coor[0]));
+                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
+                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
+                    //
+                    expandedNodes.Add(4, new FeNode(4, coor[2][0] * cos, coor[2][1], coor[2][0] * sin));
+                    expandedNodes.Add(5, new FeNode(5, coor[1]));
+                    expandedNodes.Add(6, new FeNode(6, coor[2][0] * cos, coor[2][1], -coor[2][0] * sin));
+                    //
+                    expandedElement = new ParabolicTriangleElement(61, new int[] { 1, 2, 3, 4, 5, 6 });
+                }
+                // Triangle
+                else if (coor[1][0] == 0)
+                {
+                    expandedNodes.Add(1, new FeNode(1, coor[1]));
+                    expandedNodes.Add(2, new FeNode(2, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
+                    expandedNodes.Add(3, new FeNode(3, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
+                    //
+                    expandedNodes.Add(4, new FeNode(4, coor[2][0] * cos, coor[2][1], coor[2][0] * sin));
+                    expandedNodes.Add(5, new FeNode(5, coor[0]));
+                    expandedNodes.Add(6, new FeNode(6, coor[2][0] * cos, coor[2][1], -coor[2][0] * sin));
+                    //
+                    expandedElement = new ParabolicTriangleElement(62, new int[] { 1, 2, 3, 4, 5, 6 });
+                }
+                // Quad
+                else
+                {
+                    expandedNodes.Add(1, new FeNode(1, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
+                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
+                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
+                    expandedNodes.Add(4, new FeNode(4, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
+                    //
+                    expandedNodes.Add(5, new FeNode(5, coor[2][0] * cos, coor[2][1], coor[2][0] * sin));
+                    expandedNodes.Add(6, new FeNode(6, coor[1]));
+                    expandedNodes.Add(7, new FeNode(7, coor[2][0] * cos, coor[2][1], -coor[2][0] * sin));
+                    expandedNodes.Add(8, new FeNode(8, coor[0]));
+                    //
+                    expandedElement = new ParabolicQuadrilateralElement(81, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
+                }
+            }
+            else throw new NotSupportedException();
+        }
+
+        public InitialTranslationalVelocity[] GetTranslationalVelocities(InitialAngularVelocity initialAngularVelocity,
+                                                                         Dictionary<string, int[]> referencePointsNodeIds)
+        {
+            Dictionary<int, double[]> nodeIdCoor = new Dictionary<int, double[]>();
+            if (initialAngularVelocity.RegionType == RegionTypeEnum.NodeSetName)
+            {
+                FeNodeSet nodeSet = _mesh.NodeSets[initialAngularVelocity.RegionName];
+                for (int i = 0; i < nodeSet.Labels.Length; i++)
+                {
+                    nodeIdCoor[nodeSet.Labels[i]] = _mesh.Nodes[nodeSet.Labels[i]].Coor;
+                }
+            }
+            else if (initialAngularVelocity.RegionType == RegionTypeEnum.SurfaceName)
+            {
+                string nodeSetName = _mesh.Surfaces[initialAngularVelocity.RegionName].NodeSetName;
+                FeNodeSet nodeSet = _mesh.NodeSets[nodeSetName];
+                for (int i = 0; i < nodeSet.Labels.Length; i++)
+                {
+                    nodeIdCoor[nodeSet.Labels[i]] = _mesh.Nodes[nodeSet.Labels[i]].Coor;
+                }
+            }
+            else if (initialAngularVelocity.RegionType == RegionTypeEnum.ReferencePointName)
+            {
+                FeReferencePoint rp = _mesh.ReferencePoints[initialAngularVelocity.RegionName];
+                nodeIdCoor[referencePointsNodeIds[rp.Name][0]] = rp.Coor();
+            }
+            //
+            Dictionary<int, double[]> nodeIdVelocity;
+            initialAngularVelocity.GetTranslationalVelocities(nodeIdCoor, out nodeIdVelocity);
+            //
+            int count = 0;
+            int nodeId;
+            InitialTranslationalVelocity[] translationalVelocities = new InitialTranslationalVelocity[nodeIdVelocity.Count];
+            foreach (var entry in nodeIdVelocity)
+            {
+                nodeId = entry.Key;
+                // Is the node is on the axis
+                if (nodeId < 0)
+                {
+                    // If the node is a translational node of the reference point, get a rotational node instead
+                    foreach (var rpEntry in referencePointsNodeIds)
+                    {
+                        if (rpEntry.Value[0] == -nodeId)
+                        {
+                            nodeId = rpEntry.Value[1];
+                            break;
+                        }
+                    }
+                }
+                //
+                translationalVelocities[count++] =
+                    new InitialTranslationalVelocity("_iniTransVel_" + nodeId.ToString(), nodeId,
+                                                     entry.Value[0], entry.Value[1], entry.Value[2],
+                                                     initialAngularVelocity.TwoD, true);
+            }
+            //
+            return translationalVelocities;
+        }
+        // Defined fields                                                                           
+        public DefinedTemperature[] GetNodalTemperaturesFromVariableDefinedTemperature(DefinedTemperature definedTemperature)
+        {
+            if (definedTemperature.Type == DefinedTemperatureTypeEnum.FromFile) return null;
+            if (definedTemperature.DistributionName == Distribution.DefaultDistributionName) return null;
+            // Node set
+            FeNodeSet nodeSet;
+            if (definedTemperature.RegionType == RegionTypeEnum.NodeSetName)
+            {
+                nodeSet = _mesh.NodeSets[definedTemperature.RegionName];
+            }
+            else if (definedTemperature.RegionType == RegionTypeEnum.SurfaceName)
+            {
+                FeSurface surface = _mesh.Surfaces[definedTemperature.RegionName];
+                nodeSet = _mesh.NodeSets[surface.NodeSetName];
+            }
+            else throw new NotSupportedException();
+            //
+            double[][] coor = new double[nodeSet.Labels.Length][];
+            // Parallel
+            Parallel.For(0, nodeSet.Labels.Length, i =>
+            {
+                int nodeId = nodeSet.Labels[i];
+                coor[i] = _mesh.Nodes[nodeId].Coor;
+            });
+            // Temperature
+            double[] temperatures;
+            definedTemperature.GetTemperaturesAndDistancesForPoints(this, coor, out _, out temperatures);
+            // Parallel
+            ConcurrentBag<DefinedTemperature> definedTemperatures = new ConcurrentBag<DefinedTemperature>();
+            Parallel.For(0, nodeSet.Labels.Length, i =>
+            {
+                int nodeId = nodeSet.Labels[i];
+                // Temperature definitions
+                DefinedTemperature dt = new DefinedTemperature("NodeID_" + nodeId.ToString(), nodeId, temperatures[i], true);
+                dt.AmplitudeName = definedTemperature.AmplitudeName;
+                definedTemperatures.Add(dt);
+            });
+            //
+            return definedTemperatures.ToArray();
+        }
+        // Parameters                                                                               
+        public void UpdateNCalcParameters()
+        {
+            try
+            {
+                MyNCalc.ExistingParameters = new CaeGlobals.OrderedDictionary<string, object>("Parameters");
+                MyNCalc.ExistingParameters.AddRange(GetPropertyParameters());
+                foreach (var entry in _parameters) MyNCalc.ExistingParameters.Add(entry.Key, entry.Value.Value);
+            }
+            catch
+            {
+                bool handled = false;
+                ReportParameterError(ref handled);
+                if (!handled) throw new CaeException("The parameters could not be evaluated. Check the parameter equations.");
+            }
+        }
+        
+        public Dictionary<string, object> GetPropertyParameters()
+        {
+            double volume;
+            double area;
+            string prefix = "Geometry";
+            Dictionary<string, object> propParameters = new Dictionary<string, object>();
+            // Geometry
+            string volumePrefix = prefix + ".Volume";
+            propParameters.Add(volumePrefix, 0);
+            string areaPrefix = prefix + ".Area";
+            propParameters.Add(areaPrefix, 0);
+            // 
+            volume = 0;
+            area = 0;
+            HashSet<string> compoundSubpartNames = new HashSet<string>();
+            foreach (var partEntry in _geometry.Parts)
+            {
+                if (partEntry.Value is CompoundGeometryPart cgp) compoundSubpartNames.UnionWith(cgp.SubPartNames);
+            }
+            foreach (var partEntry in _geometry.Parts)
+            {
+                if (partEntry.Value is CompoundGeometryPart cgp)
+                {
+                    AddCompoundPartProperties(prefix, cgp, ref propParameters);
+                    volume += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Volume"];
+                    area += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Area"];
+                }
+                else if (!compoundSubpartNames.Contains(partEntry.Value.Name))
+                {
+                    AddNonCompoundPartProperties(prefix, partEntry.Value, ref propParameters);
+                    volume += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Volume"];
+                    area += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Area"];
+                }
+            }
+            propParameters[volumePrefix] = volume;
+            propParameters[areaPrefix] = area;
+            // Mesh
+            prefix = "Mesh";
+            volumePrefix = prefix + ".Volume";
+            propParameters.Add(volumePrefix, 0);
+            areaPrefix = prefix + ".Area";
+            propParameters.Add(areaPrefix, 0);
+            // 
+            volume = 0;
+            area = 0;
+            foreach (var partEntry in _mesh.Parts)
+            {
+                AddNonCompoundPartProperties(prefix, partEntry.Value, ref propParameters);
+                volume += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Volume"];
+                area += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Area"];
+            }
+            propParameters[volumePrefix] = volume;
+            propParameters[areaPrefix] = area;
+            //
+            return propParameters;
+        }
+        public string[] GetAllParameterNames()
+        {
+            List<string> parameterNames = new List<string>();
+            parameterNames.AddRange(_parameters.Keys);
+            parameterNames.AddRange(GetPropertyParameters().Keys);
+            return parameterNames.ToArray();
+        }
+        private void AddCompoundPartProperties(string prefix, CompoundGeometryPart part,
+                                               ref Dictionary<string, object> propParameters)
+        {
+            // Geometry
+            prefix += "." + part.Name;
+            string volumePrefix = prefix + ".Volume";
+            propParameters.Add(volumePrefix, 0);
+            string areaPrefix = prefix + ".Area";
+            propParameters.Add(areaPrefix, 0);
+            double volume = 0;
+            double area = 0;
+            foreach (var subPartName in part.SubPartNames)
+            {
+                AddNonCompoundPartProperties(prefix, _geometry.Parts[subPartName], ref propParameters);
+                volume += (double)propParameters[prefix + "." + subPartName + ".Volume"];
+                area += (double)propParameters[prefix + "." + subPartName + ".Area"];
+            }
+            propParameters[volumePrefix] = volume;
+            propParameters[areaPrefix] = area;
+        }
+        private void AddNonCompoundPartProperties(string prefix, BasePart part, ref Dictionary<string, object> propParameters)
+        {
+            bool solid = part.PartType == PartType.Solid || part.PartType == PartType.SolidAsShell;
+            if (part is CompoundGeometryPart)
+                throw new NotSupportedException();
+            else
+            {
+                VisualizationData vis = part.Visualization;
+                prefix += "." + part.Name;
+                // Volume
+                double volume = 0;
+                if (solid) volume = part.MassProperties.Volume;
+                propParameters.Add(prefix + ".Volume", volume);
+                // Area
+                string areaPrefix = prefix + ".Area";
+                propParameters.Add(areaPrefix, -1);
+                // Surfaces
+                double area = 0;
+                double perimeter;
+                string surfacePrefix;
+                for (int i = 0; i < vis.FaceCount; i++)
+                {
+                    surfacePrefix = prefix + ".Surface-" + (i + 1);
+                    propParameters.Add(surfacePrefix + ".Area", vis.FaceAreas[i]);
+                    area += vis.FaceAreas[i];
+                    perimeter = 0;
+                    for (int j = 0; j < vis.FaceEdgeIds[i].Length; j++) perimeter += vis.EdgeLengths[vis.FaceEdgeIds[i][j]];
+                    //propParameters.Add(surfacePrefix + ".Perimeter", perimeter);
+                }
+                //
+                propParameters[areaPrefix] = area;
+                // Edges
+                string edgePrefix;
+                for (int i = 0; i < vis.EdgeCount; i++)
+                {
+                    edgePrefix = prefix + ".Edge-" + (i + 1);
+                    //propParameters.Add(edgePrefix + ".Length", vis.EdgeLengths[i]);
+                }
+            }
+        }
+
+
+
+        // 3D - 2D                                                                                  
+        public void UpdateMeshPartsElementTypes(bool allowMixedModel)
+        {
+            if (_properties != null)
+            {
+                Dictionary<Type, HashSet<Enum>> elementTypeEnums = _properties.ModelSpace.GetAvailableElementTypes(allowMixedModel);
+                if (_mesh != null) _mesh.UpdatePartsElementTypes(elementTypeEnums);
+            }
+        }
+        // Boundary displacement method                                                             
+
+        // Copy
+
+        // ISerialization
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            // Using typeof() works also for null fields
+            info.AddValue("_name", _name, typeof(string));
+            info.AddValue("_geometry", _geometry, typeof(FeMesh));
+            info.AddValue("_mesh", _mesh, typeof(FeMesh));
+            info.AddValue("_userViews", _userViews, typeof(CaeGlobals.OrderedDictionary<string, UserViewParameters>));
+            info.AddValue("_parameters", _parameters, typeof(EquationParameterCollection));
+            if (!_omitCylindersForSerialization)
+                info.AddValue("_cylinders", _cylinders, typeof(CaeGlobals.OrderedDictionary<string, FeCylinder>));
+            info.AddValue("_materials", _materials, typeof(CaeGlobals.OrderedDictionary<string, Material>));
+            info.AddValue("_sections", _sections, typeof(CaeGlobals.OrderedDictionary<string, Section>));
+            info.AddValue("_constraints", _constraints, typeof(CaeGlobals.OrderedDictionary<string, Constraint>));
+            info.AddValue("_surfaceInteractions", _surfaceInteractions, typeof(CaeGlobals.OrderedDictionary<string, SurfaceInteraction>));
+            info.AddValue("_contactPairs", _contactPairs, typeof(CaeGlobals.OrderedDictionary<string, ContactPair>));
+            info.AddValue("_distributions", _distributions, typeof(CaeGlobals.OrderedDictionary<string, Distribution>));
+            info.AddValue("_amplitudes", _amplitudes, typeof(CaeGlobals.OrderedDictionary<string, Amplitude>));
+            info.AddValue("_initialConditions", _initialConditions, typeof(CaeGlobals.OrderedDictionary<string, InitialCondition>));
+            info.AddValue("_stepCollection", _stepCollection, typeof(StepCollection));
+            info.AddValue("_calculixUserKeywords", _calculixUserKeywords,
+                          typeof(CaeGlobals.OrderedDictionary<int[], Calculix.CalculixUserKeyword>));
+            info.AddValue("_properties", _properties, typeof(ModelProperties));
+            info.AddValue("_unitSystem", _unitSystem, typeof(UnitSystem));
+            info.AddValue("_hashName", _hashName, typeof(string));
+        }
+
         public CLoad[] GetNodalCLoadsFromVariablePressureLoad(VariablePressure load)
         {
             Dictionary<int, int> elementIdSectionId;
@@ -2963,92 +2963,6 @@ namespace CaeModel
             //
             return loads.ToArray();
         }
-        public void GetExpandedAxisymmetricElementFromNodeIds(int[] nodeIds, out FeElement expandedElement,
-                                                             out Dictionary<int, FeNode> expandedNodes)
-        {
-            expandedElement = null;
-            expandedNodes = new Dictionary<int, FeNode>();
-            // Node coor
-            double[][] coor = new double[nodeIds.Length][];
-            for (int i = 0; i < nodeIds.Length; i++) coor[i] = _mesh.Nodes[nodeIds[i]].Coor;
-            //
-            double cos = Math.Cos(Math.PI / 180 * 0.01);
-            double sin = Math.Sin(Math.PI / 180 * 0.01);
-            //
-            if (nodeIds.Length == 2)
-            {
-                // Triangle
-                if (coor[0][0] == 0)
-                {
-                    expandedNodes.Add(1, new FeNode(1, coor[0]));
-                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
-                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
-                    expandedElement = new LinearTriangleElement(31, new int[] { 1, 2, 3 });
-                }
-                // Triangle
-                else if (coor[1][0] == 0)
-                {
-                    expandedNodes.Add(1, new FeNode(1, coor[1]));
-                    expandedNodes.Add(2, new FeNode(2, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
-                    expandedNodes.Add(3, new FeNode(3, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
-                    expandedElement = new LinearTriangleElement(32, new int[] { 1, 2, 3 });
-                }
-                // Quad
-                else
-                {
-                    expandedNodes.Add(1, new FeNode(1, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
-                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
-                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
-                    expandedNodes.Add(4, new FeNode(4, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
-                    expandedElement = new LinearQuadrilateralElement(41, new int[] { 1, 2, 3, 4 });
-                }
-            }
-            else if (nodeIds.Length == 3)
-            {
-                // Triangle
-                if (coor[0][0] == 0)
-                {
-                    expandedNodes.Add(1, new FeNode(1, coor[0]));
-                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
-                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
-                    //
-                    expandedNodes.Add(4, new FeNode(4, coor[2][0] * cos, coor[2][1], coor[2][0] * sin));
-                    expandedNodes.Add(5, new FeNode(5, coor[1]));
-                    expandedNodes.Add(6, new FeNode(6, coor[2][0] * cos, coor[2][1], -coor[2][0] * sin));
-                    //
-                    expandedElement = new ParabolicTriangleElement(61, new int[] { 1, 2, 3, 4, 5, 6 });
-                }
-                // Triangle
-                else if (coor[1][0] == 0)
-                {
-                    expandedNodes.Add(1, new FeNode(1, coor[1]));
-                    expandedNodes.Add(2, new FeNode(2, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
-                    expandedNodes.Add(3, new FeNode(3, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
-                    //
-                    expandedNodes.Add(4, new FeNode(4, coor[2][0] * cos, coor[2][1], coor[2][0] * sin));
-                    expandedNodes.Add(5, new FeNode(5, coor[0]));
-                    expandedNodes.Add(6, new FeNode(6, coor[2][0] * cos, coor[2][1], -coor[2][0] * sin));
-                    //
-                    expandedElement = new ParabolicTriangleElement(62, new int[] { 1, 2, 3, 4, 5, 6 });
-                }
-                // Quad
-                else
-                {
-                    expandedNodes.Add(1, new FeNode(1, coor[0][0] * cos, coor[0][1], coor[0][0] * sin));
-                    expandedNodes.Add(2, new FeNode(2, coor[1][0] * cos, coor[1][1], coor[1][0] * sin));
-                    expandedNodes.Add(3, new FeNode(3, coor[1][0] * cos, coor[1][1], -coor[1][0] * sin));
-                    expandedNodes.Add(4, new FeNode(4, coor[0][0] * cos, coor[0][1], -coor[0][0] * sin));
-                    //
-                    expandedNodes.Add(5, new FeNode(5, coor[2][0] * cos, coor[2][1], coor[2][0] * sin));
-                    expandedNodes.Add(6, new FeNode(6, coor[1]));
-                    expandedNodes.Add(7, new FeNode(7, coor[2][0] * cos, coor[2][1], -coor[2][0] * sin));
-                    expandedNodes.Add(8, new FeNode(8, coor[0]));
-                    //
-                    expandedElement = new ParabolicQuadrilateralElement(81, new int[] { 1, 2, 3, 4, 5, 6, 7, 8 });
-                }
-            }
-            else throw new NotSupportedException();
-        }
         public DLoad[] GetElementDLoadsFromVariablePressureLoad(VariablePressure load)
         {
             // Surface
@@ -3090,407 +3004,5 @@ namespace CaeModel
             //
             return loads.ToArray();
         }
-        public InitialTranslationalVelocity[] GetTranslationalVelocities(InitialAngularVelocity initialAngularVelocity,
-                                                                         Dictionary<string, int[]> referencePointsNodeIds)
-        {
-            Dictionary<int, double[]> nodeIdCoor = new Dictionary<int, double[]>();
-            if (initialAngularVelocity.RegionType == RegionTypeEnum.NodeSetName)
-            {
-                FeNodeSet nodeSet = _mesh.NodeSets[initialAngularVelocity.RegionName];
-                for (int i = 0; i < nodeSet.Labels.Length; i++)
-                {
-                    nodeIdCoor[nodeSet.Labels[i]] = _mesh.Nodes[nodeSet.Labels[i]].Coor;
-                }
-            }
-            else if (initialAngularVelocity.RegionType == RegionTypeEnum.SurfaceName)
-            {
-                string nodeSetName = _mesh.Surfaces[initialAngularVelocity.RegionName].NodeSetName;
-                FeNodeSet nodeSet = _mesh.NodeSets[nodeSetName];
-                for (int i = 0; i < nodeSet.Labels.Length; i++)
-                {
-                    nodeIdCoor[nodeSet.Labels[i]] = _mesh.Nodes[nodeSet.Labels[i]].Coor;
-                }
-            }
-            else if (initialAngularVelocity.RegionType == RegionTypeEnum.ReferencePointName)
-            {
-                FeReferencePoint rp = _mesh.ReferencePoints[initialAngularVelocity.RegionName];
-                nodeIdCoor[referencePointsNodeIds[rp.Name][0]] = rp.Coor();
-            }
-            //
-            Dictionary<int, double[]> nodeIdVelocity;
-            initialAngularVelocity.GetTranslationalVelocities(nodeIdCoor, out nodeIdVelocity);
-            //
-            int count = 0;
-            int nodeId;
-            InitialTranslationalVelocity[] translationalVelocities = new InitialTranslationalVelocity[nodeIdVelocity.Count];
-            foreach (var entry in nodeIdVelocity)
-            {
-                nodeId = entry.Key;
-                // Is the node is on the axis
-                if (nodeId < 0)
-                {
-                    // If the node is a translational node of the reference point, get a rotational node instead
-                    foreach (var rpEntry in referencePointsNodeIds)
-                    {
-                        if (rpEntry.Value[0] == -nodeId)
-                        {
-                            nodeId = rpEntry.Value[1];
-                            break;
-                        }
-                    }
-                }
-                //
-                translationalVelocities[count++] =
-                    new InitialTranslationalVelocity("_iniTransVel_" + nodeId.ToString(), nodeId,
-                                                     entry.Value[0], entry.Value[1], entry.Value[2],
-                                                     initialAngularVelocity.TwoD, true);
-            }
-            //
-            return translationalVelocities;
-        }
-        // Defined fields                                                                           
-        public DefinedTemperature[] GetNodalTemperaturesFromVariableDefinedTemperature(DefinedTemperature definedTemperature)
-        {
-            if (definedTemperature.Type == DefinedTemperatureTypeEnum.FromFile) return null;
-            if (definedTemperature.DistributionName == Distribution.DefaultDistributionName) return null;
-            // Node set
-            FeNodeSet nodeSet;
-            if (definedTemperature.RegionType == RegionTypeEnum.NodeSetName)
-            {
-                nodeSet = _mesh.NodeSets[definedTemperature.RegionName];
-            }
-            else if (definedTemperature.RegionType == RegionTypeEnum.SurfaceName)
-            {
-                FeSurface surface = _mesh.Surfaces[definedTemperature.RegionName];
-                nodeSet = _mesh.NodeSets[surface.NodeSetName];
-            }
-            else throw new NotSupportedException();
-            //
-            double[][] coor = new double[nodeSet.Labels.Length][];
-            // Parallel
-            Parallel.For(0, nodeSet.Labels.Length, i =>
-            {
-                int nodeId = nodeSet.Labels[i];
-                coor[i] = _mesh.Nodes[nodeId].Coor;
-            });
-            // Temperature
-            double[] temperatures;
-            definedTemperature.GetTemperaturesAndDistancesForPoints(this, coor, out _, out temperatures);
-            // Parallel
-            ConcurrentBag<DefinedTemperature> definedTemperatures = new ConcurrentBag<DefinedTemperature>();
-            Parallel.For(0, nodeSet.Labels.Length, i =>
-            {
-                int nodeId = nodeSet.Labels[i];
-                // Temperature definitions
-                DefinedTemperature dt = new DefinedTemperature("NodeID_" + nodeId.ToString(), nodeId, temperatures[i], true);
-                dt.AmplitudeName = definedTemperature.AmplitudeName;
-                definedTemperatures.Add(dt);
-            });
-            //
-            return definedTemperatures.ToArray();
-        }
-        // Parameters                                                                               
-        public void UpdateNCalcParameters()
-        {
-            try
-            {
-                MyNCalc.ExistingParameters = new OrderedDictionary<string, object>("Parameters");
-                MyNCalc.ExistingParameters.AddRange(GetPropertyParameters());
-                foreach (var entry in _parameters) MyNCalc.ExistingParameters.Add(entry.Key, entry.Value.Value);
-            }
-            catch
-            {
-                MessageBoxes.ShowError("The parameters could not be evaluated. Check the parameter equations.");
-            }
-        }
-        
-        public Dictionary<string, object> GetPropertyParameters()
-        {
-            double volume;
-            double area;
-            string prefix = "Geometry";
-            Dictionary<string, object> propParameters = new Dictionary<string, object>();
-            // Geometry
-            string volumePrefix = prefix + ".Volume";
-            propParameters.Add(volumePrefix, 0);
-            string areaPrefix = prefix + ".Area";
-            propParameters.Add(areaPrefix, 0);
-            // 
-            volume = 0;
-            area = 0;
-            HashSet<string> compoundSubpartNames = new HashSet<string>();
-            foreach (var partEntry in _geometry.Parts)
-            {
-                if (partEntry.Value is CompoundGeometryPart cgp) compoundSubpartNames.UnionWith(cgp.SubPartNames);
-            }
-            foreach (var partEntry in _geometry.Parts)
-            {
-                if (partEntry.Value is CompoundGeometryPart cgp)
-                {
-                    AddCompoundPartProperties(prefix, cgp, ref propParameters);
-                    volume += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Volume"];
-                    area += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Area"];
-                }
-                else if (!compoundSubpartNames.Contains(partEntry.Value.Name))
-                {
-                    AddNonCompoundPartProperties(prefix, partEntry.Value, ref propParameters);
-                    volume += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Volume"];
-                    area += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Area"];
-                }
-            }
-            propParameters[volumePrefix] = volume;
-            propParameters[areaPrefix] = area;
-            // Mesh
-            prefix = "Mesh";
-            volumePrefix = prefix + ".Volume";
-            propParameters.Add(volumePrefix, 0);
-            areaPrefix = prefix + ".Area";
-            propParameters.Add(areaPrefix, 0);
-            // 
-            volume = 0;
-            area = 0;
-            foreach (var partEntry in _mesh.Parts)
-            {
-                AddNonCompoundPartProperties(prefix, partEntry.Value, ref propParameters);
-                volume += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Volume"];
-                area += (double)propParameters[prefix + "." + partEntry.Value.Name + ".Area"];
-            }
-            propParameters[volumePrefix] = volume;
-            propParameters[areaPrefix] = area;
-            //
-            return propParameters;
-        }
-        public string[] GetAllParameterNames()
-        {
-            List<string> parameterNames = new List<string>();
-            parameterNames.AddRange(_parameters.Keys);
-            parameterNames.AddRange(GetPropertyParameters().Keys);
-            return parameterNames.ToArray();
-        }
-        private void AddCompoundPartProperties(string prefix, CompoundGeometryPart part,
-                                               ref Dictionary<string, object> propParameters)
-        {
-            // Geometry
-            prefix += "." + part.Name;
-            string volumePrefix = prefix + ".Volume";
-            propParameters.Add(volumePrefix, 0);
-            string areaPrefix = prefix + ".Area";
-            propParameters.Add(areaPrefix, 0);
-            double volume = 0;
-            double area = 0;
-            foreach (var subPartName in part.SubPartNames)
-            {
-                AddNonCompoundPartProperties(prefix, _geometry.Parts[subPartName], ref propParameters);
-                volume += (double)propParameters[prefix + "." + subPartName + ".Volume"];
-                area += (double)propParameters[prefix + "." + subPartName + ".Area"];
-            }
-            propParameters[volumePrefix] = volume;
-            propParameters[areaPrefix] = area;
-        }
-        private void AddNonCompoundPartProperties(string prefix, BasePart part, ref Dictionary<string, object> propParameters)
-        {
-            bool solid = part.PartType == PartType.Solid || part.PartType == PartType.SolidAsShell;
-            if (part is CompoundGeometryPart)
-                throw new NotSupportedException();
-            else
-            {
-                VisualizationData vis = part.Visualization;
-                prefix += "." + part.Name;
-                // Volume
-                double volume = 0;
-                if (solid) volume = part.MassProperties.Volume;
-                propParameters.Add(prefix + ".Volume", volume);
-                // Area
-                string areaPrefix = prefix + ".Area";
-                propParameters.Add(areaPrefix, -1);
-                // Surfaces
-                double area = 0;
-                double perimeter;
-                string surfacePrefix;
-                for (int i = 0; i < vis.FaceCount; i++)
-                {
-                    surfacePrefix = prefix + ".Surface-" + (i + 1);
-                    propParameters.Add(surfacePrefix + ".Area", vis.FaceAreas[i]);
-                    area += vis.FaceAreas[i];
-                    perimeter = 0;
-                    for (int j = 0; j < vis.FaceEdgeIds[i].Length; j++) perimeter += vis.EdgeLengths[vis.FaceEdgeIds[i][j]];
-                    //propParameters.Add(surfacePrefix + ".Perimeter", perimeter);
-                }
-                //
-                propParameters[areaPrefix] = area;
-                // Edges
-                string edgePrefix;
-                for (int i = 0; i < vis.EdgeCount; i++)
-                {
-                    edgePrefix = prefix + ".Edge-" + (i + 1);
-                    //propParameters.Add(edgePrefix + ".Length", vis.EdgeLengths[i]);
-                }
-            }
-        }
-
-
-
-        // 3D - 2D                                                                                  
-        public void UpdateMeshPartsElementTypes(bool allowMixedModel)
-        {
-            if (_properties != null)
-            {
-                Dictionary<Type, HashSet<Enum>> elementTypeEnums = _properties.ModelSpace.GetAvailableElementTypes(allowMixedModel);
-                if (_mesh != null) _mesh.UpdatePartsElementTypes(elementTypeEnums);
-            }
-        }
-        // Boundary displacement method                                                             
-        public FeModel PrepareBdmModel(Dictionary<int, double[]> deformations)
-        {
-            // Mesh
-            FeModel bdmModel = new FeModel("BDMmodel", _unitSystem, false);
-            bdmModel.Properties = _properties;
-            bdmModel.SetMesh(_mesh.DeepCopy());
-            // Materials
-            Material materialElastic = new Material("Elastic");
-            materialElastic.AddProperty(new Elastic(new double[][] { new double[] { 1000, 0, 0 } }));
-            bdmModel._materials.Add(materialElastic.Name, materialElastic);
-            // Sections
-            Section section;
-            foreach (var entry in _sections)
-            {
-                section = entry.Value.DeepClone();
-                section.MaterialName = materialElastic.Name;
-                bdmModel.Sections.Add(section.Name, section);
-            }
-            // Constraints
-            HashSet<int> constrainedNodeIds = new HashSet<int>();
-            Constraint constraint;
-            foreach (var entry in _constraints)
-            {
-                constraint = entry.Value.DeepClone();
-                bdmModel.Constraints.Add(constraint.Name, constraint);
-                //
-                if (constraint is RigidBody rb)
-                {
-                    if (rb.SlaveRegionType == RegionTypeEnum.Selection)
-                        constrainedNodeIds.UnionWith(rb.SlaveCreationIds);
-                    else if (rb.SlaveRegionType == RegionTypeEnum.NodeSetName)
-                        constrainedNodeIds.UnionWith(_mesh.NodeSets[rb.SlaveRegionName].Labels);
-                    else if (rb.SlaveRegionType == RegionTypeEnum.SurfaceName)
-                        constrainedNodeIds.UnionWith(_mesh.NodeSets[_mesh.Surfaces[rb.SlaveRegionName].NodeSetName].Labels);
-                }
-            }
-            // Distributions
-            Distribution distribution;
-            foreach (var entry in _distributions)
-            {
-                distribution = entry.Value.DeepClone();
-                bdmModel.Distributions.Add(distribution.Name, distribution);
-            }
-            // Amplitudes
-            Amplitude amplitude;
-            foreach (var entry in _amplitudes)
-            {
-                amplitude = entry.Value.DeepClone();
-                bdmModel.Amplitudes.Add(amplitude.Name, amplitude);
-            }
-            // Steps
-            StaticStep staticStep = new StaticStep("Step-1");
-            bdmModel._stepCollection.AddStep(staticStep, false);
-            BoundaryDisplacementStep boundaryDisplacementStep = _stepCollection.GetBoundaryDisplacementStep();
-            if (boundaryDisplacementStep == null)
-                throw new CaeException("The boundary displacement step is missing.");
-            // Add existing boundary conditions
-            bool twoD = false;
-            BoundaryCondition bc;
-            foreach (var entry in boundaryDisplacementStep.BoundaryConditions)
-            {
-                bc = entry.Value.DeepClone();
-                staticStep.AddBoundaryCondition(bc);
-                twoD = bc.TwoD;
-            }
-            // Create BDM boundary conditions
-            string name;
-            double[] xyz;
-            FeNodeSet nodeSet;
-            DisplacementRotation displacementRotation;
-            //
-            if (deformations != null)
-            {
-                foreach (var entry in deformations)
-                {
-                    if (!constrainedNodeIds.Contains(entry.Key))
-                    {
-                        // Node set
-                        name = bdmModel.Mesh.NodeSets.GetNextNumberedKey("BDM", "_" + entry.Key);
-                        nodeSet = new FeNodeSet(name, new int[] { entry.Key });
-                        bdmModel.Mesh.NodeSets.Add(nodeSet.Name, nodeSet);
-                        // Boundary condition
-                        xyz = entry.Value;
-                        name = staticStep.BoundaryConditions.GetNextNumberedKey("BDM-" + entry.Key);
-                        displacementRotation = new DisplacementRotation(name, nodeSet.Name, RegionTypeEnum.NodeSetName, twoD,
-                                                                        false, 0);
-                        if (xyz[0] != 0) displacementRotation.U1.SetEquationFromValue(xyz[0]);
-                        if (xyz[1] != 0) displacementRotation.U2.SetEquationFromValue(xyz[1]);
-                        if (xyz[2] != 0) displacementRotation.U3.SetEquationFromValue(xyz[2]);
-                        staticStep.AddBoundaryCondition(displacementRotation);
-                    }
-                }
-            }
-            //
-            return bdmModel;
-        }
-        // Copy
-        public FeModel DeepCopy()
-        {
-            try
-            {
-                FeModel model = this.DeepClone();
-                //
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    using (BinaryWriter bw = new BinaryWriter(ms))
-                    {
-                        WriteToBinaryWriter(this, bw);
-                        //
-                        bw.Flush();
-                        bw.BaseStream.Seek(0, SeekOrigin.Begin);
-                        using (BinaryReader br = new BinaryReader(bw.BaseStream))
-                        {
-                            ReadFromBinaryReader(model, br, -1);
-                        }
-                    }
-                }
-                //
-                return model;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        // ISerialization
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            // Using typeof() works also for null fields
-            info.AddValue("_name", _name, typeof(string));
-            info.AddValue("_geometry", _geometry, typeof(FeMesh));
-            info.AddValue("_mesh", _mesh, typeof(FeMesh));
-            info.AddValue("_userViews", _userViews, typeof(OrderedDictionary<string, UserViewParameters>));
-            info.AddValue("_parameters", _parameters, typeof(EquationParameterCollection));
-            if (!_omitCylindersForSerialization)
-                info.AddValue("_cylinders", _cylinders, typeof(OrderedDictionary<string, FeCylinder>));
-            info.AddValue("_materials", _materials, typeof(OrderedDictionary<string, Material>));
-            info.AddValue("_sections", _sections, typeof(OrderedDictionary<string, Section>));
-            info.AddValue("_constraints", _constraints, typeof(OrderedDictionary<string, Constraint>));
-            info.AddValue("_surfaceInteractions", _surfaceInteractions, typeof(OrderedDictionary<string, SurfaceInteraction>));
-            info.AddValue("_contactPairs", _contactPairs, typeof(OrderedDictionary<string, ContactPair>));
-            info.AddValue("_distributions", _distributions, typeof(OrderedDictionary<string, Distribution>));
-            info.AddValue("_amplitudes", _amplitudes, typeof(OrderedDictionary<string, Amplitude>));
-            info.AddValue("_initialConditions", _initialConditions, typeof(OrderedDictionary<string, InitialCondition>));
-            info.AddValue("_stepCollection", _stepCollection, typeof(StepCollection));
-            info.AddValue("_calculixUserKeywords", _calculixUserKeywords,
-                          typeof(OrderedDictionary<int[], Calculix.CalculixUserKeyword>));
-            info.AddValue("_properties", _properties, typeof(ModelProperties));
-            info.AddValue("_unitSystem", _unitSystem, typeof(UnitSystem));
-            info.AddValue("_hashName", _hashName, typeof(string));
-        }
-
     }
 }

@@ -7,6 +7,8 @@
 // Author: Matej Borovinšek
 // Contributors:
 
+using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -37,15 +39,15 @@ namespace CaeResults
                         results.GetHistoryOutputData(historyData, out columnNames, out rowBasedData, true);
                         // Title
                         sb.AppendLine("History output component" + delimiter +
-                                      historyResultSet.Name + "." + fieldEntry.Key + "." + componentEntry.Key);
+                                      FormatCell(historyResultSet.Name + "." + fieldEntry.Key + "." + componentEntry.Key, delimiter));
                         // Column names
                         for (int i = 0; i < columnNames.Length; i++)
                         {
-                            if (i == 0) sb.Append(columnNames[i]);
+                            if (i == 0) sb.Append(FormatCell(columnNames[i], delimiter));
                             else
                             {
                                 sb.Append(delimiter);
-                                sb.Append(columnNames[i]);
+                                sb.Append(FormatCell(columnNames[i], delimiter));
                             }
                         }
                         sb.AppendLine();
@@ -55,7 +57,7 @@ namespace CaeResults
                             for (int j = 0; j < rowBasedData[i].Length; j++)
                             {
                                 if (j != 0) sb.Append(delimiter);
-                                sb.Append(rowBasedData[i][j]);
+                                sb.Append(FormatCell(rowBasedData[i][j], delimiter));
                             }
                             sb.AppendLine();
                         }
@@ -65,6 +67,15 @@ namespace CaeResults
             }
             //
             File.WriteAllText(fileName, sb.ToString());
+        }
+        private static string FormatCell(object value, string delimiter)
+        {
+            string text = value is IFormattable formattable
+                ? formattable.ToString(null, CultureInfo.InvariantCulture)
+                : value?.ToString() ?? "";
+            if (text.Contains(delimiter) || text.Contains("\"") || text.Contains("\r") || text.Contains("\n"))
+                return "\"" + text.Replace("\"", "\"\"") + "\"";
+            return text;
         }
     }
 }

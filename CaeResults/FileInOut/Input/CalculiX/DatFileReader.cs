@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -154,7 +155,7 @@ namespace CaeResults
                 DatDataSet existingDataSet;
                 Dictionary<double, double> timeFrequency = null;
                 Dictionary<double, double> timeModeNumber = null;
-                OrderedDictionary<string, DatDataSet> dataSets = new OrderedDictionary<string, DatDataSet>("DataSets");
+                CaeGlobals.OrderedDictionary<string, DatDataSet> dataSets = new CaeGlobals.OrderedDictionary<string, DatDataSet>("DataSets");
                 //
                 HistoryResults allHistoryResults = new HistoryResults("HistoryOutput");
                 HistoryResults frequencyHistoryOutput = new HistoryResults("HistoryOutput");
@@ -1207,7 +1208,7 @@ namespace CaeResults
                 tmp2 = tmp[2].Split(_dataSplitter, StringSplitOptions.RemoveEmptyEntries);
                 dataSet.BaseSetName = tmp2[0];
                 dataSet.SetName = RepairSetName(tmp2[0].Trim(), repairedSetNames);
-                dataSet.Time = double.Parse(tmp2[1]);
+                dataSet.Time = double.Parse(tmp2[1], CultureInfo.InvariantCulture);
                 //
                 int length;
                 double[] values;
@@ -1272,7 +1273,7 @@ namespace CaeResults
             int count;
             string tmp3;
             string[] tmp2;
-            if (!double.TryParse(valueAsString, out value))
+            if (!double.TryParse(valueAsString, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
             {
                 // Try to repair values as:
                 // 1.090361-282  8.468565-284 -8.171595-285
@@ -1283,7 +1284,7 @@ namespace CaeResults
                     count = tmp3.Length - (tmp2[1].Length + 1);
                     valueAsString = tmp3.Substring(0, count) + "E" + tmp3.Substring(count, tmp2[1].Length + 1);
                     //
-                    if (!double.TryParse(valueAsString, out value)) value = double.NaN;
+                    if (!double.TryParse(valueAsString, NumberStyles.Float, CultureInfo.InvariantCulture, out value)) value = double.NaN;
                 }
                 else value = double.NaN;
             }

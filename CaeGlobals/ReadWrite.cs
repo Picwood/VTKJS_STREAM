@@ -37,6 +37,7 @@ namespace CaeGlobals
             if (numOfEntries <= -1) data = null;
             else
             {
+                if (numOfEntries > 100_000_000) throw new InvalidDataException("Binary integer array exceeds its limit.");
                 data = new int[numOfEntries];
                 for (int i = 0; i < data.Length; i++) data[i] = br.ReadInt32();
             }
@@ -60,6 +61,7 @@ namespace CaeGlobals
             if (numOfEntries <= -1) data = null;
             else
             {
+                if (numOfEntries > 100_000_000) throw new InvalidDataException("Binary floating-point array exceeds its limit.");
                 data = new double[numOfEntries];
                 for (int i = 0; i < data.Length; i++) data[i] = br.ReadDouble();
             }
@@ -83,6 +85,7 @@ namespace CaeGlobals
             if (numOfEntries <= -1) data = null;
             else
             {
+                if (numOfEntries > 10_000_000) throw new InvalidDataException("Binary jagged array exceeds its limit.");
                 data = new int[numOfEntries][];
                 for (int i = 0; i < data.Length; i++) ReadFromBinaryStream(out data[i], br);
             }

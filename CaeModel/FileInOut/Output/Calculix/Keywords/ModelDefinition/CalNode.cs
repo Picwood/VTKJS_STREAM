@@ -18,7 +18,7 @@ using CaeMesh;
 namespace FileInOut.Output.Calculix
 {
     [Serializable]
-    internal class CalNode : CalculixKeyword
+    internal partial class CalNode : CalculixKeyword
     {
         // Variables                                                                                                                
         private IDictionary<string, FeReferencePoint> _referencePoints;
@@ -30,19 +30,18 @@ namespace FileInOut.Output.Calculix
 
 
         // Constructor                                                                                                              
-        public CalNode(FeModel model, List<FeNode> additionalNodes,
-                       IDictionary<string, int[]> referencePointsNodeIds,
-                       Dictionary<int, double[]> deformations)
+        public CalNode(IDictionary<int, FeNode> nodes, IDictionary<string, FeReferencePoint> referencePoints,
+                       ModelSpaceEnum modelSpace, List<FeNode> additionalNodes,
+                       IDictionary<string, int[]> referencePointsNodeIds, Dictionary<int, double[]> deformations)
         {
-            _referencePoints = model.Mesh.ReferencePoints;
-            _nodes = model.Mesh.Nodes;
+            _nodes = nodes;
+            _referencePoints = referencePoints;
+            _modelSpace = modelSpace;
             _additionalNodes = new Dictionary<int, FeNode>();
             foreach (var node in additionalNodes) _additionalNodes.Add(node.Id, node);
-            _modelSpace = model.Properties.ModelSpace;
             _referencePointsNodeIds = referencePointsNodeIds;
             _deformations = deformations;
         }
-
 
         // Properties                                                                                                               
 
@@ -67,26 +66,26 @@ namespace FileInOut.Output.Calculix
                 {
                     if (_referencePoints.TryGetValue(entry.Key, out rp))
                     {
-                        sb.AppendFormat("{0}, {1:E8}, {2:E8}, {3:E8}", entry.Value[0], rp.X.Value,
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}, {3:E8}", entry.Value[0], rp.X.Value,
                                                                        rp.Y.Value, rp.Z.Value).AppendLine();
-                        sb.AppendFormat("{0}, {1:E8}, {2:E8}, {3:E8}", entry.Value[1], rp.X.Value,
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}, {3:E8}", entry.Value[1], rp.X.Value,
                                                                        rp.Y.Value, rp.Z.Value).AppendLine();
                     }
                     else
                     {
-                        sb.AppendFormat("{0}, {1:E8}, {2:E8}, {3:E8}", entry.Value[0], 0, 0, 0).AppendLine();
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}, {3:E8}", entry.Value[0], 0, 0, 0).AppendLine();
                     }
                 }
                 else if (_modelSpace.IsTwoD())
                 {
                     if (_referencePoints.TryGetValue(entry.Key, out rp))
                     {
-                        sb.AppendFormat("{0}, {1:E8}, {2:E8}", entry.Value[0], rp.X.Value, rp.Y.Value).AppendLine();
-                        sb.AppendFormat("{0}, {1:E8}, {2:E8}", entry.Value[1], rp.X.Value, rp.Y.Value).AppendLine();
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}", entry.Value[0], rp.X.Value, rp.Y.Value).AppendLine();
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}", entry.Value[1], rp.X.Value, rp.Y.Value).AppendLine();
                     }
                     else
                     {
-                        sb.AppendFormat("{0}, {1:E8}, {2:E8}", entry.Value[0], 0, 0).AppendLine();
+                        sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}", entry.Value[0], 0, 0).AppendLine();
                     }
                 }
                 else throw new NotSupportedException();
@@ -112,9 +111,9 @@ namespace FileInOut.Output.Calculix
                 }
                 //
                 if (_modelSpace == ModelSpaceEnum.ThreeD)
-                    sb.AppendFormat("{0}, {1:E8}, {2:E8}, {3:E8}", node.Id, node.X, node.Y, node.Z).AppendLine();
+                    sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}, {3:E8}", node.Id, node.X, node.Y, node.Z).AppendLine();
                 else if (_modelSpace.IsTwoD())
-                    sb.AppendFormat("{0}, {1:E8}, {2:E8}", node.Id, node.X, node.Y).AppendLine();
+                    sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0}, {1:E8}, {2:E8}", node.Id, node.X, node.Y).AppendLine();
                 else throw new NotSupportedException();
             }
         }

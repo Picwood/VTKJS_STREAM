@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 using CaeGlobals;
 using CaeMesh.Meshing;
 using DynamicTypeDescriptor;
-using GmshCommon;
 
 namespace CaeMesh
 {

@@ -72,7 +72,7 @@ namespace CaeMesh
             else _partType = PartType.Unknown;
         }
         public BasePart(BasePart part)
-            : base(part.Name, part.Labels.ToArray())
+            : base(part)
         {
             _partId = part.PartId;
             //
@@ -88,11 +88,11 @@ namespace CaeMesh
             //
             _smoothShaded = part.SmoothShaded;
             //
-            _boundingBox = part.BoundingBox.DeepClone();
+            _boundingBox = part.BoundingBox == null ? null : part.BoundingBox.DeepCopy();
             //
             if (part.Offset != null) _offset = part.Offset.ToArray();
             //
-            _massProperties = part.MassProperties.DeepClone();
+            _massProperties = part.MassProperties.DeepCopy();
         }
 
 

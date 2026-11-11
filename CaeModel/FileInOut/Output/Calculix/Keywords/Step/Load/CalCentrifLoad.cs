@@ -37,6 +37,17 @@ namespace FileInOut.Output.Calculix
         }
 
 
+        // Resolve export-only regions without cloning or modifying the model load.
+        public static CalCentrifLoad CreateForExport(CentrifLoad load, string regionName, ComplexLoadTypeEnum complexLoadType)
+        {
+            var snapshot = new CentrifLoad(load.Name, regionName, load.RegionType,
+                                      new[] { load.X.Value, load.Y.Value, load.Z.Value },
+                                      new[] { load.N1.Value, load.N2.Value, load.N3.Value },
+                                      load.RotationalSpeed.Value, load.TwoD, load.Axisymmetric, load.Complex, load.PhaseDeg.Value);
+            snapshot.AmplitudeName = load.AmplitudeName;
+            return new CalCentrifLoad(snapshot, complexLoadType);
+        }
+
         // Methods                                                                                                                  
         public override string GetKeywordString()
         {

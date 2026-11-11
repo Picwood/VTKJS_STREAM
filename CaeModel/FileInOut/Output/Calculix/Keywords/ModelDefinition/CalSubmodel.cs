@@ -39,7 +39,7 @@ namespace FileInOut.Output.Calculix
         public override string GetKeywordString()
         {
             if (_globalResultsFileName != null)
-                return string.Format("*Submodel, Type=Node, Input=\"{0}\"{1}", _globalResultsFileName.ToUTF8(), Environment.NewLine);
+                return string.Format("*Submodel, Type=Node, Input=\"{0}\"{1}", _globalResultsFileName, Environment.NewLine);
             else
                 throw new CaeException("Submodel BC: the file with the global result is not defined (Model -> Edit)");
         }

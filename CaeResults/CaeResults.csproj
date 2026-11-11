@@ -60,10 +60,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTypeEnum.cs" />
     <Compile Include="Enums\ComplexResultTypeEnum.cs" />
     <Compile Include="Enums\DeformationScaleFactorTypeEnum.cs" />
     <Compile Include="Enums\SlipWearResultsEnum.cs" />
     <Compile Include="FeResults.cs" />
+    <Compile Include="FeResults.Legacy.cs" />
     <Compile Include="FieldOutputNames.cs" />
     <Compile Include="FieldOutput\FieldResultFilter.cs" />
     <Compile Include="FieldOutput\ResultFieldOutput.cs" />
@@ -89,6 +91,8 @@
     <Compile Include="FileInOut\Input\CalculiX\FrdFeDescriptorId.cs" />
     <Compile Include="FileInOut\Input\CalculiX\DatFileReader.cs" />
     <Compile Include="FileInOut\Input\CalculiX\FrdFileReader.cs" />
+    <Compile Include="FileInOut\Input\CalculiX\FrdFileReader.Aggregate.cs" />
+    <Compile Include="FileInOut\Input\CalculiX\FrdFileData.cs" />
     <Compile Include="_Compatibility\v2.2.3\HistoryResultSetExporter.cs" />
     <Compile Include="HistoryOutputs\ResultHistoryOutput.cs" />
     <Compile Include="HistoryOutputs\ResultHistoryOutputFromElementSize.cs" />
