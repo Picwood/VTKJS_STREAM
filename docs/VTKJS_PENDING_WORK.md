@@ -14,8 +14,8 @@ This is the durable handoff for work intentionally not claimed by the current MV
 | PEND-012 | P0 | Complete (2026-09-02) | Desktop bootstrap/client | Resynchronize WebView after first late non-empty topology |
 | PEND-004 | P1 | Ongoing migration | PrePoMax adapter/client | Retire remaining hidden ActiViz compatibility backend |
 | PEND-005 | P1 | Requires interactive reviewer | Desktop integration | Manual visual acceptance on representative models |
-| PEND-006 | P1 | Decision deferred | Desktop/platform | Linux desktop shell and embedded-WebView selection |
-| PEND-007 | P1 | Follows PEND-006 | Packaging/platform | Installers, redistribution, and GPU support matrix |
+| PEND-006 | P1 | Complete (2026-10-22) | Desktop/platform | Linux desktop shell and embedded-WebView selection |
+| PEND-007 | P1 | GTK selected; clean Ubuntu install/upgrade/purge complete | Packaging/platform | Installers, redistribution, and GPU support matrix |
 | PEND-008 | P2 | Ready in supported browsers | Client recovery | Golden-image and WebGL context-loss/OOM automation |
 | PEND-009 | P2 | Ready incrementally | Tests/contracts/server | Residual test-matrix hardening |
 | PEND-010 | P3 | Conditional | Animation protocol | Retained displacement-basis transport |
@@ -72,7 +72,7 @@ Status-block and shared result-widget positioning ownership was retired on 2026-
 
 Smoothing and highlight-setting ownership was retired on 2026-09-08. Retained normalized state drives primary, secondary, and mouse browser affordances and updates existing retained selection construction. Point/line preferences no longer recreate hidden ActiViz; WebGL's context antialiasing is the documented rasterization semantic because its API has no VTK 5.8 toggle equivalent. User-pick activation/deactivation and hover behavior are next. Evidence: [graphics interaction settings](../prototypes/VtkJsStreaming/docs/evidence/graphics-interaction-settings-retirement.md).
 
-Operational status and the distinction between VTK.js visible rendering and a physically ActiViz-free executable are documented in [VTK.js launch and remaining ActiViz dependency](VTKJS_ACTIVIZ_STATUS.md). ActiViz assemblies are still required at startup today.
+Operational status and the distinction between VTK.js visible rendering and a physically ActiViz-free executable are documented in [VTK.js launch and remaining ActiViz dependency](VTKJS_ACTIVIZ_STATUS.md). ActiViz assemblies are still required when starting the original Windows `PrePoMax.exe`; the separate native GTK Linux package does not contain or reference them.
 
 Non-pickable base auxiliary construction was retired on 2026-09-04. Surfaces use retained scene resources; points and lines use a separate persistent browser-primitive ownership set that survives selection clear and supports visibility, rename, removal, navigation replay, and full-scene cleanup. The VTK.js OpenFOAM seam bypasses `vtkOpenFOAMReader` and lets the existing managed `polyMesh` boundary reader submit faces and unique edges through those routes. This does not claim native-reader volumetric/internal-cell parity or 3MF/transformation projection for persistent primitives. Evidence: [auxiliary/OpenFOAM construction](../prototypes/VtkJsStreaming/docs/evidence/auxiliary-openfoam-construction-retirement.md).
 
@@ -94,15 +94,57 @@ Review: camera views and fit; contours/legend/extrema; transparency and overlap;
 
 Completion evidence: reviewer/date, OS/GPU/browser/DPI, screenshots or short capture, model/field/frame identifiers, discrepancy list with severity, and explicit accept/reject disposition linked from the MVP acceptance table.
 
+The portable Linux path now provides a reproducible per-frame evidence bundle;
+see [Linux result-reference capture](LINUX_RESULT_REFERENCE_CAPTURE.md). The
+supplied BRAKE step-1/increment-4 MISES frame has exact field and scene topology
+evidence plus a SwiftShader image. This prepares one PEND-005 review input; it
+does not substitute for the human original-application comparison or the other
+listed model families.
+
 ## PEND-006 — Linux desktop shell and WebView decision
 
-Why open: the renderer server/client are cross-platform, but the copied PrePoMax shell is WinForms/WebView2 and remains Windows-specific.
+Completed: GTK 3 with distribution WebKitGTK 4.1 is selected as the production
+Linux shell. Chromium/Playwright remains an automated renderer reference and is
+not a shipped runtime dependency. The GTK host now uses `Gtk.Application` with
+the stable desktop/AppStream application ID, owns its companion/renderer/job
+lifecycle, and ships through the reproducible Debian package.
 
-Completion evidence: time-boxed spikes for at least the leading shell/WebView candidates; input, clipboard, dialogs, file access, accessibility, GPU/WebGL, process ownership, redistribution, and update behavior measured; ADR selects or rejects a path; representative renderer and domain workflow runs on native Linux.
+Completion evidence satisfied: time-boxed spikes covered both leading hosts;
+input, clipboard, dialogs, file access, accessibility, GPU/WebGL, process
+ownership, redistribution and update behavior were measured; the ADR selects
+GTK; representative renderer and domain workflows run on native Linux.
+
+The accepted [decision record](LINUX_SHELL_CANDIDATES.md) compares both hosts
+and records native dialogs, file access, clipboard, accessibility groundwork,
+Wayland scheduling, recovery, process ownership, package installation/upgrade
+and representative domain workflows. DRM-backed WebGL 2 acceptance passes on
+X11 and Wayland using the integrated Intel GPU; forced software rendering is
+rejected. Large-model/device-matrix benchmarks, visual review, signing/updates,
+screen-reader and mixed-monitor qualification remain under their dedicated
+gates rather than reopening the framework choice.
 
 ## PEND-007 — Packaging and GPU support matrix
 
-Starts after PEND-006. Produce Windows/Linux installers, self-contained server/client packaging, WebView/runtime redistribution policy, signed update/uninstall behavior, and a tested GPU/browser/driver matrix including integrated, discrete, software fallback, and actionable unsupported-device behavior.
+With PEND-006 complete, produce Windows/Linux installers, self-contained server/client packaging, WebView/runtime redistribution policy, signed update/uninstall behavior, and a tested GPU/browser/driver matrix including integrated, discrete, software fallback, and actionable unsupported-device behavior.
+
+Early Linux artifact work now produces a relocatable checksum-manifested archive
+with private .NET 10 and ASP.NET Core runtimes, their notices, the GTK launcher,
+published companion/converter/server and built client. Private-runtime preflight
+and X11 rendering pass after extraction with external .NET hidden. The locked
+client passes 92 tests, production build and a zero-vulnerability npm audit. A
+reproducible Debian/Ubuntu amd64 package now installs that payload, declares
+distribution Python/GTK/WebKit dependencies and registers the desktop entry,
+AppStream metadata and PMA/PMX MIME types. Extracted-package preflight and X11
+rendering pass. Fresh Ubuntu 24.04 dependency resolution, installation,
+private-runtime preflight, generated desktop/MIME caches and complete package
+upgrade/purge now pass in a disposable container and have a dedicated CI
+workflow. The higher-version replacement repeats checksums, runtime and
+   integration validation while preserving XDG job state. The package recommends
+   Ubuntu's `calculix-ccx` and `gmsh`; the same clean container validates an
+   analytical CalculiX 2.21 C3D8 solve and STEP-to-editable-PMA generation through
+   distribution Gmsh before application replacement, then revalidates tool
+   discovery after upgrade. Signed updates, remaining native tools and the full
+   GPU/distro matrix remain open, so PEND-007 is not complete.
 
 The Windows package must also source and stage the correctly licensed/architected native `lib3mf.dll`; the managed wrapper currently exists without that runtime dependency. Acceptance must create and inspect a nonempty 3MF archive from retained VTK.js export input.
 

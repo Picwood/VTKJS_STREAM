@@ -1,0 +1,4403 @@
+{
+  "schema_version": 1,
+  "updated": "2026-11-09",
+  "path_base": "repository-root",
+  "scope": "Prepomac functional parity in the browser; external solving for release 1.",
+  "claim": "Planning registry. Mapping a reference source is not evidence that its assertions have passed against the web implementation.",
+  "baseline": {
+    "full_source_capture_complete": true,
+    "desktop_scripts": 74,
+    "declared_desktop_runs": 77,
+    "offline_reference_checks": [
+      "Audit_API_Coverage.py",
+      "Audit_API_Documentation.py",
+      "test_runner_offline.py"
+    ],
+    "custom_verification_scripts": 15,
+    "reference_test_hashes_captured": true,
+    "note": "The completed M00 execution is pinned to its dated 2026-11-06 capture. Current source inventory includes three later custom verifiers, recorded as not_run; a full current-reference baseline extension is pending. Current material slices use their own source/runtime captures and bounded differential runs.",
+    "reference_baseline_executed": false,
+    "evidence": [
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/summary.json"
+    ],
+    "inventory_updated": "2026-11-09",
+    "current_reference_extension_executed": false,
+    "pending_reference_extensions": [
+      "macOS/verify-virtual-friction.py",
+      "macOS/verify-automatic-virtual-friction.py",
+      "macOS/verify-dialog-layout.py"
+    ],
+    "historical_reference_baseline_executed": true
+  },
+  "releases": [
+    {
+      "id": "R0",
+      "name": "Existing local pilot",
+      "status": "implemented_subset",
+      "required_milestones": [],
+      "note": "Existing smoke/Chromium evidence does not mark planned differential parity cases passed."
+    },
+    {
+      "id": "R1",
+      "name": "Hosted static-solid pre/post with external solving",
+      "status": "planned",
+      "required_milestones": [
+        "M00",
+        "M01",
+        "M02",
+        "M03",
+        "M04",
+        "M05",
+        "M06"
+      ]
+    },
+    {
+      "id": "R2",
+      "name": "Geometry, broader definitions and advanced post-processing",
+      "status": "planned",
+      "required_milestones": [
+        "M07",
+        "M08",
+        "M09"
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "Qualified Prepomac parity",
+      "status": "planned",
+      "required_milestones": [
+        "M10",
+        "M11",
+        "M12",
+        "M13",
+        "M14"
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M00",
+      "title": "Reference baseline and comparison harness",
+      "depends_on": [],
+      "stream": "baseline",
+      "status": "in_progress",
+      "completion_evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/summary.json"
+      ]
+    },
+    {
+      "id": "M01",
+      "title": "Shared operations, commands and lossless project contracts",
+      "depends_on": [
+        "M00"
+      ],
+      "stream": "foundation",
+      "status": "in_progress",
+      "completion_evidence": []
+    },
+    {
+      "id": "M02",
+      "title": "Durable owned workspaces and artifact lifecycle",
+      "depends_on": [
+        "M01"
+      ],
+      "stream": "foundation",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M03",
+      "title": "Model tree, viewport selection and interaction",
+      "depends_on": [
+        "M01"
+      ],
+      "stream": "preprocess",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M04",
+      "title": "Mesh import/append, regions and mesh maintenance",
+      "depends_on": [
+        "M03"
+      ],
+      "stream": "preprocess",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M05",
+      "title": "Complete static-solid model authoring",
+      "depends_on": [
+        "M04"
+      ],
+      "stream": "preprocess",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M06",
+      "title": "External-solver handoff and core post-processing",
+      "depends_on": [
+        "M05"
+      ],
+      "stream": "release_1",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M07",
+      "title": "Geometry and meshing parity",
+      "depends_on": [
+        "M04"
+      ],
+      "stream": "geometry",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M08",
+      "title": "Broader definitions, analysis types and solver settings",
+      "depends_on": [
+        "M05",
+        "M06",
+        "M02"
+      ],
+      "stream": "model_breadth",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M09",
+      "title": "Advanced results, histories and presentation",
+      "depends_on": [
+        "M06"
+      ],
+      "stream": "postprocess",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M10",
+      "title": "Composites and material orientation workflows",
+      "depends_on": [
+        "M08",
+        "M09"
+      ],
+      "stream": "composites",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M11",
+      "title": "Prepomac custom mechanical and result tools",
+      "depends_on": [
+        "M04",
+        "M05",
+        "M06"
+      ],
+      "stream": "custom",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M12",
+      "title": "Fatigue workspace and calculation handoff",
+      "depends_on": [
+        "M09"
+      ],
+      "stream": "fatigue",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M13",
+      "title": "Python/API, journal and automation parity",
+      "depends_on": [
+        "M01"
+      ],
+      "stream": "automation",
+      "status": "planned",
+      "completion_evidence": []
+    },
+    {
+      "id": "M14",
+      "title": "Integrated Prepomac parity and production qualification",
+      "depends_on": [
+        "M02",
+        "M07",
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13"
+      ],
+      "stream": "final",
+      "status": "planned",
+      "completion_evidence": []
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "M00-T01",
+      "milestone": "M00",
+      "title": "Freeze and inventory the current reference working tree",
+      "status": "in_progress",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Run_Tests.py",
+        "APIs/Python/Test_Scripts/Audit_API_Coverage.py",
+        "APIs/Python/Test_Scripts/Audit_API_Documentation.py",
+        "APIs/Python/Test_Scripts/test_runner_offline.py"
+      ],
+      "fixtures": [
+        "Current root working tree, including untracked custom sources; all collected script headers"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Record Git HEAD, dirty/untracked state and SHA-256 of relevant source/test/fixture/build inputs; record SDK, tools, browser and hardware.",
+        "Inventory every declared run, expected exit/report condition and generated-fixture dependency; never count a script name as one run when its header declares several.",
+        "A missing, newly added or changed reference test is surfaced for review rather than silently omitted."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "The original 2026-11-06 baseline was completed and its immutable evidence is retained. The current reference inventory added virtual-friction and dialog-layout verifiers; M00 is reopened for that extension. Current sources/runtime are captured for the material slice, but three new reference verifiers remain not_run.",
+      "implementation_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/capture-prepomac-baseline.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-prepomac-custom-baseline.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/record-parity-evidence.py"
+      ],
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/summary.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-identity-2026-11-09/REPORT.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-identity-2026-11-09/summary.json"
+      ]
+    },
+    {
+      "id": "M00-T02",
+      "milestone": "M00",
+      "title": "Establish the dual-adapter comparison protocol",
+      "status": "passed",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Document.py",
+        "APIs/Python/Test_Scripts/Test_Selection_Correctness.py",
+        "APIs/Python/Test_Scripts/Test_Result_Field_Outputs.py",
+        "APIs/Python/Test_Scripts/Test_Model_Materials_Sections.py"
+      ],
+      "fixtures": [
+        "One document/property case, one sparse-ID selection case and one fixed FRD field case"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Reference and web adapters emit the same versioned semantic snapshots keyed by source IDs and explicit units.",
+        "Deliberately change one selected ID, one material value and one result value; each comparator must fail and identify the differing path.",
+        "Separate passed, failed, not-run, blocked and explicitly excluded outcomes; no blanket skip-to-pass."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-web-parity.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/compare.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/reference_snapshot.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectParitySnapshot.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/ParityEndpoints.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/Parity.Probe/Program.cs"
+      ],
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/harness-summary.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/model-comparison.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/field-comparison.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/harness-wrong-property.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/harness-wrong-material-value.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/harness-wrong-source-id.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/harness-wrong-field-value.json"
+      ]
+    },
+    {
+      "id": "M01-T01",
+      "milestone": "M01",
+      "title": "Shared model operations and replacement semantics",
+      "status": "in_progress",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Api_Session_Rules.py",
+        "APIs/Python/Test_Scripts/Test_Model_Definition_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Model_Materials_Sections.py",
+        "APIs/Python/Test_Scripts/Test_Model_Readback_Equations.py"
+      ],
+      "fixtures": [
+        "Prepared static model plus one unsupported/custom definition"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "A replace keeps every unspecified property and expression as Prepomac does.",
+        "The shared gateway validates a complete operation before publication; rejected operations preserve current model, revision and references.",
+        "An unrelated edit preserves unsupported fields or is refused before changing the project; no silent narrowing of the model schema."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "Material patch/rename plus typed constant-elastic creation, solid-section assignment and unused removal/recreation qualified. Material IDs persist; source rename-section discrepancy remains explicit. Other entity IDs, broader definitions/equations, PMX and journal/script gates remain open.",
+      "implementation_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectCommandSession.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectMaterials.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/Workspace.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/Program.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectCommandChecks.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-material-command-parity.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/M01_MATERIAL_COMMANDS.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Persistence/ProjectMaterialIdentities.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Persistence/StaticProjectArchive.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Persistence/AnalysisArchive.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectMaterialIdentityChecks.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-material-identity-parity.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectMaterialLifecycleChecks.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-material-lifecycle-parity.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/reference_material_lifecycle.py"
+      ],
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-material-2026-11-06/REPORT.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-material-2026-11-06/summary.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-identity-2026-11-09/REPORT.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-identity-2026-11-09/summary.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-lifecycle-2026-11-09/REPORT.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-lifecycle-2026-11-09/summary.json"
+      ]
+    },
+    {
+      "id": "M01-T02",
+      "milestone": "M01",
+      "title": "PMX/PMA compatibility, protection and atomic reopen",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-pmx-compatibility.py",
+        "macOS/verify-custom-features.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/StaticProjectChecks.cs"
+      ],
+      "fixtures": [
+        "Current PMX, older Windows command fixture, truncated/protected files, custom definitions and embedded results"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Preserve model IDs, connectivity, typed definitions, history, cylinders, fatigue and results where present.",
+        "Verify cross-open against Prepomac for each claimed PMX direction; PMA semantic equality alone is not PMX interoperability.",
+        "Wrong key, modified protection wrapper, partial stream and unsupported command/layout leave the open project intact.",
+        "Keep keys out of URLs, logs, saved state and journals."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M01-T03",
+      "milestone": "M01",
+      "title": "Command identity, transactions and replay foundation",
+      "status": "in_progress",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Rpc_Live_Session.py",
+        "APIs/Python/Test_Scripts/Test_Record_And_Run_History_Output.py"
+      ],
+      "fixtures": [
+        "Create/replace/rename/remove commands, undo branches and a deliberately failing multi-operation transaction"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "A UI/API mutation records one domain command with source revision and stable object identity.",
+        "Undo/redo restores object state, references and result validity; discarded redo does not reappear.",
+        "Define Prepomac partial-script-failure semantics separately from atomic single-operation rejection; do not silently roll back or replay a different history.",
+        "Snapshot history is not treated as journal/regeneration parity."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "Material patch/rename plus typed constant-elastic creation, solid-section assignment and unused removal/recreation qualified. Material IDs persist; source rename-section discrepancy remains explicit. Other entity IDs, broader definitions/equations, PMX and journal/script gates remain open.",
+      "implementation_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectCommandSession.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectMaterials.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/Workspace.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/Program.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectCommandChecks.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-material-command-parity.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/M01_MATERIAL_COMMANDS.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Persistence/ProjectMaterialIdentities.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Persistence/StaticProjectArchive.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Persistence/AnalysisArchive.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectMaterialIdentityChecks.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-material-identity-parity.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectMaterialLifecycleChecks.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-material-lifecycle-parity.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/reference_material_lifecycle.py"
+      ],
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-material-2026-11-06/REPORT.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-material-2026-11-06/summary.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-identity-2026-11-09/REPORT.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-identity-2026-11-09/summary.json",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-lifecycle-2026-11-09/REPORT.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M01-lifecycle-2026-11-09/summary.json"
+      ]
+    },
+    {
+      "id": "M02-T01",
+      "milestone": "M02",
+      "title": "Durable revisions, restart and artifact recovery",
+      "status": "planned",
+      "reference_mode": "web_only",
+      "reference_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectServiceChecks.cs"
+      ],
+      "fixtures": [
+        "Two saved projects with revisions and referenced source/result files; interrupted publication"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Restart and reconnect restore the last committed revision, tree selection and valid artifact references.",
+        "Crash before/after atomic revision publication exposes either the old complete revision or the new complete revision, never a mixture.",
+        "Download/reopen produces the same semantic model and result association; garbage collection never deletes a referenced revision/artifact."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "Durable multi-user service behavior has no direct desktop-equivalent test; desktop project preservation remains the semantic reference.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M02-T02",
+      "milestone": "M02",
+      "title": "Ownership and every artifact/resource access boundary",
+      "status": "planned",
+      "reference_mode": "web_only",
+      "reference_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py"
+      ],
+      "fixtures": [
+        "Two authenticated owners, two projects per owner, anonymous and expired sessions"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Cross-owner enumeration/read/write/download/history/scene/resource/job/diagnostic requests fail without revealing protected project content.",
+        "Stale revisions, CSRF, wrong-origin requests and expired credentials are rejected without mutation.",
+        "Renderer host credentials and private filesystem paths are absent from browser payloads, URLs and error bodies."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "This is an online release requirement, not a claim that desktop Prepomac has multi-user ownership.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M02-T03",
+      "milestone": "M02",
+      "title": "Admission, cancellation and cleanup",
+      "status": "planned",
+      "reference_mode": "web_only",
+      "reference_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectServiceChecks.cs"
+      ],
+      "fixtures": [
+        "Oversize/expanded uploads, abandoned sessions, full workspace pool, cancelled parser/mesh/renderer tasks"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Configured compressed/expanded/model/process/disk quotas are enforced before committing a revision; retention limits cannot discard the current project.",
+        "Cancellation/timeout reports its actual outcome, terminates owned work and preserves the last committed project.",
+        "Reconnect and retry are idempotent or use explicit new operation IDs; leaked processes/files and cross-project result caches are detected."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "Use small deterministic resource-limit fixtures; large-model qualification is a separate case.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M03-T01",
+      "milestone": "M03",
+      "title": "Model-tree identity and object actions",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Keyword_Tree_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Model_Parts.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectModelTreeChecks.cs"
+      ],
+      "fixtures": [
+        "Populated Model tree with empty collections, identical names in different steps and references"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match required branch labels/order/parentage and stable object identity across refresh and rename.",
+        "Create/edit/duplicate/rename/remove/activate/show/hide actions attach to the correct object/collection; unavailable actions are explicit.",
+        "Selection and expansion survive edits, refresh, undo and reopen without selecting the wrong step-local object."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M03-T02",
+      "milestone": "M03",
+      "title": "Source-ID picking and selection algebra",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Selection_Correctness.py",
+        "APIs/Python/Test_Scripts/Test_Selection_Pick.py",
+        "APIs/Python/Test_Scripts/Test_Api_Topology.py"
+      ],
+      "fixtures": [
+        "Sparse/large source IDs, coincident faces, hidden parts, transformed/large-origin model and a known cube"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Node/element/edge/face/part/angle and rectangle selection resolves the same authoritative ID membership as Prepomac.",
+        "Add/subtract/intersect/invert/all/clear/undo and selection precision follow the reference semantics; hiding a part does not rewrite an already stored selection.",
+        "Reject stale topology or client-supplied invalid memberships; preview limits never silently truncate saved region membership."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M03-T03",
+      "milestone": "M03",
+      "title": "Navigation and graphics interaction",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-navigation.py"
+      ],
+      "fixtures": [
+        "Known camera poses; pointer release outside viewport; repeated/mixed mouse chords and view reset"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match the supported Prepomac navigation modes and release/capture behavior using actual browser pointer events.",
+        "Camera orientation, projection, recenter/fit and selection coexist; page scrolling or context menus do not leave a stuck drag.",
+        "Use geometric/camera assertions plus screenshots; report any browser/platform input adaptation explicitly."
+      ],
+      "comparison_policy": "geometry-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M04-T01",
+      "milestone": "M04",
+      "title": "Mesh import and append with reference remapping",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Document.py",
+        "APIs/Python/Test_Scripts/Test_Model_Parts.py",
+        "APIs/Python/Test_Scripts/Test_Model_Mesh_Tools.py",
+        "APIs/Python/Test_Scripts/Test_Model_Export_Sources.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectMeshImportChecks.cs"
+      ],
+      "fixtures": [
+        "Mesh fixtures with sparse IDs, same-name parts/sets, duplicate node/element IDs and linear/quadratic element types"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Import the same supported source definitions; full deck import must not be mislabeled as mesh-only import.",
+        "Append preserves existing model definitions and remaps every affected ID/name/reference explicitly; coincident nodes are not silently welded.",
+        "Failed append leaves the original project and original export unchanged; save/reopen preserves combined connectivity and assignments."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M04-T02",
+      "milestone": "M04",
+      "title": "Node/element set lifecycle",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Node_Sets.py",
+        "APIs/Python/Test_Scripts/Test_Model_Regions.py",
+        "APIs/Python/Test_Scripts/Test_Model_Region_Coverage.py"
+      ],
+      "fixtures": [
+        "Overlapping sets, part-derived sets, picked/ID/range selections and dependent sections/loads"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match exact membership and create/replace/rename/duplicate/remove outcomes including namespace collisions.",
+        "Renames update typed references; duplicates are independent; removal handles dependents as the reference does.",
+        "Unrelated edits, undo/redo, save/reopen and exported region references remain equivalent."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M04-T03",
+      "milestone": "M04",
+      "title": "Surfaces, reference points and coordinate systems",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Regions.py",
+        "APIs/Python/Test_Scripts/Test_Model_Region_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Api_Topology.py"
+      ],
+      "fixtures": [
+        "Element/node surfaces, internal backing regions, coordinates and reference-point-dependent definitions"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Preserve element-face labels, normals, area and node membership; distinguish node and element surfaces and validate compatible consumers.",
+        "Create/edit/rename/duplicate/remove maintains backing-set ownership, local axes and dependent definitions.",
+        "Picking plus serialization/export matches the reference; invalid or stale source faces cannot create partial regions."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M04-T04",
+      "milestone": "M04",
+      "title": "Mesh transforms, quality and command-backed recovery",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Mesh_Tools.py",
+        "APIs/Python/Test_Scripts/Test_Model_Inverted_Elements.py",
+        "APIs/Python/Test_Scripts/Test_Custom_Feature_API.py",
+        "macOS/verify-custom-features.py"
+      ],
+      "fixtures": [
+        "Inverted/degenerate elements; diagnostic sets; transformed copied parts and shared regions"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Identify the same bad elements and retain diagnostic identity.",
+        "Element deletion updates parts, sets, surfaces and dependent validity; undo/redo restores/reapplies exactly.",
+        "Transforms/copies retain intended connectivity and region relationships; source parts remain unchanged when copy is requested."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M05-T01",
+      "milestone": "M05",
+      "title": "Static materials, solid sections and assignment precedence",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Materials_Sections.py",
+        "APIs/Python/Test_Scripts/Test_Model_Definition_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Model_Readback_Equations.py"
+      ],
+      "fixtures": [
+        "Elastic/density/plastic models, material references, overlapping solid section regions and orphan elements"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match material values/expressions, table ordering and solid-section properties.",
+        "Exercise create/replace/rename/duplicate/remove/activation and reference/coverage behavior; preserve unspecified values.",
+        "Compare equivalent active section coverage and CalculiX material/section keyword blocks; errors do not mutate the model."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M05-T02",
+      "milestone": "M05",
+      "title": "Static steps, mechanical supports/loads and propagation",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Steps.py",
+        "APIs/Python/Test_Scripts/Test_Model_BCs.py",
+        "APIs/Python/Test_Scripts/Test_Model_Loads.py",
+        "APIs/Python/Test_Scripts/Test_Model_Readback_Equations.py"
+      ],
+      "fixtures": [
+        "Static subset of the reference scripts; fixed/translational supports, forces/traction/pressure/gravity/centrifugal and two steps"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match static controls, equation readback, step order, copied/propagated definitions and independent later edits.",
+        "Verify per-node force versus total surface force, signs, axes, frames and units; export the same physical loading.",
+        "Exercise invalid type/region/value and removal/activation cases; do not count non-static script branches as covered here."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M05-T03",
+      "milestone": "M05",
+      "title": "Reference-dependent constraints and contact authoring",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Constraints.py",
+        "APIs/Python/Test_Scripts/Test_Model_Interactions.py"
+      ],
+      "fixtures": [
+        "Ties, rigid bodies, reference points, ordinary springs, master/slave surfaces and contact interactions"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Create/edit/duplicate/rename/remove supported static constraints/contact types using the same compatible region/reference-point forms.",
+        "Master/slave identity, tolerance, adjustment, orientation, interaction options and dependent history references survive reopen/export.",
+        "Invalid/overlapping/missing references are refused with no partial commands; pressure-dependent springs remain M11."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M05-T04",
+      "milestone": "M05",
+      "title": "Outputs, parameters, keywords and equations",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Outputs.py",
+        "APIs/Python/Test_Scripts/Test_Model_Document.py",
+        "APIs/Python/Test_Scripts/Test_Model_Readback_Equations.py",
+        "APIs/Python/Test_Scripts/Test_Model_Keyword_Tree_Coverage.py"
+      ],
+      "fixtures": [
+        "Nodal/element/contact fields; history output regions; parameters and positional user keywords"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match static output variables/flags, region scoping and propagation order.",
+        "Preserve original expressions instead of substituting evaluated values on edit/reopen.",
+        "Retain keyword insertion order and references; unsupported remapping is explicitly refused, never silently dropped."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M06-T01",
+      "milestone": "M06",
+      "title": "Export handoff and external analytic solve",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Analysis.py",
+        "APIs/Python/Test_Scripts/Test_Job_Correctness.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-native-calculix.py"
+      ],
+      "fixtures": [
+        "Same authored desktop/web cube plus analytic cube E=1000, nu=0 and total x force=1"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Compare normalized solver input while preserving physical keyword order and values.",
+        "Run both inputs externally with the same recorded solver/build/settings; retain inputs, stdout/stderr, FRD/DAT and exit conditions.",
+        "For the analytic cube U1=0.001 on the loaded face; preserve source tolerance rel=1e-5, abs=1e-10 and near-zero transverse components.",
+        "Compare the Test_Analysis model against its own reference outputs; do not substitute the different analytic-cube setup."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M06-T02",
+      "milestone": "M06",
+      "title": "FRD/DAT import, revision association and standalone result opening",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Result_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Analysis.py",
+        "APIs/Python/Test_Scripts/Test_Model_Export_Sources.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py"
+      ],
+      "fixtures": [
+        "Matching/mismatching FRD; DAT from a known run; changed-load same-mesh project; standalone result and embedded PMX results"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match supported result names, fields/components, frames, times, units, IDs and standalone-result behavior.",
+        "Reject mismatching topology/units where known; keep claimed export-revision association separate from mesh compatibility.",
+        "A raw FRD with identical mesh does not prove material/load provenance: show that limitation unless the external handoff receipt is verified.",
+        "Result replacement and unrelated edits follow explicit invalidation rules; failed import preserves current model/result state."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M06-T03",
+      "milestone": "M06",
+      "title": "Field values, deformation and rendering baseline",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Api_View_Results.py",
+        "APIs/Python/Test_Scripts/Test_Result_Coverage.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectResultChecks.cs"
+      ],
+      "fixtures": [
+        "Fixed immutable cube/two-step FRD, undeformed and positive/negative/zero displacement scales"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Compare all field values by node/element and component IDs, units, frame identity, extrema and missing-value mask.",
+        "Same artifact decoding uses exact equality; analytic/derived expectations retain their source-specific tolerances.",
+        "Verify deformed coordinates x+scale*U, scalar values independent of scale, zero-scale restoration and visible scalar legend/range."
+      ],
+      "comparison_policy": "field-numerical-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M06-T04",
+      "milestone": "M06",
+      "title": "Raw histories, plots and first hosted release workflow",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Result_History_Outputs.py",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectHistoryResultChecks.cs",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py"
+      ],
+      "fixtures": [
+        "Raw nodal/contact histories and aligned columns; a full authored/imported mesh model and external solve"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match the raw-history subset: set/field/component names, timestamps, values, units, alignment, plotting data and delimited export.",
+        "Complete login/open/import/select/author/export/external solve/upload/inspect/save/restart/reopen without desktop-only steps.",
+        "Derived history expressions/transforms are tracked under M09; pass M02 ownership/recovery before calling this an online release."
+      ],
+      "comparison_policy": "field-numerical-visual",
+      "additional_dependencies": [
+        "M02"
+      ],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M07-T01",
+      "milestone": "M07",
+      "title": "Geometry import, metadata, transforms and assembly exports",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Geometry_Metadata.py",
+        "APIs/Python/Test_Scripts/Test_Model_Geometry_Transform.py",
+        "APIs/Python/Test_Scripts/Test_Model_Export_Geometry_Assembly.py",
+        "APIs/Python/Test_Scripts/Test_Model_Export_Sources.py"
+      ],
+      "fixtures": [
+        "Actual CAD/STL fixtures declared in reference headers; multi-part assemblies and units"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match part identity, dimensions/topology/measurements and supplemental metadata across supported import/export formats.",
+        "Move/rotate/mirror/scale preserves expected IDs/names and copied/moved source semantics.",
+        "Check joined/per-part assembly exports by semantic geometry, not raw file byte order."
+      ],
+      "comparison_policy": "geometry-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M07-T02",
+      "milestone": "M07",
+      "title": "Geometry editing, splitting and repair",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Split_Geometry.py",
+        "APIs/Python/Test_Scripts/Test_Model_Split_Periodic_Faces.py",
+        "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Compound.py",
+        "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Fuse.py",
+        "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Group.py",
+        "APIs/Python/Test_Scripts/Test_Model_Group_Cells_Plain_Compound.py",
+        "APIs/Python/Test_Scripts/Test_Model_Offset_Face.py",
+        "APIs/Python/Test_Scripts/Test_Model_Delete_Cad_Faces.py",
+        "APIs/Python/Test_Scripts/Test_Model_Defeature.py",
+        "APIs/Python/Test_Scripts/Test_Model_Fuse_Faces_Repair.py"
+      ],
+      "fixtures": [
+        "Exact BREP split/periodic/compound/hole/offset fixtures declared in the scripts"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match geometry operations, selected topology, result part/solid/shell classifications, measurements and metadata.",
+        "Preserve semantic selection binding or fail stale topology; do not assert CAD repair succeeded when the reference only reports a warning.",
+        "Cancel/failure preserves source geometry; changed native kernel versions require explicit baseline review."
+      ],
+      "comparison_policy": "geometry-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M07-T03",
+      "milestone": "M07",
+      "title": "Mesher settings, shells and native job lifecycle",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Meshing.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Validity.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Mmg.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Shell_Types.py"
+      ],
+      "fixtures": [
+        "Reference geometry/STL fixtures and each supported mesher with recorded versions"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match create/replace validation and retained mesh settings; preserve unspecified region/options and selected element families.",
+        "Compare documented topology/quality/coverage invariants, boundary mapping and exported engineering response; use exact connectivity only when deterministic.",
+        "Cancel/timeout/failure cleans owned native processes and preserves previous mesh; unavailable tools are blocked, not passed."
+      ],
+      "comparison_policy": "meshing-semantic",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M07-T04",
+      "milestone": "M07",
+      "title": "Sweep, revolve, transfinite and mixed-cell mapping",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Revolve.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Split_Cells.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Sweep_Compound.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Sweep_Transfinite.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Three_Block_Mapping.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Transfinite_Frame.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Transfinite_Prism.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_Netgen_Transfinite.py",
+        "APIs/Python/Test_Scripts/Test_Model_Meshing_QuadWild_Transfinite.py",
+        "APIs/Python/Test_Scripts/Test_Workflow_Geometry_To_Result.py"
+      ],
+      "fixtures": [
+        "Sweep/revolve/prism/frame/compound BREP fixtures; reference cube.stl workflow"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Retain the exact test invariants for shared boundaries, structured sides/divisions, cell groups, element types and no orphan/inverted elements.",
+        "Compare per-mesher expected semantic outputs and numerical response; do not demand identical numbering across different mesher builds.",
+        "Complete geometry-to-model/export/external solve/results/save/reopen and preserve geometry metadata."
+      ],
+      "comparison_policy": "meshing-semantic",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M08-T01",
+      "milestone": "M08",
+      "title": "Remaining material/section types and model definitions",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Materials_Sections.py",
+        "APIs/Python/Test_Scripts/Test_Model_Fields.py",
+        "APIs/Python/Test_Scripts/Test_Model_Definition_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Model_Readback_Equations.py"
+      ],
+      "fixtures": [
+        "All non-composite source branches: temperature tables, shells/membranes/masses, fields, amplitudes/distributions and initial conditions"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Complete each source-supported subtype/property rather than treating the static-solid subset as full script parity.",
+        "Preserve units, table order, equations, coordinate systems and reference-dependent semantics.",
+        "Compare model snapshots and keyword output before/after replace/rename/reopen; run reference numerical fixtures where defined."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M08-T02",
+      "milestone": "M08",
+      "title": "Non-static steps, thermal and remaining loads/supports",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Steps.py",
+        "APIs/Python/Test_Scripts/Test_Model_BCs.py",
+        "APIs/Python/Test_Scripts/Test_Model_Loads.py",
+        "APIs/Python/Test_Scripts/Test_Model_Outputs.py",
+        "APIs/Python/Test_Scripts/Test_Journal_Mesh_Setup.py"
+      ],
+      "fixtures": [
+        "Each source-defined step/control/load/support/defined-field branch and thermal examples"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Cover the step and definition types enumerated by the current scripts, including incompatible-type refusals and propagation.",
+        "Match physical/mechanical/thermal units and expressions, activation/order and request compatibility.",
+        "Require a numerical fixture for each claimed analysis family before marking family parity; missing reference fixtures are tracked gaps."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M08-T03",
+      "milestone": "M08",
+      "title": "Analysis settings and additional solver handoffs",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Job_Correctness.py",
+        "APIs/Python/Test_Scripts/Test_Analysis.py",
+        "macOS/verify-calculix.py",
+        "macOS/verify-calculix.sh",
+        "macOS/Native/CodeAster/Dockerfile",
+        "macOS/Native/CodeAster/build.sh"
+      ],
+      "fixtures": [
+        "Recorded CalculiX variants and source-supported Code_Aster solid/plain-shell cases; composite extension in M10."
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match job settings, replacement/inherit rules, solver selection and external input/result handoff without adding server solving to R1.",
+        "For any later execution adapter, verify start/status/cancel/timeout/log/artifact behavior independently.",
+        "Code_Aster numerical comparison needs explicit fixtures; the Dockerfile is source evidence, not an existing parity test.",
+        "An unavailable solver/backend remains unqualified; preserve the documented supported subset."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "The Code_Aster test gap must be closed with a new differential fixture before claiming parity for that handoff.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M08-T04",
+      "milestone": "M08",
+      "title": "Later controlled solver-job execution",
+      "status": "planned",
+      "reference_mode": "mixed",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Job_Correctness.py",
+        "APIs/Python/Test_Scripts/Test_Analysis.py",
+        "macOS/verify-calculix.sh"
+      ],
+      "fixtures": [
+        "Two owners and isolated job directories; successful, failed, timed-out and cancelled native solves"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Preserve Prepomac job settings, start/wait/status/progress/output/open-results and cancellation semantics through an owned service operation.",
+        "No browser-provided arbitrary executable/path is run; configured solver capabilities, inputs and resource limits govern execution.",
+        "A failed/zero-exit-missing-output/cancelled job cannot publish valid results or mutate the source revision; retain diagnostic/artifact associations.",
+        "External solving remains the R1 path; hosted solving is accepted separately after ownership, quotas and durable job recovery."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [
+        "M02"
+      ],
+      "notes": "This is post-R1 work. A reference backend without qualified hardware/fixtures remains unqualified, not passed.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M09-T01",
+      "milestone": "M09",
+      "title": "Derived fields, complex results, filters and transforms",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Result_Field_Outputs.py",
+        "APIs/Python/Test_Scripts/Test_Result_Regions_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Result_Coverage.py"
+      ],
+      "fixtures": [
+        "Fixed real/complex result artifacts; equations, limits, envelopes, filters and coordinate transforms"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match formula/filter options, outputs, valid/invalid states, all values and units; retain missing/NaN masks.",
+        "Compare transforms against identical local axes/reference points and preserve physical tensor/vector meaning.",
+        "Verify clone/rename/delete/export/persistence and source result immutability."
+      ],
+      "comparison_policy": "field-numerical-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M09-T02",
+      "milestone": "M09",
+      "title": "Derived histories and history command recording",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Result_History_Outputs.py",
+        "APIs/Python/Test_Scripts/Test_Record_And_Run_History_Output.py"
+      ],
+      "fixtures": [
+        "From-field/equation/integration/merged/extracted/XY/table histories with filters and mismatched time axes"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match each source algorithm, time alignment, integration location, units, ordering and CSV output.",
+        "Generated plot data and derived-history dependencies survive edit/reopen; graph display does not replace numeric assertions.",
+        "Recorded history operations replay with the same input/result associations."
+      ],
+      "comparison_policy": "field-numerical-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M09-T03",
+      "milestone": "M09",
+      "title": "Result lifecycle, view modes, annotations and animation",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Api_View_Results.py",
+        "APIs/Python/Test_Scripts/Test_Api_View_Exploded.py",
+        "APIs/Python/Test_Scripts/Test_Result_Coverage.py",
+        "APIs/Python/Test_Scripts/Test_Api_Topology.py"
+      ],
+      "fixtures": [
+        "Multiple results/frames, exploded/section views, known queries and annotations"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Switch result/current frame/view without corrupting model context or selection IDs; compare supported presentation settings.",
+        "Probes/extrema/annotations report physical values and units at the correct source IDs, independently of visual scale.",
+        "Verify animation frame sequence/timing state, clipping/explode/transforms, capture and reconnect/context-loss recovery."
+      ],
+      "comparison_policy": "geometry-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M10-T01",
+      "milestone": "M10",
+      "title": "Composite sections, parameters and orientations",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Model_Composite_Sections.py",
+        "APIs/Python/Test_Scripts/Test_Model_Composite_Parameters.py",
+        "APIs/Python/Test_Scripts/Test_Model_Material_Orientations.py"
+      ],
+      "fixtures": [
+        "composite_shells.inp: flat/inclined/cylindrical parts, symmetric and parameter-driven laminates"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match layer material/thickness/angle/order/symmetry, orientation axes and parameter regeneration.",
+        "Compare exported ply/orientation keywords and element grouping against the reference; preserve definitions across unrelated edits and reopen.",
+        "Unsupported values and invalid orientation/region combinations fail before recording."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M10-T02",
+      "milestone": "M10",
+      "title": "Ply stresses, shell transforms and failure criteria",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Result_Composite.py"
+      ],
+      "fixtures": [
+        "The exact [0/90]s laminate and strength constants from Test_Result_Composite.py"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Keep layer-specific result sets, component units and material-axis values.",
+        "Reuse source stress bounds: S11 error <=1% of expected+0.05 and S22 error <=3%+0.05; keep the source principal-stress checks.",
+        "Reuse source MaxStress/TsaiWu/Hashin formulas and index tolerance 1e-4, TsaiWu reserve-factor relative bound 1e-3; preserve mode, NaN and missing-direction cases.",
+        "Compare identical saved result artifacts first, then independently solved matched inputs."
+      ],
+      "comparison_policy": "composite-source-tolerances",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M10-T03",
+      "milestone": "M10",
+      "title": "GUI-only composite mapping/modeler operations",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/CaeModel/CaeModel.csproj",
+        "CaeModel/Composite/CompositeLayup.cs",
+        "CaeModel/Composite/DiscreteOrientationsXmlReader.cs",
+        "APIs/Python/Test_Scripts/Audit_API_Coverage.py"
+      ],
+      "fixtures": [
+        "Minimal layer/mapping/rosette/drape/discrete-orientation fixtures created during baseline capture"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Enumerate actual GUI-only commands omitted/refused by the Python surface and capture reference snapshots through a read-only desktop extractor.",
+        "Match the implemented CAD/mesh orientation/mapping operations and persisted layer/material assignments.",
+        "Do not count Python API coverage as coverage of the whole composite modeler; missing fixtures/extractors remain open."
+      ],
+      "comparison_policy": "geometry-visual",
+      "additional_dependencies": [
+        "M07"
+      ],
+      "notes": "These are planned differential tests where a complete public API oracle is absent; source-file existence is not passing evidence.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M10-T04",
+      "milestone": "M10",
+      "title": "Composite Code_Aster handoff and numerical comparison",
+      "status": "planned",
+      "reference_mode": "mixed",
+      "reference_paths": [
+        "macOS/Native/CodeAster/Dockerfile",
+        "macOS/Native/CodeAster/build.sh",
+        "APIs/Python/Test_Scripts/Test_Result_Composite.py"
+      ],
+      "fixtures": [
+        "Source-supported true layered-shell model and qualified Code_Aster environment; matching CalculiX ply model for a physically comparable case"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Compare supported layered-shell definitions, material axes, solver handoff and FRD displacement/stress/failure-index/reserve-factor/critical-ply fields with desktop Code_Aster output.",
+        "Use same-backend same-input comparison first; define an analytic/laminate expected value and its tolerance before comparing different element formulations.",
+        "Create the missing Code_Aster oracle fixture; a Docker image build or a successful FRD conversion is not numerical evidence."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "This is post-R1 work. A reference backend without qualified hardware/fixtures remains unqualified, not passed.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M11-T01",
+      "milestone": "M11",
+      "title": "Cylinder lifecycle and SRSuntour mesh generation",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-cylinders.py",
+        "macOS/verify-srsuntour.py",
+        "macOS/verify-chamfer-model.py",
+        "APIs/Python/Test_Scripts/Test_Custom_Feature_API.py"
+      ],
+      "fixtures": [
+        "Generated linear/quadratic hex/wedge meshes, rotated/reversed axes, radial layers and a separately consented real-model copy"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match cylinder JSON/properties and lifecycle; extrusion/sweep/chamfer topology, dimensions, part IDs and source-bound mappings.",
+        "Repeat/update preserves customized ties/contacts/sections, creates no duplicate mappings/orphans and leaves unrelated cylinders unchanged.",
+        "Retain source geometry tolerances and native solve checks; sweep/CAD branches also require M07."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [
+        "M07"
+      ],
+      "notes": "Real private models are supplemental fixtures; no checked-in private file or workstation-specific solver path is required for the small deterministic suite.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M11-T02",
+      "milestone": "M11",
+      "title": "Pressure-dependent springs",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-pressure-springs.py"
+      ],
+      "fixtures": [
+        "Source CPRESS cases including first-step/last-increment, master/slave side, zero/negative/large pressures and dense/sparse pairing"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match projected node pairing and the four pressure laws; generated SPRING2 degrees/connectivity and sum of stiffnesses match.",
+        "Retain source stiffness weight tolerance rel=1e-8, abs=1e-8; the native fixture gives U3=0.5 and 1/6 for K=200 and 600.",
+        "Missing source FRD/invalid edit/export preserves permanent sets/model; referenced artifact, PMX, undo and journal survive relocation."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M11-T03",
+      "milestone": "M11",
+      "title": "Individual stress colors and local extrema",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-individual-colors.py",
+        "macOS/verify-custom-features.py"
+      ],
+      "fixtures": [
+        "Shared-node/shared-part multi-material stress result, per-component ranges, plateaus and hidden parts"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match individual range assignment/conflict rejection, unassigned gray and 0\u2013100% legend while physical values remain unchanged.",
+        "Persist modes/ranges across components/increments/reopen; verify actual pixels on a recorded physical GPU before visual qualification.",
+        "Local extrema match connected-threshold regions, lowest-ID plateau tie-break, tolerance, count limit and visible-part filtering."
+      ],
+      "comparison_policy": "field-numerical-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M11-T04",
+      "milestone": "M11",
+      "title": "Standalone spring/result transformations and FRD export",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-file-tools.py",
+        "macOS/verify-result-springs.py"
+      ],
+      "fixtures": [
+        "Temporary INP spring fixtures and FRD continuation/missing-component/multiple-step cases from the verification sources"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match generated spring pairing/stiffness and result transformations; preserve unrelated keywords/records and units.",
+        "Validate missing/truncated/incompatible inputs and export source/step/component options without corrupting originals.",
+        "Exported FRD reopens in both hosts with matching physical values, connectivity and frame names."
+      ],
+      "comparison_policy": "field-numerical-visual",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M11-T05",
+      "milestone": "M11",
+      "title": "Contact virtual friction and automatic pressure weighting",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-virtual-friction.py",
+        "macOS/verify-automatic-virtual-friction.py",
+        "CaeModel/Contact/VirtualFrictionSettings.cs",
+        "CaeModel/Contact/VirtualFrictionExportContext.cs",
+        "CaeModel/Contact/VirtualFrictionPairing.cs",
+        "CaeModel/FileInOut/Output/Calculix/CalculixFileWriter.VirtualFriction.cs",
+        "macOS/CaeModel/CaeModel.csproj"
+      ],
+      "fixtures": [
+        "Temporary contact/mesh fixtures generated by verify-virtual-friction.py; explicitly supplied interference PMX and qualified solver for the automatic two-pass case"
+      ],
+      "steps": [
+        "Capture the current reference sources/runtime and run the original virtual-friction validators in disposable directories, using an explicitly selected PMX fixture for the automatic case.",
+        "Implement browser/API creation, replacement/readback and identity-preserving project persistence for each source-supported virtual-friction setting.",
+        "Compare generated spring/constraint topology, arbitrary direction vectors, sparse optimal pairing, export non-mutation, pressure-weight conservation and actual solver response.",
+        "Qualify automatic pressure extraction and two-pass job behavior when managed execution is introduced; preserve the source validators' numerical tolerances and refusal conditions."
+      ],
+      "expected": [
+        "Preserve all virtual-friction settings across save/reopen and rename/reference operations or explicitly refuse unsupported content before publication.",
+        "Match the deterministic pairing, stiffness conventions, direction handling and solver results checked by the original scripts.",
+        "Automatic pressure weighting and asynchronous two-pass execution match the original validator; no private PMX is read implicitly."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "Added to the current inventory on 2026-11-09 after these reference features appeared since M00. The dated M00 baseline and current material-identity slice do not qualify them.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M12-T01",
+      "milestone": "M12",
+      "title": "Fatigue setup, load histories and portable package",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Custom_Feature_API.py",
+        "macOS/verify-custom-features.py"
+      ],
+      "fixtures": [
+        "Source load-file formats and generated histories, result-step associations, SN settings and moved package"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match copy-on-edit/cancel behavior, load generation/import/repetitions and persisted setup.",
+        "Reject wrong-mesh/missing-stress inputs; keep original stress-result association across repeated fatigue runs.",
+        "Package handoff JSON/manifest/INP/FRDs/loads/runner survives relocation and includes all required managed artifacts."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M12-T02",
+      "milestone": "M12",
+      "title": "Fatigue numerical CPU behavior",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-fatigue-backend.py"
+      ],
+      "fixtures": [
+        "Exact NumPy fatigue fixtures: independent load cases, fast/general path, critical planes, batch-size and input refusals"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Reuse all source unittest expectations, including accumulated damage 15e-6, cycle count 15 and life 1e6 in the repeated-case fixture.",
+        "Keep fast/general comparison rtol=1e-9, atol=1e-10 and source per-test tighter/default bounds; compare every result field, not damage alone.",
+        "Match physical-plane damage accumulation before choosing the governing plane and validate scaling/batch independence."
+      ],
+      "comparison_policy": "fatigue-source-tolerances",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M12-T03",
+      "milestone": "M12",
+      "title": "Fatigue execution handoff and conditional backends",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "macOS/verify-custom-features.py",
+        "macOS/verify-fatigue-backend.py"
+      ],
+      "fixtures": [
+        "Portable CPU package, CUDA-unavailable environment, controlled cancellation and separately available CUDA/MATLAB/Runtime backends"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "CPU completion/progress/cancel/result import matches reference semantics; CUDA absence reports the same CPU fallback explicitly.",
+        "For a backend without reference numerical qualification, retain unqualified status until both desktop and web-handoff numerical fixtures run on the required environment.",
+        "Never equate an installed launcher or successful package export with CUDA/MATLAB/FATLAB numerical parity."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "First release external solving is unchanged; remote fatigue execution, if chosen, requires the M02 controlled operation boundary.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M13-T01",
+      "milestone": "M13",
+      "title": "Public Python/API validation and readback",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Api_Enum_Vocabulary.py",
+        "APIs/Python/Test_Scripts/Test_Api_Keyword_Arguments.py",
+        "APIs/Python/Test_Scripts/Test_Api_Session_Rules.py",
+        "APIs/Python/Test_Scripts/Audit_API_Documentation.py",
+        "APIs/Python/Test_Scripts/Audit_API_Coverage.py"
+      ],
+      "fixtures": [
+        "Every API signature/enum case in the sources; invalid names/types/numbers/options and replacement defaults"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match vocabulary, expressions, return-shape/unit conventions and refusal behavior; preserve unspecified properties.",
+        "Unknown keywords/types/invalid numeric values cannot mutate or record commands.",
+        "Run the source API unchanged when the hosted Python adapter is available; any temporary semantic HTTP adapter is explicitly recorded rather than called unchanged-script parity."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [
+        "M08",
+        "M09",
+        "M10",
+        "M11",
+        "M12"
+      ],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M13-T02",
+      "milestone": "M13",
+      "title": "Recorded scripts, command journals and regeneration",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Rpc_Live_Session.py",
+        "APIs/Python/Test_Scripts/Test_Journal_Mesh_Setup.py",
+        "APIs/Python/Test_Scripts/Test_Record_And_Run_History_Output.py",
+        "APIs/Python/Test_Scripts/Test_Batch_Run.py",
+        "APIs/Python/Test_Scripts/Test_Prompt_Refused.py"
+      ],
+      "fixtures": [
+        "Successful and partial-failure scripts, import/generated-output dependencies, undo branches, meshing and derived histories"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Match command suppression/record-and-run, current-history selection and independent replay; compare resulting model/export and result definitions.",
+        "Preserve each declared expected exit/report condition, including batch errors 3/4/7 and strict-prompt refusal 5.",
+        "Replay paths use managed artifact/work directories; existing unrelated files are not overwritten, and recorded scripts keep their documented scope/import rules."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [
+        "M07",
+        "M09"
+      ],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M13-T03",
+      "milestone": "M13",
+      "title": "Automation transports and hosted execution permissions",
+      "status": "planned",
+      "reference_mode": "mixed",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Rpc_Server.py",
+        "APIs/Python/Test_Scripts/Test_Rpc_Live_Session.py",
+        "APIs/Python/Test_Scripts/Test_Mcp_Http.py",
+        "APIs/Python/Test_Scripts/Test_Mcp_Workflow.py"
+      ],
+      "fixtures": [
+        "Source RPC/MCP client workflows and read-only/refused/expired access, plus two hosted project owners"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Keep operation capability/read-only/discard/conflict semantics even when desktop pipes are replaced by hosted transport.",
+        "Agent/UI operations use the same domain commands and journal identity; audit endpoint/protocol error and handshake behavior.",
+        "Python/native execution runs only inside the defined owned artifact/resource boundary; an arbitrary project upload cannot execute server code.",
+        "Mark native job branches planned until an explicit later execution adapter is available; the R1 external-solver handoff remains valid."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [
+        "M06",
+        "M02"
+      ],
+      "notes": "Transport-specific desktop assertions need explicit adapters; preserve operation semantics rather than reproducing a named pipe in a browser.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M14-T01",
+      "milestone": "M14",
+      "title": "Whole-project cross-host regression and restore",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "APIs/Python/Test_Scripts/Test_Workflow_Geometry_To_Result.py",
+        "APIs/Python/Test_Scripts/Test_Analysis.py",
+        "macOS/verify-pmx-compatibility.py",
+        "macOS/verify-custom-features.py"
+      ],
+      "fixtures": [
+        "Versioned golden projects spanning solids, shells, composites, contact/springs, custom tools and fatigue; a representative consented user model"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Run full matched desktop/web author-save-reopen-export-external-solve-post-process cycles; compare model snapshots, artifacts, normalized input and numerical outputs.",
+        "Restore backups/revisions across service upgrade/restart and recheck old/project-protection fixtures.",
+        "No milestone is complete merely because isolated unit tests passed; close its cross-host and browser evidence."
+      ],
+      "comparison_policy": "native-numerical",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M14-T02",
+      "milestone": "M14",
+      "title": "Browser/GPU/large-model qualification",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/VTKJS_PENDING_WORK.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/VTKJS_STREAMING_RENDERER_SPEC.md",
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/prototypes/VtkJsStreaming/docs/benchmark-report.md",
+        "macOS/verify-navigation.py",
+        "macOS/verify-individual-colors.py",
+        "macOS/verify-dialog-layout.py"
+      ],
+      "fixtures": [
+        "Existing 3M renderer benchmark, representative full workflow projects, physical-GPU/browser/platform matrix and software WebGL functional run"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Retain existing renderer thresholds, protocol limits and three-cold-run physical-GPU requirements; report viewport/DPR, hardware, toolchain and raw samples.",
+        "Measure browser, server and native-process memory separately, plus load/pick/update times and cleanup; do not add unlike metrics or infer GPU performance from software rendering.",
+        "Keyboard/focus/pointer/touch/narrow-screen and context-loss/reconnect checks preserve supported task completion; qualify each promised browser/platform explicitly."
+      ],
+      "comparison_policy": "hardware-qualified",
+      "additional_dependencies": [],
+      "notes": " Reference inventory extension 2026-11-09: verify-dialog-layout.py adds editor resizing and control-reachability intent. Browser adaptation compares usable form content and responsive layout; native WinForms anchors are reference implementation details. This validator has not been run in the browser.",
+      "implementation_paths": [],
+      "evidence": []
+    },
+    {
+      "id": "M14-T03",
+      "milestone": "M14",
+      "title": "Final capability accounting and release decision",
+      "status": "planned",
+      "reference_mode": "desktop",
+      "reference_paths": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/PREPOMAC_WEB_PARITY.md",
+        "APIs/Python/Test_Scripts/Run_Tests.py"
+      ],
+      "fixtures": [
+        "Complete source/test/feature inventory, all evidence manifests, known reference failures and remaining hardware/backend gaps"
+      ],
+      "steps": [
+        "Prepare identical immutable fixture copies and configuration for Prepomac and the web adapter.",
+        "Perform the named operations; exercise the browser for the user-facing path.",
+        "Compare the expected outputs, save/reopen and failure behavior; retain both runs and diffs."
+      ],
+      "expected": [
+        "Every baseline capability/declared test run maps to an implemented tested workflow or an explicit unresolved gap.",
+        "No required planned, failed, blocked or unqualified case is counted as passed or hidden by aggregate test counts.",
+        "Freeze release/source/fixture identities and supported scope; changes to Prepomac or tests trigger targeted requalification."
+      ],
+      "comparison_policy": "exact-domain",
+      "additional_dependencies": [],
+      "notes": "",
+      "implementation_paths": [],
+      "evidence": []
+    }
+  ],
+  "reference_sources": [
+    {
+      "path": "APIs/Python/Test_Scripts/Audit_API_Coverage.py",
+      "sha256": "e848d42af3c60649ac9ad88e9a2e3e9a895024b6b83a804e8005f6a474f1cbab",
+      "cases": [
+        "M00-T01",
+        "M10-T03",
+        "M13-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Audit_API_Documentation.py",
+      "sha256": "6764ad261b9bd8a26a4010d5005ae583898137fe278f101396fb6d3b8cde33d5",
+      "cases": [
+        "M00-T01",
+        "M13-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Run_Tests.py",
+      "sha256": "a4f02dbb13bc0c0ca922295c68e01926ba5b50b221fc449e70ece67df8ba7715",
+      "cases": [
+        "M00-T01",
+        "M14-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Analysis.py",
+      "sha256": "8e84168a8abf128fb6cc1ed7ed69a222d6638c63109a6aff5675d6b6c2c8e559",
+      "cases": [
+        "M06-T01",
+        "M06-T02",
+        "M08-T03",
+        "M08-T04",
+        "M14-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Api_Enum_Vocabulary.py",
+      "sha256": "f1b789309bcc05c01210bcb6b177f6b34b4c00e5909ac5ea0d2b37a1218aa7a4",
+      "cases": [
+        "M13-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Api_Keyword_Arguments.py",
+      "sha256": "fcbafdb3f9eb30454502976bd25521d995c95089d96049fe3a15355b9d29fc01",
+      "cases": [
+        "M13-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Api_Session_Rules.py",
+      "sha256": "841d25c73a88e317219e6ecee2eaf161097694ae02ec5cb7de33949d6226010d",
+      "cases": [
+        "M01-T01",
+        "M13-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Api_Topology.py",
+      "sha256": "2b7a239dc7f984a07f6a5bdb6203f241d7f4b2f940b61dfc6d09fdab39a3e536",
+      "cases": [
+        "M03-T02",
+        "M04-T03",
+        "M09-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Api_View_Exploded.py",
+      "sha256": "f45ee53d822b69e18f477363f64ae4b3f5f765c4069bdcd4c57dca7cad58614f",
+      "cases": [
+        "M09-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Api_View_Results.py",
+      "sha256": "1c70d53c80e399b8e7cecbc872a6b14d41bb60cb3ce0efd8e1157ff078604519",
+      "cases": [
+        "M06-T03",
+        "M09-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Batch_Run.py",
+      "sha256": "757fa848cca8be4fdf26be30b68cea7031564927392bad81b9ab016f356853cb",
+      "cases": [
+        "M13-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Custom_Feature_API.py",
+      "sha256": "ea87ca13f941c6474bc8a729e2a69b86bf015be14e4d1d2e5434474a74a6b2b6",
+      "cases": [
+        "M04-T04",
+        "M11-T01",
+        "M12-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Job_Correctness.py",
+      "sha256": "ab4a56572438a35ffe7cad5526104244d15eb46684a4cf7b8a8c226c479af23d",
+      "cases": [
+        "M06-T01",
+        "M08-T03",
+        "M08-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Journal_Mesh_Setup.py",
+      "sha256": "bded143d13f95672b1d1316ca5ff6e60b045bf4d0a468e6a7bcd4111542aceb0",
+      "cases": [
+        "M08-T02",
+        "M13-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Mcp_Http.py",
+      "sha256": "4be35db3c14a0d92fbe125870fcdf405d998dee5a1db4d5413bc430bdd9a6deb",
+      "cases": [
+        "M13-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Mcp_Workflow.py",
+      "sha256": "f70a82c14a2a8a0ed4c86d51f3ef49e029e58d33908500c856b33f4c7903748f",
+      "cases": [
+        "M13-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_BCs.py",
+      "sha256": "d2407cc81f5bd2877d585b9186a53cc4032dccbfe1db304e05d70aa1798826ac",
+      "cases": [
+        "M05-T02",
+        "M08-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Composite_Parameters.py",
+      "sha256": "e28d564b8be322669c362e2f2bf3e3ae1a95c2fa1ac3c4e507832f8e7f0e4393",
+      "cases": [
+        "M10-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Composite_Sections.py",
+      "sha256": "de94ea27f8dad79feaccc7972b5d10e30fc54ad529a4aa0829b3ada6fe9e5ba9",
+      "cases": [
+        "M10-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Constraints.py",
+      "sha256": "9c19cd3b9598f11ac53c0142297d565d5f482deb21792d74df4616c0e928cc62",
+      "cases": [
+        "M05-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Defeature.py",
+      "sha256": "5452261f767aafa81c71d5f5e20029c045507d68e2e52a25bf060bcb7317ce6e",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Definition_Coverage.py",
+      "sha256": "e9e6606288bb377f8177e73f9f8d7a33090bf919761faebde2a2e6f08566a31f",
+      "cases": [
+        "M01-T01",
+        "M05-T01",
+        "M08-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Delete_Cad_Faces.py",
+      "sha256": "c75be445185088317df0503dd4d302dffea43643696d9c0be1a477fb95b98de4",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Document.py",
+      "sha256": "48b90e3f2e81a62a278b2813f2229e95b83d919b6f364072e9a25a1ae53031b3",
+      "cases": [
+        "M00-T02",
+        "M04-T01",
+        "M05-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Export_Geometry_Assembly.py",
+      "sha256": "acb4dca80a56c36535854fea4d0ad930a2cbafa2b39bb1564f615a68fb7d4203",
+      "cases": [
+        "M07-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Export_Sources.py",
+      "sha256": "f69a1b8eae509e38f0ef5a1146b75b82bb825baf9f74acf3b4368424517f522d",
+      "cases": [
+        "M04-T01",
+        "M06-T02",
+        "M07-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Fields.py",
+      "sha256": "f756aca0194b48a1326d1939422391fea28cd834f47b7823b9fb47668ff0d420",
+      "cases": [
+        "M08-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Fuse_Faces_Repair.py",
+      "sha256": "1441393559a66ecccf61cff44278890e71c4df3bfbcdd67479b493cdf8730780",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Geometry_Metadata.py",
+      "sha256": "922f2e282b9b189a5872496295b5a2970d2b11629ceea6d078899c7e1a25eeb0",
+      "cases": [
+        "M07-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Geometry_Transform.py",
+      "sha256": "b14899de55a69dfbdc47dbcc7423248a9edec00a41e999bc3762e3b614330af0",
+      "cases": [
+        "M07-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Group_Cells_Plain_Compound.py",
+      "sha256": "cebd4856b75229317991dcbec6233ac76bc1670723b095bf535a5ee413ccc404",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Interactions.py",
+      "sha256": "b77253804a4188c39b1708fbed1ea83af25e58d09a27df4e3a648f0f8f111a38",
+      "cases": [
+        "M05-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Inverted_Elements.py",
+      "sha256": "6b2b6eec11f2494a21f280f0f75b1c867580a30c9f43097f7353b21ab963b068",
+      "cases": [
+        "M04-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Keyword_Tree_Coverage.py",
+      "sha256": "3c482b74e3e2d88d3bcb3d396637b2105d0c57750b777d15efcea253e34f9781",
+      "cases": [
+        "M03-T01",
+        "M05-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Loads.py",
+      "sha256": "2de2f84dca0b7ac9db539a4414f05bd0a1ae2d8d2d9efffe50201a22e34de8a5",
+      "cases": [
+        "M05-T02",
+        "M08-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Material_Orientations.py",
+      "sha256": "7ecfe11add84cf2af365cf607398ccef37a62d931a663cafa1434eeeb600faab",
+      "cases": [
+        "M10-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Materials_Sections.py",
+      "sha256": "0b2d06e6abf5a37315d4b8586aa90b616552f92995cb11622575abc9901cd18d",
+      "cases": [
+        "M00-T02",
+        "M01-T01",
+        "M05-T01",
+        "M08-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Mesh_Tools.py",
+      "sha256": "5af944b23d8c1855e1155611a137c52ec7e08164e092957be19f6a0b3f7c2fc5",
+      "cases": [
+        "M04-T01",
+        "M04-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing.py",
+      "sha256": "9a1e6c0b340512f5922db25cea4b2480e25a781edfc86241b87773a57cd332c9",
+      "cases": [
+        "M07-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Coverage.py",
+      "sha256": "319d999f29a91008a17c6ad54f96ab10228bf073eba54111b96905edb855cc6b",
+      "cases": [
+        "M07-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Mmg.py",
+      "sha256": "09628d177d78ecd5b0c8ec9f2d5cbd0e2951ea122f6cb0ae4de9753132982463",
+      "cases": [
+        "M07-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Netgen_Transfinite.py",
+      "sha256": "0df0d3fa15bfa39861f9c5e9a6e42d97ddc5c80617a7e40d589f140602305cc1",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_QuadWild_Transfinite.py",
+      "sha256": "49d738872dd6bd9b22219a53f554a7e90902bf76ecdd845973ba2d346fb61a69",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Revolve.py",
+      "sha256": "dae08bc48e8b5dbbdfd8bad54b905a9d8e31c268f6bb3b7ad963f9af2ddfb351",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Shell_Types.py",
+      "sha256": "340fb8a1b1cc87b04ebb3cfd166c8c890fa0877575ce7b3357082b79246bb3c8",
+      "cases": [
+        "M07-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Split_Cells.py",
+      "sha256": "67947ec3895ba87776f793c6998a8d2e89a510af7d56e33880b2cee6b26e9250",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Sweep_Compound.py",
+      "sha256": "e4e1e91bc7ab3a53c2169af45ca9ade8b26580503f1997164e68efb801076caa",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Sweep_Transfinite.py",
+      "sha256": "e9e3de8ad503824c2bc83f0657e894fcd6b9dfd668fd0ad1b886ba4f13aae8cb",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Three_Block_Mapping.py",
+      "sha256": "bb61233cdbe96c436645a2d31ab1a278bf22df33a752b19151ce37df5c9cb23b",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Transfinite_Frame.py",
+      "sha256": "caab822036e74a5d41f080b68a2c9943f3535cfb546bd02c67ef3641bf4740a0",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Transfinite_Prism.py",
+      "sha256": "b9c26abb2fcc2fa716f07df0ccb6181333991277789bef2c29ce2d46f2f01fe7",
+      "cases": [
+        "M07-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Validity.py",
+      "sha256": "630ac82aca2a276661c31fccc0303fe0874c48a1e25d39c46723e3b6284c4b9b",
+      "cases": [
+        "M07-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Node_Sets.py",
+      "sha256": "e6f67520b610e5373bbdaf22d91b256396b40aaa8daa32d9305867b19ee76575",
+      "cases": [
+        "M04-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Offset_Face.py",
+      "sha256": "01106395b0e3ac5071ff5c49c4abd8f9ed5b2b4799481ce887e2ce792ba38cbc",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Outputs.py",
+      "sha256": "944c42736485cb87cdf1f4159ab3ba8de39766ec82843977c142cf923f37fb23",
+      "cases": [
+        "M05-T04",
+        "M08-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Parts.py",
+      "sha256": "e88303c3f7ae661e2459177020bfd70c2b24af9ab5cf1d822c74509166f4c170",
+      "cases": [
+        "M03-T01",
+        "M04-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Readback_Equations.py",
+      "sha256": "f2b4b50a8b0c41156d5c548eaf0772b3c5dba0495ed3c2fda751fd028013ff58",
+      "cases": [
+        "M01-T01",
+        "M05-T01",
+        "M05-T02",
+        "M05-T04",
+        "M08-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Region_Coverage.py",
+      "sha256": "8a6b2a611cf2c51af571b53101309f657f7ee2ae8f6cf362071cdae8d4101758",
+      "cases": [
+        "M04-T02",
+        "M04-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Regions.py",
+      "sha256": "5b82b77e67f4182b7a437e22a6336f0222bf21e34c36452ce76923063df261f0",
+      "cases": [
+        "M04-T02",
+        "M04-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Compound.py",
+      "sha256": "943315e2708be507ae98cf5f635d21f7024b6634c1035bad24c4379ed756e0af",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Fuse.py",
+      "sha256": "a8ed161c2599f6d5749db5ded6b82ad54187e5a5612d8a2840370a7913d2ebb7",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Group.py",
+      "sha256": "12161f4d04f88fff9f2a18c3629051f9e3410a5dc91969240288334142c070e1",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Geometry.py",
+      "sha256": "6f216438d56241f7c164f27e946de77b19f1c1cd0afe1f77f958b0b95eb2cdb7",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Periodic_Faces.py",
+      "sha256": "f21723a25bda62394862eb569bca9323849f87dd2148f0860b67c51945704f7b",
+      "cases": [
+        "M07-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Model_Steps.py",
+      "sha256": "b9f4e1fd3f0180fa0a3395ce030192d56d289ba3d10eb578dae0252daabb31b6",
+      "cases": [
+        "M05-T02",
+        "M08-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Prompt_Refused.py",
+      "sha256": "f225fec842cd851ae2a17e19c94fb1ba7e4207e9ae501d7eb257373a145ff709",
+      "cases": [
+        "M13-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Record_And_Run_History_Output.py",
+      "sha256": "29c17791f914a0882dacda93e45b2293c87fcd1b39a860e0c8aad80a6651211e",
+      "cases": [
+        "M01-T03",
+        "M09-T02",
+        "M13-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Result_Composite.py",
+      "sha256": "25f26b284b5fbb899294361d396925aa17049a19ed1381d38e31f14ba135d206",
+      "cases": [
+        "M10-T02",
+        "M10-T04"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Result_Coverage.py",
+      "sha256": "bfe9d53185d1f38e8f04e7d05cfeb7f361512df5305e4aa39d40d754b92dc105",
+      "cases": [
+        "M06-T02",
+        "M06-T03",
+        "M09-T01",
+        "M09-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Result_Field_Outputs.py",
+      "sha256": "c6a14f08f9b7ad0d6c66725d4386a51a15edd65e7968672069c945b7f23925be",
+      "cases": [
+        "M00-T02",
+        "M09-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Result_History_Outputs.py",
+      "sha256": "9007032e8a4f5b688d555bee693404feef710fa5f2b122eb7d39910ac14e5b27",
+      "cases": [
+        "M06-T04",
+        "M09-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Result_Regions_Coverage.py",
+      "sha256": "47143ff299f7ecddedd4379f4e3dec69fe8e8060558315473c0795358c032dd9",
+      "cases": [
+        "M09-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Rpc_Live_Session.py",
+      "sha256": "5a0eecad14a2298f85063d0dbe4459ec63a8dc8247248bde60b65904a8b240d1",
+      "cases": [
+        "M01-T03",
+        "M13-T02",
+        "M13-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Rpc_Server.py",
+      "sha256": "3b427d178f54e026e1585faa3672f9917cd752d5e9aa0541dc9ea77fc07574c7",
+      "cases": [
+        "M13-T03"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Selection_Correctness.py",
+      "sha256": "d9c3ec5d6b4dd468f21693a22f4964814e0408046ccfa89ae448de3522083e0b",
+      "cases": [
+        "M00-T02",
+        "M03-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Selection_Pick.py",
+      "sha256": "bebd57026251a01d9f6d02f45566f4cac530a73d1aa7611b96568e636098e0fe",
+      "cases": [
+        "M03-T02"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Test_Workflow_Geometry_To_Result.py",
+      "sha256": "e4ce9b363fbea1c7e759846b63f5b3e2ccf476519c462d67fb7d14a5c61c901b",
+      "cases": [
+        "M07-T04",
+        "M14-T01"
+      ]
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/test_runner_offline.py",
+      "sha256": "d1ae1a5f6ebee1a4472c200be87788337e69d5ca31c924e940ce1f9404bac84a",
+      "cases": [
+        "M00-T01"
+      ]
+    },
+    {
+      "path": "CaeModel/Composite/CompositeLayup.cs",
+      "sha256": "90027306ba679224a71a58c2e012b7f91612381eb6853f0d619226f2de6c3078",
+      "cases": [
+        "M10-T03"
+      ]
+    },
+    {
+      "path": "CaeModel/Composite/DiscreteOrientationsXmlReader.cs",
+      "sha256": "7f3c03d03ecd93599120dfbf3b911972f2bc2e05a728860024b2a5ee1700b782",
+      "cases": [
+        "M10-T03"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/VTKJS_STREAMING_RENDERER_SPEC.md",
+      "sha256": "b15514f881e9981e7a1be0eb8b28c77e41678706cf0b322caa141bc7df9275e3",
+      "cases": [
+        "M14-T02"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/PREPOMAC_WEB_PARITY.md",
+      "sha256": "8a0d8081483ab17718f4a8f1a14a569b992c4da515cc58af5f460727f56054c2",
+      "cases": [
+        "M14-T03"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/VTKJS_PENDING_WORK.md",
+      "sha256": "ac73969ca4ab7317003143fc600d5c433f907065abb74df16595e39fcd8c92a3",
+      "cases": [
+        "M14-T02"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectHistoryResultChecks.cs",
+      "sha256": "be9e1487539dbec0e635914952cfa5d843c036037106f8f66f1c4ac44da79fb9",
+      "cases": [
+        "M06-T04"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectMeshImportChecks.cs",
+      "sha256": "ffced4ec07784392e6eca6cda130d096171264a1a6375ee7ec5c8d1b36723fe5",
+      "cases": [
+        "M04-T01"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectModelTreeChecks.cs",
+      "sha256": "5e4deb5277aba9da9838505ff8f3171241f035940eff65e0bf255944d6517f2f",
+      "cases": [
+        "M03-T01"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectResultChecks.cs",
+      "sha256": "efd610203b2ae9cfc5065eed21abe8eb3d7813976cafab4e0471f4eccfc2072a",
+      "cases": [
+        "M06-T03"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectServiceChecks.cs",
+      "sha256": "19a5ea2ff89326682da962f3c59a7664913a7cd616f18b6869c6418c5b9bd016",
+      "cases": [
+        "M02-T01",
+        "M02-T03"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/StaticProjectChecks.cs",
+      "sha256": "566d902be6a95091a7dd672e90ebfc49863bf9997bfe88def73c82c79b5fa816",
+      "cases": [
+        "M01-T02"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/prototypes/VtkJsStreaming/docs/benchmark-report.md",
+      "sha256": "ec7f1d53854c6462d237bff8e9d93efebc742c275e458c58db63d846fa867c17",
+      "cases": [
+        "M14-T02"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-native-calculix.py",
+      "sha256": "5f192be9b65c590a9bf20be20aaeca39a753f05f5b4c0d335c27338855d437e0",
+      "cases": [
+        "M06-T01"
+      ]
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py",
+      "sha256": "091cdb412ffa7c528d36a12a880ce010031cd02c18436a97f9c89510a67e0056",
+      "cases": [
+        "M02-T01",
+        "M02-T02",
+        "M02-T03",
+        "M06-T02",
+        "M06-T04"
+      ]
+    },
+    {
+      "path": "macOS/CaeModel/CaeModel.csproj",
+      "sha256": "edb2b0ae382f7586348736f46be72485dbc5e9c559e797c67143452876e22239",
+      "cases": [
+        "M10-T03",
+        "M11-T05"
+      ]
+    },
+    {
+      "path": "macOS/Native/CodeAster/Dockerfile",
+      "sha256": "50b1365b2a421da8fb2c70f5c3d12f8d74bf7d3409e4b42394d167e527b415ba",
+      "cases": [
+        "M08-T03",
+        "M10-T04"
+      ]
+    },
+    {
+      "path": "macOS/Native/CodeAster/build.sh",
+      "sha256": "6044a6e3f7a965396f1ff03d7c035d3ecbfd739ab94b2440af13aa510e6afe33",
+      "cases": [
+        "M08-T03",
+        "M10-T04"
+      ]
+    },
+    {
+      "path": "macOS/verify-calculix.py",
+      "sha256": "200a105ffd5fb3721cb400996a27abd895f3746441ceac078b163a20d07fc516",
+      "cases": [
+        "M08-T03"
+      ]
+    },
+    {
+      "path": "macOS/verify-calculix.sh",
+      "sha256": "59abe1a3a206163fde48bb41afc553797affb00bd3333ece7b274fb5ac09889a",
+      "cases": [
+        "M08-T03",
+        "M08-T04"
+      ]
+    },
+    {
+      "path": "macOS/verify-chamfer-model.py",
+      "sha256": "25ba421dadf4347aa11fc132be209558bdd3a62afc8aae30b51c18bf045cbfde",
+      "cases": [
+        "M11-T01"
+      ]
+    },
+    {
+      "path": "macOS/verify-custom-features.py",
+      "sha256": "5359d61e55c1de5a3cf27f5515fc347ef41a2ff895f4003a30bc0ea15f86201f",
+      "cases": [
+        "M01-T02",
+        "M04-T04",
+        "M11-T03",
+        "M12-T01",
+        "M12-T03",
+        "M14-T01"
+      ]
+    },
+    {
+      "path": "macOS/verify-cylinders.py",
+      "sha256": "4c4bfd2f6ca5027c333308365855cfa98a579407b3825bc0524d151afc009f38",
+      "cases": [
+        "M11-T01"
+      ]
+    },
+    {
+      "path": "macOS/verify-fatigue-backend.py",
+      "sha256": "d5efba975770644a18e31f06d34e8d5ca8f3f6f5abdc1082b3771c369d508e33",
+      "cases": [
+        "M12-T02",
+        "M12-T03"
+      ]
+    },
+    {
+      "path": "macOS/verify-file-tools.py",
+      "sha256": "4cad2fc0efacdd3b18523efa27011256bbc1ed511abec0f4e985ab5d91e5c0af",
+      "cases": [
+        "M11-T04"
+      ]
+    },
+    {
+      "path": "macOS/verify-individual-colors.py",
+      "sha256": "e002fbd0c11b01e7cc22b170d3e305d14f90b0543d7f338bd9108fdd47821d49",
+      "cases": [
+        "M11-T03",
+        "M14-T02"
+      ]
+    },
+    {
+      "path": "macOS/verify-navigation.py",
+      "sha256": "2ffd003a91003b4f153cc00fb2d7e18ba74d4fa01959e25b127cc7e3447b5554",
+      "cases": [
+        "M03-T03",
+        "M14-T02"
+      ]
+    },
+    {
+      "path": "macOS/verify-pmx-compatibility.py",
+      "sha256": "c4cd33775cb629f0b035590f70f2e46eba106bc48b4ab99dd126319ea759b131",
+      "cases": [
+        "M01-T02",
+        "M14-T01"
+      ]
+    },
+    {
+      "path": "macOS/verify-pressure-springs.py",
+      "sha256": "3aef7666f15b038ff08f4fab8e6d066112d162e5d5f236c89fa26efc9808912f",
+      "cases": [
+        "M11-T02"
+      ]
+    },
+    {
+      "path": "macOS/verify-result-springs.py",
+      "sha256": "6f4d4805b5ae47f5c77ac44e76f688ca201ea5540083c9de7c1c347e48f60d41",
+      "cases": [
+        "M11-T04"
+      ]
+    },
+    {
+      "path": "macOS/verify-srsuntour.py",
+      "sha256": "e78241bc9acb508180d9cf1c14276939754ef2705be78351b12ac624381ece84",
+      "cases": [
+        "M11-T01"
+      ]
+    },
+    {
+      "path": "macOS/verify-virtual-friction.py",
+      "sha256": "85e83e6db387ecda0544b8f51b47fe41ca331748ed753c81fa028673ea985ff4",
+      "cases": [
+        "M11-T05"
+      ]
+    },
+    {
+      "path": "macOS/verify-automatic-virtual-friction.py",
+      "sha256": "144bb63d4f1f1c1853c1145d025f0df05ecc6619c406369ca554241141bc4ae4",
+      "cases": [
+        "M11-T05"
+      ]
+    },
+    {
+      "path": "CaeModel/Contact/VirtualFrictionSettings.cs",
+      "sha256": "3007e4134418b68c0db5fa99bb6846439186b139fe6e1d198ecc0db777583737",
+      "cases": [
+        "M11-T05"
+      ]
+    },
+    {
+      "path": "CaeModel/Contact/VirtualFrictionExportContext.cs",
+      "sha256": "186f5a4cf0a0bf5145d5f0cf4d2280286196d4437a2a7cab5e90aa8216df5fa1",
+      "cases": [
+        "M11-T05"
+      ]
+    },
+    {
+      "path": "CaeModel/Contact/VirtualFrictionPairing.cs",
+      "sha256": "2bb9b71984c48ad07f0a2eb2ac749bc943c5f8a0ac36dd943530e0972bf18379",
+      "cases": [
+        "M11-T05"
+      ]
+    },
+    {
+      "path": "CaeModel/FileInOut/Output/Calculix/CalculixFileWriter.VirtualFriction.cs",
+      "sha256": "ebbcb277faefb8d141291abc9fde5d5f285c0699f82b76e1f361e6fa668a4ca9",
+      "cases": [
+        "M11-T05"
+      ]
+    },
+    {
+      "path": "macOS/verify-dialog-layout.py",
+      "sha256": "402f697750bf320c413be3b68297ae9354f4bb283ac3cf8d0d8a4bd04f04909e",
+      "cases": [
+        "M14-T02"
+      ]
+    }
+  ],
+  "declared_desktop_runs": [
+    {
+      "label": "Test_Analysis.py",
+      "path": "APIs/Python/Test_Scripts/Test_Analysis.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Api_Enum_Vocabulary.py",
+      "path": "APIs/Python/Test_Scripts/Test_Api_Enum_Vocabulary.py",
+      "switches": {},
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Api_Keyword_Arguments.py",
+      "path": "APIs/Python/Test_Scripts/Test_Api_Keyword_Arguments.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Api_Session_Rules.py",
+      "path": "APIs/Python/Test_Scripts/Test_Api_Session_Rules.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Api_Topology.py",
+      "path": "APIs/Python/Test_Scripts/Test_Api_Topology.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Api_View_Exploded.py",
+      "path": "APIs/Python/Test_Scripts/Test_Api_View_Exploded.py",
+      "switches": {
+        "-f": "cube.stl",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.stl",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Batch_Run.py [1]",
+      "path": "APIs/Python/Test_Scripts/Test_Batch_Run.py",
+      "switches": {},
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Batch_Run.py [2]",
+      "path": "APIs/Python/Test_Scripts/Test_Batch_Run.py",
+      "switches": {
+        "--scriptArgs": "fail"
+      },
+      "expected_exit": 3,
+      "expected_report_checks": [
+        [
+          "error",
+          "contains",
+          "Deliberate failure used to check the script error exit code."
+        ]
+      ],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Batch_Run.py [3]",
+      "path": "APIs/Python/Test_Scripts/Test_Batch_Run.py",
+      "switches": {
+        "--scriptArgs": "sleep",
+        "--timeout": "30"
+      },
+      "expected_exit": 4,
+      "expected_report_checks": [
+        [
+          "error",
+          "contains",
+          "exceeded the time limit of 30 s"
+        ]
+      ],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Batch_Run.py [4]",
+      "path": "APIs/Python/Test_Scripts/Test_Batch_Run.py",
+      "switches": {
+        "--scriptArgs": "cancel"
+      },
+      "expected_exit": 7,
+      "expected_report_checks": [
+        [
+          "error",
+          "contains",
+          "cancelled"
+        ]
+      ],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Custom_Feature_API.py",
+      "path": "APIs/Python/Test_Scripts/Test_Custom_Feature_API.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Job_Correctness.py",
+      "path": "APIs/Python/Test_Scripts/Test_Job_Correctness.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Journal_Mesh_Setup.py",
+      "path": "APIs/Python/Test_Scripts/Test_Journal_Mesh_Setup.py",
+      "switches": {},
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Mcp_Http.py",
+      "path": "APIs/Python/Test_Scripts/Test_Mcp_Http.py",
+      "switches": {},
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Mcp_Workflow.py",
+      "path": "APIs/Python/Test_Scripts/Test_Mcp_Workflow.py",
+      "switches": {},
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_BCs.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_BCs.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Composite_Parameters.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Composite_Parameters.py",
+      "switches": {},
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Composite_Sections.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Composite_Sections.py",
+      "switches": {
+        "-f": "composite_shells.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/composite_shells.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Constraints.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Constraints.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Defeature.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Defeature.py",
+      "switches": {
+        "-f": "blind_holes.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/blind_holes.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Definition_Coverage.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Definition_Coverage.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Delete_Cad_Faces.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Delete_Cad_Faces.py",
+      "switches": {
+        "-f": "blind_holes.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/blind_holes.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Document.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Document.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Export_Geometry_Assembly.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Export_Geometry_Assembly.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Export_Sources.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Export_Sources.py",
+      "switches": {
+        "-f": "cube.stl",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.stl",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Fields.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Fields.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Fuse_Faces_Repair.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Fuse_Faces_Repair.py",
+      "switches": {
+        "-f": "blind_holes.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/blind_holes.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Geometry_Metadata.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Geometry_Metadata.py",
+      "switches": {
+        "-f": "L_bracket_r.step",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/L_bracket_r.step",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Geometry_Transform.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Geometry_Transform.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Group_Cells_Plain_Compound.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Group_Cells_Plain_Compound.py",
+      "switches": {
+        "-f": "sweep_side2.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/sweep_side2.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Interactions.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Interactions.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Inverted_Elements.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Inverted_Elements.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Keyword_Tree_Coverage.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Keyword_Tree_Coverage.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Loads.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Loads.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Material_Orientations.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Material_Orientations.py",
+      "switches": {
+        "-f": "composite_shells.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/composite_shells.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Materials_Sections.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Materials_Sections.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Mesh_Tools.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Mesh_Tools.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing.py",
+      "switches": {
+        "-f": "cube.stl",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.stl",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Coverage.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Coverage.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Mmg.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Mmg.py",
+      "switches": {
+        "-f": "open_shell.stl",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/open_shell.stl",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Netgen_Transfinite.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Netgen_Transfinite.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_QuadWild_Transfinite.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_QuadWild_Transfinite.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Revolve.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Revolve.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Shell_Types.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Shell_Types.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Split_Cells.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Split_Cells.py",
+      "switches": {
+        "-f": "sweep_side2.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/sweep_side2.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Sweep_Compound.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Sweep_Compound.py",
+      "switches": {
+        "-f": "cube.stl",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.stl",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Sweep_Transfinite.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Sweep_Transfinite.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Three_Block_Mapping.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Three_Block_Mapping.py",
+      "switches": {
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Transfinite_Frame.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Transfinite_Frame.py",
+      "switches": {
+        "-f": "transfinite_frame.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/transfinite_frame.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Transfinite_Prism.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Transfinite_Prism.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Meshing_Validity.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Meshing_Validity.py",
+      "switches": {
+        "-f": "open_shell.stl",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/open_shell.stl",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Node_Sets.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Node_Sets.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Offset_Face.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Offset_Face.py",
+      "switches": {
+        "-f": "blind_holes.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/blind_holes.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Outputs.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Outputs.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Parts.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Parts.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Readback_Equations.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Readback_Equations.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Region_Coverage.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Region_Coverage.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Regions.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Regions.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Split_Cells_Compound.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Compound.py",
+      "switches": {
+        "-f": "box_and_cylinder.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/box_and_cylinder.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Split_Cells_Fuse.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Fuse.py",
+      "switches": {
+        "-f": "sweep_side2.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/sweep_side2.brep",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Split_Cells_Group.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Cells_Group.py",
+      "switches": {
+        "-f": "sweep_side2.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/sweep_side2.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Split_Geometry.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Geometry.py",
+      "switches": {
+        "-f": "blind_holes.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/blind_holes.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Split_Periodic_Faces.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Split_Periodic_Faces.py",
+      "switches": {
+        "-f": "blind_holes.brep",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/blind_holes.brep",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Model_Steps.py",
+      "path": "APIs/Python/Test_Scripts/Test_Model_Steps.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Prompt_Refused.py",
+      "path": "APIs/Python/Test_Scripts/Test_Prompt_Refused.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 5,
+      "expected_report_checks": [
+        [
+          "prompts[-1].caption",
+          "=",
+          "Warning"
+        ],
+        [
+          "prompts[-1].text",
+          "contains",
+          "finite elements are missing a section assignment. Continue?"
+        ],
+        [
+          "prompts[-1].buttons",
+          "=",
+          "OKCancel"
+        ],
+        [
+          "prompts[-1].refused",
+          "=",
+          true
+        ],
+        [
+          "error",
+          "contains",
+          "finite elements are missing a section assignment"
+        ]
+      ],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Result_Composite.py",
+      "path": "APIs/Python/Test_Scripts/Test_Result_Composite.py",
+      "switches": {
+        "-f": "composite_shells.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/composite_shells.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Rpc_Live_Session.py",
+      "path": "APIs/Python/Test_Scripts/Test_Rpc_Live_Session.py",
+      "switches": {},
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Rpc_Server.py",
+      "path": "APIs/Python/Test_Scripts/Test_Rpc_Server.py",
+      "switches": {
+        "--rpc": "On"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": null,
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Selection_Correctness.py",
+      "path": "APIs/Python/Test_Scripts/Test_Selection_Correctness.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Selection_Pick.py",
+      "path": "APIs/Python/Test_Scripts/Test_Selection_Pick.py",
+      "switches": {
+        "-f": "cube.inp",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.inp",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Workflow_Geometry_To_Result.py",
+      "path": "APIs/Python/Test_Scripts/Test_Workflow_Geometry_To_Result.py",
+      "switches": {
+        "-f": "cube.stl",
+        "-u": "MM_TON_S_C"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": false,
+      "fixture": "APIs/Python/Test_Scripts/Models/cube.stl",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Api_View_Results.py",
+      "path": "APIs/Python/Test_Scripts/Test_Api_View_Results.py",
+      "switches": {
+        "-f": "PyTest_Job.frd"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": true,
+      "fixture": "generated:Test_Analysis.py/PyTest_Job.frd",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Record_And_Run_History_Output.py",
+      "path": "APIs/Python/Test_Scripts/Test_Record_And_Run_History_Output.py",
+      "switches": {
+        "-f": "PyTest_Job.frd"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": true,
+      "fixture": "generated:Test_Analysis.py/PyTest_Job.frd",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Result_Coverage.py",
+      "path": "APIs/Python/Test_Scripts/Test_Result_Coverage.py",
+      "switches": {
+        "-f": "PyTest_Job.frd"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": true,
+      "fixture": "generated:Test_Analysis.py/PyTest_Job.frd",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Result_Field_Outputs.py",
+      "path": "APIs/Python/Test_Scripts/Test_Result_Field_Outputs.py",
+      "switches": {
+        "-f": "PyTest_Job.frd"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": true,
+      "fixture": "generated:Test_Analysis.py/PyTest_Job.frd",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Result_History_Outputs.py",
+      "path": "APIs/Python/Test_Scripts/Test_Result_History_Outputs.py",
+      "switches": {
+        "-f": "PyTest_Job.frd"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": true,
+      "fixture": "generated:Test_Analysis.py/PyTest_Job.frd",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    },
+    {
+      "label": "Test_Result_Regions_Coverage.py",
+      "path": "APIs/Python/Test_Scripts/Test_Result_Regions_Coverage.py",
+      "switches": {
+        "-f": "PyTest_Job.frd"
+      },
+      "expected_exit": 0,
+      "expected_report_checks": [],
+      "needs_generated_result": true,
+      "fixture": "generated:Test_Analysis.py/PyTest_Job.frd",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "web_coverage": "uncovered",
+      "web_evidence": []
+    }
+  ],
+  "reference_checks": [
+    {
+      "path": "APIs/Python/Test_Scripts/Audit_API_Coverage.py",
+      "kind": "offline",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use Run_Tests.py --filter Audit_API_Coverage; preserve its expected outcome."
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/Audit_API_Documentation.py",
+      "kind": "offline",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use Run_Tests.py --filter Audit_API_Documentation; preserve its expected outcome."
+    },
+    {
+      "path": "APIs/Python/Test_Scripts/test_runner_offline.py",
+      "kind": "offline",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use Run_Tests.py --filter test_runner_offline; preserve its expected outcome."
+    },
+    {
+      "path": "macOS/verify-calculix.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "This is an embedded-Prepomac child script. Invoke through bash macOS/verify-calculix.sh <configured-ccx> Release, not standalone Python."
+    },
+    {
+      "path": "macOS/verify-chamfer-model.py",
+      "kind": "custom",
+      "status": "blocked",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the source-defined generated checks and a consented copy for the real-model regression; never overwrite the source PMX."
+    },
+    {
+      "path": "macOS/verify-custom-features.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-cylinders.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-fatigue-backend.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-file-tools.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Run the offline unittest part and the --integration application path; one does not establish the other."
+    },
+    {
+      "path": "macOS/verify-individual-colors.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Run application checks plus the --gpu path on recorded supported physical hardware; software WebGL is only functional evidence."
+    },
+    {
+      "path": "macOS/verify-navigation.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-pmx-compatibility.py",
+      "kind": "custom",
+      "status": "failed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-pressure-springs.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-result-springs.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-srsuntour.py",
+      "kind": "custom",
+      "status": "passed",
+      "evidence": [
+        "PERSONAL/Linux_Port_trial/VTKJS_STREAM/docs/evidence/M00-2026-11-06/reference-outcomes.json"
+      ],
+      "invocation_notes": "Use the invocation and environment setup in this verifier; preserve numerical and application assertions."
+    },
+    {
+      "path": "macOS/verify-virtual-friction.py",
+      "kind": "custom",
+      "status": "not_run",
+      "evidence": [],
+      "invocation_notes": "Pending baseline extension: run the original validator with a qualified ccx in a disposable directory; this material slice did not execute it."
+    },
+    {
+      "path": "macOS/verify-automatic-virtual-friction.py",
+      "kind": "custom",
+      "status": "not_run",
+      "evidence": [],
+      "invocation_notes": "Pending baseline extension: requires an explicitly supplied interference PMX fixture and qualified solver. No default/private PMX was accessed for this slice."
+    },
+    {
+      "path": "macOS/verify-dialog-layout.py",
+      "kind": "custom",
+      "status": "not_run",
+      "evidence": [],
+      "invocation_notes": "Pending baseline extension: run the original resize validator; adapt control reachability and resize intent for browser qualification."
+    }
+  ],
+  "reference_source_adjustments": [
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py",
+      "oldSha256": "ff76301e1c2c2224beaa7cd1456970c671ba55d58a3cca5cc56ede70b5c3fbe1",
+      "newSha256": "ecf4f13a1eafe825c51a5cfbd5a6145f0f1adda4eef45d5c65b264a54b8e5f8a",
+      "reason": "The pilot HTTP regression now verifies that parity diagnostics are absent from normal launches. Prepomac root sources/tests are unchanged."
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py",
+      "oldSha256": "ecf4f13a1eafe825c51a5cfbd5a6145f0f1adda4eef45d5c65b264a54b8e5f8a",
+      "newSha256": "72347cf6761773f44169f982339af2ef71b6d5fb3610824d02b7fa4399ac1b39",
+      "reason": "Strengthen the existing pilot HTTP regression with typed material command receipts, partial edits, isolated history, stale/unknown/conflicting requests and retries after undo. No original Prepomac test was changed."
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/StaticProjectChecks.cs",
+      "oldSha256": "6809a9246edffc2465c97a438ccaa4635f99426cd9d6c0472528fb658480a56f",
+      "newSha256": "566d902be6a95091a7dd672e90ebfc49863bf9997bfe88def73c82c79b5fa816",
+      "reason": "Editable PMA output advances to v7 with material IDs; add explicit identity-preserving resave qualification. Existing archive and failure checks remain."
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py",
+      "oldSha256": "72347cf6761773f44169f982339af2ef71b6d5fb3610824d02b7fa4399ac1b39",
+      "newSha256": "25b2159418945a41a3b0455e00fd68389d8241dc7f417579296b5f73360a902f",
+      "reason": "Strengthen HTTP coverage for persistent IDs, rename, section-reference repair, PMA copy/reopen, workspace isolation and retry after undo."
+    },
+    {
+      "path": "macOS/CaeModel/CaeModel.csproj",
+      "oldSha256": "3e2c55950ef824cb654a876e12ac5251c533b9f13592b7e7b5094a33c65d6a5e",
+      "newSha256": "edb2b0ae382f7586348736f46be72485dbc5e9c559e797c67143452876e22239",
+      "reason": "Reference changed independently since M00: adds VirtualFrictionSettings, VirtualFrictionExportContext, VirtualFrictionPairing and CalculixFileWriter.VirtualFriction compile units. Current root sources/runtime captured for the Nov 9 material slice; original M00 capture retained. This work did not change the root project file."
+    },
+    {
+      "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py",
+      "oldSha256": "25b2159418945a41a3b0455e00fd68389d8241dc7f417579296b5f73360a902f",
+      "newSha256": "091cdb412ffa7c528d36a12a880ce010031cd02c18436a97f9c89510a67e0056",
+      "reason": "Add real HTTP coverage for typed material creation/assignment/unused removal, empty-workspace compatibility, retry after undo/name recreation and stale IDs. Original Prepomac source tests are unchanged."
+    }
+  ]
+}

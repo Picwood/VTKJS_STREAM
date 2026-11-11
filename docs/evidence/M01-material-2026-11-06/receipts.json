@@ -1,0 +1,30 @@
+[
+  {
+    "kind": "material.elastic.patch/1",
+    "command": {
+      "operationId": "2c3ded2d-2d76-4ce1-9576-3cf59f3d5038",
+      "expectedRevision": 1,
+      "materialName": "ELASTIC",
+      "youngsModulus": 2000,
+      "poissonsRatio": null
+    },
+    "sourceRevision": 1,
+    "committedRevision": 2,
+    "sourceSha256": "867727CDD5CE4B036BF43656294286AC7278539775B08B9B6B519376C1FDB1B8",
+    "resultSha256": "D2BDD33576F433D3F9036BC1F9DA62D1A05FFAA678AB356EF7759F29CE81292E"
+  },
+  {
+    "kind": "material.elastic.patch/1",
+    "command": {
+      "operationId": "a821d4b6-bcdc-4339-a895-beb0f01ed2c6",
+      "expectedRevision": 2,
+      "materialName": "ELASTIC",
+      "youngsModulus": null,
+      "poissonsRatio": 0.2
+    },
+    "sourceRevision": 2,
+    "committedRevision": 3,
+    "sourceSha256": "D2BDD33576F433D3F9036BC1F9DA62D1A05FFAA678AB356EF7759F29CE81292E",
+    "resultSha256": "272399A92C87C5406C5F77268A97309C889EAB2D01C59DAD09236A625802384B"
+  }
+]

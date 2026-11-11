@@ -1,0 +1,156 @@
+Linux original-function parity / solid section acceptance — 2026-10-28
+
+Scope: named-region 3D solid section authoring and independent elastic material creation.
+CAD repair remains outside project scope. Full section-type and desktop parity remain open.
+Reference: original Controller section operations, FeModel assignment order and production CalculiX section writer.
+Built from the modified working checkout; no new PMA/metadata schema version.
+GTK: Xvfb/X11 software WebGL, PREPOMAX_PYTHON=/usr/bin/python3, LIBGL_ALWAYS_SOFTWARE=1, WEBKIT_DISABLE_DMABUF_RENDERER=1.
+No new physical-GPU or Wayland qualification is claimed.
+
+Artifacts:
+viewer.tar.gz: 53468243 bytes; SHA-256 962649ee8ba14c2348488e8fb4d019409c9a5bca7af723b6b29b753bfa2cfd68
+prepomax-sections-1.deb: 34983484 bytes; SHA-256 36f474ff59af243ab4bb876821ed91ece3aff5cf8e5655777da52b6e64a8dd3f
+prepomax-sections-2.deb: 34983484 bytes; SHA-256 4aedb21bb5992a46859cf0e8996c4fc1f1ee77e58380b2ec646a5130b1b1c1f8
+
+bash scripts/test-portable.sh
+PASS: 60 STL characterization checks.
+PASS: 178 legacy NCalc compatibility checks.
+PASS: 794 CaeGlobals characterization checks.
+PASS: 1600 CaeMesh characterization checks.
+PASS: 2412 mesh I/O characterization checks.
+PASS: 29 native process characterization checks.
+PASS: 354 result history characterization checks.
+
+Total: 5,427 portable characterization checks. Build: zero warnings/errors.
+
+/usr/bin/python3 scripts/test-native-calculix.py
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (en-US).
+PASS: production DAT reader validates cube solve (en-US).
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (it-IT).
+PASS: production DAT reader validates cube solve (it-IT).
+PASS: CalculiX unit cube right-face U1=0.001; persistent logs and results retained.
+PASS: complete 2-step input matches in en-US and it-IT (excluding model ID)
+PASS: native two-step FRD fields and times (en-US).
+PASS: native two-step FRD fields and times (it-IT).
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: long-bar analytical displacement U1=0.0075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: compression analytical displacement U1=-0.00075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: unloaded analytical displacement U1=0.0
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: mechanical analytical displacement U1=0.002
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: multipart material assignments give U1=0.001 and U1=0.0005
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5l3y6065/cube.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5l3y6065/two-step/cube-two-step.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5l3y6065/long-bar/long-bar.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5l3y6065/compression/compression.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5l3y6065/unloaded/unloaded.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5l3y6065/mechanical/mechanical.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5l3y6065/multipart/multipart.inp.pma
+PASS: CLI inspect/export/solve, native multipart results, source preservation and failure handling
+PASS: default static field-output step solves and reopens FRD without requiring an unrequested DAT history file
+PASS: authored static add/edit/duplicate/deactivate/remove workflow; native steps U1=0.001/0.002 at times 1/2, independent loads and stale-result invalidation
+PASS: solid section create/edit/duplicate/activate/remove, empty coverage refusal and recovery; native two-block material/overlap displacements and independent source preservation
+PASS: native CAD -> locally refined C3D10 -> pressure solve -> archived results: 1291 analytical nodal displacements with preserved CAD topology
+
+New section physics assertions: uniform E=4000 -> max U1=0.00025, mean U1=0.000125;
+later E=2000 first-block override -> max U1=0.0005, mean U1=0.0001875;
+inactive override restores uniform response. Missing coverage refuses before job creation.
+Part-derived ALL_PARTS covers sparse part IDs; source project bytes stay unchanged.
+
+GTK: scripts/start-gtk-viewer.sh FIXTURE.pma --smoke-section NEW.pma --smoke-section-action ACTION
+Actions: add, edit, duplicate, deactivate, activate, remove; fresh destination per case.
+Recovery: no-section fixture, --smoke-section-region ElementSetName:ALL_PARTS.
+Material-only: --smoke-add-material NEW.pma --smoke-material-only.
+Existing create-and-assign: --smoke-add-material NEW.pma.
+Solve: recovered fixture, --smoke-solve --solver CalculiX/ccx_2.23/src/ccx_2.23.
+
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK solid section add, save/reopen, coverage and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: edit
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK solid section edit, save/reopen, coverage and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: duplicate
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK solid section duplicate, save/reopen, coverage and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: deactivate
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK solid section deactivate, save/reopen, coverage and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: activate
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK solid section activate, save/reopen, coverage and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: remove
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK solid section remove, save/reopen, coverage and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: recover
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK solid section add, save/reopen, coverage and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: material-only
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK elastic-material creation without section assignment, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: material-assign
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK elastic-material creation, solid-section assignment, save, reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+GTK section case: solve
+GTK stable frame: actors=2 points=16 triangles=24
+GTK stable frame: actors=2 points=16 triangles=24
+PASS: GTK native solve and result-project reopening
+
+Portable core, native CalculiX and all listed GTK runs exited 0.
+Native tools: CalculiX 2.23 (host); clean Ubuntu uses distribution CalculiX 2.21 and Gmsh 4.12.1.
+New section analytical cases run on the development host; installed commands/export are checked in Ubuntu.
+Package versions: 0.1.2~preview+sections.1 -> 0.1.2~preview+sections.2.
+
+bash scripts/test-linux-deb-clean.sh prepomax-sections-1.deb prepomax-sections-2.deb
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+Distribution CalculiX solved the analytical cube with U1=0.001
+Distribution Gmsh generated and remeshed an editable PMA with persisted controls, six CAD-face regions, source-bound topology, guarded CAD-face refinement and exact retained STEP
+PASS: installed static step add/edit/duplicate/deactivate/remove, production export and CAD/setup preservation
+PASS: installed solid section add/edit/duplicate/activation/remove, standalone material creation, coverage refusal/recovery and production export
+Upgrading package from 0.1.2~preview+sections.1 to 0.1.2~preview+sections.2
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+PASS: clean Ubuntu 24.04 install, upgrade, private-runtime preflight and purge
+
+Clean Ubuntu run exited 0. Installed CLI verifies all section operations, independent material creation,
+incomplete-coverage refusal/recovery, production export and exact retained geometry/meshing controls.
+Upgrade reopens identical inspection data and checks byte-identical authored PMA; purge preserves user state.
+python3 -m py_compile scripts/start-gtk-viewer.py scripts/test-native-calculix.py: passed.
+bash -n scripts/test-linux-deb-clean.sh: passed.
+git diff --check: passed.

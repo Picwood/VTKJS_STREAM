@@ -1,0 +1,31 @@
+{
+  "schema": "prepomac.material-identity-evidence/1",
+  "qualificationPassed": true,
+  "rawExactParityPassed": false,
+  "materialParityPassed": true,
+  "sectionReferenceIntegrityPassed": true,
+  "referenceDeviations": [
+    {
+      "path": "$.stages[1].sections[0].material",
+      "reference": "ELASTIC",
+      "candidate": "ALLOY"
+    },
+    {
+      "path": "$.stages[2].sections[0].material",
+      "reference": "ELASTIC",
+      "candidate": "alloy"
+    }
+  ],
+  "unexpectedDifferences": [],
+  "negativeControlsDetected": 4,
+  "checkpoints": 3,
+  "refusedNames": [
+    "other",
+    "Bad Name",
+    "Bad#",
+    "123",
+    " ALLOY "
+  ],
+  "referenceSourceAndRuntimeDrift": [],
+  "claim": "Bounded material identity/rename slice. Raw section-reference differences remain explicit; full M01 and full-script parity are open."
+}

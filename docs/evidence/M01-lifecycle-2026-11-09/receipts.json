@@ -1,0 +1,74 @@
+[
+  {
+    "kind": "material.elastic.create/1",
+    "command": {
+      "operationId": "1f3db2aa-a061-4441-943e-0e259f9e26d3",
+      "expectedRevision": 1,
+      "name": "NEW",
+      "youngsModulus": 700,
+      "poissonsRatio": 0.2
+    },
+    "sourceRevision": 1,
+    "committedRevision": 2,
+    "sourceSha256": "DE4406DD21E9B99A57F00421719917887A7CC1AB688637600031391AF77383C8",
+    "resultSha256": "23AE89DF4A9AF74AF4326FEDFAD59F18780A5F21B63CA6E15C9726108843166E",
+    "materialId": "5f0b56bd-32d6-4446-a2d4-426275569c45"
+  },
+  {
+    "kind": "material.assign-solid-section/1",
+    "command": {
+      "operationId": "4d48d980-e19e-46ea-9d56-ef9ecd352bcb",
+      "expectedRevision": 2,
+      "sectionName": "solid-1",
+      "materialId": "5f0b56bd-32d6-4446-a2d4-426275569c45"
+    },
+    "sourceRevision": 2,
+    "committedRevision": 3,
+    "sourceSha256": "23AE89DF4A9AF74AF4326FEDFAD59F18780A5F21B63CA6E15C9726108843166E",
+    "resultSha256": "3ED82E09659E65E9F0299783650E715CA4D562D2CE915E7C36F9E98DFD55DE1C",
+    "materialId": "5f0b56bd-32d6-4446-a2d4-426275569c45"
+  },
+  {
+    "kind": "material.assign-solid-section/1",
+    "command": {
+      "operationId": "9bd14994-f48d-4486-889d-0625d225b4fb",
+      "expectedRevision": 3,
+      "sectionName": "solid-1",
+      "materialId": "63e70b93-bbf8-4732-a3a4-db9b75773ade"
+    },
+    "sourceRevision": 3,
+    "committedRevision": 4,
+    "sourceSha256": "3ED82E09659E65E9F0299783650E715CA4D562D2CE915E7C36F9E98DFD55DE1C",
+    "resultSha256": "C1A24584B6F98EF702A2C380D4A69B6A689A32E5F36B82B5DCFC29FA87C377AA",
+    "materialId": "63e70b93-bbf8-4732-a3a4-db9b75773ade"
+  },
+  {
+    "kind": "material.remove-unused/1",
+    "command": {
+      "operationId": "0819cdec-ec52-4312-bc32-c3ccaaf90d1a",
+      "expectedRevision": 4,
+      "materialId": "5f0b56bd-32d6-4446-a2d4-426275569c45"
+    },
+    "materialName": "NEW",
+    "sourceRevision": 4,
+    "committedRevision": 5,
+    "sourceSha256": "C1A24584B6F98EF702A2C380D4A69B6A689A32E5F36B82B5DCFC29FA87C377AA",
+    "resultSha256": "992DA587565A1B620C38B091A976C52782CD7D1E25C6F35AEFB7B6C1F18FBF73",
+    "materialId": "5f0b56bd-32d6-4446-a2d4-426275569c45"
+  },
+  {
+    "kind": "material.elastic.create/1",
+    "command": {
+      "operationId": "338695f7-8ee4-4751-b813-a5bbe6414392",
+      "expectedRevision": 5,
+      "name": "NEW",
+      "youngsModulus": 800,
+      "poissonsRatio": 0.25
+    },
+    "sourceRevision": 5,
+    "committedRevision": 6,
+    "sourceSha256": "992DA587565A1B620C38B091A976C52782CD7D1E25C6F35AEFB7B6C1F18FBF73",
+    "resultSha256": "D625C9B18C22BD53D22959D941244C57AF320802718B8572472665E8298E17D3",
+    "materialId": "18940395-48ec-4d75-ae24-1450bb8ddd0a"
+  }
+]

@@ -1,3 +1,55 @@
+# Browser pre- and post-processing
+
+The current product direction is a browser workspace for **model editing →
+CalculiX input export → external solving → result upload and inspection**.
+The ultimate target is [Prepomac functional parity](docs/PREPOMAC_WEB_PARITY.md),
+including its advanced and custom engineering workflows; this first release
+does not define the final feature scope.
+The [implementation roadmap](docs/PREPOMAC_IMPLEMENTATION_ROADMAP.md) orders the
+work into dependency-based milestones with [matched acceptance tests](docs/PREPOMAC_PARITY_TESTS.md)
+from Prepomac's existing suites.
+The first local web pilot reuses the portable production core and VTK.js, with
+separate workspace state and private renderer processes. See the
+[online pivot, implemented scope and next release gates](docs/ONLINE_PRE_POST.md).
+
+From this directory, build and start the pilot, then open http://localhost:5180:
+
+```bash
+bash scripts/start-web-workspace.sh --build
+```
+
+This is a local pilot with temporary workspaces. Hosted accounts, persistent
+project storage and an online deployment remain delivery gates. Download PMA
+projects to retain pilot work. The existing Linux/GTK evidence below remains
+the engineering baseline.
+
+# Linux development and migration
+
+The native Linux port is in progress. Start with the [migration status and next gates](docs/LINUX_PORT_PROGRESS.md). The VTK.js server/client are portable; the complete PrePoMax desktop application still requires Windows.
+
+For the supported GTK project workflow, run `scripts/build-linux-viewer.sh`, then
+`scripts/start-gtk-viewer.sh` (or pass `PROJECT.pma` to open it immediately). See [Linux viewer prerequisites and validation](docs/LINUX_VIEWER_BUILD.md).
+
+The .NET 10 portable build now includes STL, the CaeGlobals core, and the `FeMesh` aggregate with parts, topology, meshing configuration, renumbering, and copied transforms. The portable model imports INP, Medit and bounded Gmsh MSH 2.2 volume meshes, preserves Gmsh CAD-face/physical regions, and exports STL/Gmsh MSH 4.1. The portable [CaeResults aggregate](docs/FERESULTS_AGGREGATE_EVIDENCE.md) supports FRD preprocessing, mesh deformation and validated derived fields. It imports [CalculiX FRD meshes and raw fields](docs/FRD_IMPORT_EVIDENCE.md), reads DAT histories, [browses, plots and exports result histories](docs/LINUX_HISTORY_RESULTS.md), and includes [field values and stress invariants](docs/RESULT_FIELD_EVIDENCE.md). **5,583 checks pass on Linux**, with native Gmsh and CalculiX acceptance. The GTK application meshes CAD through a bounded cancellable Gmsh job, retains the checksummed source geometry and global remesh controls, authors the supported analysis subset including [multiline plasticity](docs/LINUX_PLASTICITY_EDITING.md), solves it and displays results through VTK.js. See the current [Linux migration status](docs/LINUX_PORT_PROGRESS.md).
+
+**Full Linux application status:** core libraries build, but the desktop app remains Windows-only. The next gate is production model-to-solver integration; see the [current status and remaining build gates](docs/LINUX_PORT_PROGRESS.md).
+
+```bash
+bash scripts/test-portable.sh
+```
+
+With Gmsh's command-line tool and Python package installed, run the optional native workflow:
+
+```bash
+python3 scripts/test-native-gmsh.py
+```
+
+CalculiX 2.23 now passes the analytic cube solve and production DAT-reader checks in both locales. Run `python3 scripts/test-native-calculix.py`; see [solver setup](docs/CALCULIX_INTEGRATION.md).
+
+See [native workflow evidence](docs/NATIVE_GMSH_EVIDENCE.md) for dependencies and scope.
+
+The instructions below describe the existing Windows build.
+
 # Prerequisites
 *  Visual Studio 2022 Community (development environment) - https://www.visualstudio.com/downloads/
 *  ActiViz OpenSource Edition 5.8.0 (64-bit Windows XP or later) (3D library used for graphics - must be installed only on the development PC; users do not need it) - https://prepomax.fs.um.si/downloads/

@@ -1,0 +1,130 @@
+{
+  "schema": "prepomac.parity-snapshot/1",
+  "kind": "field",
+  "mesh": {
+    "nodes": [
+      {
+        "id": 1,
+        "coordinates": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 2,
+        "coordinates": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "id": 3,
+        "coordinates": [
+          1.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "id": 4,
+        "coordinates": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      {
+        "id": 5,
+        "coordinates": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": 6,
+        "coordinates": [
+          1.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": 7,
+        "coordinates": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "id": 8,
+        "coordinates": [
+          0.0,
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": 1,
+        "type": "LinearHexaElement",
+        "nodes": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ]
+      }
+    ]
+  },
+  "field": {
+    "name": "DISP",
+    "component": "U1",
+    "step": 1,
+    "increment": 1,
+    "time": 1.0,
+    "unit": "m",
+    "values": [
+      {
+        "nodeId": 1,
+        "float32Bits": 0
+      },
+      {
+        "nodeId": 2,
+        "float32Bits": 981668463
+      },
+      {
+        "nodeId": 3,
+        "float32Bits": 981668463
+      },
+      {
+        "nodeId": 4,
+        "float32Bits": 0
+      },
+      {
+        "nodeId": 5,
+        "float32Bits": 0
+      },
+      {
+        "nodeId": 6,
+        "float32Bits": 981668463
+      },
+      {
+        "nodeId": 7,
+        "float32Bits": 981668463
+      },
+      {
+        "nodeId": 8,
+        "float32Bits": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "Runtime": "10.0.12",
+  "ArchiveBytes": 3982,
+  "ArchiveSha256": "DFC849B1B8C4F9F2BC78E328C335E7D6DFF408F14B77E444F7452E046043E96C",
+  "RetentionBudgetBytes": 536870912,
+  "Field": {
+    "Name": "STRESS",
+    "Component": "MISES",
+    "Step": 1,
+    "Increment": 1,
+    "Time": 1
+  },
+  "Fingerprint": "D8EEEB80110F641D72855C48ACFF40CD40DF43F4F9368DCCE12DC55A9E5A29B9",
+  "LoadCount": 1,
+  "HitCount": 4,
+  "Measurements": [
+    {
+      "Operation": "session-catalog-cold",
+      "Milliseconds": 645.5882,
+      "Access": {
+        "CacheHit": false,
+        "Retained": true,
+        "LoadAllocatedBytes": 4303920,
+        "IdentityMilliseconds": 9.3701,
+        "SnapshotMilliseconds": 0.5905,
+        "Load": {
+          "ArchiveMilliseconds": 473.1306,
+          "DecodeMilliseconds": 50.3345
+        },
+        "Indexed": true,
+        "IndexedFieldRecords": 8,
+        "IndexMetadataBytes": 13720,
+        "DecodedFieldRecords": 0,
+        "SelectedDecodeMilliseconds": 0
+      }
+    },
+    {
+      "Operation": "session-catalog-warm",
+      "Milliseconds": 0.4991,
+      "Access": {
+        "CacheHit": true,
+        "Retained": true,
+        "LoadAllocatedBytes": 4303920,
+        "IdentityMilliseconds": 0.0603,
+        "SnapshotMilliseconds": 0,
+        "Load": {
+          "ArchiveMilliseconds": 0,
+          "DecodeMilliseconds": 0
+        },
+        "Indexed": true,
+        "IndexedFieldRecords": 8,
+        "IndexMetadataBytes": 13720,
+        "DecodedFieldRecords": 0,
+        "SelectedDecodeMilliseconds": 0
+      }
+    },
+    {
+      "Operation": "session-fingerprint",
+      "Iteration": 1,
+      "Milliseconds": 22.5911,
+      "AllocatedBytes": 614864,
+      "Access": {
+        "CacheHit": true,
+        "Retained": true,
+        "LoadAllocatedBytes": 4303920,
+        "IdentityMilliseconds": 0.0445,
+        "SnapshotMilliseconds": 0,
+        "Load": {
+          "ArchiveMilliseconds": 0,
+          "DecodeMilliseconds": 0
+        },
+        "Indexed": true,
+        "IndexedFieldRecords": 8,
+        "IndexMetadataBytes": 13720,
+        "DecodedFieldRecords": 1,
+        "SelectedDecodeMilliseconds": 14.8913
+      }
+    },
+    {
+      "Operation": "session-fingerprint",
+      "Iteration": 2,
+      "Milliseconds": 0.7971,
+      "AllocatedBytes": 614320,
+      "Access": {
+        "CacheHit": true,
+        "Retained": true,
+        "LoadAllocatedBytes": 4303920,
+        "IdentityMilliseconds": 0.052,
+        "SnapshotMilliseconds": 0,
+        "Load": {
+          "ArchiveMilliseconds": 0,
+          "DecodeMilliseconds": 0
+        },
+        "Indexed": true,
+        "IndexedFieldRecords": 8,
+        "IndexMetadataBytes": 13720,
+        "DecodedFieldRecords": 1,
+        "SelectedDecodeMilliseconds": 0.671
+      }
+    },
+    {
+      "Operation": "session-fingerprint",
+      "Iteration": 3,
+      "Milliseconds": 0.4445,
+      "AllocatedBytes": 614320,
+      "Access": {
+        "CacheHit": true,
+        "Retained": true,
+        "LoadAllocatedBytes": 4303920,
+        "IdentityMilliseconds": 0.0253,
+        "SnapshotMilliseconds": 0,
+        "Load": {
+          "ArchiveMilliseconds": 0,
+          "DecodeMilliseconds": 0
+        },
+        "Indexed": true,
+        "IndexedFieldRecords": 8,
+        "IndexMetadataBytes": 13720,
+        "DecodedFieldRecords": 1,
+        "SelectedDecodeMilliseconds": 0.3776
+      }
+    },
+    {
+      "Operation": "independent-fingerprint",
+      "Iteration": 1,
+      "Milliseconds": 3.5045,
+      "AllocatedBytes": 1097768
+    },
+    {
+      "Operation": "independent-fingerprint",
+      "Iteration": 2,
+      "Milliseconds": 2.213,
+      "AllocatedBytes": 1097768
+    },
+    {
+      "Operation": "independent-fingerprint",
+      "Iteration": 3,
+      "Milliseconds": 2.1746,
+      "AllocatedBytes": 1097768
+    }
+  ],
+  "ProcessPeakWorkingSetBytes": 90710016
+}

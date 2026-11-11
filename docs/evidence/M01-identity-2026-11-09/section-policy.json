@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "differences": [],
+  "policy": "A renamed material must remain assigned to its sections. The raw reference comparison is retained separately."
+}

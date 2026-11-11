@@ -1,0 +1,108 @@
+Linux local-sizing acceptance — 2026-10-28
+
+Built from the working checkout, with explicit preview package versions.
+Portable metadata: v31 inline / v32 external mesh when a BoxMeshSize is present.
+GTK: Xvfb/X11 with LIBGL_ALWAYS_SOFTWARE=1 and WEBKIT_DISABLE_DMABUF_RENDERER=1.
+GTK functional runs do not establish physical-GPU or Wayland qualification.
+
+Artifacts:
+viewer-final.tar.gz: 53389056 bytes; SHA-256 c8c9c80aac339abcd215bf97736c224ce08de5ee515c6935c0c28061cae17e4a
+prepomax-localbox-1.deb: 34969208 bytes; SHA-256 7803bfa2425075b00e004a188d295f51908e4099cc3797210d6fb6b04868119f
+prepomax-localbox-2.deb: 34969208 bytes; SHA-256 8c03d1f3c6d5a00b0ba4bafd788ce40a6a4952a431959ec2f700e398a50128c7
+
+Portable checks: bash scripts/test-portable.sh
+PASS: 60 STL characterization checks.
+PASS: 178 legacy NCalc compatibility checks.
+PASS: 794 CaeGlobals characterization checks.
+PASS: 1600 CaeMesh characterization checks.
+PASS: 2178 mesh I/O characterization checks.
+PASS: 29 native process characterization checks.
+PASS: 354 result history characterization checks.
+
+Native Gmsh: /usr/bin/python3 scripts/test-native-gmsh.py
+PASS: application STEP -> Gmsh -> PMA: 334 nodes, 1093 elements, 6 CAD faces and exact source geometry
+PASS: retained STEP remesh with min/max, Delaunay, optimization and quadratic controls: 2030 nodes, 1093 elements and exact source geometry
+PASS: PMA-stored Gmsh controls drive a later remesh without repeated CLI values
+PASS: quadratic stored-control remesh exports production C3D10 solver input
+PASS: local refinement box: near/far mean tetrahedron diameters 0.1868/0.4557; saved setup remeshes unchanged
+PASS: application GEO retains physical names and local sizing overrides source field/minimum/scale
+PASS: application cancellation kills running Gmsh and publishes no PMA
+PASS: native mesh: 387 positive tetrahedra, volume 1
+PASS: native volume import/export (en-US): 143 nodes, 387 tetrahedra, volume 1.
+PASS: native volume import/export (it-IT): 143 nodes, 387 tetrahedra, volume 1.
+PASS: native surface import/export (en-US): 134 nodes, 264 triangles.
+PASS: native surface import/export (it-IT): 134 nodes, 264 triangles.
+PASS: native re-read (en-US): 264 triangles, area 6
+PASS: native re-read (it-IT): 264 triangles, area 6
+PASS: native volume re-read (en-US): 387 tetrahedra, volume 1
+PASS: native volume re-read (it-IT): 387 tetrahedra, volume 1
+
+Native CalculiX: /usr/bin/python3 scripts/test-native-calculix.py
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (en-US).
+PASS: production DAT reader validates cube solve (en-US).
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (it-IT).
+PASS: production DAT reader validates cube solve (it-IT).
+PASS: CalculiX unit cube right-face U1=0.001; persistent logs and results retained.
+PASS: complete 2-step input matches in en-US and it-IT (excluding model ID)
+PASS: native two-step FRD fields and times (en-US).
+PASS: native two-step FRD fields and times (it-IT).
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: long-bar analytical displacement U1=0.0075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: compression analytical displacement U1=-0.00075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: unloaded analytical displacement U1=0.0
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: mechanical analytical displacement U1=0.002
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: multipart material assignments give U1=0.001 and U1=0.0005
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 746_lam_/cube.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 746_lam_/two-step/cube-two-step.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 746_lam_/long-bar/long-bar.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 746_lam_/compression/compression.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 746_lam_/unloaded/unloaded.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 746_lam_/mechanical/mechanical.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 746_lam_/multipart/multipart.inp.pma
+PASS: CLI inspect/export/solve, native multipart results, source preservation and failure handling
+PASS: native CAD -> locally refined C3D10 -> pressure solve -> archived results: 1301 analytical nodal displacements
+
+GTK CAD import with --smoke-size-box --smoke-second-order
+GTK stable frame: actors=1 points=782 triangles=1560
+PASS: GTK STEP chooser, retained CAD, Gmsh regions, PMA publication, reopen and renderer scene
+PASS: GTK companion exit closed renderer listener
+
+GTK saved-control remesh with --smoke-size-box --smoke-second-order
+GTK stable frame: actors=1 points=782 triangles=1560
+GTK stable frame: actors=1 points=734 triangles=1464
+PASS: GTK retained-CAD controls, remesh publication, material transfer, reopen and renderer scene
+PASS: GTK companion exit closed renderer listener
+
+Clean Ubuntu 24.04 install/upgrade/purge: scripts/test-linux-deb-clean.sh package-1.deb package-2.deb
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+Distribution CalculiX solved the analytical cube with U1=0.001
+Distribution Gmsh generated and remeshed an editable PMA with persisted controls, six CAD-face regions and exact retained STEP
+Upgrading package from 0.1.0~preview+localbox.1 to 0.1.0~preview+localbox.2
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+PASS: clean Ubuntu 24.04 install, upgrade, private-runtime preflight and purge
+
+All listed command runs exited 0.
+Clean Ubuntu uses distribution CalculiX 2.21 and Gmsh 4.12.1; local native checks use CalculiX 2.23 and Gmsh 4.14.0.
+Ubuntu acceptance solves the existing C3D8 analytical case and exports the locally refined C3D10 project.
+The local native solver acceptance additionally solves the CAD-derived locally refined C3D10 project.

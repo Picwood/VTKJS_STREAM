@@ -1,0 +1,53 @@
+Linux model tree and edit sessions — 2026-10-29
+
+Source-based reference: UserControls/ModelTree.cs, original model hierarchy,
+per-step collection ordering and selected-object/context-action behavior.
+
+Portable validation:
+  bash scripts/test-portable.sh
+  Build succeeded: 0 warnings, 0 errors.
+  PASS: 60 STL characterization checks.
+  PASS: 178 legacy NCalc compatibility checks.
+  PASS: 794 CaeGlobals characterization checks.
+  PASS: 1600 CaeMesh characterization checks.
+  PASS: 2612 mesh I/O characterization checks.
+  PASS: 29 native process characterization checks.
+  PASS: 354 result history characterization checks.
+  Total: 5627 checks.
+
+Session state/file validation:
+  python3 scripts/test-linux-edit-session.py
+  PASS: 3 tests, including branching undo/redo, baseline preservation through
+  Save, failed commit, destination/format conflicts, external modification,
+  staging cleanup and dirty-session retention.
+
+GTK acceptance environment:
+  Isolated Xvfb X11 displays, GDK_BACKEND=x11,
+  LIBGL_ALWAYS_SOFTWARE=1, WEBKIT_DISABLE_DMABUF_RENDERER=1.
+  Two-step StaticModelWorkflow(2) fixture with the existing archive-cube FRD.
+  PASS: model tree hierarchy, node-set preview, direct selected-step editor,
+        expanded/selected tree state after refresh.
+  PASS: edit within session, Undo/Redo, result restoration/invalidation,
+        rename selection including Undo/Redo, Save as and reopen.
+  PASS: original fixture bytes unchanged.
+  PASS: existing solid-section edit/copy/reopen regression.
+  PASS: empty startup and guarded model actions.
+  PASS: result-field selection and native Copy summary private selection.
+  PASS: companion shutdown closes renderer listener.
+  Full native-window screenshot inspected for tree/viewport allocation.
+
+Relocatable package acceptance:
+  bash scripts/package-linux-viewer.sh --framework-dependent OUTPUT.tar.gz
+  Extracted into a fresh temporary directory.
+  PASS: all packaged SHA256SUMS entries.
+  PASS: packaged GTK script and linux_edit_session.py match current source.
+  PASS: packaged launcher --check.
+  PASS: packaged --smoke-edit-session and --smoke-model-tree.
+  PASS: no bytecode cache written beside installed scripts.
+  PASS: packaged CLI solves the session-authored, renamed/reopened project
+        with /usr/bin/ccx (CalculiX 2.21).
+  PASS: production result fingerprints have maximum DISP/U1 = 0.001 and
+        0.002 in steps 1 and 2, respectively (relative tolerance 1e-6).
+
+This is local functional acceptance. No new physical-GPU, Wayland,
+large-model or clean-machine qualification is inferred.

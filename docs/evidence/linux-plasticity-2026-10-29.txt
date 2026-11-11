@@ -1,0 +1,55 @@
+Linux original-function parity / plasticity acceptance — 2026-10-29
+
+Scope: non-temperature-dependent multiline yield-stress/plastic-strain
+authoring with Isotropic, Kinematic and Combined hardening. Add/replace/remove,
+new-project publication, result invalidation and production CalculiX export.
+CAD repair remains outside project scope.
+
+Artifacts:
+viewer.tar.gz: 53532033 bytes; SHA-256 ef24286e23da80edfc5967ff91ee52587a088446e11952bc53983427d62c090e
+prepomax-plasticity-1.deb: 35023004 bytes; SHA-256 448a6099d93114204cdc0e2f28217ff140e0c19fd2e9a927c48251b8c1776e83
+prepomax-plasticity-2.deb: 35023004 bytes; SHA-256 0d1bcf2f5b7fcc9911eb63b028a7bfc515210c7cfa21a520cc5e86cafee69926
+Artifact directory: /tmp/prepomax-plasticity-release.EUhfYY
+Versions: 0.1.6~preview+plasticity.1 and 0.1.6~preview+plasticity.2
+
+PREPOMAX_DOTNET=/home/flopipo/.local/share/prepomax/dotnet/dotnet bash scripts/test-portable.sh
+PASS: 60 STL characterization checks.
+PASS: 178 legacy NCalc compatibility checks.
+PASS: 794 CaeGlobals characterization checks.
+PASS: 1600 CaeMesh characterization checks.
+PASS: 2568 mesh I/O characterization checks.
+PASS: 29 native process characterization checks.
+PASS: 354 result history characterization checks.
+Total: 5,583 checks. Release build: zero warnings/errors.
+
+The 40 plasticity checks cover listing, property order, Kinematic and Combined
+replacement, production keyword/data export, removal, stale-result invalidation,
+source preservation, 1–1,000 row bounds, monotonic strain and finite/positive
+value validation, unsupported material/hardening cases and staging cleanup.
+
+PREPOMAX_DOTNET=/home/flopipo/.local/share/prepomax/dotnet/dotnet python3 scripts/test-native-calculix.py
+All prior native CalculiX and optional Gmsh cases passed.
+PASS: Kinematic plasticity production export and native two-step solve at
+DISP/U1 maxima 0.001 and 0.002; Combined replacement, removal and source
+preservation passed. Native CalculiX: 2.23.
+
+GTK X11 software-WebGL acceptance:
+--smoke-plasticity-action set: PASS
+--smoke-plasticity-action edit: PASS
+--smoke-plasticity-action remove: PASS
+Each operation passed native save-as, reopen, exact property comparison, stale
+result invalidation and renderer-listener shutdown.
+
+bash scripts/test-linux-deb-clean.sh prepomax-plasticity-1.deb prepomax-plasticity-2.deb
+PASS: installed plasticity set/edit/remove and production export.
+PASS: Kinematic property retained through installed field/history edits and
+distribution CalculiX solve/history-result export.
+Upgrade: 0.1.6~preview+plasticity.1 -> 0.1.6~preview+plasticity.2.
+PASS: clean Ubuntu 24.04 install, upgrade, private-runtime preflight and purge.
+Distribution tools: CalculiX 2.21 and Gmsh 4.12.1.
+
+python3 -m py_compile scripts/start-gtk-viewer.py scripts/test-native-calculix.py: passed.
+bash -n scripts/test-linux-deb-clean.sh scripts/package-linux-deb.sh scripts/package-linux-viewer.sh: passed.
+git diff --check: passed.
+
+All accepted runs exited 0.

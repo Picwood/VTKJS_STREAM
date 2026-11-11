@@ -1,0 +1,66 @@
+Element-set authoring and reference model tree — 2026-10-29
+
+Reference:
+  Owner-supplied model-tree screenshot, recorded in LINUX_MODEL_TREE_TARGET.md.
+  Production hierarchy source: UserControls/ModelTree.cs.
+  Original .ico assets are reused by GTK; connector lines and empty-branch
+  labels follow the reference structure. Packaged assets: 22 icons.
+
+Portable acceptance:
+  bash scripts/test-portable.sh
+  Build succeeded: 0 warnings, 0 errors.
+  PASS: 60 STL checks.
+  PASS: 178 legacy NCalc checks.
+  PASS: 794 CaeGlobals checks.
+  PASS: 1600 CaeMesh checks.
+  PASS: 2704 mesh I/O checks.
+  PASS: 29 native process checks.
+  PASS: 354 result history checks.
+  Total: 5719 checks.
+  python3 scripts/test-linux-edit-session.py: 3 tests passed.
+
+New service checks:
+  IDs/ranges/steps, deduplication and exact owning-node preview.
+  Whole-part sets preserve sparse part IDs 1 and 17.
+  Newly authored sets are section targets; section coverage stays consistent.
+  Rename updates sections, gravity/centrifugal loads and element-history
+  requests across both steps, including inactive definitions.
+  Surface face mappings follow backing-set rename without changing node sets.
+  Duplicate independence and unreferenced removal.
+  Dependent removal and surface-backed membership changes are refused.
+  Invalid names, unknown IDs/parts, overflow, oversized ranges/expressions,
+  ambiguous/empty selections, stale identities and overwrite are refused.
+  Source bytes, geometry retention, result invalidation and staging cleanup.
+  Untracked custom-keyword references block mutation explicitly.
+  Reference Model, Mesh, Features, Contacts, Analyses and step ordering checked.
+
+GTK acceptance:
+  GDK_BACKEND=x11, LIBGL_ALWAYS_SOFTWARE=1,
+  WEBKIT_DISABLE_DMABUF_RENDERER=1, isolated Xvfb displays.
+  Passed on a two-step result fixture and on a two-part mesh:
+    tree create -> preview -> section preselected to the authored set ->
+    membership edit to both parts and rename -> duplicate/remove -> refuse
+    dependent removal -> undo/redo -> Save as/reopen.
+  New/renamed sets remain selected; original source bytes stay unchanged.
+  Renderer listener closes on companion exit.
+  Native-window screenshot inspected for original icons and tree structure.
+
+Native numerical acceptance:
+  CalculiX 2.21 solves the GTK-authored two-part project.
+  The authored section uses ELASTIC on the new set. Expanding that set to
+  both parts changes the second part from E=2000 to E=1000.
+  Production DAT gives U1=0.001 (tolerance 1e-9) on loaded nodes
+  2, 3, 6, 7 and 10, 11, 14, 15; transverse movements are zero.
+
+Relocatable bundle:
+  package-linux-viewer.sh --framework-dependent completed.
+  Extracted into a fresh directory; every SHA256SUMS entry verified.
+  GTK source matches checkout; all 22 original icon assets are present.
+  Launcher --check passes.
+  Packaged CLI add/edit/duplicate/remove/read passes; unknown IDs produce
+  a nonzero status and no output archive.
+  Packaged GTK full element-set/section workflow passes.
+  Packaged CLI solves that saved model and reproduces all eight U1 values.
+  No bytecode cache is written beside installed scripts.
+
+No new physical-GPU, Wayland, large-model or clean-machine claim is inferred.

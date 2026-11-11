@@ -4,7 +4,18 @@ Last audited: 2026-09-08
 
 ## Current answer
 
-PrePoMax can currently run with its **visible viewport rendered by VTK.js**, but it cannot yet start after ActiViz is uninstalled or its assemblies are removed.
+This document describes the original Windows `PrePoMax.exe` and its in-process
+VTK.js compatibility mode. That executable can currently run with its **visible
+viewport rendered by VTK.js**, but it cannot yet start after ActiViz is
+uninstalled or its assemblies are removed.
+
+The native GTK Linux application has a different build boundary. Its portable
+host, converter and renderer server do not reference `vtkControl`,
+`Kitware.VTK` or `Kitware.mummy.Runtime`; its visible renderer is VTK.js/WebGL.
+The Debian package therefore already installs and runs without ActiViz. PEND-004
+tracks retirement of the compatibility backend from the original desktop source
+and the remaining shared-domain type cleanup, rather than a missing Linux runtime
+library.
 
 VTK.js mode is selected before launch with:
 

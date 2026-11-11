@@ -1,0 +1,68 @@
+Linux original-function parity / history output acceptance — 2026-10-28
+
+Scope: named-region nodal, element, contact and section history-output request
+management for static steps. CAD repair remains outside project scope.
+Reference: original Controller history-output operations, FrmHistoryOutput
+type/region behavior and production CalculiX print writers.
+Built from the modified working checkout; no new PMA/metadata schema version.
+GTK uses Xvfb/X11 software WebGL with WEBKIT_DISABLE_DMABUF_RENDERER=1.
+No new physical-GPU or Wayland qualification is claimed.
+
+Artifacts:
+viewer.tar.gz: 53505257 bytes; SHA-256 838a90b7e0624a58b62a2bd365bf454718f605da28dae19635e6ca9eddf547f0
+prepomax-history-1.deb: 35005988 bytes; SHA-256 852e245bb6668dba496ba869f75819029376ca82b93108be8689911ed18d34a7
+prepomax-history-2.deb: 35005988 bytes; SHA-256 a9ef7505b7a960d1f67bf324a123c705e78cf07eb740d137a3d49fafc7a59472
+Artifact directory: /tmp/prepomax-history-release.t9DpRU
+Versions: 0.1.4~preview+history.1 and 0.1.4~preview+history.2
+
+PREPOMAX_DOTNET=/home/flopipo/.local/share/prepomax/dotnet/dotnet bash scripts/test-portable.sh
+PASS: 60 STL characterization checks.
+PASS: 178 legacy NCalc compatibility checks.
+PASS: 794 CaeGlobals characterization checks.
+PASS: 1600 CaeMesh characterization checks.
+PASS: 2506 mesh I/O characterization checks.
+PASS: 29 native process characterization checks.
+PASS: 354 result history characterization checks.
+Total: 5,521 checks. Release build: zero warnings/errors.
+
+The 40 new mesh-I/O checks cover subtype-safe persistence, all production
+writers, compatible region types, variables, totals/global flags, ordering,
+replacement/append propagation, independent clones, activation, invalid input,
+case-insensitive collisions, overwrite refusal, positional keywords, shared
+region preservation and stale-result invalidation.
+
+PREPOMAX_PYTHON=/usr/bin/python3 /usr/bin/python3 scripts/test-native-calculix.py
+All prior native CalculiX and optional Gmsh cases passed.
+PASS: four-type history-output inspection and nodal
+add/edit/duplicate/activation/remove/propagation; native DAT result solve and
+source preservation.
+The authored production deck contains active *Node print requests with RF,U and
+Totals=Yes in both active steps. The result archive contains DAT; reopened
+DISP/U1 maxima remain 0.001 and 0.002 at times 1 and 2. The source result PMA is
+byte-identical. Native CalculiX: 2.23.
+
+GTK history-output acceptance:
+--smoke-history-output-action add: PASS
+--smoke-history-output-action edit: PASS
+--smoke-history-output-action duplicate: PASS
+--smoke-history-output-action deactivate: PASS
+--smoke-history-output-action activate: PASS
+--smoke-history-output-action remove: PASS
+--smoke-history-output-action propagate: PASS
+Each case saved and reopened a new PMA, matched exact requested definitions,
+removed stale fields and closed the renderer listener.
+
+bash scripts/test-linux-deb-clean.sh prepomax-history-1.deb prepomax-history-2.deb
+PASS: installed history-output add/edit/duplicate/activation/remove/propagation,
+result invalidation and production export.
+Upgrade: 0.1.4~preview+history.1 -> 0.1.4~preview+history.2.
+PASS: clean Ubuntu 24.04 install, upgrade, private-runtime preflight and purge.
+The authored PMA remained byte-identical and reopened with identical inspection
+data. Distribution tools: CalculiX 2.21 and Gmsh 4.12.1.
+
+python3 -m py_compile scripts/start-gtk-viewer.py scripts/test-native-calculix.py: passed.
+bash -n scripts/test-linux-deb-clean.sh: passed.
+Documentation-link validation: passed.
+git diff --check: passed.
+
+All listed acceptance runs exited 0.

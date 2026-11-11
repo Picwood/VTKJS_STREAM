@@ -1,0 +1,1925 @@
+{
+  "desktopRuns": {
+    "Test_Analysis.py": [
+      {
+        "label": "Test_Analysis.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.35682009700031,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Analysis.py.log",
+          "sha256": "4d116d01f66118269f557afe78a6fb06d1dba841152edc2f753be59b56af6327"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Analysis.py.json",
+          "sha256": "635920c53a05396de3ef64be596a127ac9fe513eda181edca747b33d0d837694"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Api_Enum_Vocabulary.py": [
+      {
+        "label": "Test_Api_Enum_Vocabulary.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 26.338730537998345,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Api_Enum_Vocabulary.py.log",
+          "sha256": "24e4951a24a61d2938649014a21252021d2fd1dd71f21e02d44bc1ff875090cf"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Api_Enum_Vocabulary.py.json",
+          "sha256": "bc2c6a283ae59c5fa1dc16751b6c6a114c3277e4c8b66d1bd640e01b6736fda2"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Api_Keyword_Arguments.py": [
+      {
+        "label": "Test_Api_Keyword_Arguments.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 25.990084111002943,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Api_Keyword_Arguments.py.log",
+          "sha256": "1f18e340747b3bbaec13022ccfa279bc23ba11f1cf6c3fe37bf34872cae2ec46"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Api_Keyword_Arguments.py.json",
+          "sha256": "b149ea4b1a433d183961d425bfedf13eaf3428348facfd406f665e4776bc2135"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Api_Session_Rules.py": [
+      {
+        "label": "Test_Api_Session_Rules.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.317278762999194,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Api_Session_Rules.py.log",
+          "sha256": "b66f8f438d6e2fe41e7e85035a67cb2900a8b46ac89e84be1a09ff0c35184e1a"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Api_Session_Rules.py.json",
+          "sha256": "daaa61b8efcab24d745b3da28d8ad25714588c8f3a6a5934cc2b5609483e3359"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Api_Topology.py": [
+      {
+        "label": "Test_Api_Topology.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.637909607998154,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Api_Topology.py.log",
+          "sha256": "7e628ae5abd34b0470b3d5c354abb875d0477e997c4352c0121eed9a0d51fe07"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Api_Topology.py.json",
+          "sha256": "0e21726571ddacaad3fc6818ce2e0fd5d1e28e5e4df779d32c9bd2f70ba50536"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Api_View_Exploded.py": [
+      {
+        "label": "Test_Api_View_Exploded.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.814783335998072,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Api_View_Exploded.py.log",
+          "sha256": "32d58774dd69bbb1c7e654ff4dd8b7beb46016a3f1740edb47db9f21c7ad4571"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Api_View_Exploded.py.json",
+          "sha256": "045d746a503e907d6cac170cdf9953716de100fb54a347e2e733b235cefda20e"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Batch_Run.py [1]": [
+      {
+        "label": "Test_Batch_Run.py [1]",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 108.91597058999832,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Batch_Run.py.1.log",
+          "sha256": "bdb6d60e8d2005093147dc487f459fff8ffe9a2998f7055ab39c5faffc69be0f"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Batch_Run.py.1.json",
+          "sha256": "47afaa66edcdcc5223fd6dd4857dc02e8d19d9f7f879a1b914b44e028c1f7d9e"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Batch_Run.py [2]": [
+      {
+        "label": "Test_Batch_Run.py [2]",
+        "status": "passed",
+        "exit": 3,
+        "expectedExit": 3,
+        "seconds": 25.27090436099752,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Batch_Run.py.2.log",
+          "sha256": "f0d9e0874bed48f6608f24cb8d9c3255c2c1656d32b602e5e0d4b01688c7f1ea"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Batch_Run.py.2.json",
+          "sha256": "8c206e2f249ac9894b7f31f65056301063821c4f6eb24980cd363b04d9a7f087"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Batch_Run.py [3]": [
+      {
+        "label": "Test_Batch_Run.py [3]",
+        "status": "passed",
+        "exit": 4,
+        "expectedExit": 4,
+        "seconds": 30.1299469029982,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Batch_Run.py.3.log",
+          "sha256": "2e5986e65ff0c249dbe1b680b3fdb09170d7722866a8c2628d067003031ff386"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Batch_Run.py.3.json",
+          "sha256": "f85e80bef79640e7f0c29d6c2be88e461658cb8a3982a1c074fb5c3f8911cb4d"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Batch_Run.py [4]": [
+      {
+        "label": "Test_Batch_Run.py [4]",
+        "status": "passed",
+        "exit": 7,
+        "expectedExit": 7,
+        "seconds": 25.581442452003103,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Batch_Run.py.4.log",
+          "sha256": "37f1810d80199b7471d30377c9509b4c6300fb9cda9423bd5fe5530ec4d4f28a"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Batch_Run.py.4.json",
+          "sha256": "d5f5d71fa75c1103099eb73559d77a2cce4be6fdcc00f9ca9ced85b577021479"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Custom_Feature_API.py": [
+      {
+        "label": "Test_Custom_Feature_API.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 26.976173316001223,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Custom_Feature_API.py.log",
+          "sha256": "3bae819df2c576342cbfd23aae7ff4397a5eebf7819e2ff876742cc4381546a1"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Custom_Feature_API.py.json",
+          "sha256": "8ef4a228d80fa3ea1ec4cc6659f2b81efcadf3067c9eecde75bb37b4c2e8bb9c"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Job_Correctness.py": [
+      {
+        "label": "Test_Job_Correctness.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 40.228774392999185,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Job_Correctness.py.log",
+          "sha256": "ab142f22401620475022e8bae7ac4175f8a457f05b49357fb00cd60d7b1ab5ca"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Job_Correctness.py.json",
+          "sha256": "c051247c9c554e3e5d430709ca6063f15e4ada2a68325765769ac245c14a0a07"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Journal_Mesh_Setup.py": [
+      {
+        "label": "Test_Journal_Mesh_Setup.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 53.57652780200078,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Journal_Mesh_Setup.py.log",
+          "sha256": "2ccb288e8bfb335a8082b99d33309d1f210e8a1b0b590004b953b3d1c8fb1ab2"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Journal_Mesh_Setup.py.json",
+          "sha256": "6e734939b45a271756174030f10cda32b9efe1db5198972d963266d5a8021383"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      },
+      {
+        "label": "Test_Journal_Mesh_Setup.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 62.66061037400141,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/Test_Journal_Mesh_Setup.py.log",
+          "sha256": "7a01d07a85144754031663737ca68a836e9b2d82f8e48197efa74b4fd9f4d253"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/api-work/Test_Journal_Mesh_Setup.py.json",
+          "sha256": "17bba50161091db61a2c581aebe371a9df4589186a9e017b57f003db10e2fa45"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Mcp_Http.py": [
+      {
+        "label": "Test_Mcp_Http.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 53.664069227001164,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Mcp_Http.py.log",
+          "sha256": "bd0e3837e07d860a4ce6bb7b49483f1aabc63ca59fe78956d44119bed6d1cc37"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Mcp_Http.py.json",
+          "sha256": "497723895e63b55d4e30ae03f0634bf361065fddc0839fd9eb9aa1c4ff4a9f65"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      },
+      {
+        "label": "Test_Mcp_Http.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 148.558269035002,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/Test_Mcp_Http.py.log",
+          "sha256": "ff70e2d309a8cc43bff32ce16d1252790d46a9e8ba420458d4716a2cc0117b28"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/api-work/Test_Mcp_Http.py.json",
+          "sha256": "651ac4d04b6b922b6d392f74fa2e3c385c20765f4b0f2316b1256a0494743753"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      },
+      {
+        "label": "Test_Mcp_Http.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 87.05134202599947,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06/Test_Mcp_Http.py.log",
+          "sha256": "7e60d5879e2f1f2a10ebd0570da6afbc0f2d92a121ec1a63fd3ba88fb1a9e2ef"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06/api-work/Test_Mcp_Http.py.json",
+          "sha256": "51fd06a7f84c68f618f4bdd73cc92b76004962f61100ff80a8af7a4049aa88aa"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Mcp_Workflow.py": [
+      {
+        "label": "Test_Mcp_Workflow.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 54.72801496300235,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Mcp_Workflow.py.log",
+          "sha256": "a33ec6b75beea27606b3fa1af5ff7e75db1d1feb9b55e1eeb1405f27c679094b"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Mcp_Workflow.py.json",
+          "sha256": "315d18ace9ab80080c455fafced5aa4384e69b8d8a68548af4472c9b0eec4ce0"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      },
+      {
+        "label": "Test_Mcp_Workflow.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 147.76941732699925,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/Test_Mcp_Workflow.py.log",
+          "sha256": "9281cd33823882b721c5cd9b3721dfb4a432ef2812d1247bcde7323bd68c30f1"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/api-work/Test_Mcp_Workflow.py.json",
+          "sha256": "c1e4d549f74f733d0b83f4080e26cb5a6dc424a73fbd527b3542ec0e48e7ba67"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      },
+      {
+        "label": "Test_Mcp_Workflow.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 55.545141099999455,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06/Test_Mcp_Workflow.py.log",
+          "sha256": "bd93bb3a3d9aa154e14390f16a1906e1dff30b39c7c4eff0eee7f62930e49a8d"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06/api-work/Test_Mcp_Workflow.py.json",
+          "sha256": "0815cb1de23e38f5e0061d4044f7f148a4981865f46f45457097888e78686af0"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_BCs.py": [
+      {
+        "label": "Test_Model_BCs.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 30.305239983998035,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_BCs.py.log",
+          "sha256": "4e2b99eee276924b01c1310b459d17b052d45b465849c84d00d1fbf27acc299d"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_BCs.py.json",
+          "sha256": "f7de5d8a23eee0049fa2eae1b9367a0dc92e6447b785270c23e03d8a10a53800"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Composite_Parameters.py": [
+      {
+        "label": "Test_Model_Composite_Parameters.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 112.85514038099791,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Composite_Parameters.py.log",
+          "sha256": "116823133b961c13d27121abdf1e8c1af970efcac644dee5bfb5eb9ac0c66c8d"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Composite_Parameters.py.json",
+          "sha256": "80b65e5858bc47d2b6c922b9e8faf675b62f34d00090aed415ef676d07323ecf"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Composite_Sections.py": [
+      {
+        "label": "Test_Model_Composite_Sections.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.183540685997286,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Composite_Sections.py.log",
+          "sha256": "564cce4b9e90067b85c0d9e886b3044ddaa5cc89b85a957a206b25069287b873"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Composite_Sections.py.json",
+          "sha256": "6d52b83fe4508a4bc6e34ebeaef2282c09a82ac446e7de2eea54ddd7d232bc03"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Constraints.py": [
+      {
+        "label": "Test_Model_Constraints.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 32.043257511002594,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Constraints.py.log",
+          "sha256": "2215edf5999209f9bd588d3972ed765d528ea4b1ca426afbd049571d689f3edb"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Constraints.py.json",
+          "sha256": "10b05f06bc1458ea720fcea2d0ec80fe0d267d02a7fb4e8df3fd96a7a45e5d25"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Defeature.py": [
+      {
+        "label": "Test_Model_Defeature.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 29.398317010000028,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Defeature.py.log",
+          "sha256": "8cd0f8c042e41a175ed058acb7970cb5ca09ba825041e3db20537e7c3339b5df"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Defeature.py.json",
+          "sha256": "2250a1308ee33e3d6facc6481f8683e248225ed46bcca8e0bf856369a5df1c70"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Definition_Coverage.py": [
+      {
+        "label": "Test_Model_Definition_Coverage.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.68440838999959,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Definition_Coverage.py.log",
+          "sha256": "ba359fd0ae6feba5f315282fc2ecbf790c15c8428a98773138aaae3c04ed32c9"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Definition_Coverage.py.json",
+          "sha256": "f8b5c78b3248f74b0326c3990d1efa1a91a10642fa42605aa34ce9da0eca1458"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Delete_Cad_Faces.py": [
+      {
+        "label": "Test_Model_Delete_Cad_Faces.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 30.587633718998404,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Delete_Cad_Faces.py.log",
+          "sha256": "aa064f44e060502b1359f76f8260b65d5e09a870a525a90f08b64fea8c992dc2"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Delete_Cad_Faces.py.json",
+          "sha256": "80e9e769b9a4bd4c4f7f5bd2e132d2eb2729505c1bbbd48bc636e17605179c9d"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Document.py": [
+      {
+        "label": "Test_Model_Document.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.813989190999564,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Document.py.log",
+          "sha256": "b0c14c1025a5fad10f98c0728e89d53e6d2da0d1a6d631b26c5cfc55153c0105"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Document.py.json",
+          "sha256": "ce241f92f829f79caafd3eb192412ba307aeb089e0975d11f8ebe85781b8fe39"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Export_Geometry_Assembly.py": [
+      {
+        "label": "Test_Model_Export_Geometry_Assembly.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.641767348999565,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Export_Geometry_Assembly.py.log",
+          "sha256": "2d689ce488ebef4dfb55573b39b95bd222db714adacc2d24484a4c7171ca6413"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Export_Geometry_Assembly.py.json",
+          "sha256": "94d33569e111d21b48351d567de8e4a5a00355070659808dc6bd80efdc9cd64f"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Export_Sources.py": [
+      {
+        "label": "Test_Model_Export_Sources.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.976553853997757,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Export_Sources.py.log",
+          "sha256": "4ee673baa72e65be00eccd550afa3330552947a9cab4fbc843ce2dade900752b"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Export_Sources.py.json",
+          "sha256": "3359800fd68de7a62e7fa6ea6302506dcc8cbb5b528f51ccf187c6615a25f4b3"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Fields.py": [
+      {
+        "label": "Test_Model_Fields.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 31.743942668999807,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Fields.py.log",
+          "sha256": "96dd3b09dc82d606e35b51d8c6c520b23f8a8ccfb5c3627b157188cc2a9227e6"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Fields.py.json",
+          "sha256": "e1440c3d29d5797aca9942ee4cc4ba4677b9683721dac0e26c194c458e5e5831"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Fuse_Faces_Repair.py": [
+      {
+        "label": "Test_Model_Fuse_Faces_Repair.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 33.05831833999764,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Fuse_Faces_Repair.py.log",
+          "sha256": "008671a0e5b7cd33b3556437e4134c015abd00aa22e94badcff359a8fa282282"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Fuse_Faces_Repair.py.json",
+          "sha256": "56fe9af7eaa7beb49822420cd326bf1c014a3da445ad714d71939867e6528a84"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Geometry_Metadata.py": [
+      {
+        "label": "Test_Model_Geometry_Metadata.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.84236107799734,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Geometry_Metadata.py.log",
+          "sha256": "659fe6fb239798abbcf00ecf577913643e597d08470103e0e9f64abb0b48b822"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Geometry_Metadata.py.json",
+          "sha256": "372eac970571bb556260d3dce44f5bbe5bb5325ae7c5db2e4a20db9bb7c0d610"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Geometry_Transform.py": [
+      {
+        "label": "Test_Model_Geometry_Transform.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 31.10962875399855,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Geometry_Transform.py.log",
+          "sha256": "97dfa6f88efabb7737d7004b8a49eab6f17b11cfe3877e2c896511a809698e96"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Geometry_Transform.py.json",
+          "sha256": "42f3a6489b45d9f534e4edd2b2067071e07e1f239fbd465e596fac060cd96307"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Group_Cells_Plain_Compound.py": [
+      {
+        "label": "Test_Model_Group_Cells_Plain_Compound.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.837626127002295,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Group_Cells_Plain_Compound.py.log",
+          "sha256": "76d4d855eaab6eba343e9d2d9962dd1faf560c8bd3321e0c69e97365d8227215"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Group_Cells_Plain_Compound.py.json",
+          "sha256": "9a22d970e2bcea798cee9e3eb67c9cd1cc9632c2b07d18c09ee873b7eadcb94d"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Interactions.py": [
+      {
+        "label": "Test_Model_Interactions.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.106213111001125,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Interactions.py.log",
+          "sha256": "15740dd238c590618ba0914fc57a491d1d0ee890bc18f0b658c54e251925d2cc"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Interactions.py.json",
+          "sha256": "b0512f36a8a828f2b79eef4cab1f49936e7dd55a979f72dd378df2e20c915086"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Inverted_Elements.py": [
+      {
+        "label": "Test_Model_Inverted_Elements.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.886108200000308,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Inverted_Elements.py.log",
+          "sha256": "86b7577574ccb8e50bc80a07845bce4f536df3a08f614ae2d97bfdcb0f962d8b"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Inverted_Elements.py.json",
+          "sha256": "15299459e44d6068ab2a7f660dfd3de3160c7c8f817e6ff802e6dbda48a4f295"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Keyword_Tree_Coverage.py": [
+      {
+        "label": "Test_Model_Keyword_Tree_Coverage.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.486287537998578,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Keyword_Tree_Coverage.py.log",
+          "sha256": "7c1e91c4077717f1c077d6ec07d8e61e7bb5b17e425c03f1a3aadf588c17837b"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Keyword_Tree_Coverage.py.json",
+          "sha256": "55ff84cf74ec78a9debdc7b85aa98fd84b57f19c470b5d83825406c9c179221a"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Loads.py": [
+      {
+        "label": "Test_Model_Loads.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 32.40463447900038,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Loads.py.log",
+          "sha256": "67263a2645523413081757f0de05d76c51c3cb36b87ffbdba142d843a2feadd7"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Loads.py.json",
+          "sha256": "9af38d62925e61e8b42971429d49edc89223fc86ffd099ffe09717b36216caba"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Material_Orientations.py": [
+      {
+        "label": "Test_Model_Material_Orientations.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 26.92360443399957,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Material_Orientations.py.log",
+          "sha256": "a3a77a9bdf86d7457449d560d14c92c5eb8028a85d5ca5d3c3d6d90f02b32633"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Material_Orientations.py.json",
+          "sha256": "978646007ec34b35d40f9339da74d559ae621043911d8be7bf62a2b2326ac4ab"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Materials_Sections.py": [
+      {
+        "label": "Test_Model_Materials_Sections.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.050206905001687,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Materials_Sections.py.log",
+          "sha256": "3ded52b0fd6a2e4456f30312d29e9cc46c1afcde203fe494991d78027718d707"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Materials_Sections.py.json",
+          "sha256": "7f498cf658eb27e51b27decbd48d965b7ead4fcfd8c85e5990a6d86412246e97"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Mesh_Tools.py": [
+      {
+        "label": "Test_Model_Mesh_Tools.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 26.96071547599786,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Mesh_Tools.py.log",
+          "sha256": "6a81527738a673c281a4a92ef1f0c8954ed36204c15df5f661b8c4c2135a040a"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Mesh_Tools.py.json",
+          "sha256": "395e8781213de9b39fcaa74c812f0b8aae1036d6d02018b87e85b5556a124e0b"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Meshing.py": [
+      {
+        "label": "Test_Model_Meshing.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 27.323975449999125,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing.py.log",
+          "sha256": "53a4b65be643192554b88dbd58957e51712620488fbdb4a171e4d845070dbb8f"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing.py.json",
+          "sha256": "b4e8b3aa2ff79d673af7b14fcb0bd54afdf6217f96aa268e55f82c66294888d4"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Coverage.py": [
+      {
+        "label": "Test_Model_Meshing_Coverage.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.843465251000453,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Coverage.py.log",
+          "sha256": "f0475240dd681ffe3118350575e673d9110530943c0fc069e90f8c282fe3e9a7"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Coverage.py.json",
+          "sha256": "4a68148340f5cb059578793079f1fb0aabb07ec8a3d8a9c5f4c8abb13ba8a569"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Meshing_Mmg.py": [
+      {
+        "label": "Test_Model_Meshing_Mmg.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.46880476500155,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Mmg.py.log",
+          "sha256": "12c92a2e08614ac45aa0a9d6d6aa8cb4350db481de3a954fd809f096cca54015"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Mmg.py.json",
+          "sha256": "4f734057cb0017f0eba0cfcde9809bd2d375ec184e0e9aa4219a49f111458775"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Meshing_Netgen_Transfinite.py": [
+      {
+        "label": "Test_Model_Meshing_Netgen_Transfinite.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 28.934761641001387,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Netgen_Transfinite.py.log",
+          "sha256": "809917211a9eec91a2edeb8225be4fd9029897bbebaa5dfb8adc0fa9e2d9a406"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Netgen_Transfinite.py.json",
+          "sha256": "99a51e6c611a58759f803961bc200d894055b330b66c3a5aafbe79ed1d70c8fe"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_QuadWild_Transfinite.py": [
+      {
+        "label": "Test_Model_Meshing_QuadWild_Transfinite.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.932748249000724,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_QuadWild_Transfinite.py.log",
+          "sha256": "be105281aa615e5f6931db70ff9361d9a990d13e4d79341ec5ae0e1e9f693b6d"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_QuadWild_Transfinite.py.json",
+          "sha256": "d20e9ba08898048dc9ba7fc004b2f572d6d2f601bf94855e67b32b2bac55e8c3"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Meshing_Revolve.py": [
+      {
+        "label": "Test_Model_Meshing_Revolve.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 28.757828278998204,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Revolve.py.log",
+          "sha256": "1130c2e450db0fcd45fd1fc5a0d98bdac1ccbeec42b4e7552314478b939bccd2"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Revolve.py.json",
+          "sha256": "aa4dbd06c321549451b179ae6de4c53d21d691ec2757c76b6750e5d62331a374"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Shell_Types.py": [
+      {
+        "label": "Test_Model_Meshing_Shell_Types.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 27.164036866997776,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Shell_Types.py.log",
+          "sha256": "1610474c6bc5007d18555578fd09d9c4e683af47b8d09cad3dc62ce692409b1c"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Shell_Types.py.json",
+          "sha256": "df18b72b83006dc36a516b9f6d08b3fa250c17cc373a79e4507be29d9fcc1b4c"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Split_Cells.py": [
+      {
+        "label": "Test_Model_Meshing_Split_Cells.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 31.22963557699768,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Split_Cells.py.log",
+          "sha256": "f1dfc4732325bb44eef3f06694812f4c95fa9397eb7814263c62dab02a718f39"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Split_Cells.py.json",
+          "sha256": "20d31db46f860545825cfeb735f8ee158f232a59299dee69643089a2a1eec759"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Sweep_Compound.py": [
+      {
+        "label": "Test_Model_Meshing_Sweep_Compound.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 27.585335953997856,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Sweep_Compound.py.log",
+          "sha256": "544ff770f8e112d802973092889be7e736ebb6e8035559809ab4468baad665cd"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Sweep_Compound.py.json",
+          "sha256": "910dd3fc5b8ed6a0940b98436a672913994dd1e5d6d6e1086e06470f308615c2"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Sweep_Transfinite.py": [
+      {
+        "label": "Test_Model_Meshing_Sweep_Transfinite.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 26.986479787999997,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Sweep_Transfinite.py.log",
+          "sha256": "1de62d1575142baeb174f5b34b42957311f689d5a837ec9c4a9e90342bd83643"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Sweep_Transfinite.py.json",
+          "sha256": "ce8219453da627b00a9b60b33fda2169380ca48420a0fb54fbb7e7007987636e"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Three_Block_Mapping.py": [
+      {
+        "label": "Test_Model_Meshing_Three_Block_Mapping.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 26.61128023400306,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Three_Block_Mapping.py.log",
+          "sha256": "8059e91c3991695444eff5c4f6e90212f0197e1cff098b164471a491fd744db9"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Three_Block_Mapping.py.json",
+          "sha256": "4631c9ab1177fc1c532f22f3c027b066ddeacbc2244c517f65b3bb8c1409df85"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Meshing_Transfinite_Frame.py": [
+      {
+        "label": "Test_Model_Meshing_Transfinite_Frame.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 27.141493377002917,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Transfinite_Frame.py.log",
+          "sha256": "424f3ab2bb9a9a68e6ad98ab27a8c389ef4d43c1ec3ac6c3b9925640a5ddd064"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Transfinite_Frame.py.json",
+          "sha256": "bfc448d89099cb10e818dcff719e37cf033799bb1e07942bf7d3d2b01e9bd788"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Transfinite_Prism.py": [
+      {
+        "label": "Test_Model_Meshing_Transfinite_Prism.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 27.05364355400161,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Transfinite_Prism.py.log",
+          "sha256": "6ad4b4cc00658d286f5c0e69522af928431b7a890bc261f5d5caad0aab808e8e"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Transfinite_Prism.py.json",
+          "sha256": "4b909b4719877adb7e60b0eba3e59615f867d1f555510e6aeb929b1649946a00"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Meshing_Validity.py": [
+      {
+        "label": "Test_Model_Meshing_Validity.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.073671520996868,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Meshing_Validity.py.log",
+          "sha256": "3833575f940c806a5f42465d01be67447ebc5262ca885112e1946ef6e6b43b5b"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Meshing_Validity.py.json",
+          "sha256": "bc8ee8b1afa3321cedd71eea387b5a42672b81ddadeb2a91e9fa36cdf6c14985"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Node_Sets.py": [
+      {
+        "label": "Test_Model_Node_Sets.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.061428643999534,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Node_Sets.py.log",
+          "sha256": "8166ee009ae4d27714c80e1cbc7e0a3f37bfa6c55eb2a3819f7b266547ea1c8c"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Node_Sets.py.json",
+          "sha256": "22fb0c04e19af2c555b60f0e36288def48ab8eec6a9ee203bac66a849d6e39fd"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Offset_Face.py": [
+      {
+        "label": "Test_Model_Offset_Face.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 26.641750981001678,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Offset_Face.py.log",
+          "sha256": "b82957076b56404d074b72a17ba98c4c8ead1ba4b7e948b78c48066d0f7f14a4"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Offset_Face.py.json",
+          "sha256": "7a4fdc5ab24ff6d7af4a565a3a08af9314cd049590c38a384f62dff2b9620f6d"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Outputs.py": [
+      {
+        "label": "Test_Model_Outputs.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 25.948033759999817,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Outputs.py.log",
+          "sha256": "bf40cbbd48bae2e5e7fc5724368dfde99290aa71464217731e7e4459c67c3bbc"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Outputs.py.json",
+          "sha256": "98fd6f65ab39f835612f2a0ac1fe9c321a53d1133cb084f4272684a4c1edf858"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Parts.py": [
+      {
+        "label": "Test_Model_Parts.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 25.448858237999957,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Parts.py.log",
+          "sha256": "6ed4354a39292ec6cf6a908d04c97f54cf288b5a9651bbb40cb6894fe64685ba"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Parts.py.json",
+          "sha256": "11d52d3c74aac915af64dbcc236e5aba40a174ec2d5bb750419315b4a571666b"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Readback_Equations.py": [
+      {
+        "label": "Test_Model_Readback_Equations.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 38.7293553519994,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Readback_Equations.py.log",
+          "sha256": "da0b672212ac2c397432873f6b1b730b1bbcfabdda077ee4e91ff4e350924b5e"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Readback_Equations.py.json",
+          "sha256": "037b9e66c4cd9370eb3b3f418d791fbb8643cecce1ef5aab57e4f69dcfa5fd5a"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Region_Coverage.py": [
+      {
+        "label": "Test_Model_Region_Coverage.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.009073132001504,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Region_Coverage.py.log",
+          "sha256": "a84c8d64b239364194c431364e75623bc25d4f992ccc06394a3ad4a1990cc7e3"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Region_Coverage.py.json",
+          "sha256": "5216f0111f9dd15b1c272027a9e98f3b9ae7e84b8aa4618f75c370dd9fa30885"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Regions.py": [
+      {
+        "label": "Test_Model_Regions.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.365140146001067,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Regions.py.log",
+          "sha256": "96e452f28fabb1850c7a6db38f9ad25266fd35a9dcad859b54b064c62b745588"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Regions.py.json",
+          "sha256": "6ca0968027fdfc79333ea4b91e4ed56abeed166cc54aa88d186ce37ea1ff7679"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Split_Cells_Compound.py": [
+      {
+        "label": "Test_Model_Split_Cells_Compound.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.134534146000078,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Split_Cells_Compound.py.log",
+          "sha256": "0fd22132405b615d42f19accabffd05b9623dc1165171f6219462637f1291751"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Split_Cells_Compound.py.json",
+          "sha256": "7a316b3566e3704c182c53d3d523aac6a1938aaa3d4fe59b19d969d979d765c6"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Split_Cells_Fuse.py": [
+      {
+        "label": "Test_Model_Split_Cells_Fuse.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 25.963766624001437,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Split_Cells_Fuse.py.log",
+          "sha256": "ef57c498fb3cb47b326033882b7c6813e758f38900d9c6b1af00e0bf941bb51f"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Split_Cells_Fuse.py.json",
+          "sha256": "6ac5795c4f9ea87a8610f85796c81fed65c9590fa62d059ac82e3be47b8d9963"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Model_Split_Cells_Group.py": [
+      {
+        "label": "Test_Model_Split_Cells_Group.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.48017687399988,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Split_Cells_Group.py.log",
+          "sha256": "46f53b85af941cbee114e01cce6d420f16ba598ea93ac97cb4dc5a07a7651a59"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Split_Cells_Group.py.json",
+          "sha256": "2cd4ae6fc937ef7b9bc2996285317bce7215332cfb98a07a2269b34a63e13c32"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Split_Geometry.py": [
+      {
+        "label": "Test_Model_Split_Geometry.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.382420103000186,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Split_Geometry.py.log",
+          "sha256": "241770f06e01163e2a2908fd1f9e50cba500ad9d003abda817989b35596d9d48"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Split_Geometry.py.json",
+          "sha256": "524dbea3ceaa5468a7f57e42dab845e77ae656bf96e196f2671984aacba758a5"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Split_Periodic_Faces.py": [
+      {
+        "label": "Test_Model_Split_Periodic_Faces.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 29.16565955799888,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Split_Periodic_Faces.py.log",
+          "sha256": "1bdb145b3077b5f25725aff53d580d8edece8029a463efef871ad4c1a7cc7d6e"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Split_Periodic_Faces.py.json",
+          "sha256": "25485b0f3508d5423fc7ea2d29967959fc57f58a85e25d381e4d961b4d681a5b"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Model_Steps.py": [
+      {
+        "label": "Test_Model_Steps.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.913630778999504,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Model_Steps.py.log",
+          "sha256": "4884bd6c1552ea1a21adae74317e6191c73ce344e39ba448bf113f340632ea86"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Model_Steps.py.json",
+          "sha256": "271c06f998ad33594fe8a35e5aba03326be19e80c69a6f5bbb1a77610c7ad16a"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Prompt_Refused.py": [
+      {
+        "label": "Test_Prompt_Refused.py",
+        "status": "passed",
+        "exit": 5,
+        "expectedExit": 5,
+        "seconds": 26.018458743001247,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Prompt_Refused.py.log",
+          "sha256": "e9f80631d4088adf93a8c1058b1d9afde6961d29b6c34ae4bdf19992018fdcf5"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Prompt_Refused.py.json",
+          "sha256": "7dde84e76e9b92f9af6508c66ac0ac33fc8626c00c5a5663fa23964d558825fa"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Result_Composite.py": [
+      {
+        "label": "Test_Result_Composite.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.1682781060008,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Result_Composite.py.log",
+          "sha256": "6590869cb5c3cfa43aef4cdc97b8c2b525089a4fc701f21ac35e81d1ea78db96"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Result_Composite.py.json",
+          "sha256": "824196361a741fec9e9d6f663ec744a57dbef36bc09046495943091abf23d6e9"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Rpc_Live_Session.py": [
+      {
+        "label": "Test_Rpc_Live_Session.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 85.80997751399991,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Rpc_Live_Session.py.log",
+          "sha256": "5e24d77eef613ac971d2d3a7e7b971e9d804f470ab31c05d3c3a7b025b97d562"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Rpc_Live_Session.py.json",
+          "sha256": "93604757d824f6f84a9790c76f83993e3e3f72ebabe05cf0bac325434e87a72c"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      },
+      {
+        "label": "Test_Rpc_Live_Session.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 90.48777765200066,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/Test_Rpc_Live_Session.py.log",
+          "sha256": "e9dec428d4e327796c13998858b27aecd8da772729563e84dae91857ad56ec18"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/api-work/Test_Rpc_Live_Session.py.json",
+          "sha256": "71cf286826aa1b3934f5e49477500226d62a4cee525a93a92201a1aac67df830"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Rpc_Server.py": [
+      {
+        "label": "Test_Rpc_Server.py",
+        "status": "failed",
+        "exit": 1,
+        "expectedExit": 0,
+        "seconds": 25.63768789000096,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Rpc_Server.py.log",
+          "sha256": "dbbe589a9f062e6faa55dcee3c8ccde9b70f4dc89cf8d3829541deb8bf98b985"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Rpc_Server.py.json",
+          "sha256": "4edbcfc1d359fd27d216b582c0371db0bbc2c60dc1a59eacef0e38a881bf0e37"
+        },
+        "problems": [
+          "Exit 1, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      },
+      {
+        "label": "Test_Rpc_Server.py",
+        "status": "failed",
+        "exit": 1,
+        "expectedExit": 0,
+        "seconds": 0.13265146499907132,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-2026-11-06/Test_Rpc_Server.py.log",
+          "sha256": "c302ab5ac4c3c566a9cdd295abb1945bdc688968286a6ffe89e325484a264a72"
+        },
+        "problems": [
+          "Exit 1, expected 0.",
+          "the script did not print TEST PASSED",
+          "No run report was written."
+        ]
+      },
+      {
+        "label": "Test_Rpc_Server.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 27.177746965997358,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06/Test_Rpc_Server.py.log",
+          "sha256": "46bf03a1a41249e411d7043cf9dc631cdf223ba777c23cc4752bff41294d82e1"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-auth-paths-2026-11-06/api-work/Test_Rpc_Server.py.json",
+          "sha256": "96ac078515afcccda018984644e2531ad48ed6aa6b3098764b2b8473c26b625d"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Selection_Correctness.py": [
+      {
+        "label": "Test_Selection_Correctness.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.632476413000404,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Selection_Correctness.py.log",
+          "sha256": "d71e3c7dd3340e5b2c4a3dd8fd4761385191c75c6acdb725f0bb614afbd65aa3"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Selection_Correctness.py.json",
+          "sha256": "eb564dc2a887186a9c94a9dccb4d3a4c5a7da5eb2b986a24b5eb5fee34befae2"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Selection_Pick.py": [
+      {
+        "label": "Test_Selection_Pick.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.09817922399816,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Selection_Pick.py.log",
+          "sha256": "13eb272f976b7fb8fd53f6cdd6c1e17a5230d5bb7b88b4f6ac56103872f1768a"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Selection_Pick.py.json",
+          "sha256": "1cfc2d4f4c462d438a33592246e3dca9911fd9579d70582c48628f647075704c"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Workflow_Geometry_To_Result.py": [
+      {
+        "label": "Test_Workflow_Geometry_To_Result.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 26.079941844000132,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Workflow_Geometry_To_Result.py.log",
+          "sha256": "5c8c73d6739116ffef775a55408ddeac867fd3938907991cf5b4bc5d6f569cff"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Workflow_Geometry_To_Result.py.json",
+          "sha256": "5617c089c436bb5b8431bd6f2be9ff472dbdb8bdb26238162f72c28176533667"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Api_View_Results.py": [
+      {
+        "label": "Test_Api_View_Results.py",
+        "status": "failed",
+        "exit": 3,
+        "expectedExit": 0,
+        "seconds": 27.97571914799846,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Api_View_Results.py.log",
+          "sha256": "9a3cce69afe375f96e834ac65057ffc0422b11e6b0274320e676f71dc91b12e9"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Api_View_Results.py.json",
+          "sha256": "6130baacbff88c1a09cd9f24008e499057b029f1af6128cda7174b60eb74420e"
+        },
+        "problems": [
+          "Exit 3, expected 0.",
+          "the script did not print TEST PASSED",
+          "Run report exitCode differs from the declared expectation.",
+          "Run report exitStatus differs from the declared expectation."
+        ]
+      }
+    ],
+    "Test_Record_And_Run_History_Output.py": [
+      {
+        "label": "Test_Record_And_Run_History_Output.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 27.586379459000455,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Record_And_Run_History_Output.py.log",
+          "sha256": "a87850e2e226e2a82fc0f5c54560bb2098230c4e5af444d79be6060c176a26b1"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Record_And_Run_History_Output.py.json",
+          "sha256": "dec8e975ca6f24913665c33f3b42b7deeb25cd001858231381eb878921ba7edc"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Result_Coverage.py": [
+      {
+        "label": "Test_Result_Coverage.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 26.131360772000335,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Result_Coverage.py.log",
+          "sha256": "715bea8145e7679ec19b2ef6296ff2c0cfba3418324d73c4ed6a50a1522d40e8"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Result_Coverage.py.json",
+          "sha256": "09222ce5c046f10aa22efb1040d028a060ac15628405efb3635281c925d2c53f"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Result_Field_Outputs.py": [
+      {
+        "label": "Test_Result_Field_Outputs.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.3422174169973,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Result_Field_Outputs.py.log",
+          "sha256": "bc7d7df93f88134fc9c7b34d6a02958a1541e2d46d616b395368279cb6eedfa2"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Result_Field_Outputs.py.json",
+          "sha256": "eb4c202b3ffd758dd2be8504a7aa157505f9acfe69c44e198164308e3abc7efc"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Result_History_Outputs.py": [
+      {
+        "label": "Test_Result_History_Outputs.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 26.363908589002676,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Result_History_Outputs.py.log",
+          "sha256": "f834e2413339213699692bf5962afb0e936c1b50e118b513b93dd03f77bd2f1d"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Result_History_Outputs.py.json",
+          "sha256": "4ca9f339e40f40bd263b445cd6e0dbae71a6c4489d93fc8884feec3f034345bc"
+        },
+        "problems": []
+      }
+    ],
+    "Test_Result_Regions_Coverage.py": [
+      {
+        "label": "Test_Result_Regions_Coverage.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 28.306981649999216,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Test_Result_Regions_Coverage.py.log",
+          "sha256": "a1e652b8aa37d7bcee44092aa52263f556318f1c09b22eb4158a098464f3506b"
+        },
+        "report": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/api-work/Test_Result_Regions_Coverage.py.json",
+          "sha256": "7aeb85ff01cd119f4f2325a30af1f5d657ca57e48d5f42b8d3e54d273dfa2d9f"
+        },
+        "problems": []
+      }
+    ]
+  },
+  "offlineAndCustom": {
+    "APIs/Python/Test_Scripts/Audit_API_Coverage.py": [
+      {
+        "label": "Audit_API_Coverage.py",
+        "status": "failed",
+        "exit": 1,
+        "expectedExit": 0,
+        "seconds": 0.09145928799989633,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Audit_API_Coverage.py.log",
+          "sha256": "a6179162db6039ae6b664e4096b4d3febe5411774d51425dde96d45a83db83da"
+        },
+        "problems": []
+      }
+    ],
+    "APIs/Python/Test_Scripts/Audit_API_Documentation.py": [
+      {
+        "label": "Audit_API_Documentation.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 0.6360911000010674,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/Audit_API_Documentation.py.log",
+          "sha256": "1f9e4004bc6e8fca264e3661ea6c405e945684173c5d94cd7652afb875d8b151"
+        },
+        "problems": []
+      }
+    ],
+    "APIs/Python/Test_Scripts/test_runner_offline.py": [
+      {
+        "label": "test_runner_offline.py",
+        "status": "passed",
+        "exit": 0,
+        "expectedExit": 0,
+        "seconds": 0.04930126700128312,
+        "cohort": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/test_runner_offline.py.log",
+          "sha256": "6bf746b5169705415ce316bbdd6bb32aeec038b64220d9fe191996c24064a4a6"
+        },
+        "problems": []
+      }
+    ],
+    "macOS/verify-calculix.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 57.19663275199855,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-calculix/process.log",
+          "sha256": "05fac4061107cadd3b99e96895af6a67ec9a7c32eaa52ea49b1b4d09b00dba01"
+        }
+      }
+    ],
+    "macOS/verify-chamfer-model.py": [
+      {
+        "status": "blocked",
+        "reason": "Real-model regression requires an explicitly supplied consented --real-model; personal CHAMFER.pmx is not read."
+      }
+    ],
+    "macOS/verify-custom-features.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 33.80588124800124,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-custom-features/process.log",
+          "sha256": "fa13efd3aa70ad21a25a50728725ceddab3f307a41081ddb73d9e55fbb474fad"
+        }
+      }
+    ],
+    "macOS/verify-cylinders.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 28.80408998100029,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-cylinders/process.log",
+          "sha256": "e14ea893b9dda58a0fa80692aaafb53bea6606e63276477b6e507e892875b8fd"
+        }
+      }
+    ],
+    "macOS/verify-fatigue-backend.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 0.2656328789998952,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-fatigue-backend/process.log",
+          "sha256": "56a453e848f4fd59dd7b92bbd676b070b8bbd1d1519fdec2d533968422afda5a"
+        }
+      }
+    ],
+    "macOS/verify-file-tools.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 150.81962687299892,
+        "mode": "offline-and-application",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-file-tools/process.log",
+          "sha256": "b7911f8daee1080fef96a2eb960b45f7347707b5047c776d165a4e78517de26a"
+        }
+      }
+    ],
+    "macOS/verify-individual-colors.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 30.359552220001206,
+        "mode": "application-and-source-gpu-check",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-individual-colors/process.log",
+          "sha256": "7767f8f6a82f089ab83c732577138b3f2bcab6d0fe6c27e583f00db80ffd67a5"
+        }
+      }
+    ],
+    "macOS/verify-navigation.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 27.644158541999786,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-navigation/process.log",
+          "sha256": "5a269239abd1b7cc554c319b0ba534dbd5d2dc164ecbd02b9c8937579d3a5642"
+        }
+      }
+    ],
+    "macOS/verify-pmx-compatibility.py": [
+      {
+        "status": "failed",
+        "exit": 1,
+        "seconds": 27.350604595998448,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-pmx-compatibility/process.log",
+          "sha256": "ebf4f3a82ccee8c88abb0d886d555e0cbe431d36b7e242b5cd24b226d2d019db"
+        }
+      }
+    ],
+    "macOS/verify-pressure-springs.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 28.347705628002586,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-pressure-springs/process.log",
+          "sha256": "e3ddc877b0283eb0237cf7584ceeeb9eb73e9cb2aec0e2ba58ec3b946a8778e0"
+        }
+      }
+    ],
+    "macOS/verify-result-springs.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 29.859461944997747,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-result-springs/process.log",
+          "sha256": "c8709455cb2183a12e3ff926000252abe7ba703c84b7118d85c47aa4fbd3bff8"
+        }
+      }
+    ],
+    "macOS/verify-srsuntour.py": [
+      {
+        "status": "passed",
+        "exit": 0,
+        "seconds": 34.63896339299754,
+        "mode": "source-default",
+        "log": {
+          "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/custom-2026-11-06/verify-srsuntour/process.log",
+          "sha256": "007c29296a031a43c3949a4698ded8c843e91aa98d2ffb96e8710dc62090ab87"
+        }
+      }
+    ]
+  },
+  "selectionPolicy": "Last supplied cohort per label, in CLI argument order; controlled follow-up cohorts override the original configuration, not by wall-clock ordering. Earlier attempts are retained. Reference sources/binaries are unchanged.",
+  "claim": "Reference outcomes only; no full source script has matched web coverage from these results."
+}

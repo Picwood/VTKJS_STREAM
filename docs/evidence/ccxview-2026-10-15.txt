@@ -1,0 +1,121 @@
+ccxview evaluation evidence
+Assessment date: 2026-10-15
+Scope: headless source build, upstream tests, sample corpus, mutation smoke, and two project fixtures.
+No GUI, WASM, physical-GPU benchmark or full project suite run.
+ccxview commit: 41304fca6d9376fc9aedd99a53eb0800fb5a1735
+Parent base commit (working tree contains uncommitted implementation): ae5954ddefb5fbe017a35fa93594a6fdb7627b6c
+Environment: Linux 7.0.0-38-generic x86_64 GNU/Linux
+cc (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+
+BUILD/TEST COMMAND (from ccxview/)
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=/dev/null make -j4 test bench
+Exit code: 0
+The command-local Git setting avoids the Makefile changing checkout hooks configuration.
+
+Build warnings and final test output:
+tests/t_video.h:29:9: warning: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+tests/t_cfg.h:203:18: warning: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Wunused-result]
+vendor/stb_sprintf.h:594:51: warning: operand of ‘?:’ changes signedness from ‘int’ to ‘unsigned int’ due to unsignedness of other operand [-Wsign-compare]
+vendor/stb_sprintf.h:594:51: warning: operand of ‘?:’ changes signedness from ‘int’ to ‘unsigned int’ due to unsignedness of other operand [-Wsign-compare]
+label thin: 1170 of 200000 in 29.6 ms
+session bus ok, unique name :1.259
+30279 checks, 0 failed
+scripts/check-sources.sh
+check-sources: ok (99 files)
+sh tests/launcher.sh
+launcher: ok
+
+CORPUS COMMAND
+From workspace root: ccxview/build/bench --quiet FILE for each of ccxview/samples/*/*.frd and ccxview/samples/*/*.inp
+34 files; every process exited 0. Messages/warnings are not treated as independent correctness failures by this benchmark.
+ccxview/samples/cantilever/cantilever.frd                    nodes=3165 elems=576 steps=4 fields=20 tris=3168 edges=2112 msgs=0 parse=0.002s skin=0.001s
+ccxview/samples/contact/contact.frd                          nodes=1236 elems=813 steps=3 fields=12 tris=1484 edges=1484 msgs=0 parse=0.001s skin=0.001s
+ccxview/samples/contact/contact_s2s.frd                      nodes=527 elems=282 steps=1 fields=4 tris=820 edges=820 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/contact_gap/contact_gap.frd                  nodes=595 elems=348 steps=3 fields=6 tris=832 edges=832 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/contact_gap/contact_gap_c0.frd               nodes=595 elems=348 steps=3 fields=6 tris=832 edges=832 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/contact_gap/contact_gap_fric.frd             nodes=595 elems=348 steps=3 fields=6 tris=832 edges=832 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/contact_gap/contact_gap_over.frd             nodes=595 elems=348 steps=3 fields=6 tris=832 edges=832 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/contact_showcase/contact_showcase.frd        nodes=1869 elems=906 steps=8 fields=32 tris=3104 edges=3104 msgs=0 parse=0.001s skin=0.001s
+ccxview/samples/elements/elements.frd                        nodes=328 elems=51 steps=9 fields=38 tris=572 edges=486 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/modelchange/modelchange.frd                  nodes=249 elems=112 steps=7 fields=21 tris=432 edges=432 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/modelchange/submodel.frd                     nodes=225 elems=128 steps=2 fields=10 tris=320 edges=320 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/shellplate/shellplate.frd                    nodes=203 elems=20 steps=2 fields=8 tris=384 edges=256 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/showcase/showcase.frd                        nodes=1880 elems=240 steps=8 fields=27 tris=3360 edges=2240 msgs=0 parse=0.001s skin=0.001s
+ccxview/samples/slab/slab.frd                                nodes=1131 elems=144 steps=1 fields=3 tris=2016 edges=1344 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/symbols/symbols.frd                          nodes=403 elems=60 steps=3 fields=14 tris=532 edges=532 msgs=1 parse=0.000s skin=0.000s
+ccxview/samples/tie/tie.frd                                  nodes=519 elems=295 steps=1 fields=3 tris=748 edges=748 msgs=0 parse=0.000s skin=0.000s
+ccxview/samples/vessel/vessel.frd                            nodes=11409 elems=2176 steps=3 fields=9 tris=10176 edges=6784 msgs=0 parse=0.005s skin=0.002s
+ccxview/samples/cantilever/cantilever.inp                    nodes=3166 elems=576 nsets=3 elsets=1 surfs=2 mats=1 tris=3168 msgs=0 parse=0.001s
+ccxview/samples/contact/contact.inp                          nodes=1236 elems=813 nsets=3 elsets=2 surfs=2 mats=1 tris=1484 msgs=0 parse=0.001s
+ccxview/samples/contact/contact_s2s.inp                      nodes=527 elems=282 nsets=3 elsets=2 surfs=2 mats=1 tris=820 msgs=0 parse=0.000s
+ccxview/samples/contact_gap/contact_gap.inp                  nodes=595 elems=348 nsets=3 elsets=2 surfs=2 mats=1 tris=832 msgs=0 parse=0.000s
+ccxview/samples/contact_gap/contact_gap_c0.inp               nodes=595 elems=348 nsets=3 elsets=2 surfs=2 mats=1 tris=832 msgs=0 parse=0.000s
+ccxview/samples/contact_gap/contact_gap_fric.inp             nodes=595 elems=348 nsets=3 elsets=2 surfs=2 mats=1 tris=832 msgs=0 parse=0.000s
+ccxview/samples/contact_gap/contact_gap_over.inp             nodes=595 elems=348 nsets=3 elsets=2 surfs=2 mats=1 tris=832 msgs=0 parse=0.000s
+ccxview/samples/contact_showcase/contact_showcase.inp        nodes=1871 elems=906 nsets=14 elsets=10 surfs=10 mats=1 tris=3104 msgs=0 parse=0.001s
+ccxview/samples/elements/elements.inp                        nodes=227 elems=51 nsets=30 elsets=27 surfs=5 mats=2 tris=327 msgs=0 parse=0.000s
+ccxview/samples/modelchange/modelchange.inp                  nodes=249 elems=112 nsets=4 elsets=3 surfs=1 mats=1 tris=432 msgs=0 parse=0.000s
+ccxview/samples/modelchange/submodel.inp                     nodes=225 elems=128 nsets=3 elsets=4 surfs=2 mats=1 tris=320 msgs=0 parse=0.000s
+ccxview/samples/shellplate/shellplate.inp                    nodes=85 elems=20 nsets=3 elsets=1 surfs=0 mats=1 tris=120 msgs=0 parse=0.000s
+ccxview/samples/showcase/showcase.inp                        nodes=1880 elems=240 nsets=3 elsets=2 surfs=2 mats=1 tris=3360 msgs=0 parse=0.001s
+ccxview/samples/slab/slab.inp                                nodes=481 elems=144 nsets=2 elsets=1 surfs=0 mats=1 tris=864 msgs=0 parse=0.000s
+ccxview/samples/symbols/symbols.inp                          nodes=315 elems=60 nsets=6 elsets=36 surfs=10 mats=1 tris=444 msgs=0 parse=0.000s
+ccxview/samples/tie/tie.inp                                  nodes=519 elems=295 nsets=3 elsets=2 surfs=2 mats=1 tris=748 msgs=0 parse=0.000s
+ccxview/samples/vessel/vessel.inp                            nodes=11409 elems=2176 nsets=4 elsets=4 surfs=2 mats=1 tris=10176 msgs=0 parse=0.005s
+
+MUTATION COMMAND (from ccxview/)
+GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=core.hooksPath GIT_CONFIG_VALUE_0=/dev/null make fuzz
+Exit code: 0. This target uses the non-sanitized benchmark binary.
+for f in samples/showcase/showcase.frd samples/showcase/showcase.inp samples/showcase/showcase.dat \
+         samples/showcase/showcase.sta samples/showcase/showcase.cvg samples/elements/elements.frd \
+         samples/elements/elements.inp samples/elements/elements.dat samples/showcase/pin.stl; do ./build/bench --fuzz 300 "$f" || exit 1; done
+samples/showcase/showcase.frd                      300 fuzzed copies: ok
+samples/showcase/showcase.inp                      300 fuzzed copies: ok
+samples/showcase/showcase.dat                      300 fuzzed copies: ok
+samples/showcase/showcase.sta                      300 fuzzed copies: ok
+samples/showcase/showcase.cvg                      300 fuzzed copies: ok
+samples/elements/elements.frd                      300 fuzzed copies: ok
+samples/elements/elements.inp                      300 fuzzed copies: ok
+samples/elements/elements.dat                      300 fuzzed copies: ok
+samples/showcase/pin.stl                           300 fuzzed copies: ok
+
+SHARED PROJECT FIXTURES
+Outputs recaptured for this evidence file after the initial successful checks.
+
+$ ccxview/build/bench portable/tests/fixtures/calculix/cube.frd
+file      portable/tests/fixtures/calculix/cube.frd (0.0 MB)
+nodes     8
+elements  1
+steps     1 (4 fields)
+Element type 1 groups
+Material  1 groups
+Group     1 groups
+skin      12 triangles, 12 edges, 8 points
+clip cut  prepare 0.000 s, then 0.0000 s per position (8 triangles each)
+parse     0.000 s
+groups+skin 0.000 s
+decode    0.000 s (4 fields, 0.0 M values)
+  last step DISP     D1[0,0.001] D2[0,0] D3[0,0]
+  last step STRESS   SXX[1,1] SYY[0,0] SZZ[0,0] SXY[-9.62e-17,3.207e-17] SYZ[0,0] SZX[-6.277e-17,1.124e-16]
+  last step TOSTRAIN EXX[0.001,0.001] EYY[0,0] EZZ[0,0] EXY[-9.62e-20,3.207e-20] EYZ[0,0] EZX[-6.277e-20,1.124e-19]
+  last step ERROR    STR(%)[7.071e-15,7.071e-15]
+Exit code: 0
+
+$ ccxview/build/bench portable/tests/fixtures/calculix/cube-two-step.frd
+file      portable/tests/fixtures/calculix/cube-two-step.frd (0.0 MB)
+nodes     8
+elements  1
+steps     2 (8 fields)
+Element type 1 groups
+Material  1 groups
+Group     1 groups
+skin      12 triangles, 12 edges, 8 points
+clip cut  prepare 0.000 s, then 0.0000 s per position (8 triangles each)
+parse     0.000 s
+groups+skin 0.000 s
+decode    0.000 s (8 fields, 0.0 M values)
+  last step DISP     D1[0,0.002] D2[0,0] D3[0,0]
+  last step STRESS   SXX[2,2] SYY[0,0] SZZ[0,0] SXY[-1.924e-16,6.413e-17] SYZ[0,0] SZX[-1.255e-16,2.249e-16]
+  last step TOSTRAIN EXX[0.002,0.002] EYY[0,0] EZZ[0,0] EXY[-1.924e-19,6.413e-20] EYZ[0,0] EZX[-1.255e-19,2.249e-19]
+  last step ERROR    STR(%)[7.071e-15,7.071e-15]
+Exit code: 0

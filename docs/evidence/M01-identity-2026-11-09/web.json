@@ -1,0 +1,254 @@
+{
+  "stages": [
+    {
+      "materials": [
+        {
+          "name": "ELASTIC",
+          "description": "keep this description",
+          "active": true,
+          "temperatureDependent": false,
+          "properties": [
+            {
+              "kind": "Density",
+              "data": [
+                [
+                  2.5,
+                  0
+                ]
+              ]
+            },
+            {
+              "kind": "Elastic",
+              "data": [
+                [
+                  1000,
+                  0,
+                  0
+                ]
+              ]
+            },
+            {
+              "kind": "Plastic",
+              "data": [
+                [
+                  100,
+                  0,
+                  0
+                ],
+                [
+                  120,
+                  0.1,
+                  0
+                ]
+              ],
+              "hardening": "Combined"
+            },
+            {
+              "kind": "ThermalExpansion",
+              "data": [
+                [
+                  1.2e-05,
+                  0
+                ]
+              ],
+              "zeroTemperature": -40
+            }
+          ]
+        },
+        {
+          "name": "OTHER",
+          "description": null,
+          "active": true,
+          "temperatureDependent": false,
+          "properties": [
+            {
+              "kind": "Elastic",
+              "data": [
+                [
+                  500,
+                  0.1,
+                  0
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "name": "solid-1",
+          "material": "ELASTIC"
+        }
+      ]
+    },
+    {
+      "materials": [
+        {
+          "name": "ALLOY",
+          "description": "keep this description",
+          "active": true,
+          "temperatureDependent": false,
+          "properties": [
+            {
+              "kind": "Density",
+              "data": [
+                [
+                  2.5,
+                  0
+                ]
+              ]
+            },
+            {
+              "kind": "Elastic",
+              "data": [
+                [
+                  1000,
+                  0,
+                  0
+                ]
+              ]
+            },
+            {
+              "kind": "Plastic",
+              "data": [
+                [
+                  100,
+                  0,
+                  0
+                ],
+                [
+                  120,
+                  0.1,
+                  0
+                ]
+              ],
+              "hardening": "Combined"
+            },
+            {
+              "kind": "ThermalExpansion",
+              "data": [
+                [
+                  1.2e-05,
+                  0
+                ]
+              ],
+              "zeroTemperature": -40
+            }
+          ]
+        },
+        {
+          "name": "OTHER",
+          "description": null,
+          "active": true,
+          "temperatureDependent": false,
+          "properties": [
+            {
+              "kind": "Elastic",
+              "data": [
+                [
+                  500,
+                  0.1,
+                  0
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "name": "solid-1",
+          "material": "ALLOY"
+        }
+      ]
+    },
+    {
+      "materials": [
+        {
+          "name": "alloy",
+          "description": "keep this description",
+          "active": true,
+          "temperatureDependent": false,
+          "properties": [
+            {
+              "kind": "Density",
+              "data": [
+                [
+                  2.5,
+                  0
+                ]
+              ]
+            },
+            {
+              "kind": "Elastic",
+              "data": [
+                [
+                  1000,
+                  0,
+                  0
+                ]
+              ]
+            },
+            {
+              "kind": "Plastic",
+              "data": [
+                [
+                  100,
+                  0,
+                  0
+                ],
+                [
+                  120,
+                  0.1,
+                  0
+                ]
+              ],
+              "hardening": "Combined"
+            },
+            {
+              "kind": "ThermalExpansion",
+              "data": [
+                [
+                  1.2e-05,
+                  0
+                ]
+              ],
+              "zeroTemperature": -40
+            }
+          ]
+        },
+        {
+          "name": "OTHER",
+          "description": null,
+          "active": true,
+          "temperatureDependent": false,
+          "properties": [
+            {
+              "kind": "Elastic",
+              "data": [
+                [
+                  500,
+                  0.1,
+                  0
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "name": "solid-1",
+          "material": "alloy"
+        }
+      ]
+    }
+  ],
+  "refusedNames": [
+    "other",
+    "Bad Name",
+    "Bad#",
+    "123",
+    " ALLOY "
+  ]
+}

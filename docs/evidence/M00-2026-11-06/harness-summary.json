@@ -1,0 +1,38 @@
+{
+  "case": "M00-T02",
+  "passed": true,
+  "documentAndSparseSelectionMatch": true,
+  "allFixedFieldValuesMatch": true,
+  "negativeControls": [
+    {
+      "case": "wrong-property",
+      "detected": true,
+      "paths": [
+        "$.document.modelSpace"
+      ]
+    },
+    {
+      "case": "wrong-material-value",
+      "detected": true,
+      "paths": [
+        "$.materials[0].youngsModulus"
+      ]
+    },
+    {
+      "case": "wrong-source-id",
+      "detected": true,
+      "paths": [
+        "$.nodeSet.nodes"
+      ]
+    },
+    {
+      "case": "wrong-field-value",
+      "detected": true,
+      "paths": [
+        "$.field.values[0].float32Bits"
+      ]
+    }
+  ],
+  "readOnlySnapshotAndRejectedEditPreservedProject": true,
+  "claim": "Bounded harness qualification only; full Prepomac scripts and feature parity remain separately tracked."
+}

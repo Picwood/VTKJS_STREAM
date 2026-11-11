@@ -1,0 +1,46 @@
+[
+  {
+    "case": "wrong-created-modulus",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[1].materials[1].properties[0].data[0][0]",
+        "reference": 700.0,
+        "candidate": 701
+      }
+    ]
+  },
+  {
+    "case": "wrong-assignment",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[2].sections[0].material",
+        "reference": "NEW",
+        "candidate": "ELASTIC"
+      }
+    ]
+  },
+  {
+    "case": "removed-wrong-material",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[4].materials[0].name",
+        "reference": "ELASTIC",
+        "candidate": "NEW"
+      }
+    ]
+  },
+  {
+    "case": "wrong-recreated-ratio",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[5].materials[1].properties[0].data[0][1]",
+        "reference": 0.25,
+        "candidate": 0.3
+      }
+    ]
+  }
+]

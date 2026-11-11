@@ -1,0 +1,11 @@
+{
+  "schema": "prepomac.parity-comparison/1",
+  "passed": false,
+  "differences": [
+    {
+      "path": "$.field.values[0].float32Bits",
+      "reference": 0,
+      "candidate": 1
+    }
+  ]
+}

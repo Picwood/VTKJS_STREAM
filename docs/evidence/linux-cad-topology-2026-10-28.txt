@@ -1,0 +1,119 @@
+Linux CAD topology acceptance — 2026-10-28
+
+Built from the working checkout, not a clean committed revision.
+PMA archive v6: checksummed geometry.topology.json bound to exact geometry.source SHA-256.
+Topology is a read-only entity/boundary inventory, not an editable geometric kernel or stable-naming contract.
+GTK uses Xvfb/X11, LIBGL_ALWAYS_SOFTWARE=1, WEBKIT_DISABLE_DMABUF_RENDERER=1.
+These GTK checks do not establish physical-GPU or Wayland qualification.
+
+Artifacts:
+viewer.tar.gz: 53414285 bytes; SHA-256 be1e93b112e45398c866597bfefc9c21f8c3eb005959530f8df8b9616cac70d1
+prepomax-topology-1.deb: 34970064 bytes; SHA-256 89901015b4042e9e8109fdf14f3dcf5030453dc87294abdfdb481b3027322ff1
+prepomax-topology-2.deb: 34970060 bytes; SHA-256 2679b2966af6d87fe8e858c4399cd8b084f85fde67cb791f167497b0d7700817
+
+bash scripts/test-portable.sh
+PASS: 60 STL characterization checks.
+PASS: 178 legacy NCalc compatibility checks.
+PASS: 794 CaeGlobals characterization checks.
+PASS: 1600 CaeMesh characterization checks.
+PASS: 2236 mesh I/O characterization checks.
+PASS: 29 native process characterization checks.
+PASS: 354 result history characterization checks.
+
+/usr/bin/python3 scripts/test-native-gmsh.py
+PASS: application STEP -> Gmsh -> PMA: 334 nodes, 1093 elements, 6 CAD faces and exact source geometry
+PASS: retained STEP remesh with min/max, Delaunay, optimization and quadratic controls: 2030 nodes, 1093 elements and exact source geometry
+PASS: PMA-stored Gmsh controls drive a later remesh without repeated CLI values
+PASS: retained STEP boundary graph: 8 points, 12 curves, 6 faces, 1 volume; identical across remeshing
+PASS: quadratic stored-control remesh exports production C3D10 solver input
+PASS: local refinement box: near/far mean tetrahedron diameters 0.1868/0.4557; saved setup remeshes unchanged
+PASS: application GEO retains physical names and local sizing overrides source field/minimum/scale
+PASS: native sphere CAD boundary graph, including seam/shared-face references
+PASS: native interface CAD boundary graph, including seam/shared-face references
+PASS: native topology/mesh mismatches and dangling CAD references publish no project or staging archive
+PASS: application cancellation kills running Gmsh and publishes no PMA
+PASS: native mesh: 387 positive tetrahedra, volume 1
+PASS: native volume import/export (en-US): 143 nodes, 387 tetrahedra, volume 1.
+PASS: native volume import/export (it-IT): 143 nodes, 387 tetrahedra, volume 1.
+PASS: native surface import/export (en-US): 134 nodes, 264 triangles.
+PASS: native surface import/export (it-IT): 134 nodes, 264 triangles.
+PASS: native re-read (en-US): 264 triangles, area 6
+PASS: native re-read (it-IT): 264 triangles, area 6
+PASS: native volume re-read (en-US): 387 tetrahedra, volume 1
+PASS: native volume re-read (it-IT): 387 tetrahedra, volume 1
+
+/usr/bin/python3 scripts/test-native-calculix.py
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (en-US).
+PASS: production DAT reader validates cube solve (en-US).
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (it-IT).
+PASS: production DAT reader validates cube solve (it-IT).
+PASS: CalculiX unit cube right-face U1=0.001; persistent logs and results retained.
+PASS: complete 2-step input matches in en-US and it-IT (excluding model ID)
+PASS: native two-step FRD fields and times (en-US).
+PASS: native two-step FRD fields and times (it-IT).
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: long-bar analytical displacement U1=0.0075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: compression analytical displacement U1=-0.00075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: unloaded analytical displacement U1=0.0
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: mechanical analytical displacement U1=0.002
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: multipart material assignments give U1=0.001 and U1=0.0005
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5ri_hqja/cube.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5ri_hqja/two-step/cube-two-step.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5ri_hqja/long-bar/long-bar.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5ri_hqja/compression/compression.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5ri_hqja/unloaded/unloaded.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5ri_hqja/mechanical/mechanical.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 5ri_hqja/multipart/multipart.inp.pma
+PASS: CLI inspect/export/solve, native multipart results, source preservation and failure handling
+PASS: native CAD -> locally refined C3D10 -> pressure solve -> archived results: 1301 analytical nodal displacements with preserved CAD topology
+
+GTK STEP import: --smoke --smoke-mesh-geometry ... --smoke-second-order --smoke-size-box
+GTK stable frame: actors=1 points=782 triangles=1560
+PASS: GTK STEP chooser, retained CAD, Gmsh regions, PMA publication, reopen and renderer scene
+PASS: GTK companion exit closed renderer listener
+
+GTK retained-source remesh: --smoke --smoke-remesh-output ... --smoke-second-order --smoke-size-box
+GTK stable frame: actors=1 points=782 triangles=1560
+GTK stable frame: actors=1 points=734 triangles=1464
+PASS: GTK retained-CAD controls, remesh publication, material transfer, reopen and renderer scene
+PASS: GTK companion exit closed renderer listener
+
+GTK CAD inspection: --smoke --smoke-cad-topology
+GTK stable frame: actors=1 points=1082 triangles=2160
+PASS: GTK retained CAD topology dialog: 8 points, 12 curves, 6 faces, 1 volume
+PASS: GTK companion exit closed renderer listener
+
+bash scripts/test-linux-deb-clean.sh topology-1.deb topology-2.deb
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+Distribution CalculiX solved the analytical cube with U1=0.001
+Distribution Gmsh generated and remeshed an editable PMA with persisted controls, six CAD-face regions, source-bound topology and exact retained STEP
+Upgrading package from 0.1.0~preview+topology.1 to 0.1.0~preview+topology.2
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+PASS: clean Ubuntu 24.04 install, upgrade, private-runtime preflight and purge
+
+All listed command runs exited 0.
+Additional native migration check: PMA v5 -> retained-source remesh -> PMA v6, preserving exact source identity and saved controls while adding the cube graph.
+Local native tools: Gmsh 4.14.0, CalculiX 2.23. Clean Ubuntu tools: Gmsh 4.12.1, CalculiX 2.21.
+The clean Ubuntu solver case is the existing analytical C3D8 cube; the installed CLI additionally exports the quadratic C3D10 remesh.
+The local native solver case solves the locally refined C3D10 project and checks retained topology after results publication.

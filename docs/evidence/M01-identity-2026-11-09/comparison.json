@@ -1,0 +1,15 @@
+{
+  "passed": false,
+  "differences": [
+    {
+      "path": "$.stages[1].sections[0].material",
+      "reference": "ELASTIC",
+      "candidate": "ALLOY"
+    },
+    {
+      "path": "$.stages[2].sections[0].material",
+      "reference": "ELASTIC",
+      "candidate": "alloy"
+    }
+  ]
+}

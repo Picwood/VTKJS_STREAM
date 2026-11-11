@@ -1,5 +1,10 @@
 # PrePoMax Linux Port Evaluation
 
+> Migration started on 2026-09-10. See [current Linux migration progress](docs/LINUX_PORT_PROGRESS.md)
+> for implementation and validation. This historical evaluation predates the
+> VTK.js renderer work; consult that progress record and the renderer pending-work
+> register before acting on its ActiViz hosting recommendations.
+
 **Repository evaluated:** `SpectraRev` working tree  
 **Evaluation date:** 2026-08-04  
 **Purpose:** engineering assessment only; no porting work was performed

@@ -1,0 +1,97 @@
+{
+  "Runtime": "10.0.12",
+  "ArchiveBytes": 3982,
+  "ArchiveSha256": "DFC849B1B8C4F9F2BC78E328C335E7D6DFF408F14B77E444F7452E046043E96C",
+  "RetentionBudgetBytes": 536870912,
+  "Field": {
+    "Name": "STRESS",
+    "Component": "MISES",
+    "Step": 1,
+    "Increment": 1,
+    "Time": 1
+  },
+  "Fingerprint": "D8EEEB80110F641D72855C48ACFF40CD40DF43F4F9368DCCE12DC55A9E5A29B9",
+  "LoadCount": 1,
+  "HitCount": 3,
+  "Measurements": [
+    {
+      "Operation": "session-catalog-cold",
+      "Milliseconds": 233.7898,
+      "Access": {
+        "CacheHit": false,
+        "Retained": true,
+        "LoadAllocatedBytes": 4209608,
+        "IdentityMilliseconds": 3.5547,
+        "SnapshotMilliseconds": 0.1992,
+        "Load": {
+          "ArchiveMilliseconds": 157.4146,
+          "DecodeMilliseconds": 16.3161
+        }
+      }
+    },
+    {
+      "Operation": "session-fingerprint",
+      "Iteration": 1,
+      "Milliseconds": 6.1411,
+      "Access": {
+        "CacheHit": true,
+        "Retained": true,
+        "LoadAllocatedBytes": 4209608,
+        "IdentityMilliseconds": 0.031,
+        "SnapshotMilliseconds": 0,
+        "Load": {
+          "ArchiveMilliseconds": 0,
+          "DecodeMilliseconds": 0
+        }
+      }
+    },
+    {
+      "Operation": "session-fingerprint",
+      "Iteration": 2,
+      "Milliseconds": 0.0698,
+      "Access": {
+        "CacheHit": true,
+        "Retained": true,
+        "LoadAllocatedBytes": 4209608,
+        "IdentityMilliseconds": 0.017,
+        "SnapshotMilliseconds": 0,
+        "Load": {
+          "ArchiveMilliseconds": 0,
+          "DecodeMilliseconds": 0
+        }
+      }
+    },
+    {
+      "Operation": "session-fingerprint",
+      "Iteration": 3,
+      "Milliseconds": 0.031,
+      "Access": {
+        "CacheHit": true,
+        "Retained": true,
+        "LoadAllocatedBytes": 4209608,
+        "IdentityMilliseconds": 0.0081,
+        "SnapshotMilliseconds": 0,
+        "Load": {
+          "ArchiveMilliseconds": 0,
+          "DecodeMilliseconds": 0
+        }
+      }
+    },
+    {
+      "Operation": "independent-fingerprint",
+      "Iteration": 1,
+      "Milliseconds": 1.0662
+    },
+    {
+      "Operation": "independent-fingerprint",
+      "Iteration": 2,
+      "Milliseconds": 0.8187
+    },
+    {
+      "Operation": "independent-fingerprint",
+      "Iteration": 3,
+      "Milliseconds": 0.7678
+    }
+  ],
+  "ProcessPeakWorkingSetBytes": 100786176
+}

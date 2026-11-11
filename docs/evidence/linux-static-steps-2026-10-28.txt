@@ -1,0 +1,144 @@
+Linux original-function parity / static step acceptance — 2026-10-28
+
+Scope: functional parity with original PrePoMax; CAD repair is excluded, not a completion gate.
+Reference: original Controller step operations, StepCollection.AddStep copy-last behavior, StaticStep default outputs and ViewStaticStep modes.
+Built from the working checkout, not a clean committed revision.
+No new PMA/metadata schema version; typed step copy shares the production persistence codec.
+FRD remains required; unrequested DAT history is optional for field-output-only steps.
+GTK acceptance uses Xvfb/X11 software WebGL with WEBKIT_DISABLE_DMABUF_RENDERER=1.
+No new physical-GPU or Wayland qualification is claimed.
+
+Artifacts:
+viewer.tar.gz: 53448190 bytes; SHA-256 fc393b25599b327efe6ba8cddb0e3f9a24dbe74cdc99cdf60e2594c63a25f947
+prepomax-steps-1.deb: 34979016 bytes; SHA-256 8a29a1f16cc36d8f1142204e5df372fc84911067cf187e982840c7ecdfa298eb
+prepomax-steps-2.deb: 34979012 bytes; SHA-256 082c41db46598459ebbc61a18d7eb80054cd85a0fdca411659e67f1895b7f525
+
+bash scripts/test-portable.sh
+PASS: 60 STL characterization checks.
+PASS: 178 legacy NCalc compatibility checks.
+PASS: 794 CaeGlobals characterization checks.
+PASS: 1600 CaeMesh characterization checks.
+PASS: 2352 mesh I/O characterization checks.
+PASS: 29 native process characterization checks.
+PASS: 354 result history characterization checks.
+
+/usr/bin/python3 scripts/test-native-calculix.py
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (en-US).
+PASS: production DAT reader validates cube solve (en-US).
+PASS: production FRD reader validates cube mesh, displacement, stress and strain (it-IT).
+PASS: production DAT reader validates cube solve (it-IT).
+PASS: CalculiX unit cube right-face U1=0.001; persistent logs and results retained.
+PASS: complete 2-step input matches in en-US and it-IT (excluding model ID)
+PASS: native two-step FRD fields and times (en-US).
+PASS: native two-step FRD fields and times (it-IT).
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: long-bar analytical displacement U1=0.0075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: compression analytical displacement U1=-0.00075
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: unloaded analytical displacement U1=0.0
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: mechanical analytical displacement U1=0.002
+PASS: complete 1-step input matches in en-US and it-IT (excluding model ID)
+PASS: multipart material assignments give U1=0.001 and U1=0.0005
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 0h8il8o4/cube.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 0h8il8o4/two-step/cube-two-step.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 0h8il8o4/long-bar/long-bar.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 0h8il8o4/compression/compression.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 0h8il8o4/unloaded/unloaded.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 0h8il8o4/mechanical/mechanical.inp.pma
+PASS: editable project and native result payloads reopened: /tmp/prepomax calculix job 0h8il8o4/multipart/multipart.inp.pma
+PASS: CLI inspect/export/solve, native multipart results, source preservation and failure handling
+PASS: default static field-output step solves and reopens FRD without requiring an unrequested DAT history file
+PASS: authored static add/edit/duplicate/deactivate/remove workflow; native steps U1=0.001/0.002 at times 1/2, independent loads and stale-result invalidation
+PASS: native CAD -> locally refined C3D10 -> pressure solve -> archived results: 1291 analytical nodal displacements with preserved CAD topology
+
+GTK static step add-final
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step add, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step edited
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step edit, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step duplicated
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step duplicate, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step deactivated
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step deactivate, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step activated
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step activate, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step removed
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step remove, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step empty-final
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step remove, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step restarted
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK static step add, save/reopen and result invalidation
+PASS: GTK companion exit closed renderer listener
+
+GTK static step solve
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK native solve and result-project reopening
+
+GTK static step field-only-solve
+GTK stable frame: actors=1 points=8 triangles=12
+GTK stable frame: actors=1 points=8 triangles=12
+PASS: GTK native solve and result-project reopening
+
+bash scripts/test-linux-deb-clean.sh steps-1.deb steps-2.deb
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+Distribution CalculiX solved the analytical cube with U1=0.001
+Distribution Gmsh generated and remeshed an editable PMA with persisted controls, six CAD-face regions, source-bound topology, guarded CAD-face refinement and exact retained STEP
+PASS: installed static step add/edit/duplicate/deactivate/remove, production export and CAD/setup preservation
+Upgrading package from 0.1.1~preview+steps.1 to 0.1.1~preview+steps.2
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+CalculiX solver ready: /usr/bin/ccx
+Viewer companion runtime ready: .NET 10.0.12
+Renderer runtime ready: .NET 10.0.12
+Gmsh ready: /usr/bin/gmsh (4.12.1)
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+/root/.local/state/prepomax/jobs/upgrade-project.pma: OK
+PASS: clean Ubuntu 24.04 install, upgrade, private-runtime preflight and purge
+
+All listed runs exited 0.
+Native analytical step authoring case: force 1 then force 2, maximum U1=0.001/0.002 at cumulative times 1/2.
+Native tools: CalculiX 2.23; clean Ubuntu 24.04 uses CalculiX 2.21 and Gmsh 4.12.1.
+Clean Ubuntu verifies installed step commands and production export; native two-step numerical checks run on the development host.
+Package versions: 0.1.1~preview+steps.1 -> 0.1.1~preview+steps.2.

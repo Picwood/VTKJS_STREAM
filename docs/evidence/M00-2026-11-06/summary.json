@@ -1,0 +1,82 @@
+{
+  "schema": "prepomac.M00-evidence/1",
+  "milestoneComplete": true,
+  "gitHead": "fb5a89dba6ac975956d9001edf6d6756f18fe0ca",
+  "capturedUtc": "2026-11-06T14:09:30.308690+00:00",
+  "immutableCapture": {
+    "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/reference-2026-11-06/capture.json",
+    "sha256": "605971de62d9dacf2e7ec3f6142e6c79084dc56f89d3400ceb4b2de067b97dfc"
+  },
+  "rootReferenceSources": 2718,
+  "referenceRuntimeFiles": 103,
+  "referenceSourceDrift": [],
+  "referenceBinaryDrift": [],
+  "sourceAndRuntimeArchives": {
+    "sources.tar.gz": "2b9479e805c59c6721b39e70cf5dfee14ebc7a0a24b008fe9ff9f21eb13235ad",
+    "reference-binaries.tar.gz": "e208f5c481bef7ceec466f42dbf08993f7cff91c77583f9ef6df6a8c427d76b6"
+  },
+  "sourceScope": "Root Prepomac tracked/nonignored source inputs and runtime binaries. The nested VTKJS repository is captured independently; personal projects and runtime settings are excluded.",
+  "externalSolver": {
+    "sha256": "fdb2004d32e1f0072141747d1eb2c50d17155fb0b20ce308dd9dc9a4ef89e68d"
+  },
+  "shippedPmxFixtures": [
+    {
+      "path": "assets_composites/cooperhood/cooperhood.pmx",
+      "sha256": "72ae9c49c7cb42b1a468cacd89572f6640f106c759f481cc5406d1eb1f4aff98"
+    },
+    {
+      "path": "assets_composites/sphere/sphere.pmx",
+      "sha256": "f8ce6d76178c437d6a85842b4279aa0cf1d3bd6924bbbe1ab5c8bca8b1f155cf"
+    },
+    {
+      "path": "assets_composites/three-point-bend/three-point-bend.pmx",
+      "sha256": "07e5748b6c4d1c2c038092feddd00002ba5e533828cd6609dba93ada280dbbdc"
+    }
+  ],
+  "desktopRunsRecorded": 77,
+  "desktopOutcomes": {
+    "passed": 57,
+    "failed": 20,
+    "blocked": 0
+  },
+  "offlineAndCustomChecksRecorded": 15,
+  "offlineAndCustomOutcomes": {
+    "passed": 12,
+    "failed": 2,
+    "blocked": 1
+  },
+  "remainingUnattempted": [],
+  "harnessPassed": true,
+  "harnessInputsSha256": "30b4503297dce7a2f417af2b37925f666a6f702aede17ce98e2b4caff7383860",
+  "harnessImplementation": {
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-web-parity.py": "263b0071b6b67be0aa871490317d06840e7a3efb6abba459c6d42093c3147d8d",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/reference_snapshot.py": "6ffebf8603097ab1226d8fca44a4109b01e111f583d9457d2dc701bbb2b7acb1",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/compare.py": "0a7f831ce94bf9492d2584f6d4d094328ff45062e5c00fa65c469536f2880a0b",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectParitySnapshot.cs": "7017a584d1190793aa5fd641a1602d59b3fefeb4fb464e7f445e7b1b739dbd9c",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/ParityEndpoints.cs": "ed48f24f9eb4fa2f3a14c9175117b2935fa3aff0568c591f1995b110df469a89",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/Program.cs": "342dcd425d120a8cee1165fcb1337d01d4aac48769ce31f3ca10fe20680a1014",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/Parity.Probe/Program.cs": "21f9c40b1143b0bca568e3610b70b4deaf2135c164caaa053356533db3f84386"
+  },
+  "claim": "M00 baseline/harness qualification. Reference failures/preconditions remain open. Full feature and full-script web parity is not claimed.",
+  "candidateCapture": {
+    "path": "PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/candidate-2026-11-06-qualified/manifest.json",
+    "sha256": "22a08bc0bacd83f11dc2a1f7bb62fbef3afc38de223e3f9eb6f24660df6ae7f9",
+    "gitHead": "ae5954ddefb5fbe017a35fa93594a6fdb7627b6c",
+    "sourceInputs": 1098,
+    "archiveSha256": "628a6122bb3a3ad0e0f155759382fe4f66e8978badcc9c6e4a95565c483a71ab"
+  },
+  "candidateRegressions": [
+    {
+      "path": "artifacts/parity/http-regression-final.log",
+      "sha256": "ee9da8fb27ba06f36827b092fd01c47b94855bf0630c23713d43ea07f28da584",
+      "outcome": "passed",
+      "marker": "PASS: browser ownership"
+    },
+    {
+      "path": "artifacts/parity/mesh-regression-final.log",
+      "sha256": "424bb0db126f3045aec0c6d499551fd12566d4f43aa1835d14aa4ebf391f66db",
+      "outcome": "passed",
+      "marker": "PASS: 2892 mesh I/O characterization checks."
+    }
+  ]
+}

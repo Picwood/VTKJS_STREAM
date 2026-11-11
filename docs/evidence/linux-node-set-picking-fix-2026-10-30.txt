@@ -1,0 +1,71 @@
+Linux mesh picking: bounds rejection and latency correction
+Date: 2026-10-30
+
+Reproduction:
+  Original 2026-10-29 packaged application, large-coordinate mesh fixture:
+  one cube of side 1e6 translated by
+  [123456789.123, -234567890.456, 345678901.789].
+  The complete node-set GTK smoke stalls at the first pick with an error banner.
+  Diagnostic-only instrumentation of the old package reports exactly:
+    pick-invalid: The world hit lies outside the selected chunk bounds.
+  No behavior changes were made to the baseline for this reproduction.
+
+Corrections:
+  GPU picking still determines the visible actor/chunk/triangle ID.
+  CPU ray/triangle intersection reconstructs the point on that selected
+  triangle; shared raster-edge spill is clamped to the selected triangle.
+  Depth-buffer world coordinates and their extra GPU capture are no longer
+  needed. Server validation uses the actual uploaded Float32 triangle bounds,
+  with a double-precision origin/reconstruction allowance. Source element/node
+  identity, finite values, primitive availability and forged-hit checks remain.
+  Successful subsequent picking clears the previous pick error banner.
+
+  Node-set mode picks dispatch immediately instead of waiting 350 ms for a
+  surface double click. Legacy surface double-click angle growth is preserved.
+  Selection messages use the WebKit native push handler; the existing bounded
+  polling queue remains a fallback. Lifecycle/status polling remains unchanged.
+  One validated FeMesh/topology instance is reused during selection. Closing
+  the editor, reopening/switching snapshots or changing the source file stamp
+  clears/refreshes it. Applied model changes still use independent snapshots.
+
+Validation:
+  Browser unit tests: 26 files / 98 tests passed.
+  New ray tests cover scales 1e-6, 1, 1e6 and 1e12, translated/oblique rays,
+  shared raster edges, invalid primitives, parallel rays and degenerate cells.
+  Renderer server tests: all 70 passed using the .NET 8 test host runtime.
+  New server regression uses a real host-upload scene whose original double
+  bounds differ from its encoded render surface by more than 1e-4. Valid
+  geometry hits pass and forged positions/element/node IDs still fail.
+  Dedicated real-browser picking regressions: 2 passed, at scale 1 and 1e6
+  with large world coordinates, without a pick error banner.
+  The broader existing progressive-rendering browser test stops earlier at
+  the unrelated fixture-callout annotation menu assertion, before its picking
+  section. Its separate resource-integrity/reload test passes. No claim that
+  the entire broader browser workflow passes is made.
+
+  Mesh I/O checks: 2886 passed in en-US and it-IT, including cache reuse,
+  fresh editor initialization, snapshot switching, external-change invalidation
+  and explicit release. Latest portable total including unchanged suites: 5901.
+  Python: 3 selection/history and 3 edit-session checks passed.
+  Production browser build and managed builds pass with zero managed warnings.
+
+GTK regression:
+  Unit-cube and large-coordinate full node-set workflows pass under Xvfb/X11
+  with LIBGL_ALWAYS_SOFTWARE=1 and WEBKIT_DISABLE_DMABUF_RENDERER=1.
+  Actual picks cover all mesh modes and modifiers, plus native rectangles,
+  provisional selection operations, edit/cancel with an in-flight request,
+  support assignment, rename, model Undo/Redo and Save/reopen.
+  Large-fixture clicks are applied by the next ~150 ms smoke-driver check.
+  This is a sampled upper bound in the software-rendered diagnostic environment,
+  not a physical-GPU latency benchmark or a representative large-model claim.
+  Original project bytes remain unchanged and renderer listeners close.
+
+Relocated package acceptance:
+  Framework-dependent 2026-10-30 fix archive built and extracted into a new
+  directory; all SHA256SUMS and launcher startup checks pass.
+  Packaged GTK source matches the checkout. Unit and large-coordinate complete
+  picking workflows pass, as does legacy surface double-click angle growth.
+  Packaged CLI solves the authored unit model; DAT U1=0.001 at nodes 2,3,6,7,
+  absolute tolerance 1e-9. No install-directory Python bytecode cache is created.
+  Existing running viewer processes must restart to load the updated client,
+  renderer validation and companion mesh-session code.

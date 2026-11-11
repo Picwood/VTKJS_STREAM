@@ -1,0 +1,10 @@
+{
+  "schema": "prepomac.parity-comparison/1",
+  "passed": false,
+  "differences": [
+    {
+      "path": "$.nodeSet.nodes",
+      "error": "$.nodeSet.nodes: IDs must be unique and ordered."
+    }
+  ]
+}

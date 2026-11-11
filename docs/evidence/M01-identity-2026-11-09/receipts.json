@@ -1,0 +1,32 @@
+[
+  {
+    "kind": "material.rename/1",
+    "command": {
+      "operationId": "dcc3d3e8-6cd1-4ab5-afc2-836737f41391",
+      "expectedRevision": 1,
+      "materialId": "73e29b2c-1371-4a24-a766-18024c316b6d",
+      "newName": "ALLOY"
+    },
+    "previousName": "ELASTIC",
+    "sourceRevision": 1,
+    "committedRevision": 2,
+    "sourceSha256": "8A87C40C97E6A295632EED6226C1B845E5088805951E5D3B41DF46F62BBEA3B4",
+    "resultSha256": "339BE4626BC19A3ADD70FF3058A06AA5A3C1ACAD91F3EF387915000E8DFBC7FD",
+    "materialId": "73e29b2c-1371-4a24-a766-18024c316b6d"
+  },
+  {
+    "kind": "material.rename/1",
+    "command": {
+      "operationId": "2e8931a6-c93b-4918-9078-f8cb67905ce5",
+      "expectedRevision": 2,
+      "materialId": "73e29b2c-1371-4a24-a766-18024c316b6d",
+      "newName": "alloy"
+    },
+    "previousName": "ALLOY",
+    "sourceRevision": 2,
+    "committedRevision": 3,
+    "sourceSha256": "339BE4626BC19A3ADD70FF3058A06AA5A3C1ACAD91F3EF387915000E8DFBC7FD",
+    "resultSha256": "5242E52C913446F7A0C689908B37966E481491DA058B2545CA60A049682B39B5",
+    "materialId": "73e29b2c-1371-4a24-a766-18024c316b6d"
+  }
+]

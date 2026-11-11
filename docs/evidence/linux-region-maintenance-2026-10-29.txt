@@ -1,0 +1,62 @@
+Node-set and surface maintenance — 2026-10-29
+
+Reference hierarchy: docs/LINUX_MODEL_TREE_TARGET.md remains unchanged.
+
+Portable validation:
+  bash scripts/test-portable.sh
+  PASS: 60 STL checks.
+  PASS: 178 legacy NCalc checks.
+  PASS: 794 CaeGlobals checks.
+  PASS: 1600 CaeMesh checks.
+  PASS: 2790 mesh I/O checks.
+  PASS: 29 native process checks.
+  PASS: 354 result history checks.
+  Total: 5805 checks.
+  Final managed build: 0 warnings, 0 errors.
+  Python session tests: 3 passed.
+
+New model/service acceptance:
+  Node ID/range/box membership edits; typed reference updates across steps,
+  inactive loads, supports, histories and rigid bodies.
+  Surface-source node rename; membership protection for element-surface nodes.
+  Node-set duplicate independence, unused removal and referenced-removal refusal.
+  Surface face/node/area rebuilding; shared source node/element sets preserved.
+  Surface rename updates traction, pressure, supports, histories, ties, springs,
+  rigid bodies and contact-pair master/slave references.
+  Surface duplicates have independent face and node backing sets.
+  Prepared node-surface duplicates follow their backing node-set edits/renames.
+  The node-surface editor data identifies its backing node set.
+  Invalid membership, names, boxes, collisions and untracked keywords refuse
+  publication. Geometry/source bytes are preserved; stale results invalidated.
+
+GTK acceptance:
+  Isolated Xvfb X11 displays with LIBGL_ALWAYS_SOFTWARE=1 and
+  WEBKIT_DISABLE_DMABUF_RENDERER=1; two-part static model with sparse part IDs.
+  PASS: tree node-set edit/rename via coordinate box, duplicate, duplicate edit,
+        unused removal, surface expansion/rename, surface duplicate/edit/remove,
+        refusal of referenced removals, Undo/Redo, Save as/reopen.
+  PASS: existing node-box creation and element-surface creation regressions.
+  PASS: companion shutdown closes renderer listener.
+
+Native numerical validation:
+  CalculiX 2.21 solves the saved GTK-authored project.
+  The original total-force traction is extended to the right faces of both
+  parts. Part 2 retains its existing concentrated force.
+  Production DAT checks, absolute tolerance 1e-9:
+    Nodes 2,3,6,7: U1=0.0005.
+    Nodes 10,11,14,15: U1=0.00075.
+
+Relocatable package validation:
+  Framework-dependent archive built and extracted into a fresh directory.
+  PASS: all package checksums and current GTK source identity.
+  PASS: launcher startup checks.
+  PASS: CLI node add/range/box/edit/keep/duplicate/remove/read.
+  PASS: CLI surface add/edit/keep/duplicate/remove/read.
+  PASS: CLI refuses dependent removal and publishes no invalid destination.
+  PASS: packaged GTK full maintenance workflow and Save as/reopen.
+  PASS: packaged CLI solve reproduces all eight displacement values.
+  PASS: source bytes unchanged and no install-directory bytecode cache.
+  Final archive revalidated after backing-node editor disclosure was added.
+
+No new physical-GPU, Wayland, large-model or clean-machine claim is inferred.
+Old backing sets are retained pending persisted ownership and automatic cleanup.

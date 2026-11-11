@@ -1,0 +1,17 @@
+{
+  "schema": "prepomac.material-lifecycle-evidence/1",
+  "passed": true,
+  "exactCheckpoints": 6,
+  "negativeControlsDetected": 4,
+  "refusedNames": [
+    "Bad Name",
+    "Bad#",
+    "123",
+    " NEW ",
+    "elastic"
+  ],
+  "negativeModulusRefused": true,
+  "recreatedIdIsNew": true,
+  "referenceSourceAndRuntimeDrift": [],
+  "claim": "Bounded numeric elastic create, solid-section assignment, unused removal and recreation. Assigned/opaque-reference removal remains refused; full M01 and full source scripts are open."
+}

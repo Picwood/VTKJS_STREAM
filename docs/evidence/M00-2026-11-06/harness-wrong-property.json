@@ -1,0 +1,11 @@
+{
+  "schema": "prepomac.parity-comparison/1",
+  "passed": false,
+  "differences": [
+    {
+      "path": "$.document.modelSpace",
+      "reference": "ThreeD",
+      "candidate": "PlaneStress"
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+[
+  {
+    "case": "density",
+    "detected": true,
+    "materialDifferences": [
+      {
+        "path": "$[1][0].properties[0].data[0][0]",
+        "reference": 2.5,
+        "candidate": 9
+      }
+    ],
+    "sectionPolicyDifferences": []
+  },
+  {
+    "case": "hardening",
+    "detected": true,
+    "materialDifferences": [
+      {
+        "path": "$[1][0].properties[2].hardening",
+        "reference": "Combined",
+        "candidate": "Isotropic"
+      }
+    ],
+    "sectionPolicyDifferences": []
+  },
+  {
+    "case": "material-order",
+    "detected": true,
+    "materialDifferences": [
+      {
+        "path": "$[1][0].description",
+        "reference": "keep this description",
+        "candidate": null
+      },
+      {
+        "path": "$[1][0].name",
+        "reference": "ALLOY",
+        "candidate": "OTHER"
+      },
+      {
+        "path": "$[1][0].properties.length",
+        "reference": 4,
+        "candidate": 1
+      },
+      {
+        "path": "$[1][0].properties[0].data[0].length",
+        "reference": 2,
+        "candidate": 3
+      },
+      {
+        "path": "$[1][0].properties[0].data[0][0]",
+        "reference": 2.5,
+        "candidate": 500
+      },
+      {
+        "path": "$[1][0].properties[0].data[0][1]",
+        "reference": 0.0,
+        "candidate": 0.1
+      },
+      {
+        "path": "$[1][0].properties[0].kind",
+        "reference": "Density",
+        "candidate": "Elastic"
+      },
+      {
+        "path": "$[1][1].description",
+        "reference": null,
+        "candidate": "keep this description"
+      },
+      {
+        "path": "$[1][1].name",
+        "reference": "OTHER",
+        "candidate": "ALLOY"
+      },
+      {
+        "path": "$[1][1].properties.length",
+        "reference": 1,
+        "candidate": 4
+      },
+      {
+        "path": "$[1][1].properties[0].data[0].length",
+        "reference": 3,
+        "candidate": 2
+      },
+      {
+        "path": "$[1][1].properties[0].data[0][0]",
+        "reference": 500.0,
+        "candidate": 2.5
+      },
+      {
+        "path": "$[1][1].properties[0].data[0][1]",
+        "reference": 0.1,
+        "candidate": 0
+      },
+      {
+        "path": "$[1][1].properties[0].kind",
+        "reference": "Elastic",
+        "candidate": "Density"
+      }
+    ],
+    "sectionPolicyDifferences": []
+  },
+  {
+    "case": "dangling-section",
+    "detected": true,
+    "materialDifferences": [],
+    "sectionPolicyDifferences": [
+      {
+        "path": "$[1][0].material",
+        "reference": "ALLOY",
+        "candidate": "ELASTIC"
+      }
+    ]
+  }
+]

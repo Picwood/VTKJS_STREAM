@@ -1,0 +1,11 @@
+{
+  "schema": "prepomac.parity-comparison/1",
+  "passed": false,
+  "differences": [
+    {
+      "path": "$.materials[0].youngsModulus",
+      "reference": 1000.0,
+      "candidate": 2000
+    }
+  ]
+}

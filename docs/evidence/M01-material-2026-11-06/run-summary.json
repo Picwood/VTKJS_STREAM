@@ -1,0 +1,9 @@
+{
+  "schema": "prepomac.material-command-evidence/1",
+  "passed": true,
+  "stagesCompared": 3,
+  "negativeControlsDetected": 4,
+  "referenceSourceAndRuntimeDrift": [],
+  "rejectedEditsPreservedState": true,
+  "scope": "Bounded numeric material edits; M01-T01/T03 remain in progress. No PMX/equation/rename/full-script/journal parity claim."
+}

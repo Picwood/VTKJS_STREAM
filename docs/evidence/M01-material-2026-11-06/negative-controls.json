@@ -1,0 +1,107 @@
+[
+  {
+    "case": "density",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[1].properties[0].data[0][0]",
+        "reference": 2.5,
+        "candidate": 9
+      }
+    ]
+  },
+  {
+    "case": "hardening",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[1].properties[2].hardening",
+        "reference": "Combined",
+        "candidate": "Isotropic"
+      }
+    ]
+  },
+  {
+    "case": "description",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[1].description",
+        "reference": "keep this description",
+        "candidate": "lost"
+      }
+    ]
+  },
+  {
+    "case": "property-order",
+    "detected": true,
+    "differences": [
+      {
+        "path": "$.stages[1].properties[0].data[0][0]",
+        "reference": 2.5,
+        "candidate": 1.2e-05
+      },
+      {
+        "path": "$.stages[1].properties[0].kind",
+        "reference": "Density",
+        "candidate": "ThermalExpansion"
+      },
+      {
+        "path": "$.stages[1].properties[0].zeroTemperature",
+        "error": "Missing or unexpected key."
+      },
+      {
+        "path": "$.stages[1].properties[1].data.length",
+        "reference": 1,
+        "candidate": 2
+      },
+      {
+        "path": "$.stages[1].properties[1].data[0][0]",
+        "reference": 2000.0,
+        "candidate": 100
+      },
+      {
+        "path": "$.stages[1].properties[1].hardening",
+        "error": "Missing or unexpected key."
+      },
+      {
+        "path": "$.stages[1].properties[1].kind",
+        "reference": "Elastic",
+        "candidate": "Plastic"
+      },
+      {
+        "path": "$.stages[1].properties[2].data.length",
+        "reference": 2,
+        "candidate": 1
+      },
+      {
+        "path": "$.stages[1].properties[2].data[0][0]",
+        "reference": 100.0,
+        "candidate": 2000
+      },
+      {
+        "path": "$.stages[1].properties[2].hardening",
+        "error": "Missing or unexpected key."
+      },
+      {
+        "path": "$.stages[1].properties[2].kind",
+        "reference": "Plastic",
+        "candidate": "Elastic"
+      },
+      {
+        "path": "$.stages[1].properties[3].data[0][0]",
+        "reference": 1.2e-05,
+        "candidate": 2.5
+      },
+      {
+        "path": "$.stages[1].properties[3].kind",
+        "reference": "ThermalExpansion",
+        "candidate": "Density"
+      },
+      {
+        "path": "$.stages[1].properties[3].zeroTemperature",
+        "error": "Missing or unexpected key."
+      }
+    ]
+  }
+]

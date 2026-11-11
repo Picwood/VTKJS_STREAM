@@ -1,0 +1,70 @@
+{
+  "schema": "prepomac.parity-snapshot/1",
+  "kind": "model",
+  "document": {
+    "modelSpace": "ThreeD",
+    "unitSystem": "M_KG_S_C"
+  },
+  "materials": [
+    {
+      "name": "ELASTIC",
+      "youngsModulus": 1000,
+      "poissonsRatio": 0
+    }
+  ],
+  "mesh": {
+    "nodes": [
+      {
+        "id": 10,
+        "coordinates": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "id": 20,
+        "coordinates": [
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "id": 30,
+        "coordinates": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": 40,
+        "coordinates": [
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "elements": [
+      {
+        "id": 100,
+        "type": "LinearTetraElement",
+        "nodes": [
+          10,
+          20,
+          30,
+          40
+        ]
+      }
+    ]
+  },
+  "nodeSet": {
+    "name": "PARITY_SELECTED",
+    "nodes": [
+      10,
+      30
+    ]
+  }
+}

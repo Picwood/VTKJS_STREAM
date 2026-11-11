@@ -1,0 +1,65 @@
+Linux original-function parity / field output acceptance — 2026-10-28
+
+Scope: nodal, element and contact field-output request management for static steps.
+CAD repair remains outside project scope. Region-based history outputs remain open.
+Reference: original Controller field-output operations, FrmFieldOutput defaults/type lock,
+and production CalculiX node, element and contact file writers.
+Built from the modified working checkout; no new PMA/metadata schema version.
+GTK uses Xvfb/X11 software WebGL with WEBKIT_DISABLE_DMABUF_RENDERER=1.
+No new physical-GPU or Wayland qualification is claimed.
+
+Artifacts:
+viewer.tar.gz: 53490644 bytes; SHA-256 3f5bcf79ad16032575c3bdcb3536fefe71dafacb102ccaf68e46d2f4a4bd270e
+prepomax-fields-1.deb: 34992856 bytes; SHA-256 c2f735630ab8e02947e34b38b2123da295d6eef688c5ba15ee32733b11b26c5e
+prepomax-fields-2.deb: 34992856 bytes; SHA-256 f7c7f2a57376abaead56a098aca0de379e34dc31356d11b898cf41328ea607aa
+
+bash scripts/test-portable.sh
+PASS: 60 STL characterization checks.
+PASS: 178 legacy NCalc compatibility checks.
+PASS: 794 CaeGlobals characterization checks.
+PASS: 1600 CaeMesh characterization checks.
+PASS: 2466 mesh I/O characterization checks.
+PASS: 29 native process characterization checks.
+PASS: 354 result history characterization checks.
+Total: 5,481 checks. Build: zero warnings/errors.
+
+PREPOMAX_PYTHON=/usr/bin/python3 /usr/bin/python3 scripts/test-native-calculix.py
+All prior native CalculiX and optional Gmsh cases passed.
+PASS: nodal/element/contact field-output inspection and nodal
+add/edit/duplicate/activation/remove/propagation; native two-step results and source preservation
+PASS: native CAD -> locally refined C3D10 -> pressure solve -> archived results:
+1291 analytical nodal displacements with preserved CAD topology
+The authored request deck uses active *Node file, Last iterations, Global=No requests
+in both active steps. Reopened DISP/U1 maxima remain 0.001 and 0.002 at times 1 and 2.
+The original result project remains byte-identical; edited archives contain no stale results.
+Native CalculiX: 2.23.
+
+GTK field-output acceptance
+--smoke-field-output-action add: PASS
+--smoke-field-output-action edit: PASS
+--smoke-field-output-action duplicate: PASS
+--smoke-field-output-action deactivate: PASS
+--smoke-field-output-action activate: PASS
+--smoke-field-output-action remove: PASS
+--smoke-field-output-action propagate: PASS
+Each case saved and reopened a new PMA, matched the requested definitions, removed stale
+result fields and closed the renderer listener. A post-edit --smoke-solve also passed native
+solve and result-project reopening with CalculiX 2.23.
+
+bash scripts/test-linux-deb-clean.sh prepomax-fields-1.deb prepomax-fields-2.deb
+PASS: installed static step add/edit/duplicate/deactivate/remove, production export and CAD/setup preservation
+PASS: installed solid section add/edit/duplicate/activation/remove, standalone material creation,
+coverage refusal/recovery and production export
+PASS: installed field-output add/edit/duplicate/activation/remove/propagation,
+result invalidation and production export
+Upgrade: 0.1.3~preview+fields.1 -> 0.1.3~preview+fields.2
+PASS: clean Ubuntu 24.04 install, upgrade, private-runtime preflight and purge
+The authored PMA remained byte-identical and reopened with identical inspection data.
+Distribution tools: CalculiX 2.21 and Gmsh 4.12.1.
+
+python3 -m py_compile scripts/start-gtk-viewer.py scripts/test-native-calculix.py: passed.
+bash -n scripts/test-linux-deb-clean.sh: passed.
+Documentation-link validation: passed.
+git diff --check: passed.
+
+All listed runs exited 0.

@@ -1,0 +1,86 @@
+{
+  "schema": "prepomac.M01-material-slice/1",
+  "milestoneComplete": false,
+  "casesInProgress": [
+    "M01-T01",
+    "M01-T03"
+  ],
+  "referenceCapture": {
+    "path": "artifacts/parity/reference-material-command-2026-11-06/manifest.json",
+    "sha256": "73853e93752bb356a58648dc45a56c7a685dc4256cce7c8be9554f5cdaa59eb8",
+    "capturedUtc": "2026-11-06T15:14:05.443198+00:00",
+    "gitHead": "fb5a89dba6ac975956d9001edf6d6756f18fe0ca",
+    "sources": 2718,
+    "runtimeFiles": 103,
+    "archives": {
+      "sources.tar.gz": "d55073cd1df7ef2b27aa163a36ec0cf03237356c07c4e6b5090b2b8078fcb594",
+      "reference-binaries.tar.gz": "74df9472bb435acd86b64239193977d077ae5e0966130c7fb6075ce02896c227"
+    }
+  },
+  "qualifiedRun": "artifacts/parity/material-command-2026-11-06-qualified",
+  "inputs": {
+    "baselineSha256": "73853e93752bb356a58648dc45a56c7a685dc4256cce7c8be9554f5cdaa59eb8",
+    "fixtureSha256": "575db0068e4b91b0434f56fb6a9f144996d540ef12059b3562c92a06c010d870",
+    "referenceInvocation": [
+      "xvfb-run",
+      "-a",
+      "/home/flopipo/prepomac/macOS/PrePoMax/bin/Release/net10.0/PrePoMax.com",
+      "--noSettingsSave",
+      "-f",
+      "/home/flopipo/prepomac/PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/fixtures/cube-mesh.inp",
+      "-u",
+      "M_KG_S_C",
+      "--script",
+      "/home/flopipo/prepomac/PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/reference_material_command.py",
+      "-g",
+      "No",
+      "-x",
+      "Yes",
+      "-w",
+      "/home/flopipo/prepomac/PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/material-command-2026-11-06-qualified",
+      "--report",
+      "/home/flopipo/prepomac/PERSONAL/Linux_Port_trial/VTKJS_STREAM/artifacts/parity/material-command-2026-11-06-qualified/reference-run.json",
+      "--timeout",
+      "90"
+    ],
+    "implementationSha256": {
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-material-command-parity.py": "f98107ddc2c440cf733bf5454fa2c3e66df8d82a756da6bb5c6cae2d575d33cf",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/reference_material_command.py": "13987145ef74b19847dc88a03941cddcd6ce30e4070ac1c2041a875a30949764",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/run-web-parity.py": "263b0071b6b67be0aa871490317d06840e7a3efb6abba459c6d42093c3147d8d",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/tests/parity/compare.py": "0a7f831ce94bf9492d2584f6d4d094328ff45062e5c00fa65c469536f2880a0b",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/Parity.Probe/Program.cs": "81d1e6fc9c070fb29b3d59fa38dd93c0c692f54e43d538878fd2c4fc1a38a55c",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectCommandSession.cs": "a494eb910aa098308ce1f8ae040c10016bd875ad1c21e945c3a3fa62ab80f9b6",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Application/ProjectMaterials.cs": "2629e6a825c87fa43b639929f7122845d657ae99ee551644c275b88441c9e2ec",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/Workspace.cs": "7329a06a1547b216684b76694c2b3ce8f7d3a01e5e619b0cbe63b9111d8bb0ee",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/PrePoMax.Web/Program.cs": "75b769eb625400fb32f90b2ebc5956b3f373ccd30b6d8ebf539d8af1e9015f60",
+      "PERSONAL/Linux_Port_trial/VTKJS_STREAM/prototypes/VtkJsStreaming/src/client/src/workspace.ts": "d21b4d04b979d0869a76db26786f420fc0ee8f45a190869978d23d7546aae485"
+    }
+  },
+  "tests": {
+    "domainChecks": 2946,
+    "http": "passed",
+    "playwright": "1 passed",
+    "clientUnitTests": 98,
+    "negativeControlsDetected": 4,
+    "checkpointsComparedExactly": 3
+  },
+  "additionalImplementationSha256": {
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/portable/tests/MeshIO.Characterization/ProjectCommandChecks.cs": "d209743f6fa0d3c1bfb1efbd65fd9ab8da056ebed22757c12a34c0bdc078ca05",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/scripts/test-web-workspace.py": "72347cf6761773f44169f982339af2ef71b6d5fb3610824d02b7fa4399ac1b39",
+    "PERSONAL/Linux_Port_trial/VTKJS_STREAM/prototypes/VtkJsStreaming/tests/web-workspace/workflow.spec.mts": "aeea76696603d4ced9e6bd195ecbd9de940df2b2e2b79f25841abd297301255c"
+  },
+  "evidenceSha256": {
+    "browser.log": "e34de9930533906bf82a02f3447ea612318fa970ddb448deb849baf179d0224b",
+    "client-build.log": "efe2e29a6900bf9744c45d7451a54fcba39c36791834fd997251fd02659696e2",
+    "client-unit.log": "098ccab7f68cee19fbb259f7433f44461e07222d90c86063564e7edb8ba28d14",
+    "comparison.json": "eb6116fba0f791e7ddbbe3f229dbcda7bce8d24b6ae7ec40576bbaec26054292",
+    "domain.log": "d5a66675c65d21cffe5ce0c87811340d24df1cebac6f9b5b4727d3236bbd0e86",
+    "http.log": "42cda756f2760a82e09fa7b05cf86f26967eb945574ee038b5307705515699b9",
+    "negative-controls.json": "ad38527076e14dc3ea7276acd7951cf8422ce772335f8ca60784d7b0f936594f",
+    "receipts.json": "34946fa1f1c108aa6d37cdb391f4d14e07d3912ec89cc9c6bcb09ae3ac7a6fa9",
+    "reference.json": "f5d4f3a90f560b13d562971e810ca00dd14083c7931f0844cb4256f0270918e2",
+    "run-summary.json": "4ae44a043ee07b596f765a186b502d5a0892b1cb90a71ca5f0c63eab64ec74f9",
+    "web.json": "2ba769e7ae97e10a0bd948da3f581c29c8895605505d23245291c4ed6effff4c"
+  },
+  "claim": "Bounded material command and shared snapshot publication slice; full M01 and full-script web coverage remain open."
+}

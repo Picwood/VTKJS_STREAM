@@ -1,0 +1,80 @@
+PrePoMax Linux: tree-based mesh node-set selection
+Accepted: 2026-10-29
+
+Reference:
+  Original FrmNodeSet, FrmSelectItemSet, Controller.GetNodeIdsAtPoint,
+  FeMesh visualization topology and mesh angle-growth routines.
+  docs/LINUX_NODE_SET_SELECTION_REVIEW.md
+  Required model tree remains docs/LINUX_MODEL_TREE_TARGET.md.
+
+Implementation:
+  Nonmodal Create/Edit from Model -> Mesh -> Node Sets; optional top shortcut
+  opens the same tree workflow. Complete existing membership initializes edits.
+  Modes: Node, Element, Edge, Face, Edge angle, Face angle, Part and ID.
+  Angles default to 30 degrees; native validation accepts 0..180.
+  Mesh edge resolution excludes renderer triangulation diagonals.
+  Replace/Add/Subtract/Intersect operate on resolved node IDs.
+  Live native-to-browser highlights preserve scene identity and camera.
+  Selection Undo retains 32 changes; Clear, visible active All/Invert and
+  up to 32 pending ordered requests. Cancel discards provisional/in-flight work.
+  Apply uses existing region-reference guards and model snapshot Undo/Redo.
+  Rectangle checkbox enables normal dragging without Alt; native full-mesh
+  frusta support Node, Element and Part, including interior node membership.
+  Section half-spaces and strict original point-frustum boundaries are honored.
+
+Portable validation:
+  Full scripts/test-portable.sh suite passed; new final mesh I/O checks then
+  reran after disconnected-island and strict-frustum-boundary additions.
+  STL: 60; NCalc: 178; CaeGlobals: 794; CaeMesh: 1600;
+  Mesh I/O: 2876; native process: 29; result history: 354.
+  Total: 5891 checks, with mesh I/O exercised in en-US and it-IT cultures.
+  Final package managed builds: zero warnings, zero errors.
+  Python: 3 node selection/history checks and 3 edit-session checks passed.
+  Browser: 26 files / 92 tests passed; TypeScript/Vite production build passed.
+
+Mesh acceptance:
+  Complete element membership and multi-element visualization faces/edges;
+  gradual local angle growth, exact right-angle thresholds, disconnected
+  islands in one part, hidden/inactive parts and quadratic midside nodes.
+  Real mesh perimeter on triangulated quads; invalid IDs/seeds/modes/angles.
+  Native rectangles distinguish point and complete-element inclusion, detect
+  part face crossings, honor section planes and select an interior node not
+  present in the exterior render triangles. Invalid frusta are refused.
+  Full existing sets initialize; picked membership persists and exports NSET.
+
+GTK acceptance:
+  Xvfb/X11, LIBGL_ALWAYS_SOFTWARE=1, WEBKIT_DISABLE_DMABUF_RENDERER=1.
+  Actual viewport clicks exercise all seven graphical modes and Shift/Ctrl/
+  Shift+Ctrl combinations. Actual unmodified rectangle drags exercise native
+  Element, Part and Node queries. Scene identity remains unchanged during picks.
+  Undo selection/Clear/All/Invert, ordered pending membership requests,
+  complete edit initialization, Cancel with an in-flight request, Apply,
+  authored support, reference-following rename, model Undo/Redo, Save as/reopen.
+  Prior multipart region maintenance smoke passes with the new node editor:
+  membership editing, duplicates/removal, dependency refusal, node/surface
+  references, surface backing/area rebuild, Undo/Redo and Save/reopen.
+  Companion shutdown closes renderer listeners.
+
+Native numerical acceptance:
+  Saved GTK unit-cube set: mesh-support = nodes 1,4,5,8.
+  Renamed support export: mesh-support, 1, 1, 0.
+  CalculiX 2.21 solves the saved model; production DAT displacement checks
+  at nodes 2,3,6,7: U1=0.001, U2=U3=0, absolute tolerance 1e-9.
+
+Relocated distribution:
+  Framework-dependent archive built and extracted into a fresh directory.
+  All package SHA256SUMS pass; GTK source and selection module match checkout.
+  Launcher startup checks, complete new GTK workflow, multipart regression,
+  exact NSET/support export and packaged native numerical solve pass.
+  Original source bytes unchanged; no install-directory Python bytecode cache.
+
+Limits:
+  Supported solid mesh path, 100000 interactive nodes; explicit expressions
+  60000 characters / 100000 expanded IDs; 4 MiB companion requests, 2 MiB
+  responses. Existing region inventory and marker-preview bounds remain.
+  Highlights use exterior render topology/overlay budget; native membership
+  can include interior nodes. Quadratic part-intersection polygons use corners
+  in the supported straight-sided workflow.
+  Final IDs persist; original creation-history persistence, regeneration/replay,
+  CAD selection, representative large/curved mesh and physical-GPU/Wayland
+  acceptance remain open. No full original-application parity claim is made.
